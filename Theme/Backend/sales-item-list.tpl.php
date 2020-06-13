@@ -12,21 +12,16 @@
  */
 declare(strict_types=1);
 
-
-$footerView   = new \phpOMS\Views\PaginationView($this->l11nManager, $this->request, $this->response);
-$footerView->setTemplate('/Web/Templates/Lists/Footer/PaginationBig');
-$footerView->setPages(20);
-$footerView->setPage(1);
-
+/** @var \phpOMS\Views\View $this */
 $items = $this->getData('items');
 
 echo $this->getData('nav')->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="box wf-100">
+        <section class="portlet">
+            <div class="portlet-head"><?= $this->getHtml('Items'); ?><i class="fa fa-download floatRight download btn"></i></div>
             <table class="default">
-                <caption><?= $this->getHtml('Items'); ?><i class="fa fa-download floatRight download btn"></i></caption>
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
@@ -35,9 +30,6 @@ echo $this->getData('nav')->render(); ?>
                     <td><?= $this->getHtml('Available') ?>
                     <td><?= $this->getHtml('Reserved') ?>
                     <td><?= $this->getHtml('Ordered') ?>
-                <tfoot>
-                <tr>
-                    <td colspan="6">
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}sales/item/single?{?}&id=' . $value->getId()); ?>
@@ -50,9 +42,9 @@ echo $this->getData('nav')->render(); ?>
                     <td>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>
-                <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                        <?php endif; ?>
+                    <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                <?php endif; ?>
             </table>
-        </div>
+        </section>
     </div>
 </div>
