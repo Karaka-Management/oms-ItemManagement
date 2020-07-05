@@ -56,23 +56,23 @@ echo $this->getData('nav')->render();
                                         <tr>
                                             <td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                                         <tr>
-                                            <td><input id="iName1" name="name1" type="text" value="<?= $this->printHtml($item->getName1()); ?>" disabled>
+                                            <td><input id="iName1" name="name1" type="text" value="<?= $this->printHtml(''); ?>" disabled>
                                         <tr>
                                             <td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
                                         <tr>
-                                            <td><input id="iName2" name="name2" type="text" value="<?= $this->printHtml($item->getName2()); ?>" disabled>
+                                            <td><input id="iName2" name="name2" type="text" value="<?= $this->printHtml(''); ?>" disabled>
                                         <tr>
                                             <td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                                         <tr>
-                                            <td><input id="iName3" name="name3" type="text" value="<?= $this->printHtml($item->getName3()); ?>" disabled>
+                                            <td><input id="iName3" name="name3" type="text" value="<?= $this->printHtml(''); ?>" disabled>
                                         <tr>
                                             <td><label for="iName4"><?= $this->getHtml('Name4'); ?></label>
                                         <tr>
-                                            <td><input id="iName4" name="name4" type="text" value="<?= $this->printHtml($item->getName4()); ?>" disabled>
+                                            <td><input id="iName4" name="name4" type="text" value="<?= $this->printHtml(''); ?>" disabled>
                                         <tr>
                                             <td><label for="iName5"><?= $this->getHtml('Name5'); ?></label>
                                         <tr>
-                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml($item->getName5()); ?>" disabled>
+                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml(''); ?>" disabled>
                                         <tr>
                                             <td><label for="iSSuccessor"><?= $this->getHtml('Successor'); ?></label>
                                         <tr>

@@ -72,7 +72,7 @@ return [
             ],
         ],
     ],
-    '^.*/sales/item/single.*$' => [
+    '^.*/sales/item/profile.*$' => [
         [
             'dest' => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesItem',
             'verb' => RouteVerb::GET,
