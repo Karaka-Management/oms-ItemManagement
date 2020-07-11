@@ -22,6 +22,16 @@ use Modules\ItemManagement\Models\ItemMapper;
  */
 class ItemMapperTest extends \PHPUnit\Framework\TestCase
 {
+    public function testCR() : void
+    {
+        $item = new Item();
+        $item->setNumber('123456789');
+
+        $id = ItemMapper::create($item);
+        self::assertGreaterThan(0, $item->getId());
+        self::assertEquals($id, $item->getId());
+    }
+
     /**
      * @group volume
      * @group module

@@ -12,12 +12,8 @@
             "itemmgmt_item_no": {
                 "name": "itemmgmt_item_no",
                 "type": "VARCHAR(30)",
-                "null": false
-            },
-            "itemmgmt_item_segment": {
-                "name": "itemmgmt_item_segment",
-                "type": "INT",
-                "null": false
+                "null": false,
+                "unique": true
             },
             "itemmgmt_item_info": {
                 "name": "itemmgmt_item_info",
