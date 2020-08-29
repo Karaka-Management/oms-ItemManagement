@@ -76,6 +76,7 @@ return ['ItemManagement' => [
     'PriceUnit'        => 'Stückpreis',
     'Productgroup'     => 'Produktgruppe',
     'Production'       => 'Produktion',
+    'Profile'          => 'Profil',
     'Properties'       => 'Attribute',
     'Property'         => 'Attribut',
     'Purchase'         => 'Einkauf',

@@ -76,6 +76,7 @@ return ['ItemManagement' => [
     'PriceUnit'        => 'Unit of price',
     'Productgroup'     => 'Productgroup',
     'Production'       => 'Production',
+    'Profile'          => 'Profile',
     'Properties'       => 'Properties',
     'Property'         => 'Property',
     'Purchase'         => 'Purchase',
