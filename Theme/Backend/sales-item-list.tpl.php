@@ -27,11 +27,11 @@ echo $this->getData('nav')->render(); ?>
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
-                    <td class="wf-100"><?= $this->getHtml('Name') ?>
-                    <td><?= $this->getHtml('Price') ?>
-                    <td><?= $this->getHtml('Available') ?>
-                    <td><?= $this->getHtml('Reserved') ?>
-                    <td><?= $this->getHtml('Ordered') ?>
+                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
+                    <td><?= $this->getHtml('Price'); ?>
+                    <td><?= $this->getHtml('Available'); ?>
+                    <td><?= $this->getHtml('Reserved'); ?>
+                    <td><?= $this->getHtml('Ordered'); ?>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
                 $url = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId()); ?>

@@ -172,7 +172,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null): RenderableInterface
+    public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');

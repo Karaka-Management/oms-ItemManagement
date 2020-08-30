@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
- /**
+/**
  * @var \Modules\ItemManagement\Models\Item $item
  */
 $item = $this->getData('item');
@@ -39,7 +39,7 @@ echo $this->getData('nav')->render();
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : '' ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
         <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
@@ -49,11 +49,11 @@ echo $this->getData('nav')->render();
                                 <table class="layout wf-100">
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                     <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->getNumber()); ?>" disabled></span>
-                                    <tr><td><label for="iName1"><?= $this->getHtml('Name1') ?></label>
+                                    <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                                     <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml(''); ?>" required>
-                                    <tr><td><label for="iName2"><?= $this->getHtml('Name2') ?></label>
+                                    <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
                                     <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml(''); ?>">
-                                    <tr><td><label for="iName3"><?= $this->getHtml('Name3') ?></label>
+                                    <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                                     <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml(''); ?>">
                                 </table>
                             </div>
@@ -226,12 +226,12 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Groups') ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
                             $l11ns = [];
@@ -303,12 +303,12 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Groups') ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
                             $l11ns = [];
@@ -382,12 +382,12 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Prices') ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
                             $l11ns = [];
@@ -512,12 +512,12 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Prices') ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>
                                 <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name') ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
                             $l11ns = [];
@@ -685,9 +685,9 @@ echo $this->getData('nav')->render();
                             <tr>
                                 <td>IP
                                 <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                <td><?= $this->getHtml('Name') ?>
-                                <td class="wf-100"><?= $this->getHtml('Log') ?>
-                                <td><?= $this->getHtml('Date') ?>
+                                <td><?= $this->getHtml('Name'); ?>
+                                <td class="wf-100"><?= $this->getHtml('Log'); ?>
+                                <td><?= $this->getHtml('Date'); ?>
                         <tfoot>
                             <tr>
                                 <td colspan="6">

@@ -103,7 +103,7 @@ class Item
      *
      * @since 1.0.0
      */
-    public function setSuccessor(int $successor): void
+    public function setSuccessor(int $successor) : void
     {
         $this->successor = $successor;
     }
@@ -115,7 +115,7 @@ class Item
      *
      * @since 1.0.0
      */
-    public function getSuccessor(): int
+    public function getSuccessor() : int
     {
         return $this->successor;
     }
@@ -131,7 +131,6 @@ class Item
     {
         return $this->number;
     }
-
 
     /**
      * Set the item number
