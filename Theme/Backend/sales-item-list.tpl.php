@@ -34,7 +34,7 @@ echo $this->getData('nav')->render(); ?>
                     <td><?= $this->getHtml('Ordered'); ?>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId()); ?>
+                $url         = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId()); ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getNumber()); ?></a>
                     <td>

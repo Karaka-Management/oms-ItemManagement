@@ -234,7 +234,7 @@ echo $this->getData('nav')->render();
                                 <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
-                            $l11ns = [];
+                            $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
@@ -311,7 +311,7 @@ echo $this->getData('nav')->render();
                                 <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
-                            $l11ns = [];
+                            $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
@@ -390,7 +390,7 @@ echo $this->getData('nav')->render();
                                 <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
-                            $l11ns = [];
+                            $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
@@ -520,7 +520,7 @@ echo $this->getData('nav')->render();
                                 <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                         <tbody>
                             <?php $c = 0;
-                            $l11ns = [];
+                            $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
