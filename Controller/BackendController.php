@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Modules\ItemManagement\Models\ItemMapper;
-
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
