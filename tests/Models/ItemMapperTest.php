@@ -22,6 +22,10 @@ use Modules\ItemManagement\Models\ItemMapper;
  */
 class ItemMapperTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @covers Modules\HumanResourceManagement\Models\ItemMapper
+     * @group module
+     */
     public function testCR() : void
     {
         $item = new Item();
