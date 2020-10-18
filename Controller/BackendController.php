@@ -19,6 +19,8 @@ use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
+use Model\SettingsEnum;
+use Modules\Admin\Models\LocalizationMapper;
 
 /**
  * ItemManagement controller class.
@@ -48,7 +50,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $items = ItemMapper::getAll();
+        $items = ItemMapper::withConditional('language', $response->getHeader()->getL11n()->getLanguage())::getAll();
         $view->addData('items', $items);
 
         return $view;
@@ -179,6 +181,12 @@ final class BackendController extends Controller
 
         $item = ItemMapper::get((int) $request->getData('id'));
         $view->addData('item', $item);
+
+        $settings = $this->app->appSettings->get(null, [
+            SettingsEnum::DEFAULT_LOCALIZATION,
+        ]);
+
+        $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings['id']));
 
         return $view;
     }

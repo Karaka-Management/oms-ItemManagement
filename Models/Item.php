@@ -48,7 +48,7 @@ class Item
 
     private $media = [];
 
-    private $l11n = null;
+    private $l11n = [];
 
     private $attributes = [];
 
@@ -144,5 +144,39 @@ class Item
     public function setNumber(string $number) : void
     {
         $this->number = $number;
+    }
+
+    /**
+     * Add item l11n
+     *
+     * @param ItemL11n $l11n Item localization
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addL11n(ItemL11n $l11n) : void
+    {
+        $this->l11n[] = $l11n;
+    }
+
+    /**
+     * Get l11n
+     *
+     * @param string $type Localization type
+     *
+     * @return ItemL11n
+     *
+     * @since 1.0.0
+     */
+    public function getL11n(string $type) : ItemL11n
+    {
+        foreach ($this->l11n as $l11n) {
+            if ($l11n->getType()->getTitle() === $type) {
+                return $l11n;
+            }
+        }
+
+        return new NullItemL11n();
     }
 }
