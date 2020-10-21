@@ -51,11 +51,11 @@ final class ItemAttributeMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'type' => [
             'mapper'        => ItemAttributeTypeMapper::class,
-            'self'          => 'itemmgmt_item_l11n_typeref',
+            'external'          => 'itemmgmt_item_l11n_typeref',
         ],
         'value' => [
             'mapper'        => ItemAttributeValueMapper::class,
-            'self'          => 'itemmgmt_item_l11n_typeref',
+            'external'          => 'itemmgmt_item_l11n_typeref',
         ],
     ];
 

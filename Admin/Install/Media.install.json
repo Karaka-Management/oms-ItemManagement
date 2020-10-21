@@ -1,0 +1,17 @@
+[
+    {
+        "name": "ItemManagement",
+        "virtualPath": "/Modules",
+        "user": 1
+    },
+    {
+        "name": "Articles",
+        "virtualPath": "/Modules/ItemManagement",
+        "user": 1
+    },
+    {
+        "name": "Images",
+        "virtualPath": "/Modules/ItemManagement/Articles",
+        "user": 1
+    }
+]

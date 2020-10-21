@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
+use Modules\Media\Models\NullMedia;
+
 /**
  * Account class.
  *
@@ -46,7 +48,7 @@ class Item
 
     private int $type = 0;
 
-    private $media = [];
+    private $files = [];
 
     private $l11n = [];
 
@@ -178,5 +180,33 @@ class Item
         }
 
         return new NullItemL11n();
+    }
+
+    public function addFile($media) : void
+    {
+        $this->files[] = $media;
+    }
+
+    public function getFileByType(string $type)
+    {
+        foreach ($this->files as $file) {
+            if ($file->getType() === $type) {
+                return $file;
+            }
+        }
+
+        return new NullMedia();
+    }
+
+    public function getFilesByType(string $type) : array
+    {
+        $files = [];
+        foreach ($this->files as $file) {
+            if ($file->getType() === $type) {
+                $files[] = $file;
+            }
+        }
+
+        return $files;
     }
 }

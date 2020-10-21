@@ -52,10 +52,10 @@ final class ItemAttributeTypeMapper extends DataMapperAbstract
         'l11n' => [
             'mapper'        => ItemAttributeTypeL11nMapper::class,
             'table'         => 'itemmgmt_attr_type_l11n',
-            'external'      => 'itemmgmt_attr_type_l11n_type',
+            'self'      => 'itemmgmt_attr_type_l11n_type',
             'column'        => 'title',
             'conditional'   => true,
-            'self'          => null,
+            'external'          => null,
         ],
     ];
 

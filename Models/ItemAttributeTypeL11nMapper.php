@@ -51,7 +51,7 @@ final class ItemAttributeTypeL11nMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'language' => [
             'mapper'        => LanguageMapper::class,
-            'self'          => 'itemmgmt_attr_type_l11n_lang',
+            'external'          => 'itemmgmt_attr_type_l11n_lang',
             'by'            => 'code2',
             'column'        => 'code2',
             'conditional'   => true,

@@ -66,25 +66,25 @@ final class ItemMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $hasMany = [
-//        'media' => [
-//            'mapper'   => MediaMapper::class, /* mapper of the related object */
-//            'table'    => 'itemmgmt_item_media', /* table of the related object, null if no relation table is used (many->1) */
-//            'external' => 'itemmgmt_item_media_dst',
-//            'self'     => 'itemmgmt_item_media_src',
-//        ],
+        'files' => [
+            'mapper'   => MediaMapper::class, /* mapper of the related object */
+            'table'    => 'itemmgmt_item_media', /* table of the related object, null if no relation table is used (many->1) */
+            'external' => 'itemmgmt_item_media_media',
+            'self'     => 'itemmgmt_item_media_item',
+        ],
         'l11n' => [
             'mapper'        => ItemL11nMapper::class,
             'table'         => 'itemmgmt_item_l11n',
-            'external'      => 'itemmgmt_item_l11n_item',
+            'self'      => 'itemmgmt_item_l11n_item',
             'conditional'   => true,
-            'self'          => null,
+            'external'          => null,
         ],
         'attributes' => [
             'mapper'        => ItemAttributeMapper::class,
             'table'         => 'itemmgmt_item_attr',
-            'external'      => 'itemmgmt_item_attr_item',
+            'self'      => 'itemmgmt_item_attr_item',
             'conditional'   => true,
-            'self'          => null,
+            'external'          => null,
         ],
     ];
 }

@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 use phpOMS\Uri\UriFactory;
+use Modules\Media\Models\NullMedia;
 
 /** @var \phpOMS\Views\View $this */
 $items = $this->getData('items');
@@ -26,6 +27,7 @@ echo $this->getData('nav')->render(); ?>
             <table id="iSalesItemList" class="default">
                 <thead>
                 <tr>
+                    <td><?= $this->getHtml('ID', '0', '0'); ?>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
                         <input id="itemList-r1-asc" name="itemList-sort" type="radio"><label for="itemList-r1-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
                         <input id="itemList-r1-desc" name="itemList-sort" type="radio"><label for="itemList-r1-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
@@ -52,8 +54,14 @@ echo $this->getData('nav')->render(); ?>
                         <input id="itemList-r8-desc" name="itemList-sort" type="radio"><label for="itemList-r8-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId()); ?>
+                $url         = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId());
+                $image       = $value->getFileByType('backend_image');
+                ?>
                 <tr data-href="<?= $url; ?>">
+                    <td><a href="<?= $url; ?>"><img width="30" loading="lazy" class="item-image"
+                            src="<?= $image instanceof NullMedia ?
+                                        UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
+                                        UriFactory::build('{/prefix}' . $image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getNumber()); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->getDescription()); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->getDescription()); ?></a>

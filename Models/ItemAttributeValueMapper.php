@@ -57,14 +57,14 @@ final class ItemAttributeValueMapper extends DataMapperAbstract
     protected static array $ownsOne = [
         'language' => [
             'mapper'        => LanguageMapper::class,
-            'self'          => 'itemmgmt_attr_value_lang',
+            'external'          => 'itemmgmt_attr_value_lang',
             'by'            => 'code2',
             'column'        => 'code2',
             'conditional'   => true,
         ],
         'country' => [
             'mapper'        => CountryMapper::class,
-            'self'          => 'itemmgmt_attr_value_country',
+            'external'          => 'itemmgmt_attr_value_country',
             'by'            => 'code2',
             'column'        => 'code2',
             'conditional'   => true,

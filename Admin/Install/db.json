@@ -234,23 +234,6 @@
             }
         }
     },
-    "itemmgmt_item_media_type": {
-        "name": "itemmgmt_item_media_type",
-        "fields": {
-            "itemmgmt_item_media_type_id": {
-                "name": "itemmgmt_item_media_type_id",
-                "type": "INT",
-                "null": false,
-                "primary": true,
-                "autoincrement": true
-            },
-            "itemmgmt_item_media_type_title": {
-                "name": "itemmgmt_item_media_type_title",
-                "type": "VARCHAR(255)",
-                "null": false
-            }
-        }
-    },
     "itemmgmt_item_media": {
         "name": "itemmgmt_item_media",
         "fields": {
@@ -260,13 +243,6 @@
                 "null": false,
                 "primary": true,
                 "autoincrement": true
-            },
-            "itemmgmt_item_media_type": {
-                "name": "itemmgmt_item_media_type",
-                "type": "INT",
-                "null": false,
-                "foreignTable": "itemmgmt_item_media_type",
-                "foreignKey": "itemmgmt_item_media_type_id"
             },
             "itemmgmt_item_media_item": {
                 "name": "itemmgmt_item_media_item",
