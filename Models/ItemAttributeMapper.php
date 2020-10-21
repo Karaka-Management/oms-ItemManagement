@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\DataStorage\Database\DataMapperAbstract;
-use phpOMS\Localization\Defaults\LanguageMapper;
 
 /**
  * Item mapper class.

@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Controller;
 
+use Model\SettingsEnum;
+use Modules\Admin\Models\LocalizationMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
-use Model\SettingsEnum;
-use Modules\Admin\Models\LocalizationMapper;
 
 /**
  * ItemManagement controller class.

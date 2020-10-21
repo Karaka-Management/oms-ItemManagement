@@ -36,10 +36,10 @@ final class ItemAttributeTypeL11nMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'itemmgmt_attr_type_l11n_id'       => ['name' => 'itemmgmt_attr_type_l11n_id',       'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_attr_type_l11n_title'    => ['name' => 'itemmgmt_attr_type_l11n_title',    'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
+        'itemmgmt_attr_type_l11n_id'        => ['name' => 'itemmgmt_attr_type_l11n_id',       'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_attr_type_l11n_title'     => ['name' => 'itemmgmt_attr_type_l11n_title',    'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
         'itemmgmt_attr_type_l11n_type'      => ['name' => 'itemmgmt_attr_type_l11n_type',      'type' => 'int',    'internal' => 'type'],
-        'itemmgmt_attr_type_l11n_lang' => ['name' => 'itemmgmt_attr_type_l11n_lang', 'type' => 'string', 'internal' => 'language'],
+        'itemmgmt_attr_type_l11n_lang'      => ['name' => 'itemmgmt_attr_type_l11n_lang', 'type' => 'string', 'internal' => 'language'],
     ];
 
     /**

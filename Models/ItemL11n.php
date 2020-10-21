@@ -203,10 +203,10 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     public function toArray() : array
     {
         return [
-            'id'       => $this->id,
+            'id'             => $this->id,
             'description'    => $this->description,
-            'item'      => $this->item,
-            'language' => $this->language,
+            'item'           => $this->item,
+            'language'       => $this->language,
         ];
     }
 

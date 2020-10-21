@@ -14,17 +14,17 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
-use phpOMS\Module\InstallerAbstract;
-use phpOMS\DataStorage\Database\DatabasePool;
-use phpOMS\Module\ModuleInfo;
-use phpOMS\Config\SettingsInterface;
-use phpOMS\Localization\ISO639x1Enum;
 use Modules\ItemManagement\Models\ItemAttributeType;
-use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use phpOMS\Config\SettingsInterface;
+use phpOMS\DataStorage\Database\DatabasePool;
+use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Module\InstallerAbstract;
+use phpOMS\Module\ModuleInfo;
 
 /**
  * Installer class.
