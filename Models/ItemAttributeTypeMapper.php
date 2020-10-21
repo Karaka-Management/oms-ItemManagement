@@ -49,11 +49,11 @@ final class ItemAttributeTypeMapper extends DataMapperAbstract
      */
     protected static array $hasMany = [
         'l11n' => [
-            'mapper'        => ItemAttributeTypeL11nMapper::class,
-            'table'         => 'itemmgmt_attr_type_l11n',
-            'self'      => 'itemmgmt_attr_type_l11n_type',
-            'column'        => 'title',
-            'conditional'   => true,
+            'mapper'            => ItemAttributeTypeL11nMapper::class,
+            'table'             => 'itemmgmt_attr_type_l11n',
+            'self'              => 'itemmgmt_attr_type_l11n_type',
+            'column'            => 'title',
+            'conditional'       => true,
             'external'          => null,
         ],
     ];
