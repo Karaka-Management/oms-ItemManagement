@@ -47,6 +47,13 @@ final class Installer extends InstallerAbstract
         self::createItemAttributeValues($attrTypes);
     }
 
+    /**
+     * Install default attribute types
+     *
+     * @return ItemAttributeType[]
+     *
+     * @since 1.0.0
+     */
     private static function createItemAttributeTypes() : array
     {
         $itemAttrType = [];
@@ -59,6 +66,15 @@ final class Installer extends InstallerAbstract
         return $itemAttrType;
     }
 
+    /**
+     * Create default attribute values for types
+     *
+     * @param ItemAttributeType[] $itemAttrType Attribute types
+     *
+     * @return array<string, ItemAttributeValue[]>
+     *
+     * @since 1.0.0
+     */
     private static function createItemAttributeValues(array $itemAttrType) : array
     {
         $itemAttrValue = [];
@@ -110,6 +126,6 @@ final class Installer extends InstallerAbstract
         $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Grau', ISO639x1Enum::_DE);
         ItemAttributeValueMapper::create($itemAttrValue['color'][21]);
 
-        return $itemAttrType;
+        return $itemAttrValue;
     }
 }

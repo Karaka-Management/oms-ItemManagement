@@ -19,7 +19,7 @@ use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 
 /**
- * Item class.
+ * Item attribute value class.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 1.0
@@ -28,34 +28,90 @@ use phpOMS\Localization\ISO639x1Enum;
  */
 class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
 {
+    /**
+     * Id
+     *
+     * @var int
+     * @since 1.0.0
+     */
     protected int $id = 0;
 
-    protected $type = 0;
+    /**
+     * Type of the attribute
+     *
+     * @var int
+     * @since 1.0.0
+     */
+    protected int $type = 0;
 
+    /**
+     * Int value
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
     protected ?int $valueInt = null;
 
+    /**
+     * String value
+     *
+     * @var null|string
+     * @since 1.0.0
+     */
     protected ?string $valueStr = null;
 
+    /**
+     * Decimal value
+     *
+     * @var null|float
+     * @since 1.0.0
+     */
     protected ?float $valueDec = null;
 
-    protected ?\DateTime $valueDat = null;
+    /**
+     * DateTime value
+     *
+     * @var null|\DateTimeInterface
+     * @since 1.0.0
+     */
+    protected ?\DateTimeInterface $valueDat = null;
 
+    /**
+     * Is a default value which can be selected
+     *
+     * @var bool
+     * @since 1.0.0
+     */
     protected bool $isDefault = false;
 
+    /**
+     * Language
+     *
+     * @var string
+     * @since 1.0.0
+     */
     protected string $language = ISO639x1Enum::_EN;
 
+    /**
+     * Country
+     *
+     * @var string
+     * @since 1.0.0
+     */
     protected string $country = ISO3166TwoEnum::_USA;
 
     /**
      * Constructor.
      *
-     * @param string $description Title
+     * @param int    $type     Type
+     * @param mixed  $value    Value
+     * @param string $language Language
      *
      * @since 1.0.0
      */
-    public function __construct($type = 0, $value = '', string $language = ISO639x1Enum::_EN)
+    public function __construct(int $type = 0, $value = '', string $language = ISO639x1Enum::_EN)
     {
-        $this->type  = $type;
+        $this->type = $type;
 
         if (\is_string($value)) {
             $this->valueStr = $value;
@@ -67,7 +123,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
             $this->valueDat = $value;
         }
 
-        $this->language    = $language;
+        $this->language = $language;
     }
 
     /**

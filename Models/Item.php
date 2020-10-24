@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Media\Models\NullMedia;
+use Modules\Media\Models\Media;
 
 /**
  * Account class.
@@ -34,25 +35,41 @@ class Item
      */
     protected int $id = 0;
 
-    private $number = '';
-
-    private $articleGroup = 0;
-
-    private $salesGroup = 0;
-
-    private $productGroup = 0;
-
-    private $segment = 0;
+    /**
+     * Item number/id
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    private string $number = '';
 
     private $successor = 0;
 
     private int $type = 0;
 
-    private $files = [];
+    /**
+     * Files.
+     *
+     * @var int[]|Media[]
+     * @since 1.0.0
+     */
+    private array $files = [];
 
-    private $l11n = [];
+    /**
+     * Localizations.
+     *
+     * @var int[]|ItemL11n[]
+     * @since 1.0.0
+     */
+    private array $l11n = [];
 
-    private $attributes = [];
+    /**
+     * Attributes.
+     *
+     * @var int[]|ItemAttribute[]
+     * @since 1.0.0
+     */
+    private array $attributes = [];
 
     private $partslist = null;
 
@@ -60,7 +77,13 @@ class Item
 
     private $disposal = null;
 
-    private $createdAt = null;
+    /**
+     * Created at.
+     *
+     * @var \DateTimeImmutable
+     * @since 1.0.0
+     */
+    private \DateTimeImmutable $createdAt;
 
     private $info = '';
 
@@ -182,12 +205,30 @@ class Item
         return new NullItemL11n();
     }
 
+    /**
+     * Add media to item
+     *
+     * @param int|Media $media Media
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function addFile($media) : void
     {
         $this->files[] = $media;
     }
 
-    public function getFileByType(string $type)
+    /**
+     * Get media file by type
+     *
+     * @param string $type Media type
+     *
+     * @return Media
+     *
+     * @since 1.0.0
+     */
+    public function getFileByType(string $type) : Media
     {
         foreach ($this->files as $file) {
             if ($file->getType() === $type) {
@@ -198,6 +239,15 @@ class Item
         return new NullMedia();
     }
 
+    /**
+     * Get all media files by type
+     *
+     * @param string $type Media type
+     *
+     * @return Media[]
+     *
+     * @since 1.0.0
+     */
     public function getFilesByType(string $type) : array
     {
         $files = [];

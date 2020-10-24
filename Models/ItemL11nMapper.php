@@ -36,30 +36,30 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'itemmgmt_item_l11n_id'             => ['name' => 'itemmgmt_item_l11n_id',       'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_item_l11n_description'    => ['name' => 'itemmgmt_item_l11n_description',    'type' => 'string', 'internal' => 'description', 'autocomplete' => true],
-        'itemmgmt_item_l11n_item'           => ['name' => 'itemmgmt_item_l11n_item',      'type' => 'int',    'internal' => 'item'],
-        'itemmgmt_item_l11n_lang'           => ['name' => 'itemmgmt_item_l11n_lang', 'type' => 'string', 'internal' => 'language'],
-        'itemmgmt_item_l11n_typeref'        => ['name' => 'itemmgmt_item_l11n_typeref', 'type' => 'int', 'internal' => 'type'],
+        'itemmgmt_item_l11n_id'          => ['name' => 'itemmgmt_item_l11n_id',       'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_item_l11n_description' => ['name' => 'itemmgmt_item_l11n_description',    'type' => 'string', 'internal' => 'description', 'autocomplete' => true],
+        'itemmgmt_item_l11n_item'        => ['name' => 'itemmgmt_item_l11n_item',      'type' => 'int',    'internal' => 'item'],
+        'itemmgmt_item_l11n_lang'        => ['name' => 'itemmgmt_item_l11n_lang', 'type' => 'string', 'internal' => 'language'],
+        'itemmgmt_item_l11n_typeref'     => ['name' => 'itemmgmt_item_l11n_typeref', 'type' => 'int', 'internal' => 'type'],
     ];
 
     /**
      * Has one relation.
      *
-     * @var array<string, array{mapper:string, self:string, by?:string, column?:string}>
+     * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
     protected static array $ownsOne = [
         'language' => [
-            'mapper'            => LanguageMapper::class,
-            'external'          => 'itemmgmt_item_l11n_lang',
-            'by'                => 'code2',
-            'column'            => 'code2',
-            'conditional'       => true,
+            'mapper'      => LanguageMapper::class,
+            'external'    => 'itemmgmt_item_l11n_lang',
+            'by'          => 'code2',
+            'column'      => 'code2',
+            'conditional' => true,
         ],
         'type' => [
-            'mapper'            => ItemL11nTypeMapper::class,
-            'external'          => 'itemmgmt_item_l11n_typeref',
+            'mapper'   => ItemL11nTypeMapper::class,
+            'external' => 'itemmgmt_item_l11n_typeref',
         ],
     ];
 

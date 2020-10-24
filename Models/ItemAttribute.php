@@ -26,12 +26,36 @@ use phpOMS\Contract\ArrayableInterface;
  */
 class ItemAttribute implements \JsonSerializable, ArrayableInterface
 {
+    /**
+     * Id.
+     *
+     * @var int
+     * @since 1.0.0
+     */
     protected int $id = 0;
 
-    protected $item = 0;
+    /**
+     * Item this attribute belongs to
+     *
+     * @var int
+     * @since 1.0.0
+     */
+    protected int $item = 0;
 
+    /**
+     * Attribute type the attribute belongs to
+     *
+     * @var int|ItemAttributeType
+     * @since 1.0.0
+     */
     protected $type = 0;
 
+    /**
+     * Attribute value the attribute belongs to
+     *
+     * @var int|ItemAttributeValue
+     * @since 1.0.0
+     */
     protected $value = 0;
 
     /**

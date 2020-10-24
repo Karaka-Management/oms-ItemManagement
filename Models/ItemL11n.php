@@ -18,7 +18,7 @@ use phpOMS\Contract\ArrayableInterface;
 use phpOMS\Localization\ISO639x1Enum;
 
 /**
- * Item class.
+ * Localization of the item class.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 1.0
@@ -70,7 +70,9 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     /**
      * Constructor.
      *
-     * @param string $description Title
+     * @param int|ItemL11nType $type        Item localization type
+     * @param string           $description Description/content
+     * @param string           $language    Language
      *
      * @since 1.0.0
      */
@@ -136,7 +138,7 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     /**
      * Get type
      *
-     * @return int
+     * @return int|ItemL11nType
      *
      * @since 1.0.0
      */

@@ -28,7 +28,7 @@ use phpOMS\Localization\ISO639x1Enum;
 class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
 {
     /**
-     * Article ID.
+     * ID.
      *
      * @var int
      * @since 1.0.0
@@ -62,15 +62,17 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
     /**
      * Constructor.
      *
-     * @param string $description Title
+     * @param int|ItemL11nType $type     Attribute type
+     * @param string           $title    Localized title
+     * @param string           $language Language
      *
      * @since 1.0.0
      */
     public function __construct($type = 0, string $title = '', string $language = ISO639x1Enum::_EN)
     {
-        $this->type        = $type;
-        $this->title       = $title;
-        $this->language    = $language;
+        $this->type     = $type;
+        $this->title    = $title;
+        $this->language = $language;
     }
 
     /**
@@ -83,6 +85,44 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
+    }
+
+    /**
+     * Get attribute type
+     *
+     * @return int|ItemL11nType
+     *
+     * @since 1.0.0
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get attribute title
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getTitle() : string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title Title
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setTitle(string $title) : void
+    {
+        $this->title = $title;
     }
 
     /**
