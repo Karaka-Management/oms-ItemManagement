@@ -72,7 +72,7 @@ echo $this->getData('nav')->render(); ?>
                     <td>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>
-                    <tr><td colspan="6" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                    <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
             </table>
         </section>
