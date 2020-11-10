@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use Modules\Media\Models\NullMedia;
 use Modules\Media\Models\Media;
+use Modules\Media\Models\NullMedia;
 
 /**
  * Account class.
