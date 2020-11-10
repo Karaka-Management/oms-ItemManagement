@@ -35,7 +35,7 @@ class ItemL11nType implements \JsonSerializable, ArrayableInterface
     protected int $id = 0;
 
     /**
-     * Item title.
+     * Identifier for the l11n type.
      *
      * @var string
      * @since 1.0.0

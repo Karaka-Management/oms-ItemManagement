@@ -112,6 +112,34 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
     }
 
     /**
+     * Set type.
+     *
+     * @param int $type Type id
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setType(int $type) : void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language Language
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setLanguage(string $language) : void
+    {
+        $this->language = $language;
+    }
+
+    /**
      * Set title
      *
      * @param string $title Title

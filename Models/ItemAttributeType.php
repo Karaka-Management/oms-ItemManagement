@@ -66,6 +66,13 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
     protected $l11n = 0;
 
     /**
+     * Possible default attribute values
+     *
+     * @var array
+     */
+    protected array $defaults = [];
+
+    /**
      * Constructor.
      *
      * @param string $name Name/identifier of the attribute type
@@ -87,6 +94,71 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
+    }
+
+   /**
+    * Set name
+    *
+    * @param string $name Name
+    *
+    * @return void
+    *
+    * @since 1.0.0
+    */
+    public function setName(string $name) : void
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * Set l11n
+     *
+     * @param string|ItemAttributeTypeL11n $l11n Tag article l11n
+     * @param  string                      $lang Language
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setL11n($l11n, string $lang = ISO639x1Enum::_EN) : void
+    {
+        if ($l11n instanceof ItemAttributeTypeL11n) {
+            $this->l11n = $l11n;
+        } elseif ($this->l11n instanceof ItemAttributeTypeL11n && \is_string($l11n)) {
+            $this->l11n->setl11n($l11n);
+        } elseif (\is_string($l11n)) {
+            $this->l11n = new ItemAttributeTypeL11n();
+            $this->l11n->setl11n($l11n);
+            $this->l11n->setLanguage($lang);
+        }
+    }
+
+   /**
+    * Set fields
+    *
+    * @param int $fields Fields
+    *
+    * @return void
+    *
+    * @since 1.0.0
+    */
+    public function setFields(int $fields) : void
+    {
+        $this->fields = $fields;
+    }
+
+    /**
+    * Set custom
+    *
+    * @param bool $custom FieldsCustom
+    *
+    * @return void
+    *
+    * @since 1.0.0
+    */
+    public function setCustom(bool $custom) : void
+    {
+        $this->custom = $custom;
     }
 
     /**

@@ -50,7 +50,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $items = ItemMapper::withConditional('language', $response->getHeader()->getL11n()->getLanguage())::getAll();
+        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAll();
         $view->addData('items', $items);
 
         return $view;

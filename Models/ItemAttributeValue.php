@@ -21,6 +21,8 @@ use phpOMS\Localization\ISO639x1Enum;
 /**
  * Item attribute value class.
  *
+ * The relation with the type/item is defined in the ItemAttribute class.
+ *
  * @package Modules\ItemManagement\Models
  * @license OMS License 1.0
  * @link    https://orange-management.org
@@ -111,19 +113,10 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      */
     public function __construct(int $type = 0, $value = '', string $language = ISO639x1Enum::_EN)
     {
-        $this->type = $type;
-
-        if (\is_string($value)) {
-            $this->valueStr = $value;
-        } elseif (\is_int($value)) {
-            $this->valueInt = $value;
-        } elseif (\is_float($value)) {
-            $this->valueDec = $value;
-        } elseif ($value instanceof \DateTimeInterface) {
-            $this->valueDat = $value;
-        }
-
+        $this->type     = $type;
         $this->language = $language;
+
+        $this->setValue($value);
     }
 
     /**
@@ -136,6 +129,138 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
+    }
+
+    /**
+     * Set value
+     *
+     * @param int|string|float $value Value
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setValue($value) : void
+    {
+        if (\is_string($value)) {
+            $this->valueStr = $value;
+        } elseif (\is_int($value)) {
+            $this->valueInt = $value;
+        } elseif (\is_float($value)) {
+            $this->valueDec = $value;
+        } elseif ($value instanceof \DateTimeInterface) {
+            $this->valueDat = $value;
+        }
+    }
+
+    /**
+     * Set value
+     *
+     * @param int $value Value
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setValueInt(int $value) : void
+    {
+        $this->valueInt = $value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value Value
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setValueString(string $value) : void
+    {
+        $this->valueString = $value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param float $value Value
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setValueDecimal(float $value) : void
+    {
+        $this->valueDec = $value;
+    }
+
+    /**
+     * Set value
+     *
+     * @param \DateTimeInterface $value Value
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setValueDat(\DateTimeInterface $value) : void
+    {
+        $this->valueDat = $value;
+    }
+
+    /**
+     * Set default
+     *
+     * @param bool $isDefault Default
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setDefault(bool $isDefault) : void
+    {
+        $this->isDefault = $isDefault;
+    }
+
+    /**
+     * Is default value?
+     *
+     * @return  bool
+     *
+     * @since 1.0.0
+     */
+    public function isDefault() : bool
+    {
+        return $this->isDefault;
+    }
+
+    /**
+     * Set language
+     *
+     * @param string $language Language
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setLanguage(string $language) : void
+    {
+        $this->language = $language;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country Country
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setCountry(string $country) : void
+    {
+        $this->country = $country;
     }
 
     /**

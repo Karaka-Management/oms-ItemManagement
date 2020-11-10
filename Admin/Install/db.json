@@ -200,6 +200,32 @@
             }
         }
     },
+    "itemmgmt_item_attr_default": {
+        "name": "itemmgmt_item_attr_default",
+        "fields": {
+            "itemmgmt_item_attr_default_id": {
+                "name": "itemmgmt_item_attr_default_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_attr_default_type": {
+                "name": "itemmgmt_item_attr_default_type",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "itemmgmt_attr_type",
+                "foreignKey": "itemmgmt_attr_type_id"
+            },
+            "itemmgmt_item_attr_default_value": {
+                "name": "itemmgmt_item_attr_default_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "itemmgmt_attr_value",
+                "foreignKey": "itemmgmt_attr_value_id"
+            }
+        }
+    },
     "itemmgmt_item_attr": {
         "name": "itemmgmt_item_attr",
         "fields": {

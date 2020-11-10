@@ -79,52 +79,95 @@ final class Installer extends InstallerAbstract
     {
         $itemAttrValue = [];
 
-        $id                       = $itemAttrType['color']->getId();
         $itemAttrValue['color']   = [];
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Red', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][0]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Rot', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][1]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Blue', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][2]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Blau', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][3]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Green', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][4]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Grün', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][5]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Yellow', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][6]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Gelb', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][7]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'White', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][8]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Weiss', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][9]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Black', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][10]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Schwarz', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][11]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Braun', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][12]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Braun', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][13]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Purple', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][14]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Lila', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][15]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Pink', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][16]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Rosa', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][17]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Orange', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][18]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Orange', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][19]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Grey', ISO639x1Enum::_EN);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][20]);
-        $itemAttrValue['color'][] = new ItemAttributeValue($id, 'Grau', ISO639x1Enum::_DE);
-        ItemAttributeValueMapper::create($itemAttrValue['color'][21]);
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Red', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][0]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Rot', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][1]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Blue', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][2]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Blau', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][3]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Green', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][4]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grün', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][5]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Yellow', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][6]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Gelb', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][7]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'White', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][8]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Weiss', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][9]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Black', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][10]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Schwarz', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][11]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Braun', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][12]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Braun', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][13]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Purple', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][14]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Lila', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][15]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Pink', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][16]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Rosa', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][17]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Orange', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][18]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Orange', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][19]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grey', ISO639x1Enum::_EN);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][20]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
+        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grau', ISO639x1Enum::_DE);
+        $id = ItemAttributeValueMapper::create($itemAttrValue['color'][21]);
+        ItemAttributeTypeMapper::createRelation('defaults', $itemAttrType['color']->getId(), $id);
+
 
         return $itemAttrValue;
     }

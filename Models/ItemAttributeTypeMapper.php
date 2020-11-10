@@ -54,6 +54,12 @@ final class ItemAttributeTypeMapper extends DataMapperAbstract
             'conditional'       => true,
             'external'          => null,
         ],
+        'defaults' => [
+            'mapper'            => ItemAttributeValueMapper::class,
+            'table'             => 'itemmgmt_item_attr_default',
+            'self'              => 'itemmgmt_item_attr_default_type',
+            'external'          => 'itemmgmt_item_attr_default_value',
+        ],
     ];
 
     /**
