@@ -226,7 +226,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
     /**
      * Is default value?
      *
-     * @return  bool
+     * @return bool
      *
      * @since 1.0.0
      */

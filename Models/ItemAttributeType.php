@@ -96,15 +96,15 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
         return $this->id;
     }
 
-   /**
-    * Set name
-    *
-    * @param string $name Name
-    *
-    * @return void
-    *
-    * @since 1.0.0
-    */
+    /**
+     * Set name
+     *
+     * @param string $name Name
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function setName(string $name) : void
     {
         $this->name = $name;
@@ -114,7 +114,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      * Set l11n
      *
      * @param string|ItemAttributeTypeL11n $l11n Tag article l11n
-     * @param  string                      $lang Language
+     * @param string                       $lang Language
      *
      * @return void
      *
@@ -133,29 +133,29 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
         }
     }
 
-   /**
-    * Set fields
-    *
-    * @param int $fields Fields
-    *
-    * @return void
-    *
-    * @since 1.0.0
-    */
+    /**
+     * Set fields
+     *
+     * @param int $fields Fields
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function setFields(int $fields) : void
     {
         $this->fields = $fields;
     }
 
     /**
-    * Set custom
-    *
-    * @param bool $custom FieldsCustom
-    *
-    * @return void
-    *
-    * @since 1.0.0
-    */
+     * Set custom
+     *
+     * @param bool $custom FieldsCustom
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     public function setCustom(bool $custom) : void
     {
         $this->custom = $custom;
