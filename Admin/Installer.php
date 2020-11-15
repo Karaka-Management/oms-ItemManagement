@@ -25,6 +25,7 @@ use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
+use Modules\ItemManagement\Models\AttributeValueType;
 
 /**
  * Installer class.

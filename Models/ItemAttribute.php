@@ -71,6 +71,20 @@ class ItemAttribute implements \JsonSerializable, ArrayableInterface
     }
 
     /**
+     * Set item
+     *
+     * @param int|Item $item Item
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setItem($item) : void
+    {
+        $this->item = $item;
+    }
+
+    /**
      * Set type
      *
      * @param int|ItemAttributeType $type Type

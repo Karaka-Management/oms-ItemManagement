@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\Contract\ArrayableInterface;
+use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * Item Attribute Type class.

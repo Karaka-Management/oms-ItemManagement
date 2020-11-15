@@ -28,6 +28,14 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\Message\Http\HttpRequest;
+use Modules\Media\Models\PathSettings;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use Modules\ItemManagement\Models\ItemL11nTypeMapper;
+use Modules\ItemManagement\Models\ItemL11nMapper;
+use Modules\ItemManagement\Models\ItemAttributeMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 
 /**
  * ItemManagement class.
@@ -270,7 +278,7 @@ final class ApiController extends Controller
         $l11nRequest->setData('language', $request->getData('language'));
 
         $l11nAttributeType = $this->createItemAttributeTypeL11nFromRequest($l11nRequest);
-        $this->createModel($request->getHeader()->getAccount(), $l11nAttributeType, TagL11nMapper::class, 'attr_type_l11n_create', $request->getOrigin());
+        $this->createModel($request->getHeader()->getAccount(), $l11nAttributeType, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n_create', $request->getOrigin());
 
         $attrType->setL11n($l11nAttributeType);
 
@@ -309,7 +317,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['name'] = empty($request->getData('name')))
-            || ($val['l11n'] = empty($request->getData('l11n')))
+            || ($val['title'] = empty($request->getData('title')))
         ) {
             return $val;
         }
@@ -378,6 +386,7 @@ final class ApiController extends Controller
             $attrValue->setValueDat(new \DateTime($request->getData('value') ?? ''));
         }
 
+        $attrValue->setType($type);
         $attrValue->setDefault((bool) ($request->getData('default') ?? false));
 
         if ($request->hasData('language')) {

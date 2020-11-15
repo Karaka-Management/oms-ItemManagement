@@ -132,6 +132,20 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
     }
 
     /**
+     * Set value type
+     *
+     * @param int $type Type
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setType(int $type) : void
+    {
+        $this->type = $type;
+    }
+
+    /**
      * Set value
      *
      * @param int|string|float $value Value
