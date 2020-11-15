@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
+use Modules\ItemManagement\Models\AttributeValueType;
 use Modules\ItemManagement\Models\ItemAttributeType;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
@@ -25,7 +26,6 @@ use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
-use Modules\ItemManagement\Models\AttributeValueType;
 
 /**
  * Installer class.

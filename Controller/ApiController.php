@@ -17,25 +17,25 @@ namespace Modules\ItemManagement\Controller;
 use Modules\ItemManagement\Models\AttributeValueType;
 use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
+use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeType;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
+use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
+use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11n;
+use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
+use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
+use Modules\Media\Models\PathSettings;
+use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Message\Http\HttpRequest;
-use Modules\Media\Models\PathSettings;
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
-use Modules\ItemManagement\Models\ItemAttributeValueMapper;
-use Modules\ItemManagement\Models\ItemL11nTypeMapper;
-use Modules\ItemManagement\Models\ItemL11nMapper;
-use Modules\ItemManagement\Models\ItemAttributeMapper;
-use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 
 /**
  * ItemManagement class.
