@@ -13,6 +13,8 @@
 declare(strict_types=1);
 
 use phpOMS\Localization\NullLocalization;
+use phpOMS\Uri\UriFactory;
+use Modules\Media\Models\NullMedia;
 
 /**
  * @var \Modules\ItemManagement\Models\Item $item
@@ -56,11 +58,11 @@ echo $this->getData('nav')->render();
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                     <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->getNumber()); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
-                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->getDescription()); ?>" required>
+                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->getDescription()); ?>" spellcheck="false" required>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
-                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->getDescription()); ?>">
+                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->getDescription()); ?>" spellcheck="false">
                                     <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
-                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->getDescription()); ?>">
+                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->getDescription()); ?>" spellcheck="false">
                                 </table>
                             </div>
                             <div class="portlet-foot">
@@ -68,6 +70,16 @@ echo $this->getData('nav')->render();
                             </div>
                         </form>
                     </section>
+
+                    <?php $image = $item->getFileByType('backend_image');
+                        if (!($image instanceof NullMedia)) : ?>
+                    <section class="portlet">
+                        <div class="portlet-body">
+                            <img width="100%" loading="lazy" class="item-image"
+                                src="<?= UriFactory::build('{/prefix}' . $image->getPath()); ?>">
+                        </div>
+                    </section>
+                    <?php endif; ?>
 
                     <section class="portlet highlight-4">
                         <div class="portlet-body">
