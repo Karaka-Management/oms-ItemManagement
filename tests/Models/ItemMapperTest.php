@@ -28,7 +28,7 @@ class ItemMapperTest extends \PHPUnit\Framework\TestCase
      */
     public function testCR() : void
     {
-        $item = new Item();
+        $item         = new Item();
         $item->number = '123456789';
 
         $id = ItemMapper::create($item);
@@ -44,7 +44,7 @@ class ItemMapperTest extends \PHPUnit\Framework\TestCase
     public function testItemVolume() : void
     {
         for ($i = 0; $i < 100; ++$i) {
-            $item = new Item();
+            $item         = new Item();
             $item->number = (string) \mt_rand(100000, 999999);
 
             ItemMapper::create($item);

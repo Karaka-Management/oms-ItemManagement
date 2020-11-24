@@ -114,7 +114,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
         } elseif ($this->l11n instanceof ItemAttributeTypeL11n && \is_string($l11n)) {
             $this->l11n->title = $l11n;
         } elseif (\is_string($l11n)) {
-            $this->l11n = new ItemAttributeTypeL11n();
+            $this->l11n        = new ItemAttributeTypeL11n();
             $this->l11n->title = $l11n;
             $this->l11n->setLanguage($lang);
         }

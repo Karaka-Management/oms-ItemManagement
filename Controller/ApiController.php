@@ -85,7 +85,7 @@ final class ApiController extends Controller
      */
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
-        $item = new Item();
+        $item         = new Item();
         $item->number = $request->getData('number') ?? '';
 
         return $item;
@@ -459,7 +459,7 @@ final class ApiController extends Controller
      */
     private function createItemL11nTypeFromRequest(RequestAbstract $request) : ItemL11nType
     {
-        $itemL11nType = new ItemL11nType();
+        $itemL11nType        = new ItemL11nType();
         $itemL11nType->title = (string) ($request->getData('title') ?? '');
 
         return $itemL11nType;
