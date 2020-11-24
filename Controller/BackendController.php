@@ -50,7 +50,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $items = ItemMapper::withConditional('language', $response->getLanguage())::getNewest(10);
+        $items = ItemMapper::withConditional('language', $response->getLanguage())::getNewest(50);
         $view->addData('items', $items);
 
         return $view;
@@ -179,7 +179,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $item = ItemMapper::get((int) $request->getData('id'));
+        $item = ItemMapper::withConditional('language', $response->getLanguage())::get((int) $request->getData('id'));
         $view->addData('item', $item);
 
         $settings = $this->app->appSettings->get(null, [
