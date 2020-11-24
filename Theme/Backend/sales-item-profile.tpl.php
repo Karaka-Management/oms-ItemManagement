@@ -12,9 +12,9 @@
  */
 declare(strict_types=1);
 
+use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
-use Modules\Media\Models\NullMedia;
 
 /**
  * @var \Modules\ItemManagement\Models\Item $item
