@@ -82,7 +82,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      */
     public function __construct(string $name = '')
     {
-        $this->name = $name;
+        $this->setL11n($name);
     }
 
     /**
@@ -95,20 +95,6 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name Name
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setName(string $name) : void
-    {
-        $this->name = $name;
     }
 
     /**
@@ -126,10 +112,10 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
         if ($l11n instanceof ItemAttributeTypeL11n) {
             $this->l11n = $l11n;
         } elseif ($this->l11n instanceof ItemAttributeTypeL11n && \is_string($l11n)) {
-            $this->l11n->setl11n($l11n);
+            $this->l11n->title = $l11n;
         } elseif (\is_string($l11n)) {
             $this->l11n = new ItemAttributeTypeL11n();
-            $this->l11n->setl11n($l11n);
+            $this->l11n->title = $l11n;
             $this->l11n->setLanguage($lang);
         }
     }

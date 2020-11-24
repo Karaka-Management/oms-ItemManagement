@@ -47,7 +47,7 @@ echo $this->getData('nav')->render();
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
         <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
@@ -56,13 +56,13 @@ echo $this->getData('nav')->render();
                             <div class="portlet-body">
                                 <table class="layout wf-100">
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->getNumber()); ?>" disabled></span>
+                                    <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
-                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->getDescription()); ?>" spellcheck="false" required>
+                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->description); ?>" spellcheck="false" required>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
-                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->getDescription()); ?>" spellcheck="false">
+                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->description); ?>" spellcheck="false">
                                     <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
-                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->getDescription()); ?>" spellcheck="false">
+                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->description); ?>" spellcheck="false">
                                 </table>
                             </div>
                             <div class="portlet-foot">
@@ -258,7 +258,7 @@ echo $this->getData('nav')->render();
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
                                 <tr>
@@ -335,7 +335,7 @@ echo $this->getData('nav')->render();
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
                                 <tr>
@@ -414,7 +414,7 @@ echo $this->getData('nav')->render();
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
                                 <tr>
@@ -544,7 +544,7 @@ echo $this->getData('nav')->render();
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
                                 <tr>
@@ -712,8 +712,8 @@ echo $this->getData('nav')->render();
                                     <tbody>
                                         <tr>
                                             <td><?= $this->printHtml($this->request->getOrigin()); ?>
-                                            <td><?= $this->printHtml($this->request->getHeader()->getAccount()); ?>
-                                            <td><?= $this->printHtml($this->request->getHeader()->getAccount()); ?>
+                                            <td><?= $this->printHtml($this->request->header->account); ?>
+                                            <td><?= $this->printHtml($this->request->header->account); ?>
                                             <td>Creating item
                                             <td><?= $this->printHtml((new \DateTime('now'))->format('Y-m-d H:i:s')); ?>
                     </table>

@@ -65,7 +65,7 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
      * @var string
      * @since 1.0.0
      */
-    private string $description = '';
+    public string $description = '';
 
     /**
      * Constructor.
@@ -171,32 +171,6 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     public function setLanguage(string $language) : void
     {
         $this->language = $language;
-    }
-
-    /**
-     * Get item description.
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getDescription() : string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description Description
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setDescription(string $description) : void
-    {
-        $this->description = $description;
     }
 
     /**

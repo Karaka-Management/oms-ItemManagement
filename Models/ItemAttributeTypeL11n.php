@@ -57,7 +57,7 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
      * @var string
      * @since 1.0.0
      */
-    private string $title = '';
+    public string $title = '';
 
     /**
      * Constructor.
@@ -100,18 +100,6 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
     }
 
     /**
-     * Get attribute title
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getTitle() : string
-    {
-        return $this->title;
-    }
-
-    /**
      * Set type.
      *
      * @param int $type Type id
@@ -137,20 +125,6 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
     public function setLanguage(string $language) : void
     {
         $this->language = $language;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title Title
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setTitle(string $title) : void
-    {
-        $this->title = $title;
     }
 
     /**

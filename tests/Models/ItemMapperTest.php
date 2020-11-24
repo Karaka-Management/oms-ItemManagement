@@ -29,7 +29,7 @@ class ItemMapperTest extends \PHPUnit\Framework\TestCase
     public function testCR() : void
     {
         $item = new Item();
-        $item->setNumber('123456789');
+        $item->number = '123456789';
 
         $id = ItemMapper::create($item);
         self::assertGreaterThan(0, $item->getId());
@@ -45,7 +45,7 @@ class ItemMapperTest extends \PHPUnit\Framework\TestCase
     {
         for ($i = 0; $i < 100; ++$i) {
             $item = new Item();
-            $item->setNumber((string) \mt_rand(100000, 999999));
+            $item->number = (string) \mt_rand(100000, 999999);
 
             ItemMapper::create($item);
         }

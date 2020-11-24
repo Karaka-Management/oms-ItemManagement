@@ -42,8 +42,8 @@ echo $this->getData('nav')->render(); ?>
                 $url     = \phpOMS\Uri\UriFactory::build('{/prefix}business/department/profile?{?}&id=' . $value->getId()); ?>
                 <tr>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getName()); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getParent()); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->parent); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getUnit()); ?></a>
                         <?php endforeach; ?>
                         <?php if ($c === 0) : ?>

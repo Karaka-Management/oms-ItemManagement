@@ -64,13 +64,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemCreate($request))) {
             $response->set('item_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $item = $this->createItemFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $item, ItemMapper::class, 'item', $request->getOrigin());
+        $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
     }
 
@@ -86,7 +86,7 @@ final class ApiController extends Controller
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
         $item = new Item();
-        $item->setNumber($request->getData('number') ?? '');
+        $item->number = $request->getData('number') ?? '';
 
         return $item;
     }
@@ -127,13 +127,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemAttributeCreate($request))) {
             $response->set('attribute_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $attribute = $this->createItemAttributeFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $attribute, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
+        $this->createModel($request->header->account, $attribute, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully created', $attribute);
     }
 
@@ -195,13 +195,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemAttributeTypeL11nCreate($request))) {
             $response->set('attr_type_l11n_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $attrL11n = $this->createItemAttributeTypeL11nFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $attrL11n, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
+        $this->createModel($request->header->account, $attrL11n, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
     }
 
@@ -221,7 +221,7 @@ final class ApiController extends Controller
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
-        $attrL11n->setTitle((string) ($request->getData('title') ?? ''));
+        $attrL11n->title = (string) ($request->getData('title') ?? '');
 
         return $attrL11n;
     }
@@ -264,21 +264,21 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemAttributeTypeCreate($request))) {
             $response->set('attr_type_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $attrType = $this->createItemAttributeTypeFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
+        $this->createModel($request->header->account, $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
 
-        $l11nRequest = new HttpRequest($request->getUri());
+        $l11nRequest = new HttpRequest($request->uri);
         $l11nRequest->setData('type', $attrType->getId());
         $l11nRequest->setData('title', $request->getData('title'));
         $l11nRequest->setData('language', $request->getData('language'));
 
         $l11nAttributeType = $this->createItemAttributeTypeL11nFromRequest($l11nRequest);
-        $this->createModel($request->getHeader()->getAccount(), $l11nAttributeType, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n_create', $request->getOrigin());
+        $this->createModel($request->header->account, $l11nAttributeType, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n_create', $request->getOrigin());
 
         $attrType->setL11n($l11nAttributeType);
 
@@ -297,7 +297,7 @@ final class ApiController extends Controller
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
         $attrType = new ItemAttributeType();
-        $attrType->setName((string) ($request->getData('name') ?? ''));
+        $attrType->setL11n((string) ($request->getData('name') ?? ''));
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->setCustom((bool) ($request->getData('custom') ?? false));
 
@@ -342,17 +342,17 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemAttributeValueCreate($request))) {
             $response->set('attr_value_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $attrValue = $this->createItemAttributeValueFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $attrValue, ItemAttributeValueMapper::class, 'attr_value', $request->getOrigin());
+        $this->createModel($request->header->account, $attrValue, ItemAttributeValueMapper::class, 'attr_value', $request->getOrigin());
 
         if ($attrValue->isDefault()) {
             $this->createModelRelation(
-                $request->getHeader()->getAccount(),
+                $request->header->account,
                 (int) $request->getData('attributetype'),
                 $attrValue->getId(),
                 ItemAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
@@ -394,7 +394,7 @@ final class ApiController extends Controller
         }
 
         if ($request->hasData('country')) {
-            $attrValue->setCountry((string) ($request->getData('country') ?? $request->getHeader()->getL11n()->getCountry()));
+            $attrValue->setCountry((string) ($request->getData('country') ?? $request->header->l11n->getCountry()));
         }
 
         return $attrValue;
@@ -438,13 +438,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemL11nTypeCreate($request))) {
             $response->set('item_l11n_type_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $itemL11nType = $this->createItemL11nTypeFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $itemL11nType, ItemL11nTypeMapper::class, 'item_l11n_type', $request->getOrigin());
+        $this->createModel($request->header->account, $itemL11nType, ItemL11nTypeMapper::class, 'item_l11n_type', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item localization type', 'Item localization type successfully created', $itemL11nType);
     }
 
@@ -460,7 +460,7 @@ final class ApiController extends Controller
     private function createItemL11nTypeFromRequest(RequestAbstract $request) : ItemL11nType
     {
         $itemL11nType = new ItemL11nType();
-        $itemL11nType->setTitle((string) ($request->getData('title') ?? ''));
+        $itemL11nType->title = (string) ($request->getData('title') ?? '');
 
         return $itemL11nType;
     }
@@ -501,13 +501,13 @@ final class ApiController extends Controller
     {
         if (!empty($val = $this->validateItemL11nCreate($request))) {
             $response->set('item_l11n_create', new FormValidation($val));
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
         $itemL11n = $this->createItemL11nFromRequest($request);
-        $this->createModel($request->getHeader()->getAccount(), $itemL11n, ItemL11nMapper::class, 'item_l11n', $request->getOrigin());
+        $this->createModel($request->header->account, $itemL11n, ItemL11nMapper::class, 'item_l11n', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item localization', 'Item localization successfully created', $itemL11n);
     }
 
@@ -528,7 +528,7 @@ final class ApiController extends Controller
         $itemL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
-        $itemL11n->setDescription((string) ($request->getData('description') ?? ''));
+        $itemL11n->description = (string) ($request->getData('description') ?? '');
 
         return $itemL11n;
     }
@@ -574,7 +574,7 @@ final class ApiController extends Controller
 
         if (empty($uploadedFiles)) {
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Item', 'Invalid item image', $uploadedFiles);
-            $response->getHeader()->setStatusCode(RequestStatusCode::R_400);
+            $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
@@ -582,7 +582,7 @@ final class ApiController extends Controller
         $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
             $request->getData('name') ?? '',
             $uploadedFiles,
-            $request->getHeader()->getAccount(),
+            $request->header->account,
             'Modules/Media/Files/Modules/ItemManagement/' . ($request->getData('item') ?? '0'),
             '/Modules/ItemManagement/' . ($request->getData('item') ?? '0'),
             $request->getData('type') ?? '',
@@ -592,7 +592,7 @@ final class ApiController extends Controller
         );
 
         $this->createModelRelation(
-            $request->getHeader()->getAccount(),
+            $request->header->account,
             (int) $request->getData('item'),
             \reset($uploaded)->getId(),
             ItemMapper::class, 'files', '', $request->getOrigin()

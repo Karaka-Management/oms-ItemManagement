@@ -37,7 +37,7 @@ echo $this->getData('nav')->render(); ?>
         </ul>
     </div>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6 col-lg-4">
@@ -93,7 +93,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </div>
         </div>
-        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-2' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Property'); ?></h1></header>
@@ -211,7 +211,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-4" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-4' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-4" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-4' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Sales'); ?></h1></header>
@@ -289,7 +289,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-5' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Purchase'); ?></h1></header>
@@ -388,7 +388,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-6" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-6' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-6" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-6' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Accounting'); ?></h1></header>
@@ -409,7 +409,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-7" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-7' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-7" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-7' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Production'); ?></h1></header>
@@ -439,7 +439,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-8" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-8' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-8" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-8' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('StockList'); ?></h1></header>
@@ -457,7 +457,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-9" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-9' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-9" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-9' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('QM'); ?></h1></header>
@@ -470,7 +470,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-10" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-10' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-10" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-10' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Packaging'); ?></h1></header>
@@ -502,7 +502,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-11" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-11' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-11" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-11' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Media'); ?></h1></header>
@@ -518,7 +518,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-12" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-12' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-12" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-12' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Stock'); ?></h1></header>
@@ -555,7 +555,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-13" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-13' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-13" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-13' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Disposal'); ?></h1></header>
@@ -568,7 +568,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-14" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-14' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-14" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-14' ? ' checked' : ''; ?>>
         <div class="tab">
             <section class="box w-33 floatLeft">
                 <header><h1><?= $this->getHtml('Files'); ?></h1></header>
@@ -584,7 +584,7 @@ echo $this->getData('nav')->render(); ?>
                 </div>
             </section>
         </div>
-        <input type="radio" id="c-tab-15" name="tabular-2"<?= $this->request->getUri()->getFragment() === 'c-tab-15' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-15" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-15' ? ' checked' : ''; ?>>
         <div class="tab">
             <?php
             $footerView = new \phpOMS\Views\PaginationView($this->l11nManager, $this->request, $this->response);
@@ -608,8 +608,8 @@ echo $this->getData('nav')->render(); ?>
                     <tbody>
                     <tr>
                         <td><?= $this->printHtml($this->request->getOrigin()); ?>
-                        <td><?= $this->printHtml($this->request->getHeader()->getAccount()); ?>
-                        <td><?= $this->printHtml($this->request->getHeader()->getAccount()); ?>
+                        <td><?= $this->printHtml($this->request->header->account); ?>
+                        <td><?= $this->printHtml($this->request->header->account); ?>
                         <td>Creating item
                         <td><?= $this->printHtml((new \DateTime('now'))->format('Y-m-d H:i:s')); ?>
                 </table>

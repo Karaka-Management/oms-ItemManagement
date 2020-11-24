@@ -41,7 +41,7 @@ class Item
      * @var string
      * @since 1.0.0
      */
-    private string $number = '';
+    public string $number = '';
 
     private $successor = 0;
 
@@ -83,7 +83,7 @@ class Item
      * @var \DateTimeImmutable
      * @since 1.0.0
      */
-    private \DateTimeImmutable $createdAt;
+    public \DateTimeImmutable $createdAt;
 
     private $info = '';
 
@@ -110,18 +110,6 @@ class Item
     }
 
     /**
-     * Get created at date time
-     *
-     * @return \DateTimeImmutable
-     *
-     * @since 1.0.0
-     */
-    public function getCreatedAt() : \DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * Set the successor item
      *
      * @return void
@@ -143,32 +131,6 @@ class Item
     public function getSuccessor() : int
     {
         return $this->successor;
-    }
-
-    /**
-     * Get the item number
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getNumber() : string
-    {
-        return $this->number;
-    }
-
-    /**
-     * Set the item number
-     *
-     * @param string $number Number
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setNumber(string $number) : void
-    {
-        $this->number = $number;
     }
 
     /**
@@ -197,7 +159,7 @@ class Item
     public function getL11n(string $type) : ItemL11n
     {
         foreach ($this->l11n as $l11n) {
-            if ($l11n->getType()->getTitle() === $type) {
+            if ($l11n->getType()->title === $type) {
                 return $l11n;
             }
         }
@@ -231,7 +193,7 @@ class Item
     public function getFileByType(string $type) : Media
     {
         foreach ($this->files as $file) {
-            if ($file->getType() === $type) {
+            if ($file->type === $type) {
                 return $file;
             }
         }
@@ -252,7 +214,7 @@ class Item
     {
         $files = [];
         foreach ($this->files as $file) {
-            if ($file->getType() === $type) {
+            if ($file->type === $type) {
                 $files[] = $file;
             }
         }

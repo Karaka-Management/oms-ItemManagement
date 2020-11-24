@@ -62,10 +62,10 @@ echo $this->getData('nav')->render(); ?>
                             src="<?= $image instanceof NullMedia ?
                                         UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
                                         UriFactory::build('{/prefix}' . $image->getPath()); ?>"></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getNumber()); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->getDescription()); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->getDescription()); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->getDescription()); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->description); ?></a>
                     <td>
                     <td>
                     <td>
