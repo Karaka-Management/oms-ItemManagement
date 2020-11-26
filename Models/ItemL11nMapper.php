@@ -24,8 +24,6 @@ use phpOMS\Localization\Defaults\LanguageMapper;
  * @license OMS License 1.0
  * @link    https://orange-management.org
  * @since   1.0.0
- *
- * @todo Do I really want to create a relation to the language mapper? It's not really needed right?
  */
 final class ItemL11nMapper extends DataMapperAbstract
 {
@@ -50,13 +48,6 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $ownsOne = [
-        'language' => [
-            'mapper'      => LanguageMapper::class,
-            'external'    => 'itemmgmt_item_l11n_lang',
-            'by'          => 'code2',
-            'column'      => 'code2',
-            'conditional' => true,
-        ],
         'type' => [
             'mapper'   => ItemL11nTypeMapper::class,
             'external' => 'itemmgmt_item_l11n_typeref',
