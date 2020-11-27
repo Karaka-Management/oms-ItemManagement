@@ -44,7 +44,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var int
      * @since 1.0.0
      */
-    protected int $type = 0;
+    public int $type = 0;
 
     /**
      * Int value
@@ -52,7 +52,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var null|int
      * @since 1.0.0
      */
-    protected ?int $valueInt = null;
+    public ?int $valueInt = null;
 
     /**
      * String value
@@ -60,7 +60,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var null|string
      * @since 1.0.0
      */
-    protected ?string $valueStr = null;
+    public ?string $valueStr = null;
 
     /**
      * Decimal value
@@ -68,7 +68,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var null|float
      * @since 1.0.0
      */
-    protected ?float $valueDec = null;
+    public ?float $valueDec = null;
 
     /**
      * DateTime value
@@ -76,7 +76,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var null|\DateTimeInterface
      * @since 1.0.0
      */
-    protected ?\DateTimeInterface $valueDat = null;
+    public ?\DateTimeInterface $valueDat = null;
 
     /**
      * Is a default value which can be selected
@@ -84,7 +84,7 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
      * @var bool
      * @since 1.0.0
      */
-    protected bool $isDefault = false;
+    public bool $isDefault = false;
 
     /**
      * Language
@@ -132,23 +132,9 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
     }
 
     /**
-     * Set value type
-     *
-     * @param int $type Type
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setType(int $type) : void
-    {
-        $this->type = $type;
-    }
-
-    /**
      * Set value
      *
-     * @param int|string|float $value Value
+     * @param int|string|float|\DateTimeInterface $value Value
      *
      * @return void
      *
@@ -165,88 +151,6 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
         } elseif ($value instanceof \DateTimeInterface) {
             $this->valueDat = $value;
         }
-    }
-
-    /**
-     * Set value
-     *
-     * @param int $value Value
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setValueInt(int $value) : void
-    {
-        $this->valueInt = $value;
-    }
-
-    /**
-     * Set value
-     *
-     * @param string $value Value
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setValueString(string $value) : void
-    {
-        $this->valueString = $value;
-    }
-
-    /**
-     * Set value
-     *
-     * @param float $value Value
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setValueDecimal(float $value) : void
-    {
-        $this->valueDec = $value;
-    }
-
-    /**
-     * Set value
-     *
-     * @param \DateTimeInterface $value Value
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setValueDat(\DateTimeInterface $value) : void
-    {
-        $this->valueDat = $value;
-    }
-
-    /**
-     * Set default
-     *
-     * @param bool $isDefault Default
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setDefault(bool $isDefault) : void
-    {
-        $this->isDefault = $isDefault;
-    }
-
-    /**
-     * Is default value?
-     *
-     * @return bool
-     *
-     * @since 1.0.0
-     */
-    public function isDefault() : bool
-    {
-        return $this->isDefault;
     }
 
     /**

@@ -43,14 +43,14 @@ class Item
      */
     public string $number = '';
 
-    private $successor = 0;
+    public int $successor = 0;
 
     private int $type = 0;
 
     /**
      * Files.
      *
-     * @var int[]|Media[]
+     * @var Media[]
      * @since 1.0.0
      */
     private array $files = [];
@@ -58,7 +58,7 @@ class Item
     /**
      * Localizations.
      *
-     * @var int[]|ItemL11n[]
+     * @var ItemL11n[]
      * @since 1.0.0
      */
     private array $l11n = [];
@@ -71,11 +71,11 @@ class Item
      */
     private array $attributes = [];
 
-    private $partslist = null;
+    private ?int $partslist = null;
 
-    private $purchase = [];
+    private array $purchase = [];
 
-    private $disposal = null;
+    private ?int $disposal = null;
 
     /**
      * Created at.
@@ -85,7 +85,7 @@ class Item
      */
     public \DateTimeImmutable $createdAt;
 
-    private $info = '';
+    public string $info = '';
 
     /**
      * Constructor.
@@ -111,6 +111,8 @@ class Item
 
     /**
      * Set the successor item
+     *
+     * @param int $successor Successor item
      *
      * @return void
      *
@@ -159,7 +161,7 @@ class Item
     public function getL11n(string $type) : ItemL11n
     {
         foreach ($this->l11n as $l11n) {
-            if ($l11n->getType()->title === $type) {
+            if ($l11n->type->title === $type) {
                 return $l11n;
             }
         }
@@ -170,13 +172,13 @@ class Item
     /**
      * Add media to item
      *
-     * @param int|Media $media Media
+     * @param Media $media Media
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function addFile($media) : void
+    public function addFile(Media $media) : void
     {
         $this->files[] = $media;
     }

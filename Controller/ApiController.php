@@ -19,14 +19,17 @@ use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeType;
+use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
+use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
+use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\Media\Models\PathSettings;
@@ -149,9 +152,9 @@ final class ApiController extends Controller
     private function createItemAttributeFromRequest(RequestAbstract $request) : ItemAttribute
     {
         $attribute = new ItemAttribute();
-        $attribute->setItem((int) $request->getData('item'));
-        $attribute->setType((int) $request->getData('type'));
-        $attribute->setValue((int) $request->getData('value'));
+        $attribute->item = (int) $request->getData('item');
+        $attribute->type  = new NullItemAttributeType((int) $request->getData('type'));
+        $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
 
         return $attribute;
     }
@@ -350,7 +353,7 @@ final class ApiController extends Controller
         $attrValue = $this->createItemAttributeValueFromRequest($request);
         $this->createModel($request->header->account, $attrValue, ItemAttributeValueMapper::class, 'attr_value', $request->getOrigin());
 
-        if ($attrValue->isDefault()) {
+        if ($attrValue->isDefault) {
             $this->createModelRelation(
                 $request->header->account,
                 (int) $request->getData('attributetype'),
@@ -377,17 +380,17 @@ final class ApiController extends Controller
 
         $type = $request->getData('type') ?? 0;
         if ($type === AttributeValueType::_INT) {
-            $attrValue->setValueInt((int) $request->getData('value'));
+            $attrValue->valueInt = (int) $request->getData('value');
         } elseif ($type === AttributeValueType::_STRING) {
-            $attrValue->setValueString((string) $request->getData('value'));
+            $attrValue->valueStr = (string) $request->getData('value');
         } elseif ($type === AttributeValueType::_FLOAT) {
-            $attrValue->setValueDecimal((float) $request->getData('value'));
+            $attrValue->valueDec = (float) $request->getData('value');
         } elseif ($type === AttributeValueType::_DATETIME) {
-            $attrValue->setValueDat(new \DateTime($request->getData('value') ?? ''));
+            $attrValue->valueDat = new \DateTime($request->getData('value') ?? '');
         }
 
-        $attrValue->setType($type);
-        $attrValue->setDefault((bool) ($request->getData('default') ?? false));
+        $attrValue->type = $type;
+        $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
 
         if ($request->hasData('language')) {
             $attrValue->setLanguage((string) ($request->getData('language') ?? $request->getLanguage()));
@@ -523,8 +526,8 @@ final class ApiController extends Controller
     private function createItemL11nFromRequest(RequestAbstract $request) : ItemL11n
     {
         $itemL11n = new ItemL11n();
-        $itemL11n->setItem((int) ($request->getData('item') ?? 0));
-        $itemL11n->setType((int) ($request->getData('type') ?? 0));
+        $itemL11n->item = (int) ($request->getData('item') ?? 0);
+        $itemL11n->type = new NullItemL11nType((int) ($request->getData('type') ?? 0));
         $itemL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));

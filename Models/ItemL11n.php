@@ -41,15 +41,15 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
      * @var int
      * @since 1.0.0
      */
-    protected int $item = 0;
+    public int $item = 0;
 
     /**
      * Item ID.
      *
-     * @var int|ItemL11nType
+     * @var ItemL11nType
      * @since 1.0.0
      */
-    protected $type = 0;
+    public ItemL11nType $type;
 
     /**
      * Language.
@@ -70,15 +70,15 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     /**
      * Constructor.
      *
-     * @param int|ItemL11nType $type        Item localization type
-     * @param string           $description Description/content
-     * @param string           $language    Language
+     * @param ItemL11nType $type        Item localization type
+     * @param string       $description Description/content
+     * @param string       $language    Language
      *
      * @since 1.0.0
      */
-    public function __construct($type = 0, string $description = '', string $language = ISO639x1Enum::_EN)
+    public function __construct(ItemL11nType $type = null, string $description = '', string $language = ISO639x1Enum::_EN)
     {
-        $this->type        = $type;
+        $this->type        = $type ?? new ItemL11nType();
         $this->description = $description;
         $this->language    = $language;
     }
@@ -93,58 +93,6 @@ class ItemL11n implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
-    }
-
-    /**
-     * Set item.
-     *
-     * @param int $item Item id
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setItem(int $item) : void
-    {
-        $this->item = $item;
-    }
-
-    /**
-     * Get item
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getItem() : int
-    {
-        return $this->item;
-    }
-
-    /**
-     * Set type.
-     *
-     * @param int|ItemL11nType $type Item type
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setType($type) : void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Get type
-     *
-     * @return int|ItemL11nType
-     *
-     * @since 1.0.0
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**

@@ -40,23 +40,23 @@ class ItemAttribute implements \JsonSerializable, ArrayableInterface
      * @var int
      * @since 1.0.0
      */
-    protected int $item = 0;
+    public int $item = 0;
 
     /**
      * Attribute type the attribute belongs to
      *
-     * @var int|ItemAttributeType
+     * @var ItemAttributeType
      * @since 1.0.0
      */
-    protected $type = 0;
+    public ItemAttributeType $type;
 
     /**
      * Attribute value the attribute belongs to
      *
-     * @var int|ItemAttributeValue
+     * @var ItemAttributeValue
      * @since 1.0.0
      */
-    protected $value = 0;
+    public ItemAttributeValue $value;
 
     /**
      * Get id
@@ -68,48 +68,6 @@ class ItemAttribute implements \JsonSerializable, ArrayableInterface
     public function getId() : int
     {
         return $this->id;
-    }
-
-    /**
-     * Set item
-     *
-     * @param int|Item $item Item
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setItem($item) : void
-    {
-        $this->item = $item;
-    }
-
-    /**
-     * Set type
-     *
-     * @param int|ItemAttributeType $type Type
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setType($type) : void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Set value
-     *
-     * @param int|ItemAttributeValue $type Type
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setValue($value) : void
-    {
-        $this->value = $value;
     }
 
     /**
