@@ -19,19 +19,19 @@ use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeType;
-use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
-use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
-use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
+use Modules\ItemManagement\Models\NullItemAttributeType;
+use Modules\ItemManagement\Models\NullItemAttributeValue;
+use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestStatusCode;
@@ -151,8 +151,8 @@ final class ApiController extends Controller
      */
     private function createItemAttributeFromRequest(RequestAbstract $request) : ItemAttribute
     {
-        $attribute = new ItemAttribute();
-        $attribute->item = (int) $request->getData('item');
+        $attribute        = new ItemAttribute();
+        $attribute->item  = (int) $request->getData('item');
         $attribute->type  = new NullItemAttributeType((int) $request->getData('type'));
         $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
 
@@ -389,7 +389,7 @@ final class ApiController extends Controller
             $attrValue->valueDat = new \DateTime($request->getData('value') ?? '');
         }
 
-        $attrValue->type = $type;
+        $attrValue->type      = $type;
         $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
 
         if ($request->hasData('language')) {
@@ -525,7 +525,7 @@ final class ApiController extends Controller
      */
     private function createItemL11nFromRequest(RequestAbstract $request) : ItemL11n
     {
-        $itemL11n = new ItemL11n();
+        $itemL11n       = new ItemL11n();
         $itemL11n->item = (int) ($request->getData('item') ?? 0);
         $itemL11n->type = new NullItemL11nType((int) ($request->getData('type') ?? 0));
         $itemL11n->setLanguage((string) (
