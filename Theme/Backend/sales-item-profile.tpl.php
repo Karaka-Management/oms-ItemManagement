@@ -257,7 +257,7 @@ echo $this->getData('nav')->render();
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
@@ -334,7 +334,7 @@ echo $this->getData('nav')->render();
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
@@ -413,7 +413,7 @@ echo $this->getData('nav')->render();
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
@@ -543,7 +543,7 @@ echo $this->getData('nav')->render();
                                 $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getId()); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
@@ -712,8 +712,8 @@ echo $this->getData('nav')->render();
                                     <tbody>
                                         <tr>
                                             <td><?= $this->printHtml($this->request->getOrigin()); ?>
-                                            <td><?= $this->printHtml($this->request->header->account); ?>
-                                            <td><?= $this->printHtml($this->request->header->account); ?>
+                                            <td><?= $this->printHtml((string) $this->request->header->account); ?>
+                                            <td><?= $this->printHtml((string) $this->request->header->account); ?>
                                             <td>Creating item
                                             <td><?= $this->printHtml((new \DateTime('now'))->format('Y-m-d H:i:s')); ?>
                     </table>
