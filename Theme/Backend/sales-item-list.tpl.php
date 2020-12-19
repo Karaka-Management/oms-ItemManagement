@@ -27,7 +27,7 @@ echo $this->getData('nav')->render(); ?>
             <table id="iSalesItemList" class="default">
                 <thead>
                 <tr>
-                    <td><?= $this->getHtml('ID', '0', '0'); ?>
+                    <td>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
                         <input id="itemList-r1-asc" name="itemList-sort" type="radio"><label for="itemList-r1-asc"><i class="sort-asc fa fa-chevron-up"></i></label>
                         <input id="itemList-r1-desc" name="itemList-sort" type="radio"><label for="itemList-r1-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
