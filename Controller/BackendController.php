@@ -74,6 +74,9 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/purchase-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
 
+        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $view->addData('items', $items);
+
         return $view;
     }
 
