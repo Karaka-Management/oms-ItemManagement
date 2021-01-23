@@ -59,7 +59,7 @@ final class Installer extends InstallerAbstract
     {
         $itemAttrType = [];
 
-        $itemAttrType['color'] = new ItemAttributeType('color');
+        $itemAttrType['color'] = new ItemAttributeType('color'); // @todo: I think 'color' in this case is a ItemAttributeTypeL11n, this is wrong?!
         ItemAttributeTypeMapper::create($itemAttrType['color']);
         ItemAttributeTypeL11nMapper::create(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Color', ISO639x1Enum::_EN));
         ItemAttributeTypeL11nMapper::create(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Farbe', ISO639x1Enum::_DE));

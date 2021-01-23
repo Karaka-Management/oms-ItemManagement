@@ -41,7 +41,7 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
      * @var int|ItemL11nType
      * @since 1.0.0
      */
-    protected $type = 0;
+    protected int|ItemL11nType $type = 0;
 
     /**
      * Language.
@@ -68,7 +68,7 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
      *
      * @since 1.0.0
      */
-    public function __construct($type = 0, string $title = '', string $language = ISO639x1Enum::_EN)
+    public function __construct(int|ItemL11nType $type = 0, string $title = '', string $language = ISO639x1Enum::_EN)
     {
         $this->type     = $type;
         $this->title    = $title;
