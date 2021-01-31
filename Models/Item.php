@@ -16,6 +16,7 @@ namespace Modules\ItemManagement\Models;
 
 use Modules\Media\Models\Media;
 use Modules\Media\Models\NullMedia;
+use phpOMS\Localization\Money;
 
 /**
  * Account class.
@@ -46,6 +47,9 @@ class Item
     public int $successor = 0;
 
     private int $type = 0;
+
+    public Money $salesPrice;
+    public Money $purchasePrice;
 
     /**
      * Files.
@@ -95,6 +99,8 @@ class Item
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable('now');
+        $this->salesPrice = new Money();
+        $this->purchasePrice = new Money();
     }
 
     /**

@@ -20,6 +20,18 @@
                 "type": "TEXT",
                 "default": null,
                 "null": true
+            },
+            "itemmgmt_item_salesprice": {
+                "name": "itemmgmt_item_salesprice",
+                "type": "INT",
+                "default": null,
+                "null": true
+            },
+            "itemmgmt_item_purchaseprice": {
+                "name": "itemmgmt_item_purchaseprice",
+                "type": "INT",
+                "default": null,
+                "null": true
             }
         }
     },

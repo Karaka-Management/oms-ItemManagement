@@ -37,6 +37,8 @@ final class ItemMapper extends DataMapperAbstract
         'itemmgmt_item_id'   => ['name' => 'itemmgmt_item_id',      'type' => 'int',    'internal' => 'id'],
         'itemmgmt_item_no'   => ['name' => 'itemmgmt_item_no',      'type' => 'string', 'internal' => 'number', 'autocomplete' => true],
         'itemmgmt_item_info' => ['name' => 'itemmgmt_item_info',    'type' => 'string', 'internal' => 'info'],
+        'itemmgmt_item_salesprice' => ['name' => 'itemmgmt_item_salesprice',    'type' => 'Serializable', 'internal' => 'salesPrice'],
+        'itemmgmt_item_purchaseprice' => ['name' => 'itemmgmt_item_purchaseprice',    'type' => 'Serializable', 'internal' => 'purchasePrice'],
     ];
 
     protected static array $conditionals = [
