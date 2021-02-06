@@ -16,11 +16,15 @@ namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
 use Modules\Admin\Models\LocalizationMapper;
+use Modules\Billing\Models\BillMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Views\View;
+use phpOMS\Stdlib\Base\SmartDateTime;
+use phpOMS\Localization\Money;
+use phpOMS\Asset\AssetType;
 
 /**
  * ItemManagement controller class.
@@ -178,6 +182,11 @@ final class BackendController extends Controller
      */
     public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
     {
+        $head = $response->get('Content')->getData('head');
+        $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
+        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/Chartjs/chart.js');
+        $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js', ['type' => 'module']);
+
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
@@ -190,6 +199,38 @@ final class BackendController extends Controller
         ]);
 
         $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings['id']));
+
+        if ($this->app->moduleManager->isActive('Billing')) {
+            $ytd = BillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $mtd = BillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
+            $avg = BillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
+            $lastOrder = BillMapper::getLastOrderDateByItemId($item->getId());
+            $newestInvoices = BillMapper::getNewestItemInvoices($item->getId(), 5);
+            $topCustomers = BillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $regionSales = BillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $countrySales = BillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $monthlySalesCosts = BillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
+        } else {
+            $ytd = new Money();
+            $mtd = new Money();
+            $avg = new Money();
+            $lastOrder = null;
+            $newestInvoices = [];
+            $topCustomers = [];
+            $regionSales = [];
+            $countrySales = [];
+            $monthlySalesCosts = [];
+        }
+
+        $view->addData('ytd', $ytd);
+        $view->addData('mtd', $mtd);
+        $view->addData('avg', $avg);
+        $view->addData('lastOrder', $lastOrder);
+        $view->addData('newestInvoices', $newestInvoices);
+        $view->addData('topCustomers', $topCustomers);
+        $view->addData('regionSales', $regionSales);
+        $view->addData('countrySales', $countrySales);
+        $view->addData('monthlySalesCosts', $monthlySalesCosts);
 
         return $view;
     }

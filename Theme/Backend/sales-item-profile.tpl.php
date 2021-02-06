@@ -15,11 +15,17 @@ declare(strict_types=1);
 use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
+use phpOMS\Localization\Money;
 
 /**
  * @var \Modules\ItemManagement\Models\Item $item
  */
 $item = $this->getData('item');
+$newestInvoices = $this->getData('newestInvoices') ?? [];
+$topCustomers = $this->getData('topCustomers') ?? [];
+$regionSales = $this->getData('regionSales') ?? [];
+$countrySales = $this->getData('countrySales') ?? [];
+$monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
 
 $languages = \phpOMS\Localization\ISO639Enum::getConstants();
 
@@ -94,9 +100,9 @@ echo $this->getData('nav')->render();
                                 <div class="portlet-body">
                                     <table>
                                         <tr><td>YTD Sales:
-                                            <td>
+                                            <td><?= $this->getData('ytd')->getCurrency(); ?>
                                         <tr><td>MTD Sales:
-                                            <td>
+                                            <td><?= $this->getData('mtd')->getCurrency(); ?>
                                         <tr><td>ILV:
                                             <td>
                                         <tr><td>MRR:
@@ -111,11 +117,11 @@ echo $this->getData('nav')->render();
                                 <div class="portlet-body">
                                     <table>
                                         <tr><td>Last Order:
-                                            <td>
+                                            <td><?= $this->getData('lastOrder') !== null ? $this->getData('lastOrder')->format('Y-m-d H:i') : ''; ?>
                                         <tr><td>Price Change:
                                             <td>
                                         <tr><td>Created:
-                                            <td>
+                                            <td><?= $item->createdAt->format('Y-m-d H:i'); ?>
                                         <tr><td>Modified:
                                             <td>
                                     </table>
@@ -128,13 +134,13 @@ echo $this->getData('nav')->render();
                                 <div class="portlet-body">
                                     <table>
                                         <tr><td>Sales Price:
-                                            <td>
+                                            <td><?= $item->salesPrice->getCurrency(); ?>
                                         <tr><td>Purchase Price:
-                                            <td>
+                                            <td><?= $item->purchasePrice->getCurrency(); ?>
                                         <tr><td>Margin:
-                                            <td>
+                                            <td><?= \round(($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100, 2); ?> %
                                         <tr><td>Avg. Price:
-                                            <td>
+                                            <td><?= $this->getData('avg')->getCurrency(); ?>
                                     </table>
                                 </div>
                             </section>
@@ -160,40 +166,197 @@ echo $this->getData('nav')->render();
                     <div class="row">
                         <div class="col-xs-12">
                             <section class="portlet">
-                                <div class="portlet-head">Invoices</div>
-                                <div class="portlet-body"></div>
+                                <div class="portlet-head">Recent Invoices</div>
+                                <table id="iSalesItemList" class="default">
+                                    <thead>
+                                    <tr>
+                                        <td>Number
+                                        <td class="wf-100">Name
+                                        <td>Net
+                                        <td>Date
+                                    <tbody>
+                                    <?php foreach ($newestInvoices as $invoice) : ?>
+                                    <tr>
+                                        <td><?= $invoice->getNumber(); ?>
+                                        <td><?= $invoice->billTo; ?>
+                                        <td><?= $invoice->net->getCurrency(); ?>
+                                        <td><?= $invoice->createdAt->format('Y-m-d'); ?>
+                                    <?php endforeach; ?>
+                                </table>
                             </section>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
-                                <div class="portlet-head">Customers</div>
-                                <div class="portlet-body"></div>
+                                <div class="portlet-head">Top Customers</div>
+                                <table id="iSalesItemList" class="default">
+                                    <thead>
+                                    <tr>
+                                        <td>Id
+                                        <td class="wf-100">Name
+                                        <td>Country
+                                        <td>Net
+                                    <tbody>
+                                    <?php $i = -1; foreach ($topCustomers[0] as $client) : ++$i;
+                                        $url = UriFactory::build('{/prefix}sales/client/profile?id=' . $client->getId());
+                                    ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->profile->account->name1); ?> <?= $this->printHtml($client->profile->account->name2); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->getCountry()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= (new Money((int) $topCustomers[1][$i]['net_sales']))->getCurrency(); ?></a>
+                                    <?php endforeach; ?>
+                                </table>
                             </section>
                         </div>
 
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head">Sales</div>
-                                <div class="portlet-body"></div>
+                                <div class="portlet-body">
+                                    <canvas id="sales-region" data-chart='{
+                                            "type": "bar",
+                                            "data": {
+                                                "labels": [
+                                                    <?php
+                                                        $temp = [];
+                                                        foreach ($monthlySalesCosts as $monthly) {
+                                                            $temp[] = $monthly['month'] . '/' . \substr((string) $monthly['year'], -2);
+                                                        }
+                                                    ?>
+                                                    <?= '"' . \implode('", "', $temp) . '"'; ?>
+                                                ],
+                                                "datasets": [
+                                                    {
+                                                        "label": "Margin",
+                                                        "type": "line",
+                                                        "data": [
+                                                            <?php
+                                                                $temp = [];
+                                                                foreach ($monthlySalesCosts as $monthly) {
+                                                                    $temp[] = \round(((((int) $monthly['net_sales']) - ((int) $monthly['net_costs'])) / ((int) $monthly['net_sales'])) * 100, 2);
+                                                                }
+                                                            ?>
+                                                            <?= \implode(',', $temp); ?>
+                                                        ],
+                                                        "yAxisID": "axis-2",
+                                                        "fill": false,
+                                                        "borderColor": "rgb(255, 99, 132)",
+                                                        "backgroundColor": "rgb(255, 99, 132)"
+                                                    },
+                                                    {
+                                                        "label": "Sales",
+                                                        "type": "bar",
+                                                        "data": [
+                                                            <?php
+                                                                $temp = [];
+                                                                foreach ($monthlySalesCosts as $monthly) {
+                                                                    $temp[] = ((int) $monthly['net_sales']) / 1000;
+                                                                }
+                                                            ?>
+                                                            <?= \implode(',', $temp); ?>
+                                                        ],
+                                                        "yAxisID": "axis-1",
+                                                        "backgroundColor": "rgb(54, 162, 235)"
+                                                    }
+                                                ]
+                                            },
+                                            "options": {
+                                                "scales": {
+                                                    "yAxes": [
+                                                        {
+                                                            "id": "axis-1",
+                                                            "display": true,
+                                                            "position": "left"
+                                                        },
+                                                        {
+                                                            "id": "axis-2",
+                                                            "display": true,
+                                                            "position": "right",
+                                                            "scaleLabel": {
+                                                                "display": true,
+                                                                "labelString": "Margin %"
+                                                            },
+                                                            "beginAtZero": true,
+                                                            "ticks": {
+                                                                "min": 0,
+                                                                "max": 100,
+                                                                "stepSize": 10
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                    }'></canvas>
+                                </div>
                             </section>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head">Regions</div>
-                                <div class="portlet-body"></div>
+                                <div class="portlet-body">
+                                    <canvas id="sales-region" data-chart='{
+                                        "type": "pie",
+                                        "data": {
+                                            "labels": [
+                                                    "Europe", "America", "Asia", "Africa", "CIS", "Other"
+                                                ],
+                                            "datasets": [{
+                                                "data": [
+                                                    <?= (int) ($regionSales['Europe'] ?? 0) / 1000; ?>,
+                                                    <?= (int) ($regionSales['America'] ?? 0) / 1000; ?>,
+                                                    <?= (int) ($regionSales['Asia'] ?? 0) / 1000; ?>,
+                                                    <?= (int) ($regionSales['Africa'] ?? 0) / 1000; ?>,
+                                                    <?= (int) ($regionSales['CIS'] ?? 0) / 1000; ?>,
+                                                    <?= (int) ($regionSales['Other'] ?? 0) / 1000; ?>
+                                                ],
+                                                "backgroundColor": [
+                                                    "rgb(255, 99, 132)",
+                                                    "rgb(255, 159, 64)",
+                                                    "rgb(255, 205, 86)",
+                                                    "rgb(75, 192, 192)",
+                                                    "rgb(54, 162, 235)",
+                                                    "rgb(153, 102, 255)"
+                                                ]
+                                            }]
+                                        }
+                                }'></canvas>
+                                </div>
                             </section>
                         </div>
 
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
-                                <div class="portlet-head">Margins</div>
-                                <div class="portlet-body"></div>
+                                <div class="portlet-head">Countries</div>
+                                <div class="portlet-body">
+                                    <canvas id="sales-region" data-chart='{
+                                        "type": "bar",
+                                        "data": {
+                                            "labels": [
+                                                    <?= '"' . \implode('", "', \array_keys($countrySales)) . '"'; ?>
+                                                ],
+                                            "datasets": [{
+                                                "label": "YTD",
+                                                "type": "bar",
+                                                "data": [
+                                                    <?php
+                                                        $temp = [];
+                                                        foreach ($countrySales as $country) {
+                                                            $temp[] = ((int) $country) / 1000;
+                                                        }
+                                                    ?>
+                                                    <?= \implode(',', $temp); ?>
+                                                ],
+                                                "backgroundColor": "rgb(54, 162, 235)"
+                                            }]
+                                        }
+                                }'></canvas>
+                                </div>
                             </section>
                         </div>
                     </div>
