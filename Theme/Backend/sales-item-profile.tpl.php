@@ -16,18 +16,22 @@ use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
 use phpOMS\Localization\Money;
+use phpOMS\Localization\ISO639Enum;
 
 /**
  * @var \Modules\ItemManagement\Models\Item $item
  */
 $item = $this->getData('item');
+$itemL11n = $this->getData('itemL11n');
+$itemAttribute = $this->getData('itemAttribute');
+
 $newestInvoices = $this->getData('newestInvoices') ?? [];
 $topCustomers = $this->getData('topCustomers') ?? [];
 $regionSales = $this->getData('regionSales') ?? [];
 $countrySales = $this->getData('countrySales') ?? [];
 $monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
 
-$languages = \phpOMS\Localization\ISO639Enum::getConstants();
+$languages = ISO639Enum::getConstants();
 
 $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
@@ -175,12 +179,14 @@ echo $this->getData('nav')->render();
                                         <td>Net
                                         <td>Date
                                     <tbody>
-                                    <?php foreach ($newestInvoices as $invoice) : ?>
-                                    <tr>
-                                        <td><?= $invoice->getNumber(); ?>
-                                        <td><?= $invoice->billTo; ?>
-                                        <td><?= $invoice->net->getCurrency(); ?>
-                                        <td><?= $invoice->createdAt->format('Y-m-d'); ?>
+                                    <?php foreach ($newestInvoices as $invoice) :
+                                        $url = UriFactory::build('{/prefix}sales/invoice?{?}&id=' . $invoice->getId());
+                                        ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $invoice->net->getCurrency(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
                                     <?php endforeach; ?>
                                 </table>
                             </section>
@@ -279,6 +285,9 @@ echo $this->getData('nav')->render();
                                                                 "display": true,
                                                                 "labelString": "Margin %"
                                                             },
+                                                            "gridLines": {
+                                                                "display": false
+                                                            },
                                                             "beginAtZero": true,
                                                             "ticks": {
                                                                 "min": 0,
@@ -367,12 +376,10 @@ echo $this->getData('nav')->render();
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header>
-                            <h1><?= $this->getHtml('Description'); ?></h1>
-                        </header>
-                        <div class="inner">
-                            <form id="item-edit" action="<?= \phpOMS\Uri\UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                    <section class="portlet">
+                        <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Description'); ?></div>
+                            <div class="portlet-body">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -397,37 +404,39 @@ echo $this->getData('nav')->render();
                                             <td><label for="iText1"><?= $this->getHtml('Text'); ?></label>
                                         <tr>
                                             <td><textarea id="iText1" name="text1"></textarea>
-                                        <tr>
-                                            <td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                                 </table>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="portlet-foot"><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>"></div>
+                        </form>
                     </section>
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></caption>
-                        <thead>
-                            <tr>
-                                <td>
-                                <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <tbody>
-                            <?php $c = 0;
-                            $l11ns   = [];
-                            foreach ($l11ns as $key => $value) : ++$c;
-                                $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
-                                <tr data-href="<?= $url; ?>">
-                                    <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
-                                    <?php endforeach; ?>
-                                    <?php if ($c === 0) : ?>
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <table id="groupTable" class="default">
+                            <thead>
                                 <tr>
-                                    <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                    <?php endif; ?>
-                    </table>
+                                    <td>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td class="wf-100"><?= $this->getHtml('Localization'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                            <tbody>
+                                <?php $c = 0;
+                                foreach ($itemL11n as $key => $value) : ++$c;
+                                    $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->title); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->description); ?></a>
+                                        <?php endforeach; ?>
+                                        <?php if ($c === 0) : ?>
+                                    <tr>
+                                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                        <?php endif; ?>
+                        </table>
+                    </section>
                 </div>
             </div>
         </div>
@@ -435,12 +444,10 @@ echo $this->getData('nav')->render();
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header>
-                            <h1><?= $this->getHtml('Attribute'); ?></h1>
-                        </header>
-                        <div class="inner">
-                            <form id="item-edit" action="<?= \phpOMS\Uri\UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Attribute'); ?></div class="portlet-head">
+                        <div class="portlet-body">
+                            <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -483,28 +490,31 @@ echo $this->getData('nav')->render();
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></caption>
-                        <thead>
-                            <tr>
-                                <td>
-                                <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <tbody>
-                            <?php $c = 0;
-                            $l11ns   = [];
-                            foreach ($l11ns as $key => $value) : ++$c;
-                                $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
-                                <tr data-href="<?= $url; ?>">
-                                    <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
-                                    <?php endforeach; ?>
-                                    <?php if ($c === 0) : ?>
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <table id="groupTable" class="default">
+                            <thead>
                                 <tr>
-                                    <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                    <?php endif; ?>
-                    </table>
+                                    <td>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                            <tbody>
+                                <?php $c = 0;
+                                foreach ($itemAttribute as $key => $value) : ++$c;
+                                    $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->getL11n()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->value->getValue() instanceof \DateTime ? $value->value->getValue()->format('Y-m-d') : $this->printHtml((string) $value->value->getValue()); ?></a>
+                                        <?php endforeach; ?>
+                                        <?php if ($c === 0) : ?>
+                                    <tr>
+                                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                        <?php endif; ?>
+                        </table>
+                    </section>
                 </div>
             </div>
         </div>
@@ -517,7 +527,7 @@ echo $this->getData('nav')->render();
                             <h1><?= $this->getHtml('Customer'); ?></h1>
                         </header>
                         <div class="inner">
-                            <form id="item-edit" action="<?= \phpOMS\Uri\UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                            <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -573,7 +583,7 @@ echo $this->getData('nav')->render();
                             <?php $c = 0;
                             $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
-                                $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
@@ -596,7 +606,7 @@ echo $this->getData('nav')->render();
                             <h1><?= $this->getHtml('Purchase'); ?></h1>
                         </header>
                         <div class="inner">
-                            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
+                            <form action="<?= UriFactory::build('{/api}...'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -635,7 +645,7 @@ echo $this->getData('nav')->render();
                             <h1><?= $this->getHtml('Supplier'); ?></h1>
                         </header>
                         <div class="inner">
-                            <form id="item-edit" action="<?= \phpOMS\Uri\UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                            <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -703,7 +713,7 @@ echo $this->getData('nav')->render();
                             <?php $c = 0;
                             $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
-                                $url = \phpOMS\Uri\UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
                                     <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
@@ -736,7 +746,7 @@ echo $this->getData('nav')->render();
                             <h1><?= $this->getHtml('General'); ?></h1>
                         </header>
                         <div class="inner">
-                            <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
+                            <form action="<?= UriFactory::build('{/api}...'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>
@@ -791,7 +801,7 @@ echo $this->getData('nav')->render();
                             <h1><?= $this->getHtml('General'); ?></h1>
                         </header>
                         <div class="inner">
-                            <form id="item-edit" action="<?= \phpOMS\Uri\UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                            <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
                                 <table class="layout wf-100">
                                     <tbody>
                                         <tr>

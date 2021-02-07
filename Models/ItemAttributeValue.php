@@ -153,6 +153,21 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
         }
     }
 
+    public function getValue() : mixed
+    {
+        if (!empty($this->valueStr)) {
+            return $this->valueStr;
+        } elseif (!empty($this->valueInt)) {
+            return $this->valueInt;
+        } elseif (!empty($this->valueDec)) {
+            return $this->valueDec;
+        } elseif ($this->valueDat instanceof \DateTimeInterface) {
+            return $this->valueDat;
+        }
+
+        return null;
+    }
+
     /**
      * Set language
      *

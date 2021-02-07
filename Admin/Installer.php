@@ -64,6 +64,19 @@ final class Installer extends InstallerAbstract
         ItemAttributeTypeL11nMapper::create(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Color', ISO639x1Enum::_EN));
         ItemAttributeTypeL11nMapper::create(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Farbe', ISO639x1Enum::_DE));
 
+        // weight
+        // segment_level_1
+        // segment_level_2
+        // segment_level_3
+        // segment_level_4
+        // product_group
+        //      consumable
+        //      packaging
+        //      service
+        //      machine
+        //      spare part
+        //      transportation
+
         return $itemAttrType;
     }
 

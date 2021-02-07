@@ -66,7 +66,7 @@ echo $this->getData('nav')->render(); ?>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->description); ?></a>
-                    <td>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->salesPrice->getCurrency()); ?></a>
                     <td>
                     <td>
                     <td>

@@ -93,6 +93,7 @@ final class ApiController extends Controller
         $item->number = $request->getData('number') ?? '';
         $item->salesPrice = new Money($request->getData('salesprice', 'int') ?? 0);
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
+        $item->info = $request->getData('info') ?? '';
 
         return $item;
     }

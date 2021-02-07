@@ -41,7 +41,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      * @var string
      * @since 1.0.0
      */
-    protected string $name = '';
+    protected string $name = ''; // @todo: currently not filled, should be used as identifier or if not required removed (at the moment it seems like it is useless?!)
 
     /**
      * Which field data type is required (string, int, ...) in the value
@@ -118,6 +118,16 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
             $this->l11n->title = $l11n;
             $this->l11n->setLanguage($lang);
         }
+    }
+
+    /**
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getL11n() : string
+    {
+        return $this->l11n instanceof ItemAttributeTypeL11n ? $this->l11n->title : $this->l11n;
     }
 
     /**
