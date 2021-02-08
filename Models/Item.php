@@ -49,6 +49,7 @@ class Item
     private int $type = 0;
 
     public Money $salesPrice;
+
     public Money $purchasePrice;
 
     /**
@@ -98,8 +99,8 @@ class Item
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTimeImmutable('now');
-        $this->salesPrice = new Money();
+        $this->createdAt     = new \DateTimeImmutable('now');
+        $this->salesPrice    = new Money();
         $this->purchasePrice = new Money();
     }
 

@@ -13,22 +13,22 @@
 declare(strict_types=1);
 
 use Modules\Media\Models\NullMedia;
+use phpOMS\Localization\ISO639Enum;
+use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
-use phpOMS\Localization\Money;
-use phpOMS\Localization\ISO639Enum;
 
 /**
  * @var \Modules\ItemManagement\Models\Item $item
  */
-$item = $this->getData('item');
-$itemL11n = $this->getData('itemL11n');
+$item          = $this->getData('item');
+$itemL11n      = $this->getData('itemL11n');
 $itemAttribute = $this->getData('itemAttribute');
 
-$newestInvoices = $this->getData('newestInvoices') ?? [];
-$topCustomers = $this->getData('topCustomers') ?? [];
-$regionSales = $this->getData('regionSales') ?? [];
-$countrySales = $this->getData('countrySales') ?? [];
+$newestInvoices    = $this->getData('newestInvoices') ?? [];
+$topCustomers      = $this->getData('topCustomers') ?? [];
+$regionSales       = $this->getData('regionSales') ?? [];
+$countrySales      = $this->getData('countrySales') ?? [];
 $monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
 
 $languages = ISO639Enum::getConstants();

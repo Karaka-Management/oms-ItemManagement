@@ -33,13 +33,13 @@ use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
+use phpOMS\Localization\Money;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Localization\Money;
 
 /**
  * ItemManagement class.
@@ -89,11 +89,11 @@ final class ApiController extends Controller
      */
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
-        $item         = new Item();
-        $item->number = $request->getData('number') ?? '';
-        $item->salesPrice = new Money($request->getData('salesprice', 'int') ?? 0);
+        $item                = new Item();
+        $item->number        = $request->getData('number') ?? '';
+        $item->salesPrice    = new Money($request->getData('salesprice', 'int') ?? 0);
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
-        $item->info = $request->getData('info') ?? '';
+        $item->info          = $request->getData('info') ?? '';
 
         return $item;
     }
