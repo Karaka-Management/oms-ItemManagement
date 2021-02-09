@@ -590,7 +590,7 @@ final class ApiController extends Controller
             $request->getData('name') ?? '',
             $uploadedFiles,
             $request->header->account,
-            'Modules/Media/Files/Modules/ItemManagement/' . ($request->getData('item') ?? '0'),
+            __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/' . ($request->getData('item') ?? '0'),
             '/Modules/ItemManagement/' . ($request->getData('item') ?? '0'),
             $request->getData('type') ?? '',
             '',
