@@ -200,10 +200,10 @@ echo $this->getData('nav')->render();
                                 <table id="iSalesItemList" class="default">
                                     <thead>
                                     <tr>
-                                        <td>Id
-                                        <td class="wf-100">Name
-                                        <td>Country
-                                        <td>Net
+                                        <td><?= $this->getHtml('Number'); ?>
+                                        <td class="wf-100"><?= $this->getHtml('Name'); ?>
+                                        <td><?= $this->getHtml('Country'); ?>
+                                        <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
                                     <?php $i = -1; foreach ($topCustomers[0] as $client) : ++$i;
                                         $url = UriFactory::build('{/prefix}sales/client/profile?id=' . $client->getId());
@@ -220,7 +220,7 @@ echo $this->getData('nav')->render();
 
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
-                                <div class="portlet-head">Sales</div>
+                                <div class="portlet-head"><?= $this->getHtml('Sales'); ?></div>
                                 <div class="portlet-body">
                                     <canvas id="sales-region" data-chart='{
                                             "type": "bar",
@@ -236,7 +236,7 @@ echo $this->getData('nav')->render();
                                                 ],
                                                 "datasets": [
                                                     {
-                                                        "label": "Margin",
+                                                        "label": "<?= $this->getHtml('Margin'); ?>",
                                                         "type": "line",
                                                         "data": [
                                                             <?php
@@ -253,7 +253,7 @@ echo $this->getData('nav')->render();
                                                         "backgroundColor": "rgb(255, 99, 132)"
                                                     },
                                                     {
-                                                        "label": "Sales",
+                                                        "label": "<?= $this->getHtml('Sales'); ?>",
                                                         "type": "bar",
                                                         "data": [
                                                             <?php
@@ -283,7 +283,7 @@ echo $this->getData('nav')->render();
                                                             "position": "right",
                                                             "scaleLabel": {
                                                                 "display": true,
-                                                                "labelString": "Margin %"
+                                                                "labelString": "<?= $this->getHtml('Margin'); ?> %"
                                                             },
                                                             "gridLines": {
                                                                 "display": false
@@ -341,7 +341,7 @@ echo $this->getData('nav')->render();
 
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
-                                <div class="portlet-head">Countries</div>
+                                <div class="portlet-head"><?= $this->getHtml('Countries'); ?></div>
                                 <div class="portlet-body">
                                     <canvas id="sales-region" data-chart='{
                                         "type": "bar",
