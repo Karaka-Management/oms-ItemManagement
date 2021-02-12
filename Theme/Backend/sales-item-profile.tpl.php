@@ -103,13 +103,13 @@ echo $this->getData('nav')->render();
                             <section class="portlet highlight-1">
                                 <div class="portlet-body">
                                     <table>
-                                        <tr><td>YTD Sales:
+                                        <tr><td><?= $this->getHtml('YTDSales'); ?>:
                                             <td><?= $this->getData('ytd')->getCurrency(); ?>
-                                        <tr><td>MTD Sales:
+                                        <tr><td><?= $this->getHtml('MTDSales'); ?>:
                                             <td><?= $this->getData('mtd')->getCurrency(); ?>
-                                        <tr><td>ILV:
+                                        <tr><td><?= $this->getHtml('ILV'); ?>:
                                             <td>
-                                        <tr><td>MRR:
+                                        <tr><td><?= $this->getHtml('MRR'); ?>:
                                             <td>
                                     </table>
                                 </div>
@@ -120,13 +120,13 @@ echo $this->getData('nav')->render();
                             <section class="portlet highlight-2">
                                 <div class="portlet-body">
                                     <table>
-                                        <tr><td>Last Order:
+                                        <tr><td><?= $this->getHtml('LastOrder'); ?>:
                                             <td><?= $this->getData('lastOrder') !== null ? $this->getData('lastOrder')->format('Y-m-d H:i') : ''; ?>
-                                        <tr><td>Price Change:
+                                        <tr><td><?= $this->getHtml('PriceChange'); ?>:
                                             <td>
-                                        <tr><td>Created:
+                                        <tr><td><?= $this->getHtml('Created'); ?>:
                                             <td><?= $item->createdAt->format('Y-m-d H:i'); ?>
-                                        <tr><td>Modified:
+                                        <tr><td><?= $this->getHtml('Modified'); ?>:
                                             <td>
                                     </table>
                                 </div>
@@ -137,13 +137,13 @@ echo $this->getData('nav')->render();
                             <section class="portlet highlight-3">
                                 <div class="portlet-body">
                                     <table>
-                                        <tr><td>Sales Price:
+                                        <tr><td><?= $this->getHtml('SalesPrice'); ?>:
                                             <td><?= $item->salesPrice->getCurrency(); ?>
-                                        <tr><td>Purchase Price:
+                                        <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
                                             <td><?= $item->purchasePrice->getCurrency(); ?>
-                                        <tr><td>Margin:
+                                        <tr><td><?= $this->getHtml('Margin'); ?>:
                                             <td><?= \round(($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100, 2); ?> %
-                                        <tr><td>Avg. Price:
+                                        <tr><td><?= $this->getHtml('AvgPrice'); ?>:
                                             <td><?= $this->getData('avg')->getCurrency(); ?>
                                     </table>
                                 </div>
@@ -154,14 +154,14 @@ echo $this->getData('nav')->render();
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
-                                <div class="portlet-head">Notes</div>
+                                <div class="portlet-head"><?= $this->getHtml('Notes'); ?></div>
                                 <div class="portlet-body"></div>
                             </section>
                         </div>
 
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
-                                <div class="portlet-head">Documents</div>
+                                <div class="portlet-head"><?= $this->getHtml('Documents'); ?></div>
                                 <div class="portlet-body"></div>
                             </section>
                         </div>
@@ -174,10 +174,10 @@ echo $this->getData('nav')->render();
                                 <table id="iSalesItemList" class="default">
                                     <thead>
                                     <tr>
-                                        <td>Number
-                                        <td class="wf-100">Name
-                                        <td>Net
-                                        <td>Date
+                                        <td><?= $this->getHtml('Number'); ?>
+                                        <td class="wf-100"><?= $this->getHtml('Name'); ?>
+                                        <td><?= $this->getHtml('Net'); ?>
+                                        <td><?= $this->getHtml('Date'); ?>
                                     <tbody>
                                     <?php foreach ($newestInvoices as $invoice) :
                                         $url = UriFactory::build('{/prefix}sales/invoice?{?}&id=' . $invoice->getId());
