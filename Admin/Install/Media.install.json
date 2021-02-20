@@ -1,20 +1,16 @@
 [
     {
         "type": "collection",
+        "create_directory": true,
         "name": "ItemManagement",
         "virtualPath": "/Modules",
         "user": 1
     },
     {
         "type": "collection",
+        "create_directory": true,
         "name": "Articles",
         "virtualPath": "/Modules/ItemManagement",
-        "user": 1
-    },
-    {
-        "type": "collection",
-        "name": "Images",
-        "virtualPath": "/Modules/ItemManagement/Articles",
         "user": 1
     }
 ]
