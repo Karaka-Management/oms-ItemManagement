@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Media\Models\MediaMapper;
+use Modules\Editor\Models\EditorDocMapper;
 use phpOMS\DataStorage\Database\DataMapperAbstract;
 
 /**
@@ -73,6 +74,12 @@ final class ItemMapper extends DataMapperAbstract
             'table'    => 'itemmgmt_item_media',         /* table of the related object, null if no relation table is used (many->1) */
             'external' => 'itemmgmt_item_media_media',
             'self'     => 'itemmgmt_item_media_item',
+        ],
+        'notes' => [
+            'mapper'   => EditorDocMapper::class,            /* mapper of the related object */
+            'table'    => 'itemmgmt_item_note',         /* table of the related object, null if no relation table is used (many->1) */
+            'external' => 'itemmgmt_item_note_doc',
+            'self'     => 'itemmgmt_item_note_item',
         ],
         'l11n' => [
             'mapper'      => ItemL11nMapper::class,

@@ -16,7 +16,7 @@ namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
 use Modules\Admin\Models\LocalizationMapper;
-use Modules\Billing\Models\BillMapper;
+use Modules\Billing\Models\SalesBillMapper;
 use Modules\Billing\Models\BillTypeL11n;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemL11nMapper;
@@ -104,6 +104,9 @@ final class BackendController extends Controller
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/stock-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response));
+
+        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $view->addData('items', $items);
 
         return $view;
     }
@@ -213,16 +216,16 @@ final class BackendController extends Controller
 
         // stats
         if ($this->app->moduleManager->isActive('Billing')) {
-            $ytd       = BillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $mtd       = BillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
-            $avg       = BillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
-            $lastOrder = BillMapper::getLastOrderDateByItemId($item->getId());
+            $ytd       = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $mtd       = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
+            $avg       = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
+            $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
             // @todo: why is the conditional array necessary, shouldn't the mapper realize when it mustn't use the conditional (when the field doesn't exist in the mapper)
-            $newestInvoices    = BillMapper::withConditional('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
-            $topCustomers      = BillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $regionSales       = BillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $countrySales      = BillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $monthlySalesCosts = BillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
+            $newestInvoices    = SalesBillMapper::withConditional('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
+            $topCustomers      = SalesBillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
         } else {
             $ytd               = new Money();
             $mtd               = new Money();
@@ -244,6 +247,50 @@ final class BackendController extends Controller
         $view->addData('regionSales', $regionSales);
         $view->addData('countrySales', $countrySales);
         $view->addData('monthlySalesCosts', $monthlySalesCosts);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementPurchaseItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = $this->viewItemManagementSalesItem($request, $response, $data);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
+        $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
+
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementWarehouseItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = $this->viewItemManagementSalesItem($request, $response, $data);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
+        $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
+
 
         return $view;
     }

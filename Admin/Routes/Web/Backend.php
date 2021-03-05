@@ -28,7 +28,7 @@ return [
             ],
         ],
     ],
-    '^.*/warehouse/stock/list.*$' => [
+    '^.*/warehouse/item/list.*$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingList',
             'verb'       => RouteVerb::GET,
@@ -61,7 +61,7 @@ return [
             ],
         ],
     ],
-    '.*/warehouse/stock/create.*$' => [
+    '.*/warehouse/item/create.*$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingCreate',
             'verb'       => RouteVerb::GET,
@@ -80,6 +80,28 @@ return [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/purchase/item/profile.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseItem',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::PURCHASE_ITEM,
+            ],
+        ],
+    ],
+    '^.*/warehouse/item/profile.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehouseItem',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::STOCK_ITEM,
             ],
         ],
     ],

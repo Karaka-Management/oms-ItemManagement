@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
+use Modules\Editor\Models\EditorDoc;
 use Modules\Media\Models\Media;
 use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\Money;
@@ -59,6 +60,14 @@ class Item
      * @since 1.0.0
      */
     private array $files = [];
+
+    /**
+     * Files.
+     *
+     * @var EditorDoc[]
+     * @since 1.0.0
+     */
+    private array $notes = [];
 
     /**
      * Localizations.
@@ -188,6 +197,44 @@ class Item
     public function addFile(Media $media) : void
     {
         $this->files[] = $media;
+    }
+
+    /**
+     * Add doc to item
+     *
+     * @param EditorDoc $note Note
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addNote(EditorDoc $note) : void
+    {
+        $this->notes[] = $note;
+    }
+
+    /**
+     * Get notes
+     *
+     * @return EditorDoc[]
+     *
+     * @since 1.0.0
+     */
+    public function getNotes() : array
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Get files
+     *
+     * @return Media[]
+     *
+     * @since 1.0.0
+     */
+    public function getFiles() : array
+    {
+        return $this->files;
     }
 
     /**

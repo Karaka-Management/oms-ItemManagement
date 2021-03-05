@@ -24,7 +24,7 @@ echo $this->getData('nav')->render(); ?>
     <div class="col-xs-12">
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Items'); ?><i class="fa fa-download floatRight download btn"></i></div>
-            <table id="iSalesItemList" class="default">
+            <table id="iPurchaseItemList" class="default">
                 <thead>
                 <tr>
                     <td>
@@ -54,7 +54,7 @@ echo $this->getData('nav')->render(); ?>
                         <input id="itemList-r8-desc" name="itemList-sort" type="radio"><label for="itemList-r8-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/prefix}sales/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/prefix}purchase/item/profile?{?}&id=' . $value->getId());
                 $image       = $value->getFileByType('backend_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
@@ -66,7 +66,7 @@ echo $this->getData('nav')->render(); ?>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->description); ?></a>
-                    <td>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->purchasePrice->getCurrency()); ?></a>
                     <td>
                     <td>
                     <td>

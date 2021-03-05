@@ -25,6 +25,9 @@ $item          = $this->getData('item');
 $itemL11n      = $this->getData('itemL11n');
 $itemAttribute = $this->getData('itemAttribute');
 
+$notes = $item->getNotes();
+$files = $item->getFiles();
+
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
 $topCustomers      = $this->getData('topCustomers') ?? [];
 $regionSales       = $this->getData('regionSales') ?? [];
@@ -102,7 +105,7 @@ echo $this->getData('nav')->render();
                         <div class="col-xs-12 col-lg-4">
                             <section class="portlet highlight-1">
                                 <div class="portlet-body">
-                                    <table>
+                                    <table class="wf-100">
                                         <tr><td><?= $this->getHtml('YTDSales'); ?>:
                                             <td><?= $this->getData('ytd')->getCurrency(); ?>
                                         <tr><td><?= $this->getHtml('MTDSales'); ?>:
@@ -119,7 +122,7 @@ echo $this->getData('nav')->render();
                         <div class="col-xs-12 col-lg-4">
                             <section class="portlet highlight-2">
                                 <div class="portlet-body">
-                                    <table>
+                                    <table class="wf-100">
                                         <tr><td><?= $this->getHtml('LastOrder'); ?>:
                                             <td><?= $this->getData('lastOrder') !== null ? $this->getData('lastOrder')->format('Y-m-d H:i') : ''; ?>
                                         <tr><td><?= $this->getHtml('PriceChange'); ?>:
@@ -136,7 +139,7 @@ echo $this->getData('nav')->render();
                         <div class="col-xs-12 col-lg-4">
                             <section class="portlet highlight-3">
                                 <div class="portlet-body">
-                                    <table>
+                                    <table class="wf-100">
                                         <tr><td><?= $this->getHtml('SalesPrice'); ?>:
                                             <td><?= $item->salesPrice->getCurrency(); ?>
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
@@ -155,14 +158,42 @@ echo $this->getData('nav')->render();
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Notes'); ?></div>
-                                <div class="portlet-body"></div>
+                                <table id="iNotesItemList" class="default">
+                                    <thead>
+                                    <tr>
+                                        <td class="wf-100"><?= $this->getHtml('Title'); ?>
+                                        <td><?= $this->getHtml('CreatedAt'); ?>
+                                    <tbody>
+                                    <?php foreach ($notes as $note) :
+                                        $url = UriFactory::build('{/prefix}editor/single?{?}&id=' . $note->getId());
+                                        ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="<?= $url; ?>"><?= $note->title; ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $note->createdAt->format('Y-m-d'); ?></a>
+                                    <?php endforeach; ?>
+                                </table>
                             </section>
                         </div>
 
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Documents'); ?></div>
-                                <div class="portlet-body"></div>
+                                <table id="iFilesItemList" class="default">
+                                    <thead>
+                                    <tr>
+                                        <td class="wf-100"><?= $this->getHtml('Title'); ?>
+                                        <td>
+                                        <td><?= $this->getHtml('CreatedAt'); ?>
+                                    <tbody>
+                                    <?php foreach ($files as $file) :
+                                        $url = UriFactory::build('{/prefix}media/single?{?}&id=' . $file->getId());
+                                        ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="<?= $url; ?>"><?= $file->name; ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $file->extension; ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $file->createdAt->format('Y-m-d'); ?></a>
+                                    <?php endforeach; ?>
+                                </table>
                             </section>
                         </div>
                     </div>

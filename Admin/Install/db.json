@@ -295,5 +295,31 @@
                 "foreignKey": "media_id"
             }
         }
+    },
+    "itemmgmt_item_note": {
+        "name": "itemmgmt_item_note",
+        "fields": {
+            "itemmgmt_item_note_id": {
+                "name": "itemmgmt_item_note_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_note_item": {
+                "name": "itemmgmt_item_note_item",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            },
+            "itemmgmt_item_note_doc": {
+                "name": "itemmgmt_item_note_doc",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "editor_doc",
+                "foreignKey": "editor_doc_id"
+            }
+        }
     }
 }
