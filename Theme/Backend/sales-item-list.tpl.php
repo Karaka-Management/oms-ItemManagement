@@ -35,7 +35,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-2">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-2">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -47,7 +47,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-4">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-4">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -59,7 +59,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-6">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-6">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -71,7 +71,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-8">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-8">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -83,7 +83,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-10">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-10">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -95,7 +95,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-12">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-12">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -107,7 +107,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-14">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-14">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
@@ -119,7 +119,7 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                         <label for="iSalesItemList-sort-16">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-16">
-                             <i class="sort-desc fa fa-chevron-down"></i>
+                            <i class="sort-desc fa fa-chevron-down"></i>
                         </label>
                         <label>
                             <i class="filter fa fa-filter"></i>
