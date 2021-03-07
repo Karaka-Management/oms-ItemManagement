@@ -16,8 +16,8 @@ namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
 use Modules\Admin\Models\LocalizationMapper;
-use Modules\Billing\Models\SalesBillMapper;
 use Modules\Billing\Models\BillTypeL11n;
+use Modules\Billing\Models\SalesBillMapper;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemMapper;
@@ -269,7 +269,6 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
 
-
         return $view;
     }
 
@@ -290,7 +289,6 @@ final class BackendController extends Controller
         $view = $this->viewItemManagementSalesItem($request, $response, $data);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
-
 
         return $view;
     }

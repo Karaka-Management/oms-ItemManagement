@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use Modules\Media\Models\MediaMapper;
 use Modules\Editor\Models\EditorDocMapper;
+use Modules\Media\Models\MediaMapper;
 use phpOMS\DataStorage\Database\DataMapperAbstract;
 
 /**
