@@ -201,11 +201,12 @@ echo $this->getData('nav')->render();
                     <div class="row">
                         <div class="col-xs-12">
                             <section class="portlet">
-                                <div class="portlet-head">Recent Invoices</div>
+                                <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
                                 <table id="iSalesItemList" class="default">
                                     <thead>
                                     <tr>
                                         <td><?= $this->getHtml('Number'); ?>
+                                        <td><?= $this->getHtml('Type'); ?>
                                         <td class="wf-100"><?= $this->getHtml('Name'); ?>
                                         <td><?= $this->getHtml('Net'); ?>
                                         <td><?= $this->getHtml('Date'); ?>
@@ -215,6 +216,7 @@ echo $this->getData('nav')->render();
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $invoice->net->getCurrency(); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>

@@ -57,7 +57,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
         $view->addData('items', $items);
 
         return $view;
@@ -81,7 +81,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/purchase-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
 
-        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
         $view->addData('items', $items);
 
         return $view;
@@ -105,7 +105,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/stock-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response));
 
-        $items = ItemMapper::withConditional('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
         $view->addData('items', $items);
 
         return $view;
@@ -197,7 +197,10 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $item = ItemMapper::withConditional('language', $response->getLanguage())::get((int) $request->getData('id'));
+        $item = ItemMapper::with('language', $response->getLanguage())
+            ::with('files', limit: 5, orderBy: 'createdAt', sortOrder: 'ASC')
+            ::with('notes', limit: 5, orderBy: 'id', sortOrder: 'ASC')
+            ::get((int) $request->getData('id'));
         $view->addData('item', $item);
 
         $settings = $this->app->appSettings->get(null, [
@@ -206,12 +209,12 @@ final class BackendController extends Controller
 
         $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings['id']));
 
-        $itemL11n = ItemL11nMapper::withConditional('language', $response->getLanguage())
-            ::withConditional('item', $item->getId())::getAll();
+        $itemL11n = ItemL11nMapper::with('language', $response->getLanguage())
+            ::with('item', $item->getId())::getAll();
         $view->addData('itemL11n', $itemL11n);
 
-        $itemAttribute = ItemAttributeMapper::withConditional('language', $response->getLanguage())
-            ::withConditional('item', $item->getId())::getAll();
+        $itemAttribute = ItemAttributeMapper::with('language', $response->getLanguage())
+            ::with('item', $item->getId())::getAll();
         $view->addData('itemAttribute', $itemAttribute);
 
         // stats
@@ -221,7 +224,7 @@ final class BackendController extends Controller
             $avg       = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
             $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
             // @todo: why is the conditional array necessary, shouldn't the mapper realize when it mustn't use the conditional (when the field doesn't exist in the mapper)
-            $newestInvoices    = SalesBillMapper::withConditional('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
+            $newestInvoices    = SalesBillMapper::with('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
             $topCustomers      = SalesBillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
