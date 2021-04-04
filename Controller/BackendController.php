@@ -15,11 +15,14 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
+use Modules\Media\Models\Media;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Billing\Models\BillTypeL11n;
 use Modules\Billing\Models\SalesBillMapper;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemL11nMapper;
+use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
@@ -28,6 +31,7 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Views\View;
+use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 
 /**
  * ItemManagement controller class.
@@ -39,6 +43,111 @@ use phpOMS\Views\View;
  */
 final class BackendController extends Controller
 {
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeTypes(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+
+        $attributes = ItemAttributeTypeMapper::with('language', $response->getLanguage())
+            ::getAll();
+
+        $view->addData('attributes', $attributes);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeValues(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+
+        $attributes = ItemAttributeValueMapper::with('language', $response->getLanguage())
+            ::getAll();
+
+        $view->addData('attributes', $attributes);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeType(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+
+        $attribute = ItemAttributeTypeMapper::with('language', $response->getLanguage())
+            ::get((int) $request->getData('id'));
+
+        $view->addData('attribute', $attribute);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeValue(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
+        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+
+        $attribute = ItemAttributeValueMapper::with('language', $response->getLanguage())
+            ::get((int) $request->getData('id'));
+
+        $view->addData('attribute', $attribute);
+
+        return $view;
+    }
+
     /**
      * Routing end-point for application behaviour.
      *
@@ -57,7 +166,13 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::with('language', $response->getLanguage())
+            ::with('type', 'backend_image', models: [Media::class]) // @todo: it would be nicer if I coult say files:type or files/type and remove the models parameter?
+            ::with('notes', models: null)
+            ::with('attributes', models: null)
+            ::with('title', ['name1', 'name2', 'name3'], comparison: 'in', models: [ItemL11nType::class]) // @todo: profile, why does this have almost no impact on the sql performance?
+            ::getAfterPivot(0, null, 25);
+
         $view->addData('items', $items);
 
         return $view;
@@ -181,12 +296,12 @@ final class BackendController extends Controller
      * @param ResponseAbstract $response Response
      * @param mixed            $data     Generic data
      *
-     * @return RenderableInterface
+     * @return View
      *
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
     {
         $head = $response->get('Content')->getData('head');
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
@@ -226,6 +341,7 @@ final class BackendController extends Controller
             // @todo: why is the conditional array necessary, shouldn't the mapper realize when it mustn't use the conditional (when the field doesn't exist in the mapper)
             $newestInvoices    = SalesBillMapper::with('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
             $topCustomers      = SalesBillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $allInvoices      = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
@@ -235,6 +351,7 @@ final class BackendController extends Controller
             $avg               = new Money();
             $lastOrder         = null;
             $newestInvoices    = [];
+            $allInvoices       = [];
             $topCustomers      = [];
             $regionSales       = [];
             $countrySales      = [];
@@ -246,6 +363,7 @@ final class BackendController extends Controller
         $view->addData('avg', $avg);
         $view->addData('lastOrder', $lastOrder);
         $view->addData('newestInvoices', $newestInvoices);
+        $view->addData('allInvoices', $allInvoices);
         $view->addData('topCustomers', $topCustomers);
         $view->addData('regionSales', $regionSales);
         $view->addData('countrySales', $countrySales);

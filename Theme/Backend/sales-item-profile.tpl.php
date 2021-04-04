@@ -29,6 +29,7 @@ $notes = $item->getNotes();
 $files = $item->getFiles();
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
+$allInvoices       = $this->getData('allInvoices') ?? [];
 $topCustomers      = $this->getData('topCustomers') ?? [];
 $regionSales       = $this->getData('regionSales') ?? [];
 $countrySales      = $this->getData('countrySales') ?? [];
@@ -56,7 +57,8 @@ echo $this->getData('nav')->render();
             <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
             <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
             <li><label for="c-tab-12"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-13"><?= $this->getHtml('SalesInvoices'); ?></label></li>
+            <li><label for="c-tab-14"><?= $this->getHtml('Logs'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -168,8 +170,8 @@ echo $this->getData('nav')->render();
                                         $url = UriFactory::build('{/prefix}editor/single?{?}&id=' . $note->getId());
                                         ?>
                                     <tr data-href="<?= $url; ?>">
-                                        <td><a href="<?= $url; ?>"><?= $note->title; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $note->createdAt->format('Y-m-d'); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($note->title); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($note->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                 </table>
                             </section>
@@ -189,9 +191,9 @@ echo $this->getData('nav')->render();
                                         $url = UriFactory::build('{/prefix}media/single?{?}&id=' . $file->getId());
                                         ?>
                                     <tr data-href="<?= $url; ?>">
-                                        <td><a href="<?= $url; ?>"><?= $file->name; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $file->extension; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $file->createdAt->format('Y-m-d'); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($file->name); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($file->extension); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($file->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                 </table>
                             </section>
@@ -215,11 +217,11 @@ echo $this->getData('nav')->render();
                                         $url = UriFactory::build('{/prefix}sales/bill?{?}&id=' . $invoice->getId());
                                         ?>
                                     <tr data-href="<?= $url; ?>">
-                                        <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $invoice->net->getCurrency(); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->net->getCurrency()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                 </table>
                             </section>
@@ -513,7 +515,7 @@ echo $this->getData('nav')->render();
                                         <tr>
                                             <td><label for="iText1"><?= $this->getHtml('Value'); ?></label>
                                         <tr>
-                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml('$item->getName1()'); ?>">
+                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml($item->getL11n('name1')->description); ?>">
                                         <tr>
                                             <td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                                 </table>
@@ -557,7 +559,7 @@ echo $this->getData('nav')->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="box wf-100">
                         <header>
-                            <h1><?= $this->getHtml('Customer'); ?></h1>
+                            <h1><?= $this->getHtml('Pricing'); ?></h1>
                         </header>
                         <div class="inner">
                             <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
@@ -605,28 +607,30 @@ echo $this->getData('nav')->render();
                 </div>
 
                 <div class="col-xs-12 col-md-6">
-                    <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></caption>
-                        <thead>
-                            <tr>
-                                <td>
-                                <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                        <tbody>
-                            <?php $c = 0;
-                            $l11ns   = [];
-                            foreach ($l11ns as $key => $value) : ++$c;
-                                $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
-                                <tr data-href="<?= $url; ?>">
-                                    <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
-                                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
-                                    <?php endforeach; ?>
-                                    <?php if ($c === 0) : ?>
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <table id="iSalesItemList" class="default">
+                            <thead>
                                 <tr>
-                                    <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                    <?php endif; ?>
-                    </table>
+                                    <td>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                            <tbody>
+                                <?php $c = 0;
+                                $l11ns   = [];
+                                foreach ($l11ns as $key => $value) : ++$c;
+                                    $url = UriFactory::build('{/prefix}admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    <tr data-href="<?= $url; ?>">
+                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
+                                        <?php endforeach; ?>
+                                        <?php if ($c === 0) : ?>
+                                    <tr>
+                                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                        <?php endif; ?>
+                        </table>
+                    </section>
                 </div>
             </div>
         </div>
@@ -900,6 +904,37 @@ echo $this->getData('nav')->render();
         </div>
 
         <input type="radio" id="c-tab-13" name="tabular-2" checked>
+        <div class="tab">
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
+                        <table id="iSalesItemList" class="default">
+                            <thead>
+                            <tr>
+                                <td><?= $this->getHtml('Number'); ?>
+                                <td><?= $this->getHtml('Type'); ?>
+                                <td class="wf-100"><?= $this->getHtml('Name'); ?>
+                                <td><?= $this->getHtml('Net'); ?>
+                                <td><?= $this->getHtml('Date'); ?>
+                            <tbody>
+                            <?php foreach ($allInvoices as $invoice) :
+                                $url = UriFactory::build('{/prefix}sales/bill?{?}&id=' . $invoice->getId());
+                                ?>
+                            <tr data-href="<?= $url; ?>">
+                                <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->net->getCurrency(); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
+                            <?php endforeach; ?>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <input type="radio" id="c-tab-14" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">

@@ -41,7 +41,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      * @var string
      * @since 1.0.0
      */
-    protected string $name = ''; // @todo: currently not filled, should be used as identifier or if not required removed (at the moment it seems like it is useless?!)
+    public string $name = ''; // @todo: currently not filled, should be used as identifier or if not required removed (at the moment it seems like it is useless?!)
 
     /**
      * Which field data type is required (string, int, ...) in the value
@@ -59,12 +59,16 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      */
     protected bool $custom = false;
 
+    public string $validationPattern = '';
+
+    public bool $isRequired = false;
+
     /**
      * Localization
      *
-     * @var int|int[]|ItemAttributeTypeL11n|ItemAttributeTypeL11n[]
+     * @var ItemAttributeTypeL11n
      */
-    protected $l11n = 0;
+    protected string | ItemAttributeTypeL11n $l11n;
 
     /**
      * Possible default attribute values

@@ -114,6 +114,18 @@
                 "name": "itemmgmt_attr_type_custom",
                 "type": "TINYINT(1)",
                 "null": false
+            },
+            "itemmgmt_attr_type_required": {
+                "description": "Every item must have this attribute type if set to true.",
+                "name": "itemmgmt_attr_type_required",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "itemmgmt_attr_type_pattern": {
+                "description": "This is a regex validation pattern.",
+                "name": "itemmgmt_attr_type_pattern",
+                "type": "VARCHAR(255)",
+                "null": false
             }
         }
     },

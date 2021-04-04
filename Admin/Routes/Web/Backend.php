@@ -6,6 +6,50 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
+    '^.*/item/attribute/type.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypes',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/value.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/type.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypes',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/value.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::ATTRIBUTE,
+            ],
+        ],
+    ],
     '^.*/sales/item/list.*$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesList',
@@ -102,6 +146,17 @@ return [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::STOCK_ITEM,
+            ],
+        ],
+    ],
+    '^.*/sales/analysis/item(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemAnalysis',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::SALES_ITEM,
             ],
         ],
     ],

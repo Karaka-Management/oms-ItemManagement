@@ -31,4 +31,6 @@ abstract class PermissionState extends Enum
     public const PURCHASE_ITEM = 2;
 
     public const STOCK_ITEM = 3;
+
+    public const ATTRIBUTE = 4;
 }
