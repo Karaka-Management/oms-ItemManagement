@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 return ['Navigation' => [
+    'Article' => 'Article',
     'Analyze' => 'Analyze',
     'Attributes' => 'Attributes',
     'Types' => 'Types',
