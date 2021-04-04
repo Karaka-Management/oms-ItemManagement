@@ -13,6 +13,7 @@
 declare(strict_types=1);
 
 return ['Navigation' => [
+<<<<<<< HEAD
     'Article' => 'Article',
     'Analyze' => 'Analyze',
     'Attributes' => 'Attributes',
@@ -20,5 +21,13 @@ return ['Navigation' => [
     'Values' => 'Values',
     'Create'  => 'Create',
     'List'    => 'List',
+=======
+    'Analyze'           => 'Analyze',
+    'Attributes'        => 'Attributes',
+    'Types'             => 'Types',
+    'Values'            => 'Values',
+    'Create'            => 'Create',
+    'List'              => 'List',
+>>>>>>> 48bc5fa4026129886716af1344890676e9c02540
     'ItemManagement'    => 'Item Management',
 ]];

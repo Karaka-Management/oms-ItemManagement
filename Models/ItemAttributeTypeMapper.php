@@ -33,11 +33,11 @@ final class ItemAttributeTypeMapper extends DataMapperAbstract
      * @since 1.0.0
      */
     protected static array $columns = [
-        'itemmgmt_attr_type_id'     => ['name' => 'itemmgmt_attr_type_id',     'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_attr_type_name'   => ['name' => 'itemmgmt_attr_type_name',   'type' => 'string', 'internal' => 'name', 'autocomplete' => true],
-        'itemmgmt_attr_type_fields' => ['name' => 'itemmgmt_attr_type_fields', 'type' => 'int',    'internal' => 'fields'],
-        'itemmgmt_attr_type_custom' => ['name' => 'itemmgmt_attr_type_custom', 'type' => 'bool', 'internal' => 'custom'],
-        'itemmgmt_attr_type_pattern' => ['name' => 'itemmgmt_attr_type_pattern', 'type' => 'bool', 'internal' => 'validationPattern'],
+        'itemmgmt_attr_type_id'       => ['name' => 'itemmgmt_attr_type_id',     'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_attr_type_name'     => ['name' => 'itemmgmt_attr_type_name',   'type' => 'string', 'internal' => 'name', 'autocomplete' => true],
+        'itemmgmt_attr_type_fields'   => ['name' => 'itemmgmt_attr_type_fields', 'type' => 'int',    'internal' => 'fields'],
+        'itemmgmt_attr_type_custom'   => ['name' => 'itemmgmt_attr_type_custom', 'type' => 'bool', 'internal' => 'custom'],
+        'itemmgmt_attr_type_pattern'  => ['name' => 'itemmgmt_attr_type_pattern', 'type' => 'bool', 'internal' => 'validationPattern'],
         'itemmgmt_attr_type_required' => ['name' => 'itemmgmt_attr_type_required', 'type' => 'bool', 'internal' => 'isRequired'],
     ];
 

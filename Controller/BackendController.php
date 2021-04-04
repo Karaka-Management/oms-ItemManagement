@@ -15,15 +15,16 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
-use Modules\Media\Models\Media;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Billing\Models\BillTypeL11n;
 use Modules\Billing\Models\SalesBillMapper;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemMapper;
+use Modules\Media\Models\Media;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\Localization\Money;
@@ -31,7 +32,6 @@ use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Views\View;
-use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 
 /**
  * ItemManagement controller class.
@@ -43,7 +43,6 @@ use Modules\ItemManagement\Models\ItemAttributeValueMapper;
  */
 final class BackendController extends Controller
 {
-
     /**
      * Routing end-point for application behaviour.
      *
@@ -341,7 +340,7 @@ final class BackendController extends Controller
             // @todo: why is the conditional array necessary, shouldn't the mapper realize when it mustn't use the conditional (when the field doesn't exist in the mapper)
             $newestInvoices    = SalesBillMapper::with('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
             $topCustomers      = SalesBillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $allInvoices      = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $allInvoices       = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
