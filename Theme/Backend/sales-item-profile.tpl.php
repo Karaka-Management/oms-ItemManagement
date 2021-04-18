@@ -57,7 +57,7 @@ echo $this->getData('nav')->render();
             <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
             <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
             <li><label for="c-tab-12"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('SalesInvoices'); ?></label></li>
+            <li><label for="c-tab-13"><?= $this->getHtml('Bills'); ?></label></li>
             <li><label for="c-tab-14"><?= $this->getHtml('Logs'); ?></label></li>
         </ul>
     </div>

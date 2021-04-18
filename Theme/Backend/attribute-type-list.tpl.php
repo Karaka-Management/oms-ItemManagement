@@ -23,7 +23,7 @@ echo $this->getData('nav')->render(); ?>
     <div class="col-xs-12">
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('AttributeTypes'); ?><i class="fa fa-download floatRight download btn"></i></div>
-            <table id="iAttributeTypeList" class="default">
+            <table id="iAttributeTypeList" class="default sticky">
                 <thead>
                 <tr>
                     <td><?= $this->getHtml('ID', '0', '0'); ?>
