@@ -28,28 +28,6 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute/type.*$' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypes',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::MODULE_NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionState::ATTRIBUTE,
-            ],
-        ],
-    ],
-    '^.*/item/attribute/value.*$' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::MODULE_NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionState::ATTRIBUTE,
-            ],
-        ],
-    ],
     '^.*/sales/item/list.*$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesList',
