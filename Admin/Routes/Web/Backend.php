@@ -151,12 +151,23 @@ return [
     ],
     '^.*/sales/analysis/item(\?.*|$)$' => [
         [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemAnalysis',
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemSalesAnalysis',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::MODULE_NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/purchase/analysis/item(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemPurchaseAnalysis',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::MODULE_NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionState::PURCHASE_ITEM,
             ],
         ],
     ],
