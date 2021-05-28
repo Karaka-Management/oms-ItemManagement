@@ -12,11 +12,8 @@
  */
 declare(strict_types=1);
 
-use phpOMS\Localization\Money;
-
 /**
  * @var \phpOMS\Views\View $this
  */
 
 echo $this->getData('nav')->render();
-?>
