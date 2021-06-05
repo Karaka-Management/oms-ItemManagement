@@ -46,19 +46,20 @@ echo $this->getData('nav')->render();
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Attributes'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('Sales'); ?></label></li>
-            <li><label for="c-tab-5"><?= $this->getHtml('Purchasing'); ?></label></li>
-            <li><label for="c-tab-6"><?= $this->getHtml('Production'); ?></label></li>
-            <li><label for="c-tab-7"><?= $this->getHtml('QA'); ?></label></li>
-            <li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label></li>
-            <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label></li>
-            <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
-            <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
-            <li><label for="c-tab-12"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Bills'); ?></label></li>
-            <li><label for="c-tab-14"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-2"><?= $this->getHtml('Address'); ?></label></li>
+            <li><label for="c-tab-3"><?= $this->getHtml('Localization'); ?></label></li>
+            <li><label for="c-tab-4"><?= $this->getHtml('Attributes'); ?></label></li>
+            <li><label for="c-tab-5"><?= $this->getHtml('Sales'); ?></label></li>
+            <li><label for="c-tab-6"><?= $this->getHtml('Purchasing'); ?></label></li>
+            <li><label for="c-tab-7"><?= $this->getHtml('Production'); ?></label></li>
+            <li><label for="c-tab-8"><?= $this->getHtml('QA'); ?></label></li>
+            <li><label for="c-tab-9"><?= $this->getHtml('Packaging'); ?></label></li>
+            <li><label for="c-tab-10"><?= $this->getHtml('Accounting'); ?></label></li>
+            <li><label for="c-tab-11"><?= $this->getHtml('Stock'); ?></label></li>
+            <li><label for="c-tab-12"><?= $this->getHtml('Disposal'); ?></label></li>
+            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label></li>
+            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label></li>
+            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -219,7 +220,7 @@ echo $this->getData('nav')->render();
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a class="content" href="<?= UriFactory::build('{/prefix}sales/client/profile?{?}&id=' . $invoice->client->getId()); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->net->getCurrency()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
