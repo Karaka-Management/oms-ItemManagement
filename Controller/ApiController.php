@@ -34,7 +34,6 @@ use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\Money;
-use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
@@ -294,7 +293,7 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
-        $attrType = new ItemAttributeType();
+        $attrType       = new ItemAttributeType();
         $attrType->name = (string) ($request->getData('name') ?? '');
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->setCustom((bool) ($request->getData('custom') ?? false));
