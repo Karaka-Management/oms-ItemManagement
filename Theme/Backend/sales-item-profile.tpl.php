@@ -18,11 +18,13 @@ use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Uri\UriFactory;
 
-/**
- * @var \Modules\ItemManagement\Models\Item $item
- */
-$item          = $this->getData('item');
-$itemL11n      = $this->getData('itemL11n');
+/** @var \Modules\ItemManagement\Models\Item $item */
+$item = $this->getData('item');
+
+/** @var \Modules\ItemManagement\Models\ItemL11n $itemL11n */
+$itemL11n = $this->getData('itemL11n');
+
+/** @var \Modules\ItemManagement\Models\ItemAttribute $itemAttribute */
 $itemAttribute = $this->getData('itemAttribute');
 
 $notes = $item->getNotes();
@@ -37,6 +39,7 @@ $monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
 
 $languages = ISO639Enum::getConstants();
 
+/** @var \phpOMS\Localization\Localization $l11n */
 $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
 echo $this->getData('nav')->render();

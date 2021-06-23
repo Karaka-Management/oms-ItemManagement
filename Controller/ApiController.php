@@ -277,17 +277,8 @@ final class ApiController extends Controller
         }
 
         $attrType = $this->createItemAttributeTypeFromRequest($request);
+        $attrType->setL11n($request->getData('title'), $request->getData('language'));
         $this->createModel($request->header->account, $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
-
-        $l11nRequest = new HttpRequest($request->uri);
-        $l11nRequest->setData('type', $attrType->getId());
-        $l11nRequest->setData('title', $request->getData('title'));
-        $l11nRequest->setData('language', $request->getData('language'));
-
-        $l11nAttributeType = $this->createItemAttributeTypeL11nFromRequest($l11nRequest);
-        $this->createModel($request->header->account, $l11nAttributeType, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n_create', $request->getOrigin());
-
-        $attrType->setL11n($l11nAttributeType);
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
     }
@@ -304,7 +295,7 @@ final class ApiController extends Controller
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
         $attrType = new ItemAttributeType();
-        $attrType->setL11n((string) ($request->getData('name') ?? ''));
+        $attrType->name = (string) ($request->getData('name') ?? '');
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->setCustom((bool) ($request->getData('custom') ?? false));
 

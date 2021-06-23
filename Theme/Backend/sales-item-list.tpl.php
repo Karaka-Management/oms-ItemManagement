@@ -16,6 +16,7 @@ use Modules\Media\Models\NullMedia;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
+/** @var \Modules\ItemManagement\Models\Item[] $items */
 $items = $this->getData('items');
 
 echo $this->getData('nav')->render(); ?>
