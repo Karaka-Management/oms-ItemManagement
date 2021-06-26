@@ -68,7 +68,9 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      *
      * @var ItemAttributeTypeL11n
      */
-    protected string|ItemAttributeTypeL11n $l11n;
+    protected string |
+
+ItemAttributeTypeL11n $l11n;
 
     /**
      * Possible default attribute values
@@ -111,7 +113,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      *
      * @since 1.0.0
      */
-    public function setL11n(string|ItemAttributeTypeL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
+    public function setL11n(string | ItemAttributeTypeL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
     {
         if ($l11n instanceof ItemAttributeTypeL11n) {
             $this->l11n = $l11n;
