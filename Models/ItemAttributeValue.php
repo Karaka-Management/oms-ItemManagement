@@ -153,6 +153,13 @@ class ItemAttributeValue implements \JsonSerializable, ArrayableInterface
         }
     }
 
+    /**
+     * Get value
+     *
+     * @return null|int|string|float|\DateTimeInterface
+     *
+     * @since 1.0.0
+     */
     public function getValue() : mixed
     {
         if (!empty($this->valueStr)) {
