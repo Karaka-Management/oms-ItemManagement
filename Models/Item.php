@@ -200,7 +200,33 @@ class Item
     }
 
     /**
-     * Add doc to item
+     * Add attribute to item
+     *
+     * @param ItemAttribute $attribute Note
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function addAttribute(ItemAttribute $attribute) : void
+    {
+        $this->attributes[] = $attribute;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return ItemAttribute[]
+     *
+     * @since 1.0.0
+     */
+    public function getAttributes() : array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * Add note to item
      *
      * @param EditorDoc $note Note
      *
