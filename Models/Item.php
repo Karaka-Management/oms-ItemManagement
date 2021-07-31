@@ -216,7 +216,7 @@ class Item
     /**
      * Get attributes
      *
-     * @return ItemAttribute[]
+     * @return int[]|ItemAttribute[]
      *
      * @since 1.0.0
      */
