@@ -24,6 +24,7 @@ echo $this->getData('nav')->render(); ?>
     <div class="col-xs-12">
         <section class="portlet">
             <div class="portlet-head"><?= $this->getHtml('Items'); ?><i class="fa fa-download floatRight download btn"></i></div>
+            <div class="slider">
             <table id="iPurchaseItemList" class="default sticky">
                 <thead>
                 <tr>
@@ -147,6 +148,7 @@ echo $this->getData('nav')->render(); ?>
                     <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                 <?php endif; ?>
             </table>
+            </div>
         </section>
     </div>
 </div>
