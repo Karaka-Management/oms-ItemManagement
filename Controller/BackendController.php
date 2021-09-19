@@ -314,8 +314,8 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
         $item = ItemMapper::with('language', $response->getLanguage())
-            ::with('files', limit: 5, orderBy: 'createdAt', sortOrder: 'ASC')
-            ::with('notes', limit: 5, orderBy: 'id', sortOrder: 'ASC')
+            ::with('files', limit: 5)::orderBy('createdAt', 'ASC')
+            ::with('notes', limit: 5)::orderBy('id', 'ASC')
             ::get((int) $request->getData('id'));
         $view->addData('item', $item);
 
