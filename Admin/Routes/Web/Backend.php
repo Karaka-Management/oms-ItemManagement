@@ -23,7 +23,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypes',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::ATTRIBUTE,
             ],
@@ -34,7 +34,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::ATTRIBUTE,
             ],
@@ -45,7 +45,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::SALES_ITEM,
             ],
@@ -56,7 +56,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::PURCHASE_ITEM,
             ],
@@ -67,7 +67,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingList',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::STOCK_ITEM,
             ],
@@ -78,7 +78,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesCreate',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionState::SALES_ITEM,
             ],
@@ -89,7 +89,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseCreate',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionState::PURCHASE_ITEM,
             ],
@@ -100,7 +100,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingCreate',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
                 'state'  => PermissionState::STOCK_ITEM,
             ],
@@ -111,7 +111,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesItem',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::SALES_ITEM,
             ],
@@ -122,7 +122,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseItem',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::PURCHASE_ITEM,
             ],
@@ -133,7 +133,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehouseItem',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::STOCK_ITEM,
             ],
@@ -144,7 +144,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemSalesAnalysis',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::SALES_ITEM,
             ],
@@ -155,7 +155,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemPurchaseAnalysis',
             'verb'       => RouteVerb::GET,
             'permission' => [
-                'module' => BackendController::MODULE_NAME,
+                'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
                 'state'  => PermissionState::PURCHASE_ITEM,
             ],

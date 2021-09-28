@@ -19,7 +19,7 @@ namespace Modules\ItemManagement\tests\Admin;
  */
 class AdminTest extends \PHPUnit\Framework\TestCase
 {
-    protected const MODULE_NAME = 'ItemManagement';
+    protected const NAME = 'ItemManagement';
 
     protected const URI_LOAD = '';
 
