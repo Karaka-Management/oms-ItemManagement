@@ -68,9 +68,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      *
      * @var ItemAttributeTypeL11n
      */
-    protected string |
-
-ItemAttributeTypeL11n $l11n;
+    protected string|ItemAttributeTypeL11n $l11n;
 
     /**
      * Possible default attribute values
