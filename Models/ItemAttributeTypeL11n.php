@@ -41,9 +41,7 @@ class ItemAttributeTypeL11n implements \JsonSerializable, ArrayableInterface
      * @var int|ItemAttributeType
      * @since 1.0.0
      */
-    protected int |
-
-ItemAttributeType $type = 0;
+    protected int | ItemAttributeType $type = 0;
 
     /**
      * Language.
