@@ -20,7 +20,7 @@ use Modules\ItemManagement\Models\ItemMapper;
 /**
  * @internal
  */
-class ItemMapperTest extends \PHPUnit\Framework\TestCase
+final class ItemMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\ItemManagement\Models\ItemMapper
