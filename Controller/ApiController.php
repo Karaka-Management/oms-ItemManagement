@@ -577,7 +577,8 @@ final class ApiController extends Controller
         }
 
         $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
-            [$request->getData('name') ?? ''],
+            $request->getDataList('names') ?? [],
+            $request->getDataList('filenames') ?? [],
             $uploadedFiles,
             $request->header->account,
             __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
