@@ -15,6 +15,11 @@
                 "null": false,
                 "unique": true
             },
+            "itemmgmt_item_status": {
+                "name": "itemmgmt_item_status",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "itemmgmt_item_info": {
                 "name": "itemmgmt_item_info",
                 "type": "TEXT",

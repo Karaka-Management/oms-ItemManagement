@@ -57,7 +57,7 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      * @var bool
      * @since 1.0.0
      */
-    protected bool $custom = false;
+    public bool $custom = false;
 
     public string $validationPattern = '';
 
@@ -68,14 +68,14 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
      *
      * @var ItemAttributeTypeL11n
      */
-    protected string | ItemAttributeTypeL11n $l11n;
+    private string | ItemAttributeTypeL11n $l11n;
 
     /**
      * Possible default attribute values
      *
      * @var array
      */
-    protected array $defaults = [];
+    private array $defaults = [];
 
     /**
      * Constructor.
@@ -149,25 +149,17 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
     }
 
     /**
-     * Set custom
-     *
-     * @param bool $custom FieldsCustom
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setCustom(bool $custom) : void
-    {
-        $this->custom = $custom;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array
     {
-        return [];
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'validationPattern' => $this->validationPattern,
+            'custom' => $this->custom,
+            'isRequired' => $this->isRequired,
+        ];
     }
 
     /**

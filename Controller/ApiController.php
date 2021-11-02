@@ -39,6 +39,7 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * ItemManagement class.
@@ -223,7 +224,7 @@ final class ApiController extends Controller
     private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : ItemAttributeTypeL11n
     {
         $attrL11n = new ItemAttributeTypeL11n();
-        $attrL11n->setType((int) ($request->getData('type') ?? 0));
+        $attrL11n->type = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
@@ -276,7 +277,6 @@ final class ApiController extends Controller
         }
 
         $attrType = $this->createItemAttributeTypeFromRequest($request);
-        $attrType->setL11n($request->getData('title'), $request->getData('language'));
         $this->createModel($request->header->account, $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
@@ -294,9 +294,9 @@ final class ApiController extends Controller
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
         $attrType       = new ItemAttributeType();
-        $attrType->name = (string) ($request->getData('name') ?? '');
+        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
-        $attrType->setCustom((bool) ($request->getData('custom') ?? false));
+        $attrType->custom = (bool) ($request->getData('custom') ?? false);
 
         return $attrType;
     }
@@ -313,8 +313,7 @@ final class ApiController extends Controller
     private function validateItemAttributeTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['name'] = empty($request->getData('name')))
-            || ($val['title'] = empty($request->getData('title')))
+        if (($val['title'] = empty($request->getData('title')))
         ) {
             return $val;
         }
@@ -567,6 +566,13 @@ final class ApiController extends Controller
      */
     public function apiFileCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        if (!empty($val = $this->validateFileCreate($request))) {
+            $response->set('item_file_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
         $uploadedFiles = $request->getFiles() ?? [];
 
         if (empty($uploadedFiles)) {
@@ -600,6 +606,26 @@ final class ApiController extends Controller
     }
 
     /**
+     * Validate item note create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateFileCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['item'] = empty($request->getData('item')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
      * Api method to create item files
      *
      * @param RequestAbstract  $request  Request
@@ -614,10 +640,41 @@ final class ApiController extends Controller
      */
     public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : void
     {
+        if (!empty($val = $this->validateNoteCreate($request))) {
+            $response->set('item_note_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
         $request->setData('virtualpath', '/Modules/ItemManagement/Articles/' . $request->getData('id'), true);
         $this->app->moduleManager->get('Editor')->apiEditorCreate($request, $response, $data);
 
+        if ($response->header->status !== RequestStatusCode::R_200) {
+            return;
+        }
+
         $model = $response->get($request->uri->__toString())['response'];
         $this->createModelRelation($request->header->account, $request->getData('id'), $model->getId(), ItemMapper::class, 'notes', '', $request->getOrigin());
+    }
+
+    /**
+     * Validate item note create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateNoteCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = empty($request->getData('id')))
+        ) {
+            return $val;
+        }
+
+        return [];
     }
 }

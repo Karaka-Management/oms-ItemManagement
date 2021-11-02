@@ -47,7 +47,7 @@ class Item
 
     public int $successor = 0;
 
-    private int $type = 0;
+    private int $status = ItemStatus::ACTIVE;
 
     public Money $salesPrice;
 
@@ -126,32 +126,6 @@ class Item
     }
 
     /**
-     * Set the successor item
-     *
-     * @param int $successor Successor item
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setSuccessor(int $successor) : void
-    {
-        $this->successor = $successor;
-    }
-
-    /**
-     * Get the successor item
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getSuccessor() : int
-    {
-        return $this->successor;
-    }
-
-    /**
      * Add item l11n
      *
      * @param ItemL11n $l11n Item localization
@@ -183,6 +157,32 @@ class Item
         }
 
         return new NullItemL11n();
+    }
+
+    /**
+     * Get status.
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    public function getStatus() : int
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param int $status Status
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setStatus(int $status) : void
+    {
+        $this->status = $status;
     }
 
     /**
@@ -266,13 +266,13 @@ class Item
     /**
      * Get media file by type
      *
-     * @param string $type Media type
+     * @param null|int $type Media type
      *
      * @return Media
      *
      * @since 1.0.0
      */
-    public function getFileByType(string $type) : Media
+    public function getFileByType(int $type = null) : Media
     {
         foreach ($this->files as $file) {
             if ($file->type === $type) {
@@ -286,13 +286,13 @@ class Item
     /**
      * Get all media files by type
      *
-     * @param string $type Media type
+     * @param null|int $type Media type
      *
      * @return Media[]
      *
      * @since 1.0.0
      */
-    public function getFilesByType(string $type) : array
+    public function getFilesByType(int $type = null) : array
     {
         $files = [];
         foreach ($this->files as $file) {
@@ -302,5 +302,26 @@ class Item
         }
 
         return $files;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray() : array
+    {
+        return [
+            'id'            => $this->id,
+            'number'        => $this->number,
+            'status'        => $this->status,
+            'info'          => $this->info,
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }

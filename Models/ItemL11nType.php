@@ -71,7 +71,10 @@ class ItemL11nType implements \JsonSerializable, ArrayableInterface
      */
     public function toArray() : array
     {
-        return [];
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+        ];
     }
 
     /**

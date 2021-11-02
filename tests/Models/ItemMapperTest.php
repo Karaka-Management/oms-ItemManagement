@@ -35,19 +35,4 @@ final class ItemMapperTest extends \PHPUnit\Framework\TestCase
         self::assertGreaterThan(0, $item->getId());
         self::assertEquals($id, $item->getId());
     }
-
-    /**
-     * @group volume
-     * @group module
-     * @coversNothing
-     */
-    public function testItemVolume() : void
-    {
-        for ($i = 0; $i < 100; ++$i) {
-            $item         = new Item();
-            $item->number = (string) \mt_rand(100000, 999999);
-
-            ItemMapper::create($item);
-        }
-    }
 }
