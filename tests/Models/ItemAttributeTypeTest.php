@@ -65,18 +65,18 @@ final class ItemAttributeTypeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize() : void
     {
-        $this->attr->name = 'Test';
+        $this->attr->name              = 'Test';
         $this->attr->validationPattern = 'Pattern';
-        $this->attr->custom = true;
-        $this->attr->isRequired = true;
+        $this->attr->custom            = true;
+        $this->attr->isRequired        = true;
 
         self::assertEquals(
             [
-                'id' => 0,
-                'name' => 'Test',
+                'id'                => 0,
+                'name'              => 'Test',
                 'validationPattern' => 'Pattern',
-                'custom' => true,
-                'isRequired' => true,
+                'custom'            => true,
+                'isRequired'        => true,
             ],
             $this->attr->jsonSerialize()
         );

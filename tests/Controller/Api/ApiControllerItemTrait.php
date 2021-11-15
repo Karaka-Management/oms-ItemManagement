@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Controller\Api;
 
-use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;

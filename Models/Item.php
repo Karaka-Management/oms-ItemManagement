@@ -310,10 +310,10 @@ class Item
     public function toArray() : array
     {
         return [
-            'id'            => $this->id,
-            'number'        => $this->number,
-            'status'        => $this->status,
-            'info'          => $this->info,
+            'id'     => $this->id,
+            'number' => $this->number,
+            'status' => $this->status,
+            'info'   => $this->info,
         ];
     }
 

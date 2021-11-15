@@ -65,7 +65,7 @@ class ItemAttribute implements \JsonSerializable, ArrayableInterface
      */
     public function __construct()
     {
-        $this->type = new NullItemAttributeType();
+        $this->type  = new NullItemAttributeType();
         $this->value = new NullItemAttributeValue();
     }
 
@@ -87,8 +87,9 @@ class ItemAttribute implements \JsonSerializable, ArrayableInterface
     public function toArray() : array
     {
         return [
-            'id' => $this->id,
-            'type' => $this->type,
+            'id'    => $this->id,
+            'item'  => $this->item,
+            'type'  => $this->type,
             'value' => $this->value,
         ];
     }

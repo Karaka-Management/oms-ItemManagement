@@ -14,13 +14,12 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
+use Modules\Editor\Models\EditorDoc;
 use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemStatus;
-use Modules\Editor\Models\EditorDoc;
 use Modules\Media\Models\Media;
-use Modules\Profile\Models\ContactElement;
 
 /**
  * @internal
@@ -58,7 +57,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertInstanceOf('phpOMS\Localization\Money', $this->item->purchasePrice);
     }
 
-     /**
+    /**
      * @covers Modules\ItemManagement\Models\Item
      * @group module
      */
@@ -68,7 +67,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(ItemStatus::INACTIVE, $this->item->getStatus());
     }
 
-     /**
+    /**
      * @covers Modules\ItemManagement\Models\Item
      * @group module
      */

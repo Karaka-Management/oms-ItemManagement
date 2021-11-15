@@ -51,6 +51,7 @@ final class ItemAttributeTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(
             [
                 'id',
+                'item',
                 'type',
                 'value',
             ],

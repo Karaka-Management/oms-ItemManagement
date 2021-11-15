@@ -25,14 +25,9 @@ use phpOMS\Application\ApplicationAbstract;
 use phpOMS\DataStorage\Session\HttpSession;
 use phpOMS\Dispatcher\Dispatcher;
 use phpOMS\Event\EventManager;
-use phpOMS\Message\Http\HttpRequest;
-use phpOMS\Message\Http\HttpResponse;
-use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Module\ModuleAbstract;
 use phpOMS\Module\ModuleManager;
 use phpOMS\Router\WebRouter;
-use phpOMS\System\MimeType;
-use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\TestUtils;
 
 /**

@@ -33,13 +33,13 @@ use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
+use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * ItemManagement class.
@@ -223,7 +223,7 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : ItemAttributeTypeL11n
     {
-        $attrL11n = new ItemAttributeTypeL11n();
+        $attrL11n       = new ItemAttributeTypeL11n();
         $attrL11n->type = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()

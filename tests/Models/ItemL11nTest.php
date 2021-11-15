@@ -62,15 +62,15 @@ final class ItemL11nTest extends \PHPUnit\Framework\TestCase
     public function testSerialize() : void
     {
         $this->l11n->description  = 'Title';
-        $this->l11n->item   = 2;
+        $this->l11n->item         = 2;
         $this->l11n->setLanguage(ISO639x1Enum::_DE);
 
         self::assertEquals(
             [
-                'id'        => 0,
+                'id'              => 0,
                 'description'     => 'Title',
-                'item'      => 2,
-                'language'  => ISO639x1Enum::_DE,
+                'item'            => 2,
+                'language'        => ISO639x1Enum::_DE,
             ],
             $this->l11n->jsonSerialize()
         );

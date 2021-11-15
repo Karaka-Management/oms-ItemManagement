@@ -154,11 +154,11 @@ class ItemAttributeType implements \JsonSerializable, ArrayableInterface
     public function toArray() : array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            'id'                => $this->id,
+            'name'              => $this->name,
             'validationPattern' => $this->validationPattern,
-            'custom' => $this->custom,
-            'isRequired' => $this->isRequired,
+            'custom'            => $this->custom,
+            'isRequired'        => $this->isRequired,
         ];
     }
 

@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\tests\Models;
 
 use Modules\ItemManagement\Models\ItemAttributeValue;
-use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\ISO3166TwoEnum;
+use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * @internal
@@ -41,7 +41,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     {
         self::assertEquals(0, $this->attr->getId());
         self::assertEquals(0, $this->attr->type);
-        self::assertEquals(null, $this->attr->getValue());
+        self::assertNull($this->attr->getValue());
         self::assertFalse($this->attr->isDefault);
     }
 
