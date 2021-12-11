@@ -16,7 +16,7 @@ namespace Modules\ItemManagement\Models;
 
 use Modules\Editor\Models\EditorDocMapper;
 use Modules\Media\Models\MediaMapper;
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Item mapper class.
@@ -26,7 +26,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class ItemMapper extends DataMapperAbstract
+final class ItemMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -34,7 +34,7 @@ final class ItemMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'itemmgmt_item_id'                => ['name' => 'itemmgmt_item_id',      'type' => 'int',    'internal' => 'id'],
         'itemmgmt_item_no'                => ['name' => 'itemmgmt_item_no',      'type' => 'string', 'internal' => 'number', 'autocomplete' => true],
         'itemmgmt_item_status'            => ['name' => 'itemmgmt_item_status',      'type' => 'int', 'internal' => 'status'],
@@ -53,7 +53,7 @@ final class ItemMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'itemmgmt_item';
+    public const TABLE = 'itemmgmt_item';
 
     /**
      * Primary field name.
@@ -61,7 +61,7 @@ final class ItemMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'itemmgmt_item_id';
+    public const PRIMARYFIELD ='itemmgmt_item_id';
 
     /**
      * Has many relation.
@@ -69,7 +69,7 @@ final class ItemMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
      * @since 1.0.0
      */
-    protected static array $hasMany = [
+    public const HAS_MANY = [
         'files' => [
             'mapper'   => MediaMapper::class,            /* mapper of the related object */
             'table'    => 'itemmgmt_item_media',         /* table of the related object, null if no relation table is used (many->1) */
@@ -86,14 +86,12 @@ final class ItemMapper extends DataMapperAbstract
             'mapper'      => ItemL11nMapper::class,
             'table'       => 'itemmgmt_item_l11n',
             'self'        => 'itemmgmt_item_l11n_item',
-            'conditional' => true,
             'external'    => null,
         ],
         'attributes' => [
             'mapper'      => ItemAttributeMapper::class,
             'table'       => 'itemmgmt_item_attr',
             'self'        => 'itemmgmt_item_attr_item',
-            'conditional' => true,
             'external'    => null,
         ],
     ];

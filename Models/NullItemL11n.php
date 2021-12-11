@@ -34,5 +34,6 @@ final class NullItemL11n extends ItemL11n
     public function __construct(int $id = 0)
     {
         $this->id = $id;
+        parent::__construct();
     }
 }

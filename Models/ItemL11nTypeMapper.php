@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Item mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class ItemL11nTypeMapper extends DataMapperAbstract
+final class ItemL11nTypeMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class ItemL11nTypeMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'itemmgmt_item_l11n_type_id'       => ['name' => 'itemmgmt_item_l11n_type_id',       'type' => 'int',    'internal' => 'id'],
         'itemmgmt_item_l11n_type_title'    => ['name' => 'itemmgmt_item_l11n_type_title',    'type' => 'string', 'internal' => 'title'],
     ];
@@ -43,7 +43,7 @@ final class ItemL11nTypeMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'itemmgmt_item_l11n_type';
+    public const TABLE = 'itemmgmt_item_l11n_type';
 
     /**
      * Primary field name.
@@ -51,5 +51,5 @@ final class ItemL11nTypeMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'itemmgmt_item_l11n_type_id';
+    public const PRIMARYFIELD ='itemmgmt_item_l11n_type_id';
 }

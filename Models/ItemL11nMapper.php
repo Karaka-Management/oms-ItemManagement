@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\DataStorage\Database\DataMapperAbstract;
+use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
  * Item mapper class.
@@ -24,7 +24,7 @@ use phpOMS\DataStorage\Database\DataMapperAbstract;
  * @link    https://orange-management.org
  * @since   1.0.0
  */
-final class ItemL11nMapper extends DataMapperAbstract
+final class ItemL11nMapper extends DataMapperFactory
 {
     /**
      * Columns.
@@ -32,7 +32,7 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @var array<string, array{name:string, type:string, internal:string, autocomplete?:bool, readonly?:bool, writeonly?:bool, annotations?:array}>
      * @since 1.0.0
      */
-    protected static array $columns = [
+    public const COLUMNS = [
         'itemmgmt_item_l11n_id'          => ['name' => 'itemmgmt_item_l11n_id',       'type' => 'int',    'internal' => 'id'],
         'itemmgmt_item_l11n_description' => ['name' => 'itemmgmt_item_l11n_description',    'type' => 'string', 'internal' => 'description', 'autocomplete' => true],
         'itemmgmt_item_l11n_item'        => ['name' => 'itemmgmt_item_l11n_item',      'type' => 'int',    'internal' => 'item'],
@@ -46,7 +46,7 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @var array<string, array{mapper:string, external:string, by?:string, column?:string, conditional?:bool}>
      * @since 1.0.0
      */
-    protected static array $ownsOne = [
+    public const OWNS_ONE = [
         'type' => [
             'mapper'   => ItemL11nTypeMapper::class,
             'external' => 'itemmgmt_item_l11n_typeref',
@@ -59,7 +59,7 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $table = 'itemmgmt_item_l11n';
+    public const TABLE = 'itemmgmt_item_l11n';
 
     /**
      * Primary field name.
@@ -67,5 +67,5 @@ final class ItemL11nMapper extends DataMapperAbstract
      * @var string
      * @since 1.0.0
      */
-    protected static string $primaryField = 'itemmgmt_item_l11n_id';
+    public const PRIMARYFIELD ='itemmgmt_item_l11n_id';
 }

@@ -168,12 +168,22 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
+        $items = ItemMapper::getAll()
+            ->with('l11n')
+            ->with('l11n/type')
+            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/type', ['name1', 'name2', 'name3'], 'IN')
+            ->limit(25)
+            ->execute();
+
+        /*
         $items = ItemMapper::with('language', $response->getLanguage())
             ::with('type', 'backend_image', models: [Media::class]) // @todo: it would be nicer if I coult say files:type or files/type and remove the models parameter?
             ::with('notes', models: null)
             ::with('attributes', models: null)
             ::with('title', ['name1', 'name2', 'name3'], comparison: 'in', models: [ItemL11nType::class]) // @todo: profile, why does this have almost no impact on the sql performance?
             ::getAfterPivot(0, null, 25);
+            */
 
         $view->addData('items', $items);
 
@@ -324,7 +334,7 @@ final class BackendController extends Controller
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->setData('defaultlocalization', LocalizationMapper::get((int) $settings['id']));
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings['id']))->execute();
 
         $itemL11n = ItemL11nMapper::with('language', $response->getLanguage())
             ::with('item', $item->getId())::getAll();
