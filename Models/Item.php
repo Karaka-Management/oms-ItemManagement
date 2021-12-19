@@ -80,7 +80,7 @@ class Item
     /**
      * Attributes.
      *
-     * @var int[]|ItemAttribute[]
+     * @var ItemAttribute[]
      * @since 1.0.0
      */
     private array $attributes = [];
@@ -142,13 +142,13 @@ class Item
     /**
      * Get l11n
      *
-     * @param string $type Localization type
+     * @param null|string $type Localization type
      *
      * @return ItemL11n
      *
      * @since 1.0.0
      */
-    public function getL11n(string $type) : ItemL11n
+    public function getL11n(string $type = null) : ItemL11n
     {
         foreach ($this->l11n as $l11n) {
             if ($l11n->type->title === $type) {
@@ -157,6 +157,18 @@ class Item
         }
 
         return new NullItemL11n();
+    }
+
+    /**
+     * Get localizations
+     *
+     * @return ItemL11n[]
+     *
+     * @since 1.0.0
+     */
+    public function getL11ns() : array
+    {
+        return $this->l11n;
     }
 
     /**
@@ -216,7 +228,7 @@ class Item
     /**
      * Get attributes
      *
-     * @return int[]|ItemAttribute[]
+     * @return ItemAttribute[]
      *
      * @since 1.0.0
      */

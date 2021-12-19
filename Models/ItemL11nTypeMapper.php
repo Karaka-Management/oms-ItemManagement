@@ -33,8 +33,8 @@ final class ItemL11nTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_item_l11n_type_id'       => ['name' => 'itemmgmt_item_l11n_type_id',       'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_item_l11n_type_title'    => ['name' => 'itemmgmt_item_l11n_type_title',    'type' => 'string', 'internal' => 'title'],
+        'itemmgmt_item_l11n_type_id'    => ['name' => 'itemmgmt_item_l11n_type_id',    'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_item_l11n_type_title' => ['name' => 'itemmgmt_item_l11n_type_title', 'type' => 'string', 'internal' => 'title'],
     ];
 
     /**

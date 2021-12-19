@@ -47,12 +47,12 @@ final class ItemAttributeMapper extends DataMapperFactory
      */
     public const OWNS_ONE = [
         'type' => [
-            'mapper'            => ItemAttributeTypeMapper::class,
-            'external'          => 'itemmgmt_item_attr_type',
+            'mapper'   => ItemAttributeTypeMapper::class,
+            'external' => 'itemmgmt_item_attr_type',
         ],
         'value' => [
-            'mapper'            => ItemAttributeValueMapper::class,
-            'external'          => 'itemmgmt_item_attr_value',
+            'mapper'   => ItemAttributeValueMapper::class,
+            'external' => 'itemmgmt_item_attr_value',
         ],
     ];
 

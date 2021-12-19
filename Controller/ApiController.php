@@ -293,7 +293,7 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
-        $attrType       = new ItemAttributeType();
+        $attrType = new ItemAttributeType();
         $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->custom = (bool) ($request->getData('custom') ?? false);

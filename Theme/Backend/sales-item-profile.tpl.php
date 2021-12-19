@@ -21,11 +21,8 @@ use phpOMS\Uri\UriFactory;
 /** @var \Modules\ItemManagement\Models\Item $item */
 $item = $this->getData('item');
 
-/** @var \Modules\ItemManagement\Models\ItemL11n $itemL11n */
-$itemL11n = $this->getData('itemL11n');
-
-/** @var \Modules\ItemManagement\Models\ItemAttribute $itemAttribute */
-$itemAttribute = $this->getData('itemAttribute');
+$itemL11n = $item->getL11ns();
+$itemAttribute = $item->getAttributes();
 
 $notes = $item->getNotes();
 $files = $item->getFiles();
@@ -90,7 +87,7 @@ echo $this->getData('nav')->render();
                         </form>
                     </section>
 
-                    <?php $image = $item->getFileByType('backend_image');
+                    <?php $image = $item->getFileByType(0);
                         if (!($image instanceof NullMedia)) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
@@ -217,14 +214,16 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('Net'); ?>
                                         <td><?= $this->getHtml('Date'); ?>
                                     <tbody>
-                                    <?php foreach ($newestInvoices as $invoice) :
+                                    <?php
+                                    /** @var \Modules\Billing\Models\Bill $invoice */
+                                    foreach ($newestInvoices as $invoice) :
                                         $url = UriFactory::build('{/prefix}sales/bill?{?}&id=' . $invoice->getId());
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
                                         <td><a class="content" href="<?= UriFactory::build('{/prefix}sales/client/profile?{?}&id=' . $invoice->client->getId()); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->net->getCurrency()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->netSales->getCurrency()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                 </table>
@@ -244,7 +243,7 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('Country'); ?>
                                         <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
-                                    <?php $i = -1; foreach ($topCustomers[0] as $client) : ++$i;
+                                    <?php $i = -1; foreach ($topCustomers as $client) : ++$i;
                                         $url = UriFactory::build('{/prefix}sales/client/profile?id=' . $client->getId());
                                     ?>
                                     <tr data-href="<?= $url; ?>">
@@ -922,14 +921,16 @@ echo $this->getData('nav')->render();
                                 <td><?= $this->getHtml('Net'); ?>
                                 <td><?= $this->getHtml('Date'); ?>
                             <tbody>
-                            <?php foreach ($allInvoices as $invoice) :
+                            <?php
+                            /** @var \Modules\Billing\Models\Bill $invoice */
+                            foreach ($allInvoices as $invoice) :
                                 $url = UriFactory::build('{/prefix}sales/bill?{?}&id=' . $invoice->getId());
                                 ?>
                             <tr data-href="<?= $url; ?>">
                                 <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
-                                <td><a href="<?= $url; ?>"><?= $invoice->net->getCurrency(); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->netSales->getCurrency(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
                             <?php endforeach; ?>
                         </table>

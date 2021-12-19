@@ -16,17 +16,14 @@ namespace Modules\ItemManagement\Controller;
 
 use Model\SettingsEnum;
 use Modules\Admin\Models\LocalizationMapper;
-use Modules\Billing\Models\BillTypeL11n;
+use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\SalesBillMapper;
-use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
-use Modules\ItemManagement\Models\ItemL11nMapper;
-use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemMapper;
-use Modules\Media\Models\Media;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
+use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Localization\ISO3166CharEnum;
 use phpOMS\Localization\ISO3166NameEnum;
 use phpOMS\Localization\Money;
@@ -64,8 +61,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attributes = ItemAttributeTypeMapper::with('language', $response->getLanguage())
-            ::getAll();
+        $attributes = ItemAttributeTypeMapper::getAll()->with('l11n')->where('l11n/language', $response->getLanguage())->execute();
 
         $view->addData('attributes', $attributes);
 
@@ -90,8 +86,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attributes = ItemAttributeValueMapper::with('language', $response->getLanguage())
-            ::getAll();
+        $attributes = ItemAttributeValueMapper::getAll()->with('l11n')->where('l11n/language', $response->getLanguage())->execute();
 
         $view->addData('attributes', $attributes);
 
@@ -116,8 +111,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attribute = ItemAttributeTypeMapper::with('language', $response->getLanguage())
-            ::get((int) $request->getData('id'));
+        $attribute = ItemAttributeTypeMapper::get()->with('l11n')->where('id', (int) $request->getData('id'))->where('l11n/language', $response->getLanguage())->execute();
 
         $view->addData('attribute', $attribute);
 
@@ -142,8 +136,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attribute = ItemAttributeValueMapper::with('language', $response->getLanguage())
-            ::get((int) $request->getData('id'));
+        $attribute = ItemAttributeValueMapper::get()->with('l11n')->where('id', (int) $request->getData('id'))->where('l11n/language', $response->getLanguage())->execute();
 
         $view->addData('attribute', $attribute);
 
@@ -172,18 +165,9 @@ final class BackendController extends Controller
             ->with('l11n')
             ->with('l11n/type')
             ->where('l11n/language', $response->getLanguage())
-            ->where('l11n/type', ['name1', 'name2', 'name3'], 'IN')
+            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->limit(25)
             ->execute();
-
-        /*
-        $items = ItemMapper::with('language', $response->getLanguage())
-            ::with('type', 'backend_image', models: [Media::class]) // @todo: it would be nicer if I coult say files:type or files/type and remove the models parameter?
-            ::with('notes', models: null)
-            ::with('attributes', models: null)
-            ::with('title', ['name1', 'name2', 'name3'], comparison: 'in', models: [ItemL11nType::class]) // @todo: profile, why does this have almost no impact on the sql performance?
-            ::getAfterPivot(0, null, 25);
-            */
 
         $view->addData('items', $items);
 
@@ -208,7 +192,14 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/purchase-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
 
-        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::getAll()
+            ->with('l11n')
+            ->with('l11n/type')
+            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->limit(25)
+            ->execute();
+
         $view->addData('items', $items);
 
         return $view;
@@ -324,25 +315,25 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
-        $item = ItemMapper::with('language', $response->getLanguage())
-            ::with('files', limit: 5)::orderBy('createdAt', 'ASC')
-            ::with('notes', limit: 5)::orderBy('id', 'ASC')
-            ::get((int) $request->getData('id'));
+        $item = ItemMapper::get()
+            ->with('l11n')
+            ->with('l11n/type')
+            ->with('files')
+            ->with('notes')
+            ->where('id', (int) $request->getData('id'))
+            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->limit(5, 'files')->sort('files/id', OrderType::DESC) // @todo: limit not working!!!
+            ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
+            ->execute();
+
         $view->addData('item', $item);
 
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings['id']))->execute();
-
-        $itemL11n = ItemL11nMapper::with('language', $response->getLanguage())
-            ::with('item', $item->getId())::getAll();
-        $view->addData('itemL11n', $itemL11n);
-
-        $itemAttribute = ItemAttributeMapper::with('language', $response->getLanguage())
-            ::with('item', $item->getId())::getAll();
-        $view->addData('itemAttribute', $itemAttribute);
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings->getId())->execute());
 
         // stats
         if ($this->app->moduleManager->isActive('Billing')) {
@@ -350,9 +341,14 @@ final class BackendController extends Controller
             $mtd       = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
             $avg       = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
             $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
-            // @todo: why is the conditional array necessary, shouldn't the mapper realize when it mustn't use the conditional (when the field doesn't exist in the mapper)
-            $newestInvoices    = SalesBillMapper::with('language', $response->getLanguage(), [BillTypeL11n::class])::getNewestItemInvoices($item->getId(), 5);
-            $topCustomers      = SalesBillMapper::getItemTopCustomers($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $newestInvoices = SalesBillMapper::getAll()
+                ->with('type')
+                ->where('type/transferType', BillTransferType::SALES)
+                ->sort('id', OrderType::DESC)
+                ->limit(5)
+                ->execute();
+
+            $topCustomers      = [];
             $allInvoices       = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);

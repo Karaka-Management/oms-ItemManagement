@@ -33,12 +33,12 @@ final class ItemAttributeTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_attr_type_id'       => ['name' => 'itemmgmt_attr_type_id',     'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_attr_type_name'     => ['name' => 'itemmgmt_attr_type_name',   'type' => 'string', 'internal' => 'name', 'autocomplete' => true],
-        'itemmgmt_attr_type_fields'   => ['name' => 'itemmgmt_attr_type_fields', 'type' => 'int',    'internal' => 'fields'],
-        'itemmgmt_attr_type_custom'   => ['name' => 'itemmgmt_attr_type_custom', 'type' => 'bool', 'internal' => 'custom'],
-        'itemmgmt_attr_type_pattern'  => ['name' => 'itemmgmt_attr_type_pattern', 'type' => 'string', 'internal' => 'validationPattern'],
-        'itemmgmt_attr_type_required' => ['name' => 'itemmgmt_attr_type_required', 'type' => 'bool', 'internal' => 'isRequired'],
+        'itemmgmt_attr_type_id'       => ['name' => 'itemmgmt_attr_type_id',       'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_attr_type_name'     => ['name' => 'itemmgmt_attr_type_name',     'type' => 'string', 'internal' => 'name', 'autocomplete' => true],
+        'itemmgmt_attr_type_fields'   => ['name' => 'itemmgmt_attr_type_fields',   'type' => 'int',    'internal' => 'fields'],
+        'itemmgmt_attr_type_custom'   => ['name' => 'itemmgmt_attr_type_custom',   'type' => 'bool',   'internal' => 'custom'],
+        'itemmgmt_attr_type_pattern'  => ['name' => 'itemmgmt_attr_type_pattern',  'type' => 'string', 'internal' => 'validationPattern'],
+        'itemmgmt_attr_type_required' => ['name' => 'itemmgmt_attr_type_required', 'type' => 'bool',   'internal' => 'isRequired'],
     ];
 
     /**
@@ -49,17 +49,17 @@ final class ItemAttributeTypeMapper extends DataMapperFactory
      */
     public const HAS_MANY = [
         'l11n' => [
-            'mapper'            => ItemAttributeTypeL11nMapper::class,
-            'table'             => 'itemmgmt_attr_type_l11n',
-            'self'              => 'itemmgmt_attr_type_l11n_type',
-            'column'            => 'title',
-            'external'          => null,
+            'mapper'   => ItemAttributeTypeL11nMapper::class,
+            'table'    => 'itemmgmt_attr_type_l11n',
+            'self'     => 'itemmgmt_attr_type_l11n_type',
+            'column'   => 'title',
+            'external' => null,
         ],
         'defaults' => [
-            'mapper'            => ItemAttributeValueMapper::class,
-            'table'             => 'itemmgmt_item_attr_default',
-            'self'              => 'itemmgmt_item_attr_default_type',
-            'external'          => 'itemmgmt_item_attr_default_value'
+            'mapper'   => ItemAttributeValueMapper::class,
+            'table'    => 'itemmgmt_item_attr_default',
+            'self'     => 'itemmgmt_item_attr_default_type',
+            'external' => 'itemmgmt_item_attr_default_value'
         ],
     ];
 
