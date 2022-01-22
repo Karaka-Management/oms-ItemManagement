@@ -223,7 +223,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/stock-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response));
 
-        $items = ItemMapper::with('language', $response->getLanguage())::getAfterPivot(0, null, 25);
+        $items = ItemMapper::getAll()->execute();
         $view->addData('items', $items);
 
         return $view;
@@ -337,10 +337,12 @@ final class BackendController extends Controller
 
         // stats
         if ($this->app->moduleManager->isActive('Billing')) {
-            $ytd       = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $mtd       = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
-            $avg       = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
+            $ytd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $mtd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
+            $avg = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
+
             $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
+
             $newestInvoices = SalesBillMapper::getAll()
                 ->with('type')
                 ->where('type/transferType', BillTransferType::SALES)
