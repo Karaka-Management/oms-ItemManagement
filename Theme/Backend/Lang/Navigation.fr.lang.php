@@ -13,12 +13,12 @@
 declare(strict_types=1);
 
 return ['Navigation' => [
-    'Analyze'        => 'Analyze',
+    'Analyze'        => 'Analyser',
     'Article'        => 'Article',
-    'Attributes'     => 'Attributes',
-    'Create'         => 'Create',
-    'ItemManagement' => 'Item Management',
-    'List'           => 'List',
-    'Types'          => 'Types',
-    'Values'         => 'Values',
+    'Attributes'     => 'Les attributs',
+    'Create'         => 'Créer',
+    'ItemManagement' => 'Gestion des articles',
+    'List'           => 'Lister',
+    'Types'          => 'Les types',
+    'Values'         => 'Valeurs',
 ]];
