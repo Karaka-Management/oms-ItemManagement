@@ -21,6 +21,7 @@ use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\Localization\ISO639x1Enum;
@@ -48,9 +49,9 @@ final class Installer extends InstallerAbstract
     /**
      * {@inheritdoc}
      */
-    public static function install(DatabasePool $dbPool, ModuleInfo $info, SettingsInterface $cfgHandler) : void
+    public static function install(ApplicationAbstract $app, ModuleInfo $info, SettingsInterface $cfgHandler) : void
     {
-        parent::install($dbPool, $info, $cfgHandler);
+        parent::install($app, $info, $cfgHandler);
 
         $attrTypes = self::createItemAttributeTypes();
         self::createItemAttributeValues($attrTypes);
