@@ -13,7 +13,7 @@
 declare(strict_types=1);
 
 use Modules\ItemManagement\Controller\BackendController;
-use Modules\ItemManagement\Models\PermissionState;
+use Modules\ItemManagement\Models\PermissionCategory;
 use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
@@ -25,7 +25,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ATTRIBUTE,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
     ],
@@ -36,7 +36,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::ATTRIBUTE,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
     ],
@@ -47,7 +47,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SALES_ITEM,
+                'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
@@ -58,7 +58,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::PURCHASE_ITEM,
+                'state'  => PermissionCategory::PURCHASE_ITEM,
             ],
         ],
     ],
@@ -69,7 +69,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::STOCK_ITEM,
+                'state'  => PermissionCategory::STOCK_ITEM,
             ],
         ],
     ],
@@ -80,7 +80,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::SALES_ITEM,
+                'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
@@ -91,7 +91,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::PURCHASE_ITEM,
+                'state'  => PermissionCategory::PURCHASE_ITEM,
             ],
         ],
     ],
@@ -102,7 +102,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::CREATE,
-                'state'  => PermissionState::STOCK_ITEM,
+                'state'  => PermissionCategory::STOCK_ITEM,
             ],
         ],
     ],
@@ -113,7 +113,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SALES_ITEM,
+                'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
@@ -124,7 +124,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::PURCHASE_ITEM,
+                'state'  => PermissionCategory::PURCHASE_ITEM,
             ],
         ],
     ],
@@ -135,7 +135,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::STOCK_ITEM,
+                'state'  => PermissionCategory::STOCK_ITEM,
             ],
         ],
     ],
@@ -146,7 +146,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::SALES_ITEM,
+                'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
@@ -157,7 +157,7 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionState::PURCHASE_ITEM,
+                'state'  => PermissionCategory::PURCHASE_ITEM,
             ],
         ],
     ],
