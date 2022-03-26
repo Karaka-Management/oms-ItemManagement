@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\Contract\ArrayableInterface;
 
 /**
  * Item class.
@@ -24,7 +23,7 @@ use phpOMS\Contract\ArrayableInterface;
  * @link    https://karaka.app
  * @since   1.0.0
  */
-class ItemAttribute implements \JsonSerializable, ArrayableInterface
+class ItemAttribute implements \JsonSerializable
 {
     /**
      * Id.

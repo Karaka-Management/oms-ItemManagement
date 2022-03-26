@@ -28,13 +28,13 @@
             },
             "itemmgmt_item_salesprice": {
                 "name": "itemmgmt_item_salesprice",
-                "type": "INT",
+                "type": "BIGINT",
                 "default": null,
                 "null": true
             },
             "itemmgmt_item_purchaseprice": {
                 "name": "itemmgmt_item_purchaseprice",
-                "type": "INT",
+                "type": "BIGINT",
                 "default": null,
                 "null": true
             }
