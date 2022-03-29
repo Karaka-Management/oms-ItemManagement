@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-
 /**
  * Item class.
  *
