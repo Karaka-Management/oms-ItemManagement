@@ -573,7 +573,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $uploadedFiles = $request->getFiles() ?? [];
+        $uploadedFiles = $request->getFiles();
 
         if (empty($uploadedFiles)) {
             $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Item', 'Invalid item image', $uploadedFiles);
@@ -583,8 +583,8 @@ final class ApiController extends Controller
         }
 
         $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
-            $request->getDataList('names') ?? [],
-            $request->getDataList('filenames') ?? [],
+            $request->getDataList('names'),
+            $request->getDataList('filenames'),
             $uploadedFiles,
             $request->header->account,
             __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
