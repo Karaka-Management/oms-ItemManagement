@@ -23,7 +23,6 @@ use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
-use phpOMS\DataStorage\Database\DatabasePool;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;

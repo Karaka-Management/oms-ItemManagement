@@ -21,7 +21,7 @@ use phpOMS\Uri\UriFactory;
 /** @var \Modules\ItemManagement\Models\Item $item */
 $item = $this->getData('item');
 
-$itemL11n = $item->getL11ns();
+$itemL11n      = $item->getL11ns();
 $itemAttribute = $item->getAttributes();
 
 $notes = $item->getNotes();

@@ -59,7 +59,7 @@ final class ItemAttributeTypeMapper extends DataMapperFactory
             'mapper'   => ItemAttributeValueMapper::class,
             'table'    => 'itemmgmt_item_attr_default',
             'self'     => 'itemmgmt_item_attr_default_type',
-            'external' => 'itemmgmt_item_attr_default_value'
+            'external' => 'itemmgmt_item_attr_default_value',
         ],
     ];
 
