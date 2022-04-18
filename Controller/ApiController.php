@@ -590,9 +590,7 @@ final class ApiController extends Controller
             __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
             '/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
             $request->getData('type', 'int'),
-            '',
-            '',
-            PathSettings::FILE_PATH
+            pathSettings: PathSettings::FILE_PATH
         );
 
         $this->createModelRelation(
