@@ -55,7 +55,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementAttributeTypes(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementAttributeTypes(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
@@ -80,7 +80,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementAttributeValues(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementAttributeValues(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
@@ -105,7 +105,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementAttributeType(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementAttributeType(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
@@ -130,7 +130,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementAttributeValue(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementAttributeValue(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
@@ -155,7 +155,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementSalesList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementSalesList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
@@ -186,7 +186,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementPurchaseList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementPurchaseList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/purchase-item-list');
@@ -217,7 +217,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementWarehousingList(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementWarehousingList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/stock-list');
@@ -241,7 +241,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementSalesCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementSalesCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
@@ -262,7 +262,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementPurchaseCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementPurchaseCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
@@ -283,7 +283,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementWarehousingCreate(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementWarehousingCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
@@ -394,7 +394,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementPurchaseItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementPurchaseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = $this->viewItemManagementSalesItem($request, $response, $data);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
@@ -415,7 +415,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementWarehouseItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemManagementWarehouseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $view = $this->viewItemManagementSalesItem($request, $response, $data);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
@@ -436,7 +436,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemSalesAnalysis(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemSalesAnalysis(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $head = $response->get('Content')->getData('head');
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
@@ -608,7 +608,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemPurchaseAnalysis(RequestAbstract $request, ResponseAbstract $response, $data = null) : RenderableInterface
+    public function viewItemPurchaseAnalysis(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         $head = $response->get('Content')->getData('head');
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
