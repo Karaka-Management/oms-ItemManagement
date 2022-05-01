@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Controller;
 
-use Modules\Admin\Models\SettingsEnum;
 use Modules\Admin\Models\LocalizationMapper;
+use Modules\Admin\Models\SettingsEnum;
 use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\SalesBillMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
