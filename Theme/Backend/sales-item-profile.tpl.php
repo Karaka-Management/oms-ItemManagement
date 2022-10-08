@@ -82,7 +82,7 @@ echo $this->getData('nav')->render();
                                 </table>
                             </div>
                             <div class="portlet-foot">
-                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>"> <input type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>">
+                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item"> <input type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
                             </div>
                         </form>
                     </section>
@@ -91,7 +91,7 @@ echo $this->getData('nav')->render();
                         if (!($image instanceof NullMedia)) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
-                            <img width="100%" loading="lazy" class="item-image"
+                            <img alt="<?= $this->printHtml($image->name); ?>" width="100%" loading="lazy" class="item-image"
                                 src="<?= UriFactory::build('{/prefix}' . $image->getPath()); ?>">
                         </div>
                     </section>
@@ -678,7 +678,7 @@ echo $this->getData('nav')->render();
                                         <tr>
                                             <td><input id="iPName" name="pname" type="number" min="0" step="1" placeholder="">
                                         <tr>
-                                            <td><input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                                            <td><input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
                                 </table>
                             </form>
                         </div>

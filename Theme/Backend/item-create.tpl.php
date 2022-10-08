@@ -59,7 +59,7 @@ echo $this->getData('nav')->render(); ?>
                                     <tr><td><input id="iArticlegroup" name="articlegroup" type="text" placeholder="" required>
                                     <tr><td><label for="iSSuccessor"><?= $this->getHtml('Successor'); ?></label>
                                     <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input id="iSource" name="source" type="text" placeholder=""></span>
-                                    <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                                    <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-item">
                                 </table>
                             </form>
                         </div>
@@ -366,7 +366,7 @@ echo $this->getData('nav')->render(); ?>
                             <tr><td><input id="iPName" name="pname" type="text" placeholder="">
                             <tr><td><label for="iPName"><?= $this->getHtml('Leadtime'); ?></label>
                             <tr><td><input id="iPName" name="pname" type="number" min="0" step="1" placeholder="">
-                            <tr><td><input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                            <tr><td><input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
                         </table>
                     </form>
                 </div>
