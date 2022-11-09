@@ -36,4 +36,12 @@ final class NullItemAttribute extends ItemAttribute
         parent::__construct();
         $this->id = $id;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize() : mixed
+    {
+        return ['id' => $this->id];
+    }
 }

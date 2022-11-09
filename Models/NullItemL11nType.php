@@ -35,4 +35,12 @@ final class NullItemL11nType extends ItemL11nType
     {
         $this->id = $id;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize() : mixed
+    {
+        return ['id' => $this->id];
+    }
 }
