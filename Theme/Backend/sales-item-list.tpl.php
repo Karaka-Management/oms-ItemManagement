@@ -129,14 +129,14 @@ echo $this->getData('nav')->render(); ?>
 
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('sales/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/lang}/{/app}/sales/item/profile?{?}&id=' . $value->getId());
                 $image       = $value->getFileByType(0);
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->getHtml('IMG_alt_item'); ?>" width="30" loading="lazy" class="item-image"
                             src="<?= $image instanceof NullMedia ?
                                         UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
-                                        UriFactory::build('' . $image->getPath()); ?>"></a>
+                                        UriFactory::build('{/lang}/{/app}/' . $image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>

@@ -52,14 +52,14 @@ echo $this->getData('nav')->render(); ?>
                         <input id="itemList-r8-desc" name="itemList-sort" type="radio"><label for="itemList-r8-desc"><i class="sort-desc fa fa-chevron-down"></i></label>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('warehouse/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/lang}/{/app}/warehouse/item/profile?{?}&id=' . $value->getId());
                 $image       = $value->getFileByType('backend_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->printHtml($image->name); ?>" width="30" loading="lazy" class="item-image"
                             src="<?= $image instanceof NullMedia ?
                                         UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
-                                        UriFactory::build('' . $image->getPath()); ?>"></a>
+                                        UriFactory::build('{/lang}/{/app}/' . $image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
