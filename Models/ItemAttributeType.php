@@ -62,6 +62,7 @@ class ItemAttributeType implements \JsonSerializable
 
     public bool $isRequired = false;
 
+
     /**
      * Localization
      *
@@ -75,6 +76,14 @@ class ItemAttributeType implements \JsonSerializable
      * @var array
      */
     private array $defaults = [];
+
+    /**
+     * Default attribute value
+     *
+     * @var int
+     * @since 1.0.0
+     */
+    public int $default = 0;
 
     /**
      * Constructor.

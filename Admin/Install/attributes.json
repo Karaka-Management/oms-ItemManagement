@@ -1,0 +1,77 @@
+[
+    {
+        "id": "color",
+        "name": {
+            "en": "Color",
+            "de": "Farbe"
+        },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "name": {
+                    "en": "Red",
+                    "de": "Rot"
+                }
+            },
+            {
+                "name": {
+                    "en": "Green",
+                    "de": "Gruen"
+                }
+            }
+        ]
+    },
+    {
+        "id": "length",
+        "name": {
+            "en": "Length",
+            "de": "Laenge"
+        },
+        "values": []
+    },
+    {
+        "id": "weight",
+        "name": {
+            "en": "Weight",
+            "de": "Gewicht"
+        },
+        "values": []
+    },
+    {
+        "id": "origin",
+        "name": {
+            "en": "Country of origin",
+            "de": "Herkunftsland"
+        },
+        "values": []
+    },
+    {
+        "id": "license",
+        "name": {
+            "en": "License",
+            "de": "Lizenz"
+        },
+        "values": []
+    },
+    {
+        "id": "payment_model",
+        "name": {
+            "en": "Payment Model",
+            "de": "Zahlungsweise"
+        },
+        "values": [
+            {
+                "en": "Subscription",
+                "de": "Abo"
+            },
+            {
+                "en": "pay-per-use",
+                "de": "Einmalzahlung"
+            }
+        ]
+    }
+]

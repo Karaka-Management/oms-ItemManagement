@@ -85,6 +85,10 @@ class ItemAttributeValue implements \JsonSerializable
      */
     public bool $isDefault = false;
 
+    // @todo: The following l11n is bad!!!
+    // the l11n should be separate, because we want to know which value it is despite the l11n
+    // it should be basically the same ass the itemattributetype which has a itemattributetypel11n element.
+
     /**
      * Language
      *
