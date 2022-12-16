@@ -62,7 +62,6 @@ class ItemAttributeType implements \JsonSerializable
 
     public bool $isRequired = false;
 
-
     /**
      * Localization
      *
