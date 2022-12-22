@@ -209,21 +209,41 @@
                 "null": true,
                 "default": null
             },
-            "itemmgmt_attr_value_lang": {
-                "name": "itemmgmt_attr_value_lang",
+            "itemmgmt_attr_value_unit": {
+                "name": "itemmgmt_attr_value_unit",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+        }
+    },
+    "itemmgmt_attr_value_l11n": {
+        "name": "itemmgmt_attr_value_l11n",
+        "fields": {
+            "itemmgmt_attr_value_l11n_id": {
+                "name": "itemmgmt_attr_value_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_attr_value_l11n_title": {
+                "name": "itemmgmt_attr_value_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "itemmgmt_attr_value_l11n_type": {
+                "name": "itemmgmt_attr_value_l11n_value",
+                "type": "INT(11)",
+                "null": false,
+                "foreignTable": "itemmgmt_attr_value",
+                "foreignKey": "itemmgmt_attr_value_id"
+            },
+            "itemmgmt_attr_value_l11n_lang": {
+                "name": "itemmgmt_attr_value_l11n_lang",
                 "type": "VARCHAR(2)",
-                "null": true,
-                "default": null,
+                "null": false,
                 "foreignTable": "language",
                 "foreignKey": "language_639_1"
-            },
-            "itemmgmt_attr_value_country": {
-                "name": "itemmgmt_attr_value_country",
-                "type": "VARCHAR(2)",
-                "null": true,
-                "default": null,
-                "foreignTable": "country",
-                "foreignKey": "country_code2"
             }
         }
     },
@@ -284,6 +304,171 @@
                 "default": null,
                 "foreignTable": "itemmgmt_attr_value",
                 "foreignKey": "itemmgmt_attr_value_id"
+            }
+        }
+    },
+    "itemmgmt_item_sales_price": {
+        "name": "itemmgmt_item_sales_price",
+        "fields": {
+            "itemmgmt_item_sales_price_id": {
+                "name": "itemmgmt_item_sales_price_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_sales_price_name": {
+                "name": "itemmgmt_item_sales_price_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_price": {
+                "name": "itemmgmt_item_sales_price_price",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_status": {
+                "name": "itemmgmt_item_sales_price_status",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_minquantity": {
+                "name": "itemmgmt_item_sales_price_minquantity",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_relativediscount": {
+                "name": "itemmgmt_item_sales_price_relativediscount",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_absolutediscount": {
+                "name": "itemmgmt_item_sales_price_absolutediscount",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_relativeunitdiscount": {
+                "name": "itemmgmt_item_sales_price_relativeunitdiscount",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_absoluteunitdiscount": {
+                "name": "itemmgmt_item_sales_price_absoluteunitdiscount",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_region": {
+                "name": "itemmgmt_item_sales_price_region",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_country": {
+                "name": "itemmgmt_item_sales_price_country",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_start": {
+                "name": "itemmgmt_item_sales_price_start",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_end": {
+                "name": "itemmgmt_item_sales_price_end",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_promocode": {
+                "name": "itemmgmt_item_sales_price_end",
+                "type": "INT(11)",
+                "null": false
+            }
+        }
+    },
+    "itemmgmt_item_sales_price_relation": {
+        "name": "itemmgmt_item_sales_price_relation",
+        "fields": {
+            "itemmgmt_item_note_id": {
+                "name": "itemmgmt_item_sales_price_relation_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_sales_price_relation_item": {
+                "name": "itemmgmt_item_sales_price_relation_item",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            },
+            "itemmgmt_item_sales_price_relation_itemgroup": {
+                "name": "itemmgmt_item_sales_price_relation_itemgroup",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            },
+            "itemmgmt_item_sales_price_relation_client": {
+                "name": "itemmgmt_item_sales_price_relation_client",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "clientmgmt_client",
+                "foreignKey": "clientmgmt_client_id"
+            },
+            "itemmgmt_item_sales_price_relation_clientgroup": {
+                "name": "itemmgmt_item_sales_price_relation_clientgroup",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "clientmgmt_client",
+                "foreignKey": "clientmgmt_client_id"
+            },
+            "itemmgmt_item_sales_price_relation_price": {
+                "name": "itemmgmt_item_sales_price_relation_price",
+                "type": "INT",
+                "null": true,
+                "default": null,
+                "foreignTable": "itemmgmt_item_sales_price",
+                "foreignKey": "itemmgmt_item_sales_price_id"
+            }
+        }
+    },
+    "itemmgmt_item_sales_price_history": {
+        "name": "itemmgmt_item_sales_price_history",
+        "fields": {
+            "itemmgmt_item_sales_price_history_id": {
+                "name": "itemmgmt_item_sales_price_history_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            }
+        }
+    },
+    "itemmgmt_item_purchase_price": {
+        "name": "itemmgmt_item_purchase_price",
+        "fields": {
+            "itemmgmt_item_purchase_price_id": {
+                "name": "itemmgmt_item_purchase_price_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            }
+        }
+    },
+    "itemmgmt_item_purchase_price_history": {
+        "name": "itemmgmt_item_purchase_price_history",
+        "fields": {
+            "itemmgmt_item_purchase_price_history_id": {
+                "name": "itemmgmt_item_purchase_price_history_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
             }
         }
     },

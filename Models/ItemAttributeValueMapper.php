@@ -40,9 +40,24 @@ final class ItemAttributeValueMapper extends DataMapperFactory
         'itemmgmt_attr_value_valueInt' => ['name' => 'itemmgmt_attr_value_valueInt', 'type' => 'int',      'internal' => 'valueInt'],
         'itemmgmt_attr_value_valueDec' => ['name' => 'itemmgmt_attr_value_valueDec', 'type' => 'float',    'internal' => 'valueDec'],
         'itemmgmt_attr_value_valueDat' => ['name' => 'itemmgmt_attr_value_valueDat', 'type' => 'DateTime', 'internal' => 'valueDat'],
-        'itemmgmt_attr_value_lang'     => ['name' => 'itemmgmt_attr_value_lang',     'type' => 'string',   'internal' => 'language'],
-        'itemmgmt_attr_value_country'  => ['name' => 'itemmgmt_attr_value_country',  'type' => 'string',   'internal' => 'country'],
     ];
+
+    /**
+     * Has many relation.
+     *
+     * @var array<string, array{mapper:string, table:string, self?:?string, external?:?string, column?:string}>
+     * @since 1.0.0
+     */
+    public const HAS_MANY = [
+        'l11n' => [
+            'mapper'   => ItemAttributeValueL11nMapper::class,
+            'table'    => 'itemmgmt_attr_value_l11n',
+            'self'     => 'itemmgmt_attr_value_l11n_type',
+            'column'   => 'title',
+            'external' => null,
+        ],
+    ];
+
 
     /**
      * Primary table.

@@ -90,36 +90,29 @@ class ItemAttributeValue implements \JsonSerializable
     // it should be basically the same ass the itemattributetype which has a itemattributetypel11n element.
 
     /**
-     * Language
+     * Localization
      *
-     * @var string
-     * @since 1.0.0
+     * @var null|ItemAttributeValueL11n
      */
-    protected string $language = ISO639x1Enum::_EN;
-
-    /**
-     * Country
-     *
-     * @var string
-     * @since 1.0.0
-     */
-    protected string $country = ISO3166TwoEnum::_USA;
+    private ?ItemAttributeValueL11n $l11n = null;
 
     /**
      * Constructor.
      *
-     * @param int    $type     Type
-     * @param mixed  $value    Value
-     * @param string $language Language
+     * @param int   $type  Type
+     * @param mixed $value Value
      *
      * @since 1.0.0
      */
-    public function __construct(int $type = 0, $value = '', string $language = ISO639x1Enum::_EN)
+    public function __construct(int $type = 0, mixed $value = '', string $name = '')
     {
-        $this->type     = $type;
-        $this->language = $language;
+        $this->type = $type;
 
         $this->setValue($value);
+
+        if (!empty($name)) {
+            $this->setL11n($name);
+        }
     }
 
     /**
@@ -132,6 +125,40 @@ class ItemAttributeValue implements \JsonSerializable
     public function getId() : int
     {
         return $this->id;
+    }
+
+
+    /**
+     * Set l11n
+     *
+     * @param string|ItemAttributeTypeL11n $l11n Tag article l11n
+     * @param string                       $lang Language
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
+    public function setL11n(string | ItemAttributeValueL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
+    {
+        if ($l11n instanceof ItemAttributeValueL11n) {
+            $this->l11n = $l11n;
+        } elseif (isset($this->l11n) && $this->l11n instanceof ItemAttributeValueL11n) {
+            $this->l11n->title = $l11n;
+        } else {
+            $this->l11n        = new ItemAttributeValueL11n();
+            $this->l11n->title = $l11n;
+            $this->l11n->setLanguage($lang);
+        }
+    }
+
+    /**
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    public function getL11n() : string
+    {
+        return $this->l11n instanceof ItemAttributeTypeL11n ? $this->l11n->title : $this->l11n;
     }
 
     /**
