@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\Localization\ISO3166TwoEnum;
 use phpOMS\Localization\ISO639x1Enum;
 
 /**
@@ -126,7 +125,6 @@ class ItemAttributeValue implements \JsonSerializable
     {
         return $this->id;
     }
-
 
     /**
      * Set l11n

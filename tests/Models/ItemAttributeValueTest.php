@@ -15,8 +15,6 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\tests\Models;
 
 use Modules\ItemManagement\Models\ItemAttributeValue;
-use phpOMS\Localization\ISO3166TwoEnum;
-use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * @internal

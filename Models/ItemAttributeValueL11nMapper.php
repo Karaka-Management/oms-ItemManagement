@@ -33,10 +33,10 @@ final class ItemAttributeValueL11nMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_attr_value_l11n_id'    => ['name' => 'itemmgmt_attr_value_l11n_id',    'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_attr_value_l11n_title' => ['name' => 'itemmgmt_attr_value_l11n_title', 'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
+        'itemmgmt_attr_value_l11n_id'     => ['name' => 'itemmgmt_attr_value_l11n_id',    'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_attr_value_l11n_title'  => ['name' => 'itemmgmt_attr_value_l11n_title', 'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
         'itemmgmt_attr_value_l11n_value'  => ['name' => 'itemmgmt_attr_value_l11n_value',  'type' => 'int',    'internal' => 'value'],
-        'itemmgmt_attr_value_l11n_lang'  => ['name' => 'itemmgmt_attr_value_l11n_lang',  'type' => 'string', 'internal' => 'language'],
+        'itemmgmt_attr_value_l11n_lang'   => ['name' => 'itemmgmt_attr_value_l11n_lang',  'type' => 'string', 'internal' => 'language'],
     ];
 
     /**

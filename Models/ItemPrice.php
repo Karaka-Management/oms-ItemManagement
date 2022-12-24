@@ -118,19 +118,19 @@ class ItemPrice implements \JsonSerializable
     public function toArray() : array
     {
         return [
-            'id'             => $this->id,
-            'name'           => $this->name,
-            'currency'           => $this->currency,
-            'price'           => $this->price,
-            'status'           => $this->status,
-            'minQuantity'           => $this->minQuantity,
-            'relativeDiscount'           => $this->relativeDiscount,
-            'absoluteDiscount'           => $this->absoluteDiscount,
+            'id'                             => $this->id,
+            'name'                           => $this->name,
+            'currency'                       => $this->currency,
+            'price'                          => $this->price,
+            'status'                         => $this->status,
+            'minQuantity'                    => $this->minQuantity,
+            'relativeDiscount'               => $this->relativeDiscount,
+            'absoluteDiscount'               => $this->absoluteDiscount,
             'relativeUnitDiscount'           => $this->relativeUnitDiscount,
             'absoluteUnitDiscount'           => $this->absoluteUnitDiscount,
-            'promocode'           => $this->promocode,
-            'start'           => $this->start,
-            'end'           => $this->end,
+            'promocode'                      => $this->promocode,
+            'start'                          => $this->start,
+            'end'                            => $this->end,
         ];
     }
 

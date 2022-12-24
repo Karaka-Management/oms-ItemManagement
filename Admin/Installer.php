@@ -14,22 +14,12 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
-use Modules\ItemManagement\Models\AttributeValueType;
-use Modules\ItemManagement\Models\ItemAttributeType;
-use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
-use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
-use Modules\ItemManagement\Models\ItemAttributeValue;
-use Modules\ItemManagement\Models\ItemAttributeValueMapper;
-use Modules\ItemManagement\Models\ItemAttributeValueL11n;
-use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
-use phpOMS\Localization\ISO639x1Enum;
-use phpOMS\Module\InstallerAbstract;
-use phpOMS\Module\ModuleInfo;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Module\InstallerAbstract;
+use phpOMS\Module\ModuleInfo;
 use phpOMS\Uri\HttpUri;
 
 /**
