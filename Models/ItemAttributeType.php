@@ -40,7 +40,7 @@ class ItemAttributeType implements \JsonSerializable
      * @var string
      * @since 1.0.0
      */
-    public string $name = ''; // @todo: currently not filled, should be used as identifier or if not required removed (at the moment it seems like it is useless?!)
+    public string $name = '';
 
     /**
      * Which field data type is required (string, int, ...) in the value
@@ -67,7 +67,7 @@ class ItemAttributeType implements \JsonSerializable
      *
      * @var ItemAttributeTypeL11n
      */
-    private string | ItemAttributeTypeL11n $l11n;
+    private string | ItemAttributeTypeL11n $l11n = '';
 
     /**
      * Possible default attribute values
@@ -93,7 +93,7 @@ class ItemAttributeType implements \JsonSerializable
      */
     public function __construct(string $name = '')
     {
-        $this->setL11n($name);
+        $this->name = $name;
     }
 
     /**
@@ -153,6 +153,18 @@ class ItemAttributeType implements \JsonSerializable
     public function setFields(int $fields) : void
     {
         $this->fields = $fields;
+    }
+
+    /**
+     * Get default values
+     *
+     * @return array
+     *
+     * @sicne 1.0.0
+     */
+    public function getDefaults() : array
+    {
+        return $this->defaults;
     }
 
     /**

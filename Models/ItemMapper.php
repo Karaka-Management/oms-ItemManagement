@@ -41,6 +41,7 @@ final class ItemMapper extends DataMapperFactory
         'itemmgmt_item_info'          => ['name' => 'itemmgmt_item_info',          'type' => 'string',       'internal' => 'info'],
         'itemmgmt_item_salesprice'    => ['name' => 'itemmgmt_item_salesprice',    'type' => 'Serializable', 'internal' => 'salesPrice'],
         'itemmgmt_item_purchaseprice' => ['name' => 'itemmgmt_item_purchaseprice', 'type' => 'Serializable', 'internal' => 'purchasePrice'],
+        'itemmgmt_item_parent' => ['name' => 'itemmgmt_item_parent', 'type' => 'int', 'internal' => 'parent'],
     ];
 
     /**

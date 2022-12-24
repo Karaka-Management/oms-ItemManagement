@@ -21,11 +21,16 @@ use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use Modules\ItemManagement\Models\ItemAttributeValueL11n;
+use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Module\InstallerAbstract;
 use phpOMS\Module\ModuleInfo;
+use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
+use phpOMS\Uri\HttpUri;
 
 /**
  * Installer class.
@@ -52,38 +57,114 @@ final class Installer extends InstallerAbstract
     {
         parent::install($app, $info, $cfgHandler);
 
-        $attrTypes = self::createItemAttributeTypes();
-        self::createItemAttributeValues($attrTypes);
+        $fileContent = \file_get_contents(__DIR__ . '/Install/attributes.json');
+        if ($fileContent === false) {
+            return;
+        }
+
+        $attributes = \json_decode($fileContent);
+        $attrTypes  = self::createItemAttributeTypes($app, $attributes);
+        self::createItemAttributeValues($app, $attrTypes, $attributes);
+
+        $fileContent = \file_get_contents(__DIR__ . '/Install/localizations.json');
+        if ($fileContent === false) {
+            return;
+        }
+
+        $localizations = \json_decode($fileContent);
+        $l11nTypes     = self::createItemL11nTypes($app, $localizations);
+    }
+
+    /**
+     * Install default l11n types
+     *
+     * @param ApplicationAbstract $app   Application
+     * @param array               $l11ns Attribute definition
+     *
+     * @return array<array>
+     *
+     * @since 1.0.0
+     */
+    private static function createItemL11nTypes(ApplicationAbstract $app, array $l11ns) : array
+    {
+        /** @var array<string, array> $l11nTypes */
+        $l11nTypes = [];
+
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+
+        foreach ($l11ns as $l11n) {
+            $response = new HttpResponse();
+            $request  = new HttpRequest(new HttpUri(''));
+
+            $request->header->account = \mt_rand(2, 5);
+            $request->setData('title', $l11n['name']);
+            $request->setData('is_required', $l11n['is_required'] ?? false);
+
+            $module->apiItemL11nTypeCreate($request, $response);
+
+            $l11nTypes[] = !\is_array($response->get('')['response'])
+                ? $response->get('')['response']->toArray()
+                : $response->get('')['response'];
+        }
+
+        return $l11nTypes;
     }
 
     /**
      * Install default attribute types
      *
-     * @return ItemAttributeType[]
+     * @param ApplicationAbstract                                                                                                                                                              $app        Application
+     * @param array<array{name:string, l11n?:array<string, string>, is_required?:bool, is_custom_allowed?:bool, validation_pattern?:string, value_type?:string, values?:array<string, mixed>}> $attributes Attribute definition
+     *
+     * @return array<string, array>
      *
      * @since 1.0.0
      */
-    private static function createItemAttributeTypes() : array
+    private static function createItemAttributeTypes(ApplicationAbstract $app, array $attributes) : array
     {
+        /** @var array<string, array> $itemAttrType */
         $itemAttrType = [];
 
-        $itemAttrType['color'] = new ItemAttributeType('color');
-        ItemAttributeTypeMapper::create()->execute($itemAttrType['color']);
-        ItemAttributeTypeL11nMapper::create()->execute(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Color', ISO639x1Enum::_EN));
-        ItemAttributeTypeL11nMapper::create()->execute(new ItemAttributeTypeL11n($itemAttrType['color']->getId(), 'Farbe', ISO639x1Enum::_DE));
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
-        // weight
-        // segment_level_1
-        // segment_level_2
-        // segment_level_3
-        // segment_level_4
-        // product_group
-        //      consumable
-        //      packaging
-        //      service
-        //      machine
-        //      spare part
-        //      transportation
+        foreach ($attributes as $attribute) {
+            $response = new HttpResponse();
+            $request  = new HttpRequest(new HttpUri(''));
+
+            $request->header->account = 1;
+            $request->setData('name', $attribute['name'] ?? '');
+            $request->setData('title', $attribute['l11n'][0] ?? '');
+            $request->setData('language', \array_keys($attribute['l11n'])[0] ?? 'en');
+            $request->setData('is_required', $attribute['is_required'] ?? false);
+            $request->setData('is_custom_allowed', $attribute['is_custom_allowed'] ?? false);
+            $request->setData('validation_pattern', $attribute['validation_pattern'] ?? '');
+
+            $module->apiItemAttributeTypeCreate($request, $response);
+
+            $itemAttrType[$attribute['name']] = !\is_array($response->get('')['response'])
+                ? $response->get('')['response']->toArray()
+                : $response->get('')['response'];
+
+            $isFirst = true;
+            foreach ($attribute['l11n'] as $language => $l11n) {
+                if ($isFirst) {
+                    $isFirst = false;
+                    continue;
+                }
+
+                $response = new HttpResponse();
+                $request  = new HttpRequest(new HttpUri(''));
+
+                $request->header->account = 1;
+                $request->setData('title', $l11n);
+                $request->setData('language', $language);
+                $request->setData('type', $itemAttrType[$attribute['name']]['id']);
+
+                $module->apiItemAttributeTypeL11nCreate($request, $response);
+            }
+        }
 
         return $itemAttrType;
     }
@@ -91,104 +172,68 @@ final class Installer extends InstallerAbstract
     /**
      * Create default attribute values for types
      *
-     * @param ItemAttributeType[] $itemAttrType Attribute types
+     * @param ApplicationAbstract                                                                                                                                                              $app          Application
+     * @param array                                                                                                                                                                            $itemAttrType Attribute types
+     * @param array<array{name:string, l11n?:array<string, string>, is_required?:bool, is_custom_allowed?:bool, validation_pattern?:string, value_type?:string, values?:array<string, mixed>}> $attributes   Attribute definition
      *
-     * @return array<string, ItemAttributeValue[]>
+     * @return array<string, array>
      *
      * @since 1.0.0
      */
-    private static function createItemAttributeValues(array $itemAttrType) : array
+    private static function createItemAttributeValues(ApplicationAbstract $app, array $itemAttrType, array $attributes) : array
     {
+        /** @var array<string, array> $itemAttrValue */
         $itemAttrValue = [];
 
-        $itemAttrValue['color']   = [];
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Red', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][0]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Rot', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][1]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+        foreach ($attributes as $attribute) {
+            $itemAttrValue[$attribute['name']] = [];
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Blue', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][2]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+            foreach ($attribute['values'] as $value) {
+                $response = new HttpResponse();
+                $request  = new HttpRequest(new HttpUri(''));
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Blau', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][3]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                $request->header->account = 1;
+                $request->setData('value', $value['value'] ?? '');
+                $request->setData('value_type', $attribute['value_type'] ?? 0);
+                $request->setData('unit', $value['unit'] ?? '');
+                $request->setData('default', isset($attribute['values']) && !empty($attribute['values']));
+                $request->setData('attributetype', $itemAttrType[$attribute['name']]['id']);
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Green', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][4]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                if (isset($value['l11n']) && !empty($value['l11n'])) {
+                    $request->setData('title', $value['l11n'][0] ?? '');
+                    $request->setData('language', \array_keys($value['l11n'])[0] ?? 'en');
+                }
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grün', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][5]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                $module->apiItemAttributeValueCreate($request, $response);
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Yellow', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][6]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                $attrValue = !\is_array($response->get('')['response'])
+                    ? $response->get('')['response']->toArray()
+                    : $response->get('')['response'];
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Gelb', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][7]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                $itemAttrValue[$attribute['name']][] = $attrValue;
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'White', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][8]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                $isFirst = true;
+                foreach (($value['l11n'] ?? []) as $language => $l11n) {
+                    if ($isFirst) {
+                        $isFirst = false;
+                        continue;
+                    }
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Weiss', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][9]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                    $response = new HttpResponse();
+                    $request  = new HttpRequest(new HttpUri(''));
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Black', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][10]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                    $request->header->account = 1;
+                    $request->setData('title', $l11n);
+                    $request->setData('language', $language);
+                    $request->setData('value', $attrValue['id']);
 
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Schwarz', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][11]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Braun', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][12]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Braun', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][13]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Purple', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][14]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Lila', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][15]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Pink', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][16]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Rosa', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][17]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Orange', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][18]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Orange', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][19]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grey', ISO639x1Enum::_EN);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][20]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
-
-        $itemAttrValue['color'][] = new ItemAttributeValue(AttributeValueType::_STRING, 'Grau', ISO639x1Enum::_DE);
-        $id                       = ItemAttributeValueMapper::create()->execute($itemAttrValue['color'][21]);
-        ItemAttributeTypeMapper::writer()->createRelationTable('defaults', [$id], $itemAttrType['color']->getId());
+                    $module->apiItemAttributeValueL11nCreate($request, $response);
+                }
+            }
+        }
 
         return $itemAttrValue;
     }

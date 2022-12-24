@@ -24,16 +24,22 @@ use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use Modules\ItemManagement\Models\ItemAttributeValueL11n;
+use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
+use Modules\ItemManagement\Models\ItemPrice;
+use Modules\ItemManagement\Models\ItemPriceStatus;
+use Modules\ItemManagement\Models\ItemPriceMapper;
 use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\Money;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
@@ -94,6 +100,7 @@ final class ApiController extends Controller
         $item->salesPrice    = new Money($request->getData('salesprice', 'int') ?? 0);
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
         $item->info          = $request->getData('info') ?? '';
+        $item->parent        = ($request->getData('parent') !== null) ? (int) $request->getData('parent') : null;
 
         return $item;
     }
@@ -111,6 +118,88 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['number'] = empty($request->getData('number')))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create item
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemPriceCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemPriceCreate($request))) {
+            $response->set('item_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $item = $this->createItemPriceFromRequest($request);
+        $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
+    }
+
+    /**
+     * Method to create item from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return ItemPrice
+     *
+     * @since 1.0.0
+     */
+    private function createItemPriceFromRequest(RequestAbstract $request) : ItemPrice
+    {
+        $item                       = new ItemPrice();
+        $item->currency             = $request->getData('currency') ?? '';
+        $item->price                = new Money($request->getData('price', 'int') ?? 0);
+        $item->minQuantity          = (int) ($request->getData('minquantity') ?? 0);
+        $item->relativeDiscount     = (int) ($request->getData('relativediscount') ?? 0);
+        $item->absoluteDiscount     = (int) ($request->getData('absolutediscount') ?? 0);
+        $item->relativeUnitDiscount = (int) ($request->getData('relativeunitdiscount') ?? 0);
+        $item->absoluteUnitDiscount = (int) ($request->getData('absoluteunitdiscount') ?? 0);
+        $item->promocode            = $request->getData('promocode') ?? '';
+
+        $item->setStatus((int) ($request->getData('status') ?? ItemPriceStatus::ACTIVE));
+
+        $item->start = ($request->getData('start') === null)
+            ? null
+            : new \DateTime($request->getData('start'));
+
+        $item->end = ($request->getData('end') === null)
+            ? null
+            : new \DateTime($request->getData('end'));
+
+        return $item;
+    }
+
+    /**
+     * Validate item create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateItemPriceCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['price'] = empty($request->getData('price')))
+            || ($val['currency'] = !ISO4217CharEnum::isValidValue($request->getData('currency')))
+        ) {
             return $val;
         }
 
@@ -155,10 +244,20 @@ final class ApiController extends Controller
      */
     private function createItemAttributeFromRequest(RequestAbstract $request) : ItemAttribute
     {
-        $attribute        = new ItemAttribute();
-        $attribute->item  = (int) $request->getData('item');
-        $attribute->type  = new NullItemAttributeType((int) $request->getData('type'));
-        $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
+        $attribute       = new ItemAttribute();
+        $attribute->item = (int) $request->getData('item');
+        $attribute->type = new NullItemAttributeType((int) $request->getData('type'));
+
+        if ($request->getData('value') !== null) {
+            $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
+        } else {
+            $newRequest = clone $request;
+            $newRequest->setData('value', $request->getData('custom'), true);
+
+            $value = $this->createItemAttributeValueFromRequest($request);
+
+            $attribute->value = $value;
+        }
 
         return $attribute;
     }
@@ -176,7 +275,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['type'] = empty($request->getData('type')))
-            || ($val['value'] = empty($request->getData('value')))
+            || ($val['value'] = (empty($request->getData('value')) && empty($request->getData('custom'))))
             || ($val['item'] = empty($request->getData('item')))
         ) {
             return $val;
@@ -293,10 +392,12 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
-        $attrType = new ItemAttributeType();
+        $attrType = new ItemAttributeType($request->getData('name') ?? '');
         $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
-        $attrType->custom = (bool) ($request->getData('custom') ?? false);
+        $attrType->custom            = (bool) ($request->getData('custom') ?? false);
+        $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
+        $attrType->validationPattern = $request->getData('validation_pattern') ?? '';
 
         return $attrType;
     }
@@ -314,6 +415,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['title'] = empty($request->getData('title')))
+            || ($val['name'] = empty($request->getData('name')))
         ) {
             return $val;
         }
@@ -369,28 +471,13 @@ final class ApiController extends Controller
      */
     private function createItemAttributeValueFromRequest(RequestAbstract $request) : ItemAttributeValue
     {
-        $attrValue = new ItemAttributeValue();
+        $type = (int) ($request->getData('type') ?? 0);
 
-        $type = $request->getData('type') ?? 0;
-        if ($type === AttributeValueType::_INT) {
-            $attrValue->valueInt = (int) $request->getData('value');
-        } elseif ($type === AttributeValueType::_STRING) {
-            $attrValue->valueStr = (string) $request->getData('value');
-        } elseif ($type === AttributeValueType::_FLOAT) {
-            $attrValue->valueDec = (float) $request->getData('value');
-        } elseif ($type === AttributeValueType::_DATETIME) {
-            $attrValue->valueDat = new \DateTime($request->getData('value') ?? '');
-        }
-
-        $attrValue->type      = $type;
+        $attrValue            = new ItemAttributeValue($type, $request->getData('value'));
         $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
 
-        if ($request->hasData('language')) {
-            $attrValue->setLanguage((string) ($request->getData('language') ?? $request->getLanguage()));
-        }
-
-        if ($request->hasData('country')) {
-            $attrValue->setCountry((string) ($request->getData('country') ?? $request->header->l11n->getCountry()));
+        if ($request->getData('title') !== null) {
+            $attrValue->setL11n($request->getData('title'), $request->getData('language') ?? ISO639x1Enum::_EN);
         }
 
         return $attrValue;
@@ -409,6 +496,75 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['type'] = empty($request->getData('type')))
+            || ($val['value'] = empty($request->getData('value')))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create item attribute l11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemAttributeValueL11nCreate($request))) {
+            $response->set('attr_value_l11n_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrL11n = $this->createItemAttributeValueL11nFromRequest($request);
+        $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+    }
+
+    /**
+     * Method to create item attribute l11n from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return ItemAttributeValueL11n
+     *
+     * @since 1.0.0
+     */
+    private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : ItemAttributeValueL11n
+    {
+        $attrL11n        = new ItemAttributeValueL11n();
+        $attrL11n->value = (int) ($request->getData('value') ?? 0);
+        $attrL11n->setLanguage((string) (
+            $request->getData('language') ?? $request->getLanguage()
+        ));
+        $attrL11n->title = (string) ($request->getData('title') ?? '');
+
+        return $attrL11n;
+    }
+
+    /**
+     * Validate item attribute l11n create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateItemAttributeValueL11nCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = empty($request->getData('title')))
             || ($val['value'] = empty($request->getData('value')))
         ) {
             return $val;
@@ -455,8 +611,9 @@ final class ApiController extends Controller
      */
     private function createItemL11nTypeFromRequest(RequestAbstract $request) : ItemL11nType
     {
-        $itemL11nType        = new ItemL11nType();
-        $itemL11nType->title = (string) ($request->getData('title') ?? '');
+        $itemL11nType             = new ItemL11nType();
+        $itemL11nType->title      = (string) ($request->getData('title') ?? '');
+        $itemL11nType->isRequired = (bool) ($request->getData('is_required') ?? false);
 
         return $itemL11nType;
     }

@@ -24,7 +24,7 @@ use phpOMS\Stdlib\Base\Enum;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-abstract class ItemStatus extends Enum
+abstract class ItemPriceStatus extends Enum
 {
     public const ACTIVE = 1;
 

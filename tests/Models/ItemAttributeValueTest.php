@@ -49,26 +49,6 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      * @covers Modules\ItemManagement\Models\ItemAttributeValue
      * @group module
      */
-    public function testLanguageInputOutput() : void
-    {
-        $this->attr->setLanguage(ISO639x1Enum::_DE);
-        self::assertEquals(ISO639x1Enum::_DE, $this->attr->getLanguage());
-    }
-
-    /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
-     * @group module
-     */
-    public function testCountryInputOutput() : void
-    {
-        $this->attr->setCountry(ISO3166TwoEnum::_DEU);
-        self::assertEquals(ISO3166TwoEnum::_DEU, $this->attr->getCountry());
-    }
-
-    /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
-     * @group module
-     */
     public function testValueIntInputOutput() : void
     {
         $this->attr->setValue(1);
@@ -114,8 +94,6 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
         $this->attr->type = 1;
         $this->attr->setValue('test');
         $this->attr->isDefault = true;
-        $this->attr->setLanguage(ISO639x1Enum::_DE);
-        $this->attr->setCountry(ISO3166TwoEnum::_DEU);
 
         self::assertEquals(
             [
@@ -126,8 +104,6 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
                 'valueDec'     => null,
                 'valueDat'     => null,
                 'isDefault'    => true,
-                'language'     => ISO639x1Enum::_DE,
-                'country'      => ISO3166TwoEnum::_DEU,
             ],
             $this->attr->jsonSerialize()
         );

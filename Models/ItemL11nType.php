@@ -41,6 +41,14 @@ class ItemL11nType implements \JsonSerializable
     public string $title = '';
 
     /**
+     * Is the l11n type required for an item?
+     *
+     * @var bool
+     * @since 1.0.0
+     */
+    public bool $isRequired = false;
+
+    /**
      * Constructor.
      *
      * @param string $title Title

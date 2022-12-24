@@ -1,7 +1,91 @@
 [
     {
-        "id": "color",
-        "name": {
+        "name": "segment",
+        "l11n": {
+            "en": "Segment",
+            "de": "Segment"
+        },
+        "value_type": "int",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Segment 1",
+                    "de": "Segment 1"
+                }
+            }
+        ]
+    },
+    {
+        "name": "section",
+        "l11n": {
+            "en": "Section",
+            "de": "Sparte"
+        },
+        "value_type": "int",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Section 1",
+                    "de": "Section 1"
+                }
+            }
+        ]
+    },
+    {
+        "name": "product_group",
+        "l11n": {
+            "en": "Product Group",
+            "de": "Produktgruppe"
+        },
+        "value_type": "int",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Group 1",
+                    "de": "Gruppe 1"
+                }
+            }
+        ]
+    },
+    {
+        "name": "product_type",
+        "l11n": {
+            "en": "Product Type",
+            "de": "Produkttyp"
+        },
+        "value_type": "int",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Type 1",
+                    "de": "Typ 1"
+                }
+            }
+        ]
+    },
+    {
+        "name": "color",
+        "l11n": {
             "en": "Color",
             "de": "Farbe"
         },
@@ -12,65 +96,189 @@
         "default_value": "",
         "values": [
             {
-                "name": {
+                "value": "red",
+                "l11n": {
                     "en": "Red",
                     "de": "Rot"
                 }
             },
             {
-                "name": {
+                "value": "green",
+                "l11n": {
                     "en": "Green",
                     "de": "Gruen"
+                }
+            },
+            {
+                "value": "blue",
+                "l11n": {
+                    "en": "Blue",
+                    "de": "Blau"
+                }
+            },
+            {
+                "value": "white",
+                "l11n": {
+                    "en": "White",
+                    "de": "Weiss"
+                }
+            },
+            {
+                "value": "black",
+                "l11n": {
+                    "en": "Black",
+                    "de": "Schwarz"
                 }
             }
         ]
     },
     {
-        "id": "length",
-        "name": {
+        "name": "length",
+        "l11n": {
             "en": "Length",
             "de": "Laenge"
         },
+        "value_type": "string",
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
         "values": []
     },
     {
-        "id": "weight",
-        "name": {
+        "name": "weight",
+        "value_type": "string",
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "l11n": {
             "en": "Weight",
             "de": "Gewicht"
         },
         "values": []
     },
     {
-        "id": "origin",
-        "name": {
+        "name": "origin",
+        "l11n": {
             "en": "Country of origin",
             "de": "Herkunftsland"
         },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
         "values": []
     },
     {
-        "id": "license",
-        "name": {
+        "name": "license",
+        "l11n": {
             "en": "License",
             "de": "Lizenz"
         },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
         "values": []
     },
     {
-        "id": "payment_model",
-        "name": {
-            "en": "Payment Model",
-            "de": "Zahlungsweise"
+        "name": "it_platform",
+        "l11n": {
+            "en": "Platform",
+            "de": "Plattform"
         },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
         "values": [
             {
-                "en": "Subscription",
-                "de": "Abo"
+                "value": "cloud",
+                "is_default": true,
+                "l11n": {
+                    "en": "Cloud",
+                    "de": "Cloud"
+                }
             },
             {
-                "en": "pay-per-use",
-                "de": "Einmalzahlung"
+                "value": "local",
+                "is_default": true,
+                "l11n": {
+                    "en": "Local",
+                    "de": "Lokal"
+                }
+            },
+            {
+                "value": "mobile",
+                "is_default": true,
+                "l11n": {
+                    "en": "Mobile",
+                    "de": "Mobil"
+                }
+            }
+        ]
+    },
+    {
+        "name": "os",
+        "l11n": {
+            "en": "Operating System",
+            "de": "Betriebssystem"
+        },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": "windows",
+                "is_default": true,
+                "l11n": {
+                    "en": "Windows",
+                    "de": "Windows"
+                }
+            },
+            {
+                "value": "linux",
+                "is_default": true,
+                "l11n": {
+                    "en": "Linux",
+                    "de": "Linux"
+                }
+            },
+            {
+                "value": "osx",
+                "is_default": true,
+                "l11n": {
+                    "en": "OSX",
+                    "de": "OSX"
+                }
+            }
+        ]
+    }
+    {
+        "name": "os_version",
+        "l11n": {
+            "en": "Operating System Version",
+            "de": "Betriebssystem Version"
+        },
+        "value_type": "string",
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": "win7",
+                "is_default": true
+            },
+            {
+                "value": "win10",
+                "is_default": true
             }
         ]
     }

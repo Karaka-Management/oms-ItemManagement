@@ -38,7 +38,7 @@ class ItemAttributeValue implements \JsonSerializable
     protected int $id = 0;
 
     /**
-     * Type of the attribute
+     * Datatype of the attribute
      *
      * @var int
      * @since 1.0.0
@@ -85,9 +85,13 @@ class ItemAttributeValue implements \JsonSerializable
      */
     public bool $isDefault = false;
 
-    // @todo: The following l11n is bad!!!
-    // the l11n should be separate, because we want to know which value it is despite the l11n
-    // it should be basically the same ass the itemattributetype which has a itemattributetypel11n element.
+    /**
+     * Unit of the value
+     *
+     * @var string
+     * @since 1.0.0
+     */
+    public string $unit = '';
 
     /**
      * Localization
@@ -104,15 +108,11 @@ class ItemAttributeValue implements \JsonSerializable
      *
      * @since 1.0.0
      */
-    public function __construct(int $type = 0, mixed $value = '', string $name = '')
+    public function __construct(int $type = 0, mixed $value = '')
     {
         $this->type = $type;
 
         $this->setValue($value);
-
-        if (!empty($name)) {
-            $this->setL11n($name);
-        }
     }
 
     /**
@@ -131,8 +131,8 @@ class ItemAttributeValue implements \JsonSerializable
     /**
      * Set l11n
      *
-     * @param string|ItemAttributeTypeL11n $l11n Tag article l11n
-     * @param string                       $lang Language
+     * @param string|ItemAttributeValueL11n $l11n Tag article l11n
+     * @param string                        $lang Language
      *
      * @return void
      *
@@ -152,13 +152,15 @@ class ItemAttributeValue implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * Get localization
+     *
+     * @return null|string
      *
      * @since 1.0.0
      */
-    public function getL11n() : string
+    public function getL11n() : ?string
     {
-        return $this->l11n instanceof ItemAttributeTypeL11n ? $this->l11n->title : $this->l11n;
+        return $this->l11n instanceof ItemAttributeValueL11n ? $this->l11n->title : $this->l11n;
     }
 
     /**
@@ -206,58 +208,6 @@ class ItemAttributeValue implements \JsonSerializable
     }
 
     /**
-     * Set language
-     *
-     * @param string $language Language
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setLanguage(string $language) : void
-    {
-        $this->language = $language;
-    }
-
-    /**
-     * Get language
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getLanguage() : string
-    {
-        return $this->language;
-    }
-
-    /**
-     * Set country
-     *
-     * @param string $country Country
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setCountry(string $country) : void
-    {
-        $this->country = $country;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     *
-     * @since 1.0.0
-     */
-    public function getCountry() : string
-    {
-        return $this->country;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array
@@ -270,8 +220,6 @@ class ItemAttributeValue implements \JsonSerializable
             'valueDec'  => $this->valueDec,
             'valueDat'  => $this->valueDat,
             'isDefault' => $this->isDefault,
-            'language'  => $this->language,
-            'country'   => $this->country,
         ];
     }
 

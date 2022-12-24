@@ -20,7 +20,7 @@ use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\Money;
 
 /**
- * Account class.
+ * Item class.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 1.0
@@ -46,6 +46,8 @@ class Item
     public string $number = '';
 
     public int $successor = 0;
+
+    public ?int $parent = null;
 
     private int $status = ItemStatus::ACTIVE;
 
@@ -85,11 +87,9 @@ class Item
      */
     private array $attributes = [];
 
-    private ?int $partslist = null;
+    public ?int $partslist = null;
 
-    private array $purchase = [];
-
-    private ?int $disposal = null;
+    public ?int $disposal = null;
 
     /**
      * Created at.

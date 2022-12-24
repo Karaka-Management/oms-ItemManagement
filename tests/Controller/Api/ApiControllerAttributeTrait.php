@@ -68,6 +68,7 @@ trait ApiControllerAttributeTrait
         $request  = new HttpRequest(new HttpUri(''));
 
         $request->header->account = 1;
+        $request->setData('name', 'test_attribute');
         $request->setData('title', 'EN:1');
         $request->setData('language', ISO639x1Enum::_EN);
 

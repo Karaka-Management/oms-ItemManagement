@@ -37,6 +37,14 @@
                 "type": "BIGINT",
                 "default": null,
                 "null": true
+            },
+            "itemmgmt_item_parent": {
+                "name": "itemmgmt_item_parent",
+                "type": "INT(11)",
+                "null": true,
+                "default": null,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
             }
         }
     },
@@ -53,6 +61,12 @@
             "itemmgmt_item_l11n_type_title": {
                 "name": "itemmgmt_item_l11n_type_title",
                 "type": "VARCHAR(255)",
+                "null": false
+            },
+            "itemmgmt_item_l11n_type_required": {
+                "description": "Every item must have this attribute type if set to true.",
+                "name": "itemmgmt_item_l11n_type_required",
+                "type": "TINYINT(1)",
                 "null": false
             }
         }
@@ -180,8 +194,8 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
-            "itemmgmt_attr_value_type": {
-                "name": "itemmgmt_attr_value_type",
+            "itemmgmt_attr_value_valuetype": {
+                "name": "itemmgmt_attr_value_valuetype",
                 "type": "INT(11)",
                 "null": false
             },
@@ -213,7 +227,7 @@
                 "name": "itemmgmt_attr_value_unit",
                 "type": "VARCHAR(255)",
                 "null": false
-            },
+            }
         }
     },
     "itemmgmt_attr_value_l11n": {
@@ -231,7 +245,7 @@
                 "type": "VARCHAR(255)",
                 "null": false
             },
-            "itemmgmt_attr_value_l11n_type": {
+            "itemmgmt_attr_value_l11n_value": {
                 "name": "itemmgmt_attr_value_l11n_value",
                 "type": "INT(11)",
                 "null": false,
@@ -322,6 +336,13 @@
                 "type": "VARCHAR(255)",
                 "null": false
             },
+            "itemmgmt_item_sales_price_currency": {
+                "name": "itemmgmt_item_sales_price_currency",
+                "type": "VARCHAR(3)",
+                "null": false,
+                "foreignTable": "currency",
+                "foreignKey": "currency_code"
+            },
             "itemmgmt_item_sales_price_price": {
                 "name": "itemmgmt_item_sales_price_price",
                 "type": "INT(11)",
@@ -357,16 +378,6 @@
                 "type": "INT(11)",
                 "null": false
             },
-            "itemmgmt_item_sales_price_region": {
-                "name": "itemmgmt_item_sales_price_region",
-                "type": "INT(11)",
-                "null": false
-            },
-            "itemmgmt_item_sales_price_country": {
-                "name": "itemmgmt_item_sales_price_country",
-                "type": "INT(11)",
-                "null": false
-            },
             "itemmgmt_item_sales_price_start": {
                 "name": "itemmgmt_item_sales_price_start",
                 "type": "INT(11)",
@@ -378,7 +389,7 @@
                 "null": false
             },
             "itemmgmt_item_sales_price_promocode": {
-                "name": "itemmgmt_item_sales_price_end",
+                "name": "itemmgmt_item_sales_price_promocode",
                 "type": "INT(11)",
                 "null": false
             }
@@ -387,7 +398,7 @@
     "itemmgmt_item_sales_price_relation": {
         "name": "itemmgmt_item_sales_price_relation",
         "fields": {
-            "itemmgmt_item_note_id": {
+            "itemmgmt_item_sales_price_relation_id": {
                 "name": "itemmgmt_item_sales_price_relation_id",
                 "type": "INT",
                 "null": false,
@@ -402,29 +413,29 @@
                 "foreignTable": "itemmgmt_item",
                 "foreignKey": "itemmgmt_item_id"
             },
-            "itemmgmt_item_sales_price_relation_itemgroup": {
-                "name": "itemmgmt_item_sales_price_relation_itemgroup",
+            "itemmgmt_item_sales_price_relation_attr": {
+                "name": "itemmgmt_item_sales_price_relation_attr",
                 "type": "INT",
                 "null": true,
                 "default": null,
-                "foreignTable": "itemmgmt_item",
-                "foreignKey": "itemmgmt_item_id"
+                "foreignTable": "itemmgmt_attr_value",
+                "foreignKey": "itemmgmt_attr_value_id"
             },
             "itemmgmt_item_sales_price_relation_client": {
                 "name": "itemmgmt_item_sales_price_relation_client",
                 "type": "INT",
                 "null": true,
                 "default": null,
-                "foreignTable": "clientmgmt_client",
-                "foreignKey": "clientmgmt_client_id"
+                "foreignTable": "account",
+                "foreignKey": "account_id"
             },
             "itemmgmt_item_sales_price_relation_clientgroup": {
                 "name": "itemmgmt_item_sales_price_relation_clientgroup",
                 "type": "INT",
                 "null": true,
                 "default": null,
-                "foreignTable": "clientmgmt_client",
-                "foreignKey": "clientmgmt_client_id"
+                "foreignTable": "account",
+                "foreignKey": "account_id"
             },
             "itemmgmt_item_sales_price_relation_price": {
                 "name": "itemmgmt_item_sales_price_relation_price",
@@ -433,6 +444,19 @@
                 "default": null,
                 "foreignTable": "itemmgmt_item_sales_price",
                 "foreignKey": "itemmgmt_item_sales_price_id"
+            },
+            "itemmgmt_item_sales_price_relation_region": {
+                "name": "itemmgmt_item_sales_price_relation_region",
+                "type": "INT(11)",
+                "null": false
+            },
+            "itemmgmt_item_sales_price_relation_country": {
+                "name": "itemmgmt_item_sales_price_relation_country",
+                "type": "VARCHAR(2)",
+                "null": true,
+                "default": null,
+                "foreignTable": "country",
+                "foreignKey": "country_code2"
             }
         }
     },
