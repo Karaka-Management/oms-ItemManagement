@@ -93,9 +93,14 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemL11nTypeCreate($request, $response);
 
-            $l11nTypes[] = !\is_array($response->get('')['response'])
-                ? $response->get('')['response']->toArray()
-                : $response->get('')['response'];
+            $responseData = $response->get('');
+            if (!\is_array($responseData)) {
+                continue;
+            }
+
+            $l11nTypes[] = !\is_array($responseData['response'])
+                ? $responseData['response']->toArray()
+                : $responseData['response'];
         }
 
         return $l11nTypes;
@@ -119,6 +124,7 @@ final class Installer extends InstallerAbstract
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
         $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
+        /** @var array $attribute */
         foreach ($attributes as $attribute) {
             $response = new HttpResponse();
             $request  = new HttpRequest(new HttpUri(''));
@@ -133,9 +139,14 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemAttributeTypeCreate($request, $response);
 
-            $itemAttrType[$attribute['name']] = !\is_array($response->get('')['response'])
-                ? $response->get('')['response']->toArray()
-                : $response->get('')['response'];
+            $responseData = $response->get('');
+            if (!\is_array($responseData)) {
+                continue;
+            }
+
+            $itemAttrType[$attribute['name']] = !\is_array($responseData['response'])
+                ? $responseData['response']->toArray()
+                : $responseData['response'];
 
             $isFirst = true;
             foreach ($attribute['l11n'] as $language => $l11n) {
@@ -181,6 +192,7 @@ final class Installer extends InstallerAbstract
         foreach ($attributes as $attribute) {
             $itemAttrValue[$attribute['name']] = [];
 
+            /** @var array $value */
             foreach ($attribute['values'] as $value) {
                 $response = new HttpResponse();
                 $request  = new HttpRequest(new HttpUri(''));
@@ -199,9 +211,14 @@ final class Installer extends InstallerAbstract
 
                 $module->apiItemAttributeValueCreate($request, $response);
 
-                $attrValue = !\is_array($response->get('')['response'])
-                    ? $response->get('')['response']->toArray()
-                    : $response->get('')['response'];
+                $responseData = $response->get('');
+                if (!\is_array($responseData)) {
+                    continue;
+                }
+
+                $attrValue = !\is_array($responseData['response'])
+                    ? $responseData['response']->toArray()
+                    : $responseData['response'];
 
                 $itemAttrValue[$attribute['name']][] = $attrValue;
 

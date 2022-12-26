@@ -61,7 +61,11 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attributes = ItemAttributeTypeMapper::getAll()->with('l11n')->where('l11n/language', $response->getLanguage())->execute();
+        /** @var \Modules\ItemManagement\Models\ItemAttributeType[] $attributes */
+        $attributes = ItemAttributeTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->getLanguage())
+            ->execute();
 
         $view->addData('attributes', $attributes);
 
@@ -86,7 +90,11 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attributes = ItemAttributeValueMapper::getAll()->with('l11n')->where('l11n/language', $response->getLanguage())->execute();
+        /** @var \Modules\ItemManagement\Models\ItemAttributeValue[] $attributes */
+        $attributes = ItemAttributeValueMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->getLanguage())
+            ->execute();
 
         $view->addData('attributes', $attributes);
 
@@ -111,7 +119,12 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attribute = ItemAttributeTypeMapper::get()->with('l11n')->where('id', (int) $request->getData('id'))->where('l11n/language', $response->getLanguage())->execute();
+        /** @var \Modules\ItemManagement\Models\ItemAttributeType $attribute */
+        $attribute = ItemAttributeTypeMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $request->getData('id'))
+            ->where('l11n/language', $response->getLanguage())
+            ->execute();
 
         $view->addData('attribute', $attribute);
 
@@ -136,7 +149,12 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        $attribute = ItemAttributeValueMapper::get()->with('l11n')->where('id', (int) $request->getData('id'))->where('l11n/language', $response->getLanguage())->execute();
+        /** @var \Modules\ItemManagement\Models\ItemAttributeValue $attribute */
+        $attribute = ItemAttributeValueMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $request->getData('id'))
+            ->where('l11n/language', $response->getLanguage())
+            ->execute();
 
         $view->addData('attribute', $attribute);
 
@@ -161,6 +179,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
+        /** @var \Modules\ItemManagement\Models\Item[] $items */
         $items = ItemMapper::getAll()
             ->with('l11n')
             ->with('l11n/type')
@@ -315,6 +334,7 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
 
+        /** @var \Modules\ItemManagement\Models\Item $item */
         $item = ItemMapper::get()
             ->with('l11n')
             ->with('l11n/type')
@@ -329,6 +349,7 @@ final class BackendController extends Controller
 
         $view->addData('item', $item);
 
+        /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);

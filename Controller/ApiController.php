@@ -94,10 +94,10 @@ final class ApiController extends Controller
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
         $item                = new Item();
-        $item->number        = $request->getData('number') ?? '';
+        $item->number        = (string) ($request->getData('number') ?? '');
         $item->salesPrice    = new Money($request->getData('salesprice', 'int') ?? 0);
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
-        $item->info          = $request->getData('info') ?? '';
+        $item->info          = (string) ($request->getData('info') ?? '');
         $item->parent        = ($request->getData('parent') !== null) ? (int) $request->getData('parent') : null;
 
         return $item;
@@ -161,14 +161,14 @@ final class ApiController extends Controller
     private function createItemPriceFromRequest(RequestAbstract $request) : ItemPrice
     {
         $item                       = new ItemPrice();
-        $item->currency             = $request->getData('currency') ?? '';
+        $item->currency             = (string) ($request->getData('currency') ?? '');
         $item->price                = new Money($request->getData('price', 'int') ?? 0);
         $item->minQuantity          = (int) ($request->getData('minquantity') ?? 0);
         $item->relativeDiscount     = (int) ($request->getData('relativediscount') ?? 0);
         $item->absoluteDiscount     = (int) ($request->getData('absolutediscount') ?? 0);
         $item->relativeUnitDiscount = (int) ($request->getData('relativeunitdiscount') ?? 0);
         $item->absoluteUnitDiscount = (int) ($request->getData('absoluteunitdiscount') ?? 0);
-        $item->promocode            = $request->getData('promocode') ?? '';
+        $item->promocode            = (string) ($request->getData('promocode') ?? '');
 
         $item->setStatus((int) ($request->getData('status') ?? ItemPriceStatus::ACTIVE));
 
@@ -395,7 +395,7 @@ final class ApiController extends Controller
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->custom            = (bool) ($request->getData('custom') ?? false);
         $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
-        $attrType->validationPattern = $request->getData('validation_pattern') ?? '';
+        $attrType->validationPattern = (string) ($request->getData('validation_pattern') ?? '');
 
         return $attrType;
     }
@@ -807,8 +807,13 @@ final class ApiController extends Controller
             return;
         }
 
-        $model = $response->get($request->uri->__toString())['response'];
-        $this->createModelRelation($request->header->account, $request->getData('id'), $model->getId(), ItemMapper::class, 'notes', '', $request->getOrigin());
+        $responseData = $response->get($request->uri->__toString());
+        if (!\is_array($responseData)) {
+            return;
+        }
+
+        $model = $responseData['response'];
+        $this->createModelRelation($request->header->account, (int) $request->getData('id'), $model->getId(), ItemMapper::class, 'notes', '', $request->getOrigin());
     }
 
     /**
