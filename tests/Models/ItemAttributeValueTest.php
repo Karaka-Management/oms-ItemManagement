@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
-use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\AttributeValueType;
+use Modules\ItemManagement\Models\ItemAttributeValue;
 
 /**
  * @internal

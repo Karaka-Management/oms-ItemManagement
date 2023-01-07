@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\BaseStringL11n;
+use phpOMS\Localization\ISO639x1Enum;
 
 /**
  * Item attribute value class.
@@ -108,7 +108,7 @@ class ItemAttributeValue implements \JsonSerializable
      * Set l11n
      *
      * @param string|BaseStringL11n $l11n Tag article l11n
-     * @param string                        $lang Language
+     * @param string                $lang Language
      *
      * @return void
      *
@@ -121,9 +121,9 @@ class ItemAttributeValue implements \JsonSerializable
         } elseif (isset($this->l11n) && $this->l11n instanceof BaseStringL11n) {
             $this->l11n->content = $l11n;
         } else {
-            $this->l11n        = new BaseStringL11n();
+            $this->l11n          = new BaseStringL11n();
             $this->l11n->content = $l11n;
-            $this->l11n->ref = $this->id;
+            $this->l11n->ref     = $this->id;
             $this->l11n->setLanguage($lang);
         }
     }
@@ -144,7 +144,7 @@ class ItemAttributeValue implements \JsonSerializable
      * Set value
      *
      * @param int|string|float|\DateTimeInterface $value Value
-     * @param int $type Datatype
+     * @param int                                 $type  Datatype
      *
      * @return void
      *

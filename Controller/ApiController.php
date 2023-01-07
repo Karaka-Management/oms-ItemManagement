@@ -18,7 +18,6 @@ use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeType;
-use phpOMS\Localization\BaseStringL11n;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
@@ -28,15 +27,16 @@ use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
-use Modules\ItemManagement\Models\ItemRelationType;
-use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\ItemPrice;
 use Modules\ItemManagement\Models\ItemPriceStatus;
+use Modules\ItemManagement\Models\ItemRelationType;
+use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\PathSettings;
+use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\Money;
@@ -104,7 +104,7 @@ final class ApiController extends Controller
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
         $item->info          = (string) ($request->getData('info') ?? '');
         $item->parent        = ($request->getData('parent') !== null) ? (int) $request->getData('parent') : null;
-        $item->unit        = ($request->getData('unit') !== null) ? (int) $request->getData('unit') : null;
+        $item->unit          = ($request->getData('unit') !== null) ? (int) $request->getData('unit') : null;
 
         return $item;
     }
@@ -327,7 +327,7 @@ final class ApiController extends Controller
     private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n       = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
+        $attrL11n->ref  = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
@@ -551,7 +551,7 @@ final class ApiController extends Controller
     private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n        = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
+        $attrL11n->ref   = (int) ($request->getData('value') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
