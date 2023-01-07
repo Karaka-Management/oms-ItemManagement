@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\tests\Models;
 
 use Modules\ItemManagement\Models\ItemAttributeType;
-use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
+use phpOMS\Localization\BaseStringL11n;
 
 /**
  * @internal
@@ -55,7 +55,7 @@ final class ItemAttributeTypeTest extends \PHPUnit\Framework\TestCase
         $this->attr->setL11n('Test');
         self::assertEquals('Test', $this->attr->getL11n());
 
-        $this->attr->setL11n(new ItemAttributeTypeL11n(0, 'NewTest'));
+        $this->attr->setL11n(new BaseStringL11n('NewTest'));
         self::assertEquals('NewTest', $this->attr->getL11n());
     }
 

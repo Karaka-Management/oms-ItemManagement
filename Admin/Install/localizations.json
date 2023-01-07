@@ -1,0 +1,22 @@
+[
+	{
+		"name": "name1",
+		"is_required": true
+	},
+	{
+		"name": "name2",
+		"is_required": false
+	},
+	{
+		"name": "info",
+		"is_required": false
+	},
+	{
+		"name": "description_short",
+		"is_required": false
+	},
+	{
+		"name": "description_long",
+		"is_required": false
+	}
+]

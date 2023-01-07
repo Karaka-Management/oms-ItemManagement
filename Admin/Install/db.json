@@ -45,6 +45,66 @@
                 "default": null,
                 "foreignTable": "itemmgmt_item",
                 "foreignKey": "itemmgmt_item_id"
+            },
+            "itemmgmt_item_unit": {
+                "name": "itemmgmt_item_unit",
+                "type": "INT",
+                "default": null,
+                "null": true,
+                "foreignTable": "organization_unit",
+                "foreignKey": "organization_unit_id"
+            }
+        }
+    },
+    "itemmgmt_item_relation_type": {
+        "description": "Items can be related in many ways e.g. expansions, services, successor, tools, spare parts, materials",
+        "name": "itemmgmt_item_relation_type",
+        "fields": {
+            "itemmgmt_item_relation_type_id": {
+                "name": "itemmgmt_item_relation_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_relation_type_title": {
+                "name": "itemmgmt_item_relation_type_title",
+                "type": "VARCHAR(30)",
+                "null": false,
+                "unique": true
+            }
+        }
+    },
+    "itemmgmt_item_relation": {
+        "name": "itemmgmt_item_relation",
+        "fields": {
+            "itemmgmt_item_relation_id": {
+                "name": "itemmgmt_item_relation_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_relation_type": {
+                "name": "itemmgmt_item_relation_type",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item_relation_type",
+                "foreignKey": "itemmgmt_item_relation_type_id"
+            },
+            "itemmgmt_item_relation_src": {
+                "name": "itemmgmt_item_relation_src",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            },
+            "itemmgmt_item_relation_dst": {
+                "name": "itemmgmt_item_relation_dst",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
             }
         }
     },
@@ -60,7 +120,7 @@
             },
             "itemmgmt_item_l11n_type_title": {
                 "name": "itemmgmt_item_l11n_type_title",
-                "type": "VARCHAR(255)",
+                "type": "VARCHAR(50)",
                 "null": false
             },
             "itemmgmt_item_l11n_type_required": {
@@ -122,6 +182,12 @@
             "itemmgmt_attr_type_name": {
                 "name": "itemmgmt_attr_type_name",
                 "type": "VARCHAR(255)",
+                "null": false,
+                "unique": true
+            },
+            "itemmgmt_attr_type_datatype": {
+                "name": "itemmgmt_attr_type_datatype",
+                "type": "INT(11)",
                 "null": false
             },
             "itemmgmt_attr_type_fields": {
@@ -192,11 +258,6 @@
             "itemmgmt_attr_value_default": {
                 "name": "itemmgmt_attr_value_default",
                 "type": "TINYINT(1)",
-                "null": false
-            },
-            "itemmgmt_attr_value_valuetype": {
-                "name": "itemmgmt_attr_value_valuetype",
-                "type": "INT(11)",
                 "null": false
             },
             "itemmgmt_attr_value_valueStr": {

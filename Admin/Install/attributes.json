@@ -1,11 +1,71 @@
 [
     {
+        "name": "featured",
+        "l11n": {
+            "en": "Featured",
+            "de": "Featured"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "shop",
+        "l11n": {
+            "en": "Shop Item",
+            "de": "Shop Artikel"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "front",
+        "l11n": {
+            "en": "Frontpage",
+            "de": "Frontpage"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
         "name": "segment",
         "l11n": {
             "en": "Segment",
             "de": "Segment"
         },
-        "value_type": "int",
+        "value_type": 1,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": true,
@@ -26,7 +86,7 @@
             "en": "Section",
             "de": "Sparte"
         },
-        "value_type": "int",
+        "value_type": 1,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": true,
@@ -47,7 +107,7 @@
             "en": "Product Group",
             "de": "Produktgruppe"
         },
-        "value_type": "int",
+        "value_type": 1,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": true,
@@ -68,7 +128,7 @@
             "en": "Product Type",
             "de": "Produkttyp"
         },
-        "value_type": "int",
+        "value_type": 1,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": true,
@@ -84,12 +144,25 @@
         ]
     },
     {
+        "name": "hc-code",
+        "l11n": {
+            "en": "HC-code",
+            "de": "Zolltarifnummer"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
         "name": "color",
         "l11n": {
             "en": "Color",
             "de": "Farbe"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,
@@ -138,7 +211,7 @@
             "en": "Length",
             "de": "Laenge"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": true,
         "validation_pattern": "",
         "is_required": false,
@@ -147,7 +220,7 @@
     },
     {
         "name": "weight",
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": true,
         "validation_pattern": "",
         "is_required": false,
@@ -164,7 +237,7 @@
             "en": "Country of origin",
             "de": "Herkunftsland"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": true,
@@ -177,7 +250,7 @@
             "en": "License",
             "de": "Lizenz"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,
@@ -190,7 +263,7 @@
             "en": "Platform",
             "de": "Plattform"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,
@@ -228,7 +301,7 @@
             "en": "Operating System",
             "de": "Betriebssystem"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,
@@ -259,14 +332,14 @@
                 }
             }
         ]
-    }
+    },
     {
         "name": "os_version",
         "l11n": {
             "en": "Operating System Version",
             "de": "Betriebssystem Version"
         },
-        "value_type": "string",
+        "value_type": 2,
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,

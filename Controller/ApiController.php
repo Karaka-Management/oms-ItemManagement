@@ -18,17 +18,18 @@ use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
 use Modules\ItemManagement\Models\ItemAttributeType;
-use Modules\ItemManagement\Models\ItemAttributeTypeL11n;
+use phpOMS\Localization\BaseStringL11n;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValue;
-use Modules\ItemManagement\Models\ItemAttributeValueL11n;
 use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
+use Modules\ItemManagement\Models\ItemRelationType;
+use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\ItemPrice;
 use Modules\ItemManagement\Models\ItemPriceStatus;
@@ -78,7 +79,11 @@ final class ApiController extends Controller
         }
 
         $item = $this->createItemFromRequest($request);
+
+        $this->app->dbPool->get()->con->beginTransaction();
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
+        $this->app->dbPool->get()->con->commit();
+
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
     }
 
@@ -99,6 +104,7 @@ final class ApiController extends Controller
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
         $item->info          = (string) ($request->getData('info') ?? '');
         $item->parent        = ($request->getData('parent') !== null) ? (int) $request->getData('parent') : null;
+        $item->unit        = ($request->getData('unit') !== null) ? (int) $request->getData('unit') : null;
 
         return $item;
     }
@@ -314,18 +320,18 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemAttributeTypeL11n
+     * @return BaseStringL11n
      *
      * @since 1.0.0
      */
-    private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : ItemAttributeTypeL11n
+    private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $attrL11n       = new ItemAttributeTypeL11n();
-        $attrL11n->type = (int) ($request->getData('type') ?? 0);
+        $attrL11n       = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
-        $attrL11n->title = (string) ($request->getData('title') ?? '');
+        $attrL11n->content = (string) ($request->getData('title') ?? '');
 
         return $attrL11n;
     }
@@ -392,6 +398,7 @@ final class ApiController extends Controller
     {
         $attrType = new ItemAttributeType($request->getData('name') ?? '');
         $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
+        $attrType->datatype            = (int) ($request->getData('datatype') ?? 0);
         $attrType->setFields((int) ($request->getData('fields') ?? 0));
         $attrType->custom            = (bool) ($request->getData('custom') ?? false);
         $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
@@ -449,7 +456,7 @@ final class ApiController extends Controller
         if ($attrValue->isDefault) {
             $this->createModelRelation(
                 $request->header->account,
-                (int) $request->getData('attributetype'),
+                (int) $request->getData('type'),
                 $attrValue->getId(),
                 ItemAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
             );
@@ -469,10 +476,13 @@ final class ApiController extends Controller
      */
     private function createItemAttributeValueFromRequest(RequestAbstract $request) : ItemAttributeValue
     {
-        $type = (int) ($request->getData('type') ?? 0);
+        $type = ItemAttributeTypeMapper::get()
+            ->where('id', (int) ($request->getData('type') ?? 0))
+            ->execute();
 
-        $attrValue            = new ItemAttributeValue($type, $request->getData('value'));
+        $attrValue            = new ItemAttributeValue();
         $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
+        $attrValue->setValue($request->getData('value'), $type->datatype);
 
         if ($request->getData('title') !== null) {
             $attrValue->setL11n($request->getData('title'), $request->getData('language') ?? ISO639x1Enum::_EN);
@@ -534,18 +544,18 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemAttributeValueL11n
+     * @return BaseStringL11n
      *
      * @since 1.0.0
      */
-    private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : ItemAttributeValueL11n
+    private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $attrL11n        = new ItemAttributeValueL11n();
-        $attrL11n->value = (int) ($request->getData('value') ?? 0);
+        $attrL11n        = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
-        $attrL11n->title = (string) ($request->getData('title') ?? '');
+        $attrL11n->content = (string) ($request->getData('title') ?? '');
 
         return $attrL11n;
     }
@@ -626,6 +636,69 @@ final class ApiController extends Controller
      * @since 1.0.0
      */
     private function validateItemL11nTypeCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = empty($request->getData('title')))) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create item l11n type
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemRelationTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemRelationTypeCreate($request))) {
+            $response->set('item_relation_type_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $itemRelationType = $this->createItemRelationTypeFromRequest($request);
+        $this->createModel($request->header->account, $itemRelationType, ItemRelationTypeMapper::class, 'item_relation_type', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item relation type', 'Item relation type successfully created', $itemRelationType);
+    }
+
+    /**
+     * Method to create item l11n type from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return ItemRelationType
+     *
+     * @since 1.0.0
+     */
+    private function createItemRelationTypeFromRequest(RequestAbstract $request) : ItemRelationType
+    {
+        $itemRelationType        = new ItemRelationType();
+        $itemRelationType->title = (string) ($request->getData('title') ?? '');
+
+        return $itemRelationType;
+    }
+
+    /**
+     * Validate item l11n type create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateItemRelationTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
         if (($val['title'] = empty($request->getData('title')))) {

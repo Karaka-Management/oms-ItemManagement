@@ -22,7 +22,7 @@ namespace Modules\ItemManagement\Models;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-final class NullItemAttributeTypeL11n extends ItemAttributeTypeL11n
+final class NullItemRelationType extends ItemRelationType
 {
     /**
      * Constructor
@@ -34,7 +34,6 @@ final class NullItemAttributeTypeL11n extends ItemAttributeTypeL11n
     public function __construct(int $id = 0)
     {
         $this->id = $id;
-        parent::__construct();
     }
 
     /**

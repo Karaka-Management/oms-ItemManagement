@@ -102,6 +102,14 @@ class Item
     public string $info = '';
 
     /**
+     * Unit
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $unit = null;
+
+    /**
      * Constructor.
      *
      * @since 1.0.0
@@ -238,6 +246,47 @@ class Item
     }
 
     /**
+     * Has attribute value
+     *
+     * @param string $attrName  Attribute name
+     * @param mixed  $attrValue Attribute value
+     *
+     * @return bool
+     *
+     * @since 1.0.0
+     */
+    public function hasAttributeValue(string $attrName, mixed $attrValue) : bool
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->type->name === $attrName && $attribute->value->getValue() === $attrValue) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get attribute
+     *
+     * @param string $attrName Attribute name
+     *
+     * @return null|AttributeValue
+     *
+     * @since 1.0.0
+     */
+    public function getAttribute(string $attrName) : ?AttributeValue
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->type->name === $attrName) {
+                return $attribute->value;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Add note to item
      *
      * @param EditorDoc $note Note
@@ -288,6 +337,26 @@ class Item
     {
         foreach ($this->files as $file) {
             if ($file->type === $type) {
+                return $file;
+            }
+        }
+
+        return new NullMedia();
+    }
+
+    /**
+     * Get all media files by type name
+     *
+     * @param string $type Media type
+     *
+     * @return Media
+     *
+     * @since 1.0.0
+     */
+    public function getFileByTypeName(string $type) : Media
+    {
+        foreach ($this->files as $file) {
+            if ($file->type->name === $type) {
                 return $file;
             }
         }

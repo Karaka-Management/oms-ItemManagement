@@ -1,0 +1,29 @@
+[
+	{
+		"name": "spare_part"
+	},
+	{
+		"name": "service"
+	},
+	{
+		"name": "expansion"
+	},
+	{
+		"name": "tool"
+	},
+	{
+		"name": "material"
+	},
+	{
+		"name": "successor"
+	},
+	{
+		"name": "alternative"
+	},
+	{
+		"name": "complementary"
+	},
+	{
+		"name": "other"
+	}
+]

@@ -12,5 +12,19 @@
         "name": "Articles",
         "virtualPath": "/Modules/ItemManagement",
         "user": 1
+    },
+    {
+        "type": "type",
+        "name": "item_profile_image",
+        "l11n": [
+            {
+                "title": "Profile image",
+                "lang": "en"
+            },
+            {
+                "title": "Profilbild",
+                "lang": "de"
+            }
+        ]
     }
 ]

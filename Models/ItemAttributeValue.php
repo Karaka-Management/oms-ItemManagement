@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Localization\BaseStringL11n;
 
 /**
  * Item attribute value class.
@@ -35,14 +36,6 @@ class ItemAttributeValue implements \JsonSerializable
      * @since 1.0.0
      */
     protected int $id = 0;
-
-    /**
-     * Datatype of the attribute
-     *
-     * @var int
-     * @since 1.0.0
-     */
-    public int $type = 0;
 
     /**
      * Int value
@@ -95,24 +88,9 @@ class ItemAttributeValue implements \JsonSerializable
     /**
      * Localization
      *
-     * @var null|ItemAttributeValueL11n
+     * @var null|BaseStringL11n
      */
-    private ?ItemAttributeValueL11n $l11n = null;
-
-    /**
-     * Constructor.
-     *
-     * @param int   $type  Type
-     * @param mixed $value Value
-     *
-     * @since 1.0.0
-     */
-    public function __construct(int $type = 0, mixed $value = '')
-    {
-        $this->type = $type;
-
-        $this->setValue($value);
-    }
+    private ?BaseStringL11n $l11n = null;
 
     /**
      * Get id
@@ -129,22 +107,23 @@ class ItemAttributeValue implements \JsonSerializable
     /**
      * Set l11n
      *
-     * @param string|ItemAttributeValueL11n $l11n Tag article l11n
+     * @param string|BaseStringL11n $l11n Tag article l11n
      * @param string                        $lang Language
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function setL11n(string | ItemAttributeValueL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
+    public function setL11n(string | BaseStringL11n $l11n, string $lang = ISO639x1Enum::_EN) : void
     {
-        if ($l11n instanceof ItemAttributeValueL11n) {
+        if ($l11n instanceof BaseStringL11n) {
             $this->l11n = $l11n;
-        } elseif (isset($this->l11n) && $this->l11n instanceof ItemAttributeValueL11n) {
-            $this->l11n->title = $l11n;
+        } elseif (isset($this->l11n) && $this->l11n instanceof BaseStringL11n) {
+            $this->l11n->content = $l11n;
         } else {
-            $this->l11n        = new ItemAttributeValueL11n();
-            $this->l11n->title = $l11n;
+            $this->l11n        = new BaseStringL11n();
+            $this->l11n->content = $l11n;
+            $this->l11n->ref = $this->id;
             $this->l11n->setLanguage($lang);
         }
     }
@@ -158,28 +137,29 @@ class ItemAttributeValue implements \JsonSerializable
      */
     public function getL11n() : ?string
     {
-        return $this->l11n instanceof ItemAttributeValueL11n ? $this->l11n->title : $this->l11n;
+        return $this->l11n instanceof BaseStringL11n ? $this->l11n->content : $this->l11n;
     }
 
     /**
      * Set value
      *
      * @param int|string|float|\DateTimeInterface $value Value
+     * @param int $type Datatype
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function setValue(mixed $value) : void
+    public function setValue(mixed $value, int $datatype) : void
     {
-        if (\is_string($value)) {
-            $this->valueStr = $value;
-        } elseif (\is_int($value)) {
-            $this->valueInt = $value;
-        } elseif (\is_float($value)) {
-            $this->valueDec = $value;
-        } elseif ($value instanceof \DateTimeInterface) {
-            $this->valueDat = $value;
+        if ($datatype === AttributeValueType::_STRING) {
+            $this->valueStr = (string) $value;
+        } elseif ($datatype === AttributeValueType::_INT) {
+            $this->valueInt = (int) $value;
+        } elseif ($datatype === AttributeValueType::_FLOAT) {
+            $this->valueDec = (float) $value;
+        } elseif ($datatype === AttributeValueType::_DATETIME) {
+            $this->valueDat = new \DateTime($value);
         }
     }
 
@@ -212,7 +192,6 @@ class ItemAttributeValue implements \JsonSerializable
     {
         return [
             'id'        => $this->id,
-            'type'      => $this->type,
             'valueInt'  => $this->valueInt,
             'valueStr'  => $this->valueStr,
             'valueDec'  => $this->valueDec,

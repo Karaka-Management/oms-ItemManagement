@@ -47,22 +47,33 @@ final class Installer extends InstallerAbstract
     {
         parent::install($app, $info, $cfgHandler);
 
+        /* Attributes */
         $fileContent = \file_get_contents(__DIR__ . '/Install/attributes.json');
         if ($fileContent === false) {
             return;
         }
 
-        $attributes = \json_decode($fileContent);
+        $attributes = \json_decode($fileContent, true);
         $attrTypes  = self::createItemAttributeTypes($app, $attributes);
-        self::createItemAttributeValues($app, $attrTypes, $attributes);
+        $attrValues = self::createItemAttributeValues($app, $attrTypes, $attributes);
 
+        /* Localizations */
         $fileContent = \file_get_contents(__DIR__ . '/Install/localizations.json');
         if ($fileContent === false) {
             return;
         }
 
-        $localizations = \json_decode($fileContent);
+        $localizations = \json_decode($fileContent, true);
         $l11nTypes     = self::createItemL11nTypes($app, $localizations);
+
+        /* Relations */
+        $fileContent = \file_get_contents(__DIR__ . '/Install/relations.json');
+        if ($fileContent === false) {
+            return;
+        }
+
+        $relations = \json_decode($fileContent, true);
+        $l11nTypes = self::createItemRelationTypes($app, $relations);
     }
 
     /**
@@ -87,7 +98,7 @@ final class Installer extends InstallerAbstract
             $response = new HttpResponse();
             $request  = new HttpRequest(new HttpUri(''));
 
-            $request->header->account = \mt_rand(2, 5);
+            $request->header->account = 1;
             $request->setData('title', $l11n['name']);
             $request->setData('is_required', $l11n['is_required'] ?? false);
 
@@ -104,6 +115,46 @@ final class Installer extends InstallerAbstract
         }
 
         return $l11nTypes;
+    }
+
+    /**
+     * Install default relation types
+     *
+     * @param ApplicationAbstract $app       Application
+     * @param array               $relations Attribute definition
+     *
+     * @return array<array>
+     *
+     * @since 1.0.0
+     */
+    private static function createItemRelationTypes(ApplicationAbstract $app, array $rels) : array
+    {
+        /** @var array<string, array> $relations */
+        $relations = [];
+
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+
+        foreach ($rels as $rel) {
+            $response = new HttpResponse();
+            $request  = new HttpRequest(new HttpUri(''));
+
+            $request->header->account = 1;
+            $request->setData('title', $rel['name']);
+
+            $module->apiItemRelationTypeCreate($request, $response);
+
+            $responseData = $response->get('');
+            if (!\is_array($responseData)) {
+                continue;
+            }
+
+            $relations[] = !\is_array($responseData['response'])
+                ? $responseData['response']->toArray()
+                : $responseData['response'];
+        }
+
+        return $relations;
     }
 
     /**
@@ -131,11 +182,12 @@ final class Installer extends InstallerAbstract
 
             $request->header->account = 1;
             $request->setData('name', $attribute['name'] ?? '');
-            $request->setData('title', $attribute['l11n'][0] ?? '');
+            $request->setData('title', \reset($attribute['l11n']));
             $request->setData('language', \array_keys($attribute['l11n'])[0] ?? 'en');
             $request->setData('is_required', $attribute['is_required'] ?? false);
             $request->setData('is_custom_allowed', $attribute['is_custom_allowed'] ?? false);
             $request->setData('validation_pattern', $attribute['validation_pattern'] ?? '');
+            $request->setData('datatype', (int) $attribute['value_type']);
 
             $module->apiItemAttributeTypeCreate($request, $response);
 
@@ -199,13 +251,12 @@ final class Installer extends InstallerAbstract
 
                 $request->header->account = 1;
                 $request->setData('value', $value['value'] ?? '');
-                $request->setData('value_type', $attribute['value_type'] ?? 0);
                 $request->setData('unit', $value['unit'] ?? '');
                 $request->setData('default', isset($attribute['values']) && !empty($attribute['values']));
                 $request->setData('attributetype', $itemAttrType[$attribute['name']]['id']);
 
                 if (isset($value['l11n']) && !empty($value['l11n'])) {
-                    $request->setData('title', $value['l11n'][0] ?? '');
+                    $request->setData('title', \reset($value['l11n']));
                     $request->setData('language', \array_keys($value['l11n'])[0] ?? 'en');
                 }
 

@@ -15,20 +15,21 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\tests\Models;
 
 use Modules\ItemManagement\Models\ItemAttributeValue;
+use Modules\ItemManagement\Models\AttributeValueType;
 
 /**
  * @internal
  */
 final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
 {
-    private ItemAttributeValue $attr;
+    private ItemAttributeValue $value;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp() : void
     {
-        $this->attr = new ItemAttributeValue();
+        $this->value = new ItemAttributeValue();
     }
 
     /**
@@ -37,10 +38,9 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->attr->getId());
-        self::assertEquals(0, $this->attr->type);
-        self::assertNull($this->attr->getValue());
-        self::assertFalse($this->attr->isDefault);
+        self::assertEquals(0, $this->value->getId());
+        self::assertNull($this->value->getValue());
+        self::assertFalse($this->value->isDefault);
     }
 
     /**
@@ -49,8 +49,8 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueIntInputOutput() : void
     {
-        $this->attr->setValue(1);
-        self::assertEquals(1, $this->attr->getValue());
+        $this->value->setValue(1, AttributeValueType::_INT);
+        self::assertEquals(1, $this->value->getValue());
     }
 
     /**
@@ -59,8 +59,8 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueFloatInputOutput() : void
     {
-        $this->attr->setValue(1.1);
-        self::assertEquals(1.1, $this->attr->getValue());
+        $this->value->setValue(1.1, AttributeValueType::_FLOAT);
+        self::assertEquals(1.1, $this->value->getValue());
     }
 
     /**
@@ -69,8 +69,8 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueStringInputOutput() : void
     {
-        $this->attr->setValue('test');
-        self::assertEquals('test', $this->attr->getValue());
+        $this->value->setValue('test', AttributeValueType::_STRING);
+        self::assertEquals('test', $this->value->getValue());
     }
 
     /**
@@ -79,8 +79,9 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueDateInputOutput() : void
     {
-        $this->attr->setValue($dat = new \DateTime('now'));
-        self::assertEquals($dat->format('Y-m-d'), $this->attr->getValue()->format('Y-m-d'));
+        $dat = new \DateTime('now');
+        $this->value->setValue('now', AttributeValueType::_DATETIME);
+        self::assertEquals($dat->format('Y-m-d'), $this->value->getValue()->format('Y-m-d'));
     }
 
     /**
@@ -89,21 +90,19 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize() : void
     {
-        $this->attr->type = 1;
-        $this->attr->setValue('test');
-        $this->attr->isDefault = true;
+        $this->value->setValue('test', AttributeValueType::_STRING);
+        $this->value->isDefault = true;
 
         self::assertEquals(
             [
                 'id'           => 0,
-                'type'         => 1,
                 'valueInt'     => null,
                 'valueStr'     => 'test',
                 'valueDec'     => null,
                 'valueDat'     => null,
                 'isDefault'    => true,
             ],
-            $this->attr->jsonSerialize()
+            $this->value->jsonSerialize()
         );
     }
 }
