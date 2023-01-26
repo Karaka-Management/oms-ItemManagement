@@ -74,10 +74,10 @@ class ItemRelation implements \JsonSerializable
     public function toArray() : array
     {
         return [
-            'id'    => $this->id,
-            'source' => $this->source,
+            'id'          => $this->id,
+            'source'      => $this->source,
             'destination' => $this->destination,
-            'type' => $this->type,
+            'type'        => $this->type,
         ];
     }
 
