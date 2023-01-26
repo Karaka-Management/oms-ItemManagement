@@ -53,7 +53,7 @@ final class ItemAttributeTypeMapper extends DataMapperFactory
             'mapper'   => ItemAttributeTypeL11nMapper::class,
             'table'    => 'itemmgmt_attr_type_l11n',
             'self'     => 'itemmgmt_attr_type_l11n_type',
-            'column'   => 'title',
+            'column'   => 'content',
             'external' => null,
         ],
         'defaults' => [

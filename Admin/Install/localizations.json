@@ -18,5 +18,13 @@
 	{
 		"name": "description_long",
 		"is_required": false
+	},
+	{
+		"name": "shop_name1",
+		"is_required": true
+	},
+	{
+		"name": "shop_name2",
+		"is_required": false
 	}
 ]

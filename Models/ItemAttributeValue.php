@@ -38,6 +38,22 @@ class ItemAttributeValue implements \JsonSerializable
     protected int $id = 0;
 
     /**
+     * Depending attribute type
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $dependingAttributeType = null;
+
+    /**
+     * Depending attribute value
+     *
+     * @var null|int
+     * @since 1.0.0
+     */
+    public ?int $dependingAttributeValue = null;
+
+    /**
      * Int value
      *
      * @var null|int
@@ -154,7 +170,10 @@ class ItemAttributeValue implements \JsonSerializable
     {
         if ($datatype === AttributeValueType::_STRING) {
             $this->valueStr = (string) $value;
-        } elseif ($datatype === AttributeValueType::_INT) {
+        } elseif ($datatype === AttributeValueType::_INT
+            || $datatype === AttributeValueType::_FLOAT_INT
+            || $datatype === AttributeValueType::_BOOL
+        ) {
             $this->valueInt = (int) $value;
         } elseif ($datatype === AttributeValueType::_FLOAT) {
             $this->valueDec = (float) $value;

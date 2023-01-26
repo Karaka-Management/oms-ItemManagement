@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
 use phpOMS\Message\Http\HttpRequest;
@@ -74,6 +76,112 @@ final class Installer extends InstallerAbstract
 
         $relations = \json_decode($fileContent, true);
         $l11nTypes = self::createItemRelationTypes($app, $relations);
+
+        /* Items */
+        $fileContent = \file_get_contents(__DIR__ . '/Install/items.json');
+        if ($fileContent === false) {
+            return;
+        }
+
+        $items = \json_decode($fileContent, true);
+        $itemArray = self::createItems($app, $items);
+    }
+
+    /**
+     * Install default l11n types
+     *
+     * @param ApplicationAbstract $app   Application
+     * @param array               $items Attribute definition
+     *
+     * @return array<array>
+     *
+     * @since 1.0.0
+     */
+    private static function createItems(ApplicationAbstract $app, array $items) : array
+    {
+        $itemArray = [];
+
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+
+        $attributeTypes  = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
+        $l11nTypes       = ItemL11nTypeMapper::getAll()->execute();
+
+        // Change indexing for easier search later on.
+        foreach ($attributeTypes as $e) {
+            $attributeTypes[$e->name] = $e;
+        }
+
+        foreach ($l11nTypes as $e) {
+            $l11nTypes[$e->title] = $e;
+        }
+
+        foreach ($items as $item) {
+            $response = new HttpResponse();
+            $request  = new HttpRequest(new HttpUri(''));
+
+            $request->header->account = 1;
+            $request->setData('number', (string) $item['number']);
+
+            $module->apiItemCreate($request, $response);
+            $itemId = $response->get('')['response']->getId();
+
+            $itemArray[] = !\is_array($response['response'])
+                ? $response['response']->toArray()
+                : $response['response'];
+
+            foreach ($item['l11ns'] as $name => $l11ns) {
+                $l11nType = $l11nTypes[$name];
+
+                foreach ($l11ns as $language => $l11n) {
+                    $response = new HttpResponse();
+                    $request  = new HttpRequest(new HttpUri(''));
+
+                    $request->header->account = 1;
+                    $request->setData('item', $itemId);
+                    $request->setData('type', $l11nType->getId());
+                    $request->setData('language', (string) $language);
+                    $request->setData('description', (string) $l11n);
+
+                    $module->apiItemL11nCreate($request, $response);
+                }
+            }
+
+            foreach ($item['attributes'] as $attribute) {
+                $attrType = $attributeTypes[$attribute['type']];
+
+                $response = new HttpResponse();
+                $request  = new HttpRequest(new HttpUri(''));
+
+                $request->header->account = 1;
+                $request->setData('item', $itemId);
+                $request->setData('type', $attrType->getId());
+
+                if ($attribute['custom'] ?? true) {
+                    $request->setData('custom', $attribute['value']);
+                } else {
+                    $request->setData('value', self::findAttributeIdByValue($attrType->getDefaults(), $attribute['value']));
+                }
+
+                $module->apiItemAttributeCreate($request, $response);
+            }
+        }
+
+        return $itemArray;
+    }
+
+    private static function findAttributeIdByValue(array $defaultValues, mixed $value)
+    {
+        foreach ($defaultValues as $val) {
+            if ($val->valueStr === $value
+                || $val->valueInt === $value
+                || $val->valueDec === $value
+            ) {
+                return $val->getId();
+            }
+        }
+
+        return 0;
     }
 
     /**

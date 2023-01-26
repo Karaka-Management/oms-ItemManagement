@@ -1,0 +1,42 @@
+[
+    {
+        "number": "1",
+        "l11ns": {
+            "name1": {
+                "en": "Freight",
+                "de": "Freight"
+            },
+            "description_short": {}
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    },
+    {
+        "number": "2",
+        "l11ns": {
+            "name1": {
+                "en": "Insurance",
+                "de": "Insurance"
+            },
+            "description_short": {}
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    }
+]

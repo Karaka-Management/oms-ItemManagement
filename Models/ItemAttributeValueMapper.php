@@ -40,6 +40,8 @@ final class ItemAttributeValueMapper extends DataMapperFactory
         'itemmgmt_attr_value_valueDec'      => ['name' => 'itemmgmt_attr_value_valueDec', 'type' => 'float',    'internal' => 'valueDec'],
         'itemmgmt_attr_value_valueDat'      => ['name' => 'itemmgmt_attr_value_valueDat', 'type' => 'DateTime', 'internal' => 'valueDat'],
         'itemmgmt_attr_value_unit'          => ['name' => 'itemmgmt_attr_value_unit', 'type' => 'string', 'internal' => 'unit'],
+        'itemmgmt_attr_value_deptype'          => ['name' => 'itemmgmt_attr_value_deptype', 'type' => 'int', 'internal' => 'dependingAttributeType'],
+        'itemmgmt_attr_value_depvalue'          => ['name' => 'itemmgmt_attr_value_depvalue', 'type' => 'int', 'internal' => 'dependingAttributeValue'],
     ];
 
     /**

@@ -18,9 +18,20 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/item/attribute/type.*$' => [
+    '^.*/item/attribute/type/list.*$' => [
         [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypes',
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypeList',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/type\?.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeType',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::NAME,

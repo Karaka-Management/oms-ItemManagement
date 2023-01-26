@@ -1,28 +1,8 @@
 [
     {
-        "name": "featured",
-        "l11n": {
-            "en": "Featured",
-            "de": "Featured"
-        },
-        "value_type": 1,
-        "is_custom_allowed": false,
-        "validation_pattern": "",
-        "is_required": false,
-        "default_value": "",
-        "values": [
-            {
-                "value": 0
-            },
-            {
-                "value": 1
-            }
-        ]
-    },
-    {
         "name": "shop",
         "l11n": {
-            "en": "Shop Item",
+            "en": "Shop item",
             "de": "Shop Artikel"
         },
         "value_type": 1,
@@ -40,10 +20,30 @@
         ]
     },
     {
-        "name": "front",
+        "name": "shop_featured",
         "l11n": {
-            "en": "Frontpage",
-            "de": "Frontpage"
+            "en": "Shop featured",
+            "de": "Shop featured"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "shop_front",
+        "l11n": {
+            "en": "Shop frontpage",
+            "de": "Shop frontpage"
         },
         "value_type": 1,
         "is_custom_allowed": false,
@@ -144,10 +144,57 @@
         ]
     },
     {
-        "name": "hc-code",
+        "name": "bill_fees",
+        "description": "Used for defining special fees such as freight, insurance etc. which can be made accessible in a separate area in the bill",
+        "l11n": {
+            "en": "Bill fees",
+            "de": "Sonderkosten"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "upc",
+        "l11n": {
+            "en": "UPC",
+            "de": "UPC"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "hc_code",
         "l11n": {
             "en": "HC-code",
             "de": "Zolltarifnummer"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "hazmat",
+        "l11n": {
+            "en": "Hazmat",
+            "de": "Gefahrgut"
         },
         "value_type": 2,
         "is_custom_allowed": true,
@@ -354,5 +401,31 @@
                 "is_default": true
             }
         ]
+    },
+    {
+        "name": "minimum_order",
+        "l11n": {
+            "en": "MOQ",
+            "de": "Mindestbestellmenge"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "dual_use",
+        "l11n": {
+            "en": "Dual use",
+            "de": "Dual use"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
     }
 ]
