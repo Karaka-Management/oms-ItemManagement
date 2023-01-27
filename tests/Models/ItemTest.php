@@ -49,8 +49,6 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(ItemStatus::ACTIVE, $this->item->getStatus());
         self::assertEquals([], $this->item->getNotes());
         self::assertEquals([], $this->item->getFiles());
-        self::assertInstanceOf('\Modules\Media\Models\Media', $this->item->getFileByType());
-        self::assertEquals([], $this->item->getFilesByType());
         self::assertEquals([], $this->item->getAttributes());
         self::assertInstanceOf('Modules\ItemManagement\Models\ItemL11n', $this->item->getL11n(''));
         self::assertInstanceOf('phpOMS\Localization\Money', $this->item->salesPrice);
@@ -75,8 +73,6 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $this->item->addFile($temp = new Media());
         self::assertCount(1, $this->item->getFiles());
-        self::assertEquals($temp, $this->item->getFileByType());
-        self::assertEquals([$temp], $this->item->getFilesByType());
     }
 
     /**

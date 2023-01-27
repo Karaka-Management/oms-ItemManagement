@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Admin;
 
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
@@ -83,7 +84,7 @@ final class Installer extends InstallerAbstract
             return;
         }
 
-        $items = \json_decode($fileContent, true);
+        $items     = \json_decode($fileContent, true);
         $itemArray = self::createItems($app, $items);
     }
 
@@ -104,8 +105,11 @@ final class Installer extends InstallerAbstract
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
         $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
-        $attributeTypes  = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
-        $l11nTypes       = ItemL11nTypeMapper::getAll()->execute();
+        /** @var \Modules\ItemManagement\Models\ItemAttributeType[] $attributeTypes */
+        $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
+
+        /** @var \Modules\ItemManagement\Models\ItemL11nType[] $l11nTypes */
+        $l11nTypes = ItemL11nTypeMapper::getAll()->execute();
 
         // Change indexing for easier search later on.
         foreach ($attributeTypes as $e) {
@@ -170,7 +174,17 @@ final class Installer extends InstallerAbstract
         return $itemArray;
     }
 
-    private static function findAttributeIdByValue(array $defaultValues, mixed $value)
+    /**
+     * Find attribute IDs by value
+     *
+     * @param ItemAttributeValue[] $defaultValues Values to search in
+     * @param mixed                $value         Value to search for
+     *
+     * @return int
+     *
+     * @since 1.0.0
+     */
+    private static function findAttributeIdByValue(array $defaultValues, mixed $value) : int
     {
         foreach ($defaultValues as $val) {
             if ($val->valueStr === $value
@@ -228,8 +242,8 @@ final class Installer extends InstallerAbstract
     /**
      * Install default relation types
      *
-     * @param ApplicationAbstract $app       Application
-     * @param array               $relations Attribute definition
+     * @param ApplicationAbstract $app  Application
+     * @param array               $rels Attribute definition
      *
      * @return array<array>
      *

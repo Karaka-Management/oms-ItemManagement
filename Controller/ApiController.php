@@ -35,6 +35,7 @@ use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
+use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO4217CharEnum;
@@ -326,8 +327,8 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $attrL11n       = new BaseStringL11n();
-        $attrL11n->ref  = (int) ($request->getData('type') ?? 0);
+        $attrL11n      = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
@@ -396,13 +397,13 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
-        $attrType = new ItemAttributeType($request->getData('name') ?? '');
-        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
-        $attrType->datatype            = (int) ($request->getData('datatype') ?? 0);
-        $attrType->setFields((int) ($request->getData('fields') ?? 0));
+        $attrType                    = new ItemAttributeType($request->getData('name') ?? '');
+        $attrType->datatype          = (int) ($request->getData('datatype') ?? 0);
         $attrType->custom            = (bool) ($request->getData('custom') ?? false);
         $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
         $attrType->validationPattern = (string) ($request->getData('validation_pattern') ?? '');
+        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
+        $attrType->setFields((int) ($request->getData('fields') ?? 0));
 
         return $attrType;
     }
@@ -476,6 +477,7 @@ final class ApiController extends Controller
      */
     private function createItemAttributeValueFromRequest(RequestAbstract $request) : ItemAttributeValue
     {
+        /** @var ItemAttributeType $type */
         $type = ItemAttributeTypeMapper::get()
             ->where('id', (int) ($request->getData('type') ?? 0))
             ->execute();
@@ -550,8 +552,8 @@ final class ApiController extends Controller
      */
     private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $attrL11n        = new BaseStringL11n();
-        $attrL11n->ref   = (int) ($request->getData('value') ?? 0);
+        $attrL11n      = new BaseStringL11n();
+        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
         $attrL11n->setLanguage((string) (
             $request->getData('language') ?? $request->getLanguage()
         ));
@@ -811,15 +813,28 @@ final class ApiController extends Controller
         }
 
         $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
-            $request->getDataList('names'),
-            $request->getDataList('filenames'),
-            $uploadedFiles,
-            $request->header->account,
-            __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
-            '/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
-            $request->getData('type', 'int'),
+            names: $request->getDataList('names'),
+            fileNames: $request->getDataList('filenames'),
+            files: $uploadedFiles,
+            account: $request->header->account,
+            basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
+            virtualPath: '/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
             pathSettings: PathSettings::FILE_PATH
         );
+
+        if ($request->hasData('type')) {
+            foreach ($uploaded as $file) {
+                $this->createModelRelation(
+                    $request->header->account,
+                    $file->getId(),
+                    $request->getData('type', 'int'),
+                    MediaMapper::class,
+                    'types',
+                    '',
+                    $request->getOrigin()
+                );
+            }
+        }
 
         $this->createModelRelation(
             $request->header->account,

@@ -81,7 +81,7 @@ trait ApiControllerItemTrait
         $request->header->account = 1;
         $request->setData('name', '123456 backend');
         $request->setData('item', 1);
-        $request->setData('type', 'backend_image');
+        $request->setData('type', '1');
 
         TestUtils::setMember($request, 'files', [
             'file1' => [

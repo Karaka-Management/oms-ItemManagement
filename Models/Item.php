@@ -271,11 +271,11 @@ class Item
      *
      * @param string $attrName Attribute name
      *
-     * @return null|AttributeValue
+     * @return null|ItemAttributeValue
      *
      * @since 1.0.0
      */
-    public function getAttribute(string $attrName) : ?AttributeValue
+    public function getAttribute(string $attrName) : ?ItemAttributeValue
     {
         foreach ($this->attributes as $attribute) {
             if ($attribute->type->name === $attrName) {
@@ -327,16 +327,16 @@ class Item
     /**
      * Get media file by type
      *
-     * @param null|int $type Media type
+     * @param int $type Media type
      *
      * @return Media
      *
      * @since 1.0.0
      */
-    public function getFileByType(int $type = null) : Media
+    public function getFileByType(int $type) : Media
     {
         foreach ($this->files as $file) {
-            if ($file->type === $type) {
+            if ($file->hasMediaTypeId($type)) {
                 return $file;
             }
         }
@@ -356,33 +356,12 @@ class Item
     public function getFileByTypeName(string $type) : Media
     {
         foreach ($this->files as $file) {
-            if ($file->type->name === $type) {
+            if ($file->hasMediaTypeName($type)) {
                 return $file;
             }
         }
 
         return new NullMedia();
-    }
-
-    /**
-     * Get all media files by type
-     *
-     * @param null|int $type Media type
-     *
-     * @return Media[]
-     *
-     * @since 1.0.0
-     */
-    public function getFilesByType(int $type = null) : array
-    {
-        $files = [];
-        foreach ($this->files as $file) {
-            if ($file->type === $type) {
-                $files[] = $file;
-            }
-        }
-
-        return $files;
     }
 
     /**
