@@ -27,7 +27,7 @@ use phpOMS\Localization\Money;
  * @link    https://jingga.app
  * @since   1.0.0
  */
-class Item
+class Item implements \JsonSerializable
 {
     /**
      * ID.
@@ -374,6 +374,7 @@ class Item
             'number' => $this->number,
             'status' => $this->status,
             'info'   => $this->info,
+            'l11n'   => $this->l11n,
         ];
     }
 

@@ -128,11 +128,17 @@ final class Installer extends InstallerAbstract
             $request->setData('number', (string) $item['number']);
 
             $module->apiItemCreate($request, $response);
-            $itemId = $response->get('')['response']->getId();
 
-            $itemArray[] = !\is_array($response['response'])
-                ? $response['response']->toArray()
-                : $response['response'];
+            $responseData = $response->get('');
+            if (!\is_array($responseData)) {
+                continue;
+            }
+
+            $itemId = $responseData['response']->getId();
+
+            $itemArray[] = !\is_array($responseData['response'])
+                ? $responseData['response']->toArray()
+                : $responseData['response'];
 
             foreach ($item['l11ns'] as $name => $l11ns) {
                 $l11nType = $l11nTypes[$name];

@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Controller;
 
+use Modules\Admin\Models\NullAccount;
+use Modules\Billing\Models\PricingMapper;
 use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
@@ -35,7 +37,10 @@ use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
+use Modules\Media\Models\Collection;
+use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
+use Modules\Media\Models\MediaTypeMapper;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO4217CharEnum;
@@ -46,6 +51,7 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\System\MimeType;
 
 /**
  * ItemManagement class.
@@ -57,6 +63,64 @@ use phpOMS\Model\Message\FormValidation;
  */
 final class ApiController extends Controller
 {
+    /**
+     * Api method to find items
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        $l11n = ItemL11nMapper::getAll()
+            ->with('type')
+            ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->where('language', $request->getLanguage())
+            ->where('description', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')
+            ->execute();
+
+        $items = [];
+        foreach ($l11n as $item) {
+            $items[] = $item->item;
+        }
+
+        $response->header->set('Content-Type', MimeType::M_JSON, true);
+        $response->set(
+            $request->uri->__toString(),
+            \array_values(
+                ItemMapper::getAll()
+                    ->with('l11n')
+                    ->with('l11n/type')
+                    ->where('id', $items, 'IN')
+                    ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+                    ->where('l11n/language', $request->getLanguage())
+                    ->execute()
+            )
+        );
+
+        /*
+        @todo: BIG TODO.
+        This is the query I want to be used internally:
+
+        select itemmgmt_item.itemmgmt_item_no, itemmgmt_item_l11n.itemmgmt_item_l11n_description
+        from itemmgmt_item
+        left join itemmgmt_item_l11n on itemmgmt_item.itemmgmt_item_id = itemmgmt_item_l11n.itemmgmt_item_l11n_item
+        left join itemmgmt_item_l11n_type on itemmgmt_item_l11n.itemmgmt_item_l11n_typeref = itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_id
+        where
+            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title IN ("name1", "name2", "name3")
+            AND itemmgmt_item_l11n.itemmgmt_item_l11n_lang = "en"
+            AND itemmgmt_item_l11n.itemmgmt_item_l11n_description LIKE "%Doc%"
+
+        It is not used because they are defined as has many relations and therefore queried as a loop internally. I as the person making the request know its a 1 to 1 result despite the 1 to many db relation.
+        */
+    }
+
     /**
      * Api method to create item
      *
@@ -85,7 +149,72 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
         $this->app->dbPool->get()->con->commit();
 
+        $this->createMediaDirForItem($item->number, $request->header->account);
+
+        $uploadedFiles = $request->getFile('item_profile_image');
+        if (!empty($uploadedFiles)) {
+            // upload image
+            $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+                names: [],
+                fileNames: [],
+                files: $uploadedFiles,
+                account: $request->header->account,
+                basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Items/' . $item->number,
+                virtualPath: '/Modules/ItemManagement/Items/' . $item->number,
+                pathSettings: PathSettings::FILE_PATH
+            );
+
+            // create type / media relation
+            $profileImageType = MediaTypeMapper::get()
+                ->where('name', 'item_profile_image')
+                ->execute();
+
+            $this->createModelRelation(
+                $request->header->account,
+                $uploaded[0]->getId(),
+                $profileImageType->getId(),
+                MediaMapper::class,
+                'types',
+                '',
+                $request->getOrigin()
+            );
+
+            // create item relation
+            $this->createModelRelation(
+                $request->header->account,
+                $item->getId(),
+                $uploaded[0]->getId(),
+                ItemMapper::class,
+                'files',
+                '',
+                $request->getOrigin()
+            );
+        }
+
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
+    }
+
+    /**
+     * Create directory for an account
+     *
+     * @param string $number    Item number
+     * @param int    $createdBy Creator of the directory
+     *
+     * @return Collection
+     *
+     * @since 1.0.0
+     */
+    private function createMediaDirForItem(string $number, int $createdBy) : Collection
+    {
+        $collection       = new Collection();
+        $collection->name = $number;
+        $collection->setVirtualPath('/Modules/ItemManagement/Items');
+        $collection->setPath('/Modules/Media/Files/Modules/ItemManagement/Items/' . $number);
+        $collection->createdBy = new NullAccount($createdBy);
+
+        CollectionMapper::create()->execute($collection);
+
+        return $collection;
     }
 
     /**
@@ -104,8 +233,8 @@ final class ApiController extends Controller
         $item->salesPrice    = new Money($request->getData('salesprice', 'int') ?? 0);
         $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
         $item->info          = (string) ($request->getData('info') ?? '');
-        $item->parent        = ($request->getData('parent') !== null) ? (int) $request->getData('parent') : null;
-        $item->unit          = ($request->getData('unit') !== null) ? (int) $request->getData('unit') : null;
+        $item->parent        = $request->getData('parent', 'int');
+        $item->unit          = $request->getData('unit', 'int');
 
         return $item;
     }
@@ -817,8 +946,8 @@ final class ApiController extends Controller
             fileNames: $request->getDataList('filenames'),
             files: $uploadedFiles,
             account: $request->header->account,
-            basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
-            virtualPath: '/Modules/ItemManagement/Articles/' . ($request->getData('item') ?? '0'),
+            basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Items/' . ($request->getData('item') ?? '0'),
+            virtualPath: '/Modules/ItemManagement/Items/' . ($request->getData('item') ?? '0'),
             pathSettings: PathSettings::FILE_PATH
         );
 
@@ -888,7 +1017,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $request->setData('virtualpath', '/Modules/ItemManagement/Articles/' . $request->getData('id'), true);
+        $request->setData('virtualpath', '/Modules/ItemManagement/Items/' . $request->getData('id'), true);
         $this->app->moduleManager->get('Editor')->apiEditorCreate($request, $response, $data);
 
         if ($response->header->status !== RequestStatusCode::R_200) {

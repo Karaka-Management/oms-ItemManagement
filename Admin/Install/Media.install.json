@@ -9,7 +9,7 @@
     {
         "type": "collection",
         "create_directory": true,
-        "name": "Articles",
+        "name": "Items",
         "virtualPath": "/Modules/ItemManagement",
         "user": 1
     },
