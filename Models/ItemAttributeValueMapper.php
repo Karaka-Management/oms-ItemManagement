@@ -73,5 +73,5 @@ final class ItemAttributeValueMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='itemmgmt_attr_value_id';
+    public const PRIMARYFIELD = 'itemmgmt_attr_value_id';
 }

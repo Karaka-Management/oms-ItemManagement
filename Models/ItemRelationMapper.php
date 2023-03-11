@@ -66,5 +66,5 @@ final class ItemRelationMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='itemmgmt_item_relation_id';
+    public const PRIMARYFIELD = 'itemmgmt_item_relation_id';
 }

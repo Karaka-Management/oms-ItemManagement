@@ -210,22 +210,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementSalesList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
-
-        /** @var \Modules\ItemManagement\Models\Item[] $items */
-        $items = ItemMapper::getAll()
-            ->with('l11n')
-            ->with('l11n/type')
-            ->where('l11n/language', $response->getLanguage())
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->limit(25)
-            ->execute();
-
-        $view->addData('items', $items);
-
-        return $view;
+        return $this->viewItemManagementItemList($request, $response, $data);
     }
 
     /**
@@ -242,21 +227,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementPurchaseList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/purchase-item-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
-
-        $items = ItemMapper::getAll()
-            ->with('l11n')
-            ->with('l11n/type')
-            ->where('l11n/language', $response->getLanguage())
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->limit(25)
-            ->execute();
-
-        $view->addData('items', $items);
-
-        return $view;
+        return $this->viewItemManagementItemList($request, $response, $data);
     }
 
     /**
@@ -273,14 +244,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementWarehousingList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/stock-item-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response));
-
-        $items = ItemMapper::getAll()->execute();
-        $view->addData('items', $items);
-
-        return $view;
+        return $this->viewItemManagementItemList($request, $response, $data);
     }
 
     /**
@@ -453,82 +417,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
     {
-        $head = $response->get('Content')->getData('head');
-        $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
-        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/Chartjs/chart.js');
-        $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js', ['type' => 'module']);
-
-        $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
-
-        /** @var \Modules\ItemManagement\Models\Item $item */
-        $item = ItemMapper::get()
-            ->with('l11n')
-            ->with('l11n/type')
-            ->with('files')
-            ->with('notes')
-            ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->limit(5, 'files')->sort('files/id', OrderType::DESC) // @todo: limit not working!!!
-            ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
-            ->execute();
-
-        $view->addData('item', $item);
-
-        /** @var \Model\Setting $settings */
-        $settings = $this->app->appSettings->get(null, [
-            SettingsEnum::DEFAULT_LOCALIZATION,
-        ]);
-
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings->getId())->execute());
-
-        // stats
-        if ($this->app->moduleManager->isActive('Billing')) {
-            $ytd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $mtd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
-            $avg = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
-
-            $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
-
-            $newestInvoices = SalesBillMapper::getAll()
-                ->with('type')
-                ->where('type/transferType', BillTransferType::SALES)
-                ->sort('id', OrderType::DESC)
-                ->limit(5)
-                ->execute();
-
-            $topCustomers      = [];
-            $allInvoices       = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
-        } else {
-            $ytd               = new Money();
-            $mtd               = new Money();
-            $avg               = new Money();
-            $lastOrder         = null;
-            $newestInvoices    = [];
-            $allInvoices       = [];
-            $topCustomers      = [];
-            $regionSales       = [];
-            $countrySales      = [];
-            $monthlySalesCosts = [];
-        }
-
-        $view->addData('ytd', $ytd);
-        $view->addData('mtd', $mtd);
-        $view->addData('avg', $avg);
-        $view->addData('lastOrder', $lastOrder);
-        $view->addData('newestInvoices', $newestInvoices);
-        $view->addData('allInvoices', $allInvoices);
-        $view->addData('topCustomers', $topCustomers);
-        $view->addData('regionSales', $regionSales);
-        $view->addData('countrySales', $countrySales);
-        $view->addData('monthlySalesCosts', $monthlySalesCosts);
-
-        return $view;
+        return $this->viewItemManagementItemItem($request, $response, $data);
     }
 
     /**
@@ -545,11 +434,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementPurchaseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = $this->viewItemManagementSalesItem($request, $response, $data);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
-        $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
-
-        return $view;
+        return $this->viewItemManagementItemItem($request, $response, $data);
     }
 
     /**
@@ -566,11 +451,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementWarehouseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $view = $this->viewItemManagementSalesItem($request, $response, $data);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/sales-item-profile');
-        $view->setData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
-
-        return $view;
+        return $this->viewItemManagementItemItem($request, $response, $data);
     }
 
     /**

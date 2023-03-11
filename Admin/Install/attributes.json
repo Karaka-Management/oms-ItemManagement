@@ -1,6 +1,6 @@
 [
     {
-        "name": "shop",
+        "name": "shop_item",
         "l11n": {
             "en": "Shop item",
             "de": "Shop Artikel"
@@ -58,6 +58,19 @@
                 "value": 1
             }
         ]
+    },
+    {
+        "name": "shop_external_link",
+        "l11n": {
+            "en": "External shop link",
+            "de": "Externer Shop Link"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
     },
     {
         "name": "segment",
@@ -150,7 +163,7 @@
             "en": "Bill fees",
             "de": "Sonderkosten"
         },
-        "value_type": 2,
+        "value_type": 1,
         "is_custom_allowed": true,
         "validation_pattern": "",
         "is_required": false,
@@ -162,6 +175,38 @@
             {
                 "value": 1
             }
+        ]
+    },
+    {
+        "name": "sales_tax_code",
+        "l11n": {
+            "en": "Sales tax code",
+            "de": "USt. code"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            { "value": "SOFTWARE" },
+            { "value": "SERVICE" }
+        ]
+    },
+    {
+        "name": "purchase_tax_code",
+        "l11n": {
+            "en": "Purchse tax code",
+            "de": "VSt. code"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            { "value": "SOFTWARE" },
+            { "value": "SERVICE" }
         ]
     },
     {
@@ -422,6 +467,71 @@
             "de": "Dual use"
         },
         "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "download_link",
+        "l11n": {
+            "en": "Download link",
+            "de": "Download Link"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "demo_link",
+        "l11n": {
+            "en": "Demo link",
+            "de": "Demo Link"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "one_click_pay_cc",
+        "l11n": {
+            "en": "One Click CC payment link",
+            "de": "One Click CC Beyahllink"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "one_click_pay_cc_id",
+        "l11n": {
+            "en": "One Click CC payment ID",
+            "de": "One Click CC Beyahl ID"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "one_click_pay_paypal",
+        "l11n": {
+            "en": "One Click Paypal payment link",
+            "de": "One Click Paypal Beyahllink"
+        },
+        "value_type": 2,
         "is_custom_allowed": true,
         "validation_pattern": "",
         "is_required": false,

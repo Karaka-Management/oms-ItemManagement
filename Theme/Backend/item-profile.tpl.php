@@ -186,7 +186,7 @@ echo $this->getData('nav')->render();
 
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
-                                <div class="portlet-head"><?= $this->getHtml('Documents'); ?></div>
+                                <div class="portlet-head"><?= $this->getHtml('Files'); ?></div>
                                 <div class="slider">
                                 <table id="iFilesItemList" class="default">
                                     <thead>

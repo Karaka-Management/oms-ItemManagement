@@ -117,6 +117,17 @@ class ItemAttributeType implements \JsonSerializable
         return $this->id;
     }
 
+    public function getDefaultByValue(mixed $value) : ItemAttributeValue
+    {
+        foreach ($this->defaults as $default) {
+            if ($default->getValue() === $value) {
+                return $default;
+            }
+        }
+
+        return new NullItemAttributeValue();
+    }
+
     /**
      * Set l11n
      *

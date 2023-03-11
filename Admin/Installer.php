@@ -380,8 +380,8 @@ final class Installer extends InstallerAbstract
                 $request->header->account = 1;
                 $request->setData('value', $value['value'] ?? '');
                 $request->setData('unit', $value['unit'] ?? '');
-                $request->setData('default', isset($attribute['values']) && !empty($attribute['values']));
-                $request->setData('attributetype', $itemAttrType[$attribute['name']]['id']);
+                $request->setData('default', true); // always true since all defined values are possible default values
+                $request->setData('type', $itemAttrType[$attribute['name']]['id']);
 
                 if (isset($value['l11n']) && !empty($value['l11n'])) {
                     $request->setData('title', \reset($value['l11n']));

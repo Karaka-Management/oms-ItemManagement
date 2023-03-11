@@ -34,6 +34,7 @@ use Modules\ItemManagement\Models\ItemPrice;
 use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
+use Modules\ItemManagement\Models\ItemStatus;
 use Modules\ItemManagement\Models\NullItemAttributeType;
 use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
@@ -46,12 +47,16 @@ use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\Money;
+use phpOMS\Message\Http\HttpRequest;
+use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\Module\NullModule;
 use phpOMS\System\MimeType;
+use phpOMS\Uri\HttpUri;
 
 /**
  * ItemManagement class.
@@ -122,6 +127,21 @@ final class ApiController extends Controller
     }
 
     /**
+     * Create media directory path
+     *
+     * @param Item $item Item
+     *
+     * @return string
+     *
+     * @since 1.0.0
+     */
+    private function createItemDir(Item $item) : string
+    {
+        return '/Modules/ItemManagement/Item/'
+            . $item->getId();
+    }
+
+    /**
      * Api method to create item
      *
      * @param RequestAbstract  $request  Request
@@ -149,7 +169,23 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
         $this->app->dbPool->get()->con->commit();
 
+        if ($this->app->moduleManager->isActive('Billing')) {
+            $billing = $this->app->moduleManager->get('Billing');
+
+            $internalRequest = new HttpRequest(new HttpUri(''));
+            $internalResponse = new HttpResponse();
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->setData('name', 'base_price');
+            $internalRequest->setData('item', $item->getId());
+            $internalRequest->setData('price', $request->getData('salesprice', 'int') ?? 0);
+
+            $billing->apiPriceCreate($internalRequest, $internalResponse);
+        }
+
         $this->createMediaDirForItem($item->number, $request->header->account);
+
+        $path = $this->createItemDir($item);
 
         $uploadedFiles = $request->getFile('item_profile_image');
         if (!empty($uploadedFiles)) {
@@ -159,8 +195,8 @@ final class ApiController extends Controller
                 fileNames: [],
                 files: $uploadedFiles,
                 account: $request->header->account,
-                basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Items/' . $item->number,
-                virtualPath: '/Modules/ItemManagement/Items/' . $item->number,
+                basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
+                virtualPath: $path,
                 pathSettings: PathSettings::FILE_PATH
             );
 
@@ -235,6 +271,7 @@ final class ApiController extends Controller
         $item->info          = (string) ($request->getData('info') ?? '');
         $item->parent        = $request->getData('parent', 'int');
         $item->unit          = $request->getData('unit', 'int');
+        $item->setStatus((int) ($request->getData('status') ?? ItemStatus::ACTIVE));
 
         return $item;
     }
@@ -364,6 +401,7 @@ final class ApiController extends Controller
 
         $attribute = $this->createItemAttributeFromRequest($request);
         $this->createModel($request->header->account, $attribute, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
+
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully created', $attribute);
     }
 
@@ -388,7 +426,7 @@ final class ApiController extends Controller
             $newRequest = clone $request;
             $newRequest->setData('value', $request->getData('custom'), true);
 
-            $value = $this->createItemAttributeValueFromRequest($request);
+            $value = $this->createItemAttributeValueFromRequest($newRequest);
 
             $attribute->value = $value;
         }
@@ -442,7 +480,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createItemAttributeTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
 
     /**
@@ -667,7 +705,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createItemAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type localization', 'Attribute type localization successfully created', $attrL11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
 
     /**
@@ -736,7 +774,7 @@ final class ApiController extends Controller
 
         $itemL11nType = $this->createItemL11nTypeFromRequest($request);
         $this->createModel($request->header->account, $itemL11nType, ItemL11nTypeMapper::class, 'item_l11n_type', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item localization type', 'Item localization type successfully created', $itemL11nType);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization type', 'Localization type successfully created', $itemL11nType);
     }
 
     /**
@@ -863,7 +901,7 @@ final class ApiController extends Controller
 
         $itemL11n = $this->createItemL11nFromRequest($request);
         $this->createModel($request->header->account, $itemL11n, ItemL11nMapper::class, 'item_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item localization', 'Item localization successfully created', $itemL11n);
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $itemL11n);
     }
 
     /**
@@ -941,13 +979,19 @@ final class ApiController extends Controller
             return;
         }
 
+        $item = ItemMapper::get()
+            ->where('id', (int) $request->getData('item'))
+            ->execute();
+
+        $path = $this->createItemDir($item);
+
         $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
             names: $request->getDataList('names'),
             fileNames: $request->getDataList('filenames'),
             files: $uploadedFiles,
             account: $request->header->account,
-            basePath: __DIR__ . '/../../../Modules/Media/Files/Modules/ItemManagement/Items/' . ($request->getData('item') ?? '0'),
-            virtualPath: '/Modules/ItemManagement/Items/' . ($request->getData('item') ?? '0'),
+            basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
+            virtualPath: $path,
             pathSettings: PathSettings::FILE_PATH
         );
 

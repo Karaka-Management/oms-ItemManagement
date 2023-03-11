@@ -148,7 +148,9 @@ echo $this->getData('nav')->render();
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
                                             <td><?= $item->purchasePrice->getCurrency(); ?>
                                         <tr><td><?= $this->getHtml('Margin'); ?>:
-                                            <td><?= \round(($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100, 2); ?> %
+                                            <td><?= $item->salesPrice->getInt() === 0
+                                                ? '0.00'
+                                                : \round(($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100, 2); ?> %
                                         <tr><td><?= $this->getHtml('AvgPrice'); ?>:
                                             <td><?= $this->getData('avg')->getCurrency(); ?>
                                     </table>

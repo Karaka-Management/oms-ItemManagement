@@ -365,6 +365,27 @@ class Item implements \JsonSerializable
     }
 
     /**
+     * Get all media files by type name
+     *
+     * @param string $type Media type
+     *
+     * @return Media[]
+     *
+     * @since 1.0.0
+     */
+    public function getFilesByTypeName(string $type) : array
+    {
+        $files = [];
+        foreach ($this->files as $file) {
+            if ($file->hasMediaTypeName($type)) {
+                $files[] = $file;
+            }
+        }
+
+        return $files;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function toArray() : array

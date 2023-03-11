@@ -52,5 +52,5 @@ final class ItemL11nTypeMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='itemmgmt_item_l11n_type_id';
+    public const PRIMARYFIELD = 'itemmgmt_item_l11n_type_id';
 }

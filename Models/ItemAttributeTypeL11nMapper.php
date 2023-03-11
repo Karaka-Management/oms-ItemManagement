@@ -54,7 +54,7 @@ final class ItemAttributeTypeL11nMapper extends DataMapperFactory
      * @var string
      * @since 1.0.0
      */
-    public const PRIMARYFIELD ='itemmgmt_attr_type_l11n_id';
+    public const PRIMARYFIELD = 'itemmgmt_attr_type_l11n_id';
 
     /**
      * Model to use by the mapper.
