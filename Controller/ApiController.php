@@ -6,7 +6,7 @@
  *
  * @package   Modules\ItemManagement
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -62,7 +62,7 @@ use phpOMS\Uri\HttpUri;
  * ItemManagement class.
  *
  * @package Modules\ItemManagement
- * @license OMS License 1.0
+ * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
@@ -87,7 +87,7 @@ final class ApiController extends Controller
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('language', $request->getLanguage())
-            ->where('description', '%' . ($request->getData('search') ?? '') . '%', 'LIKE')
+            ->where('description', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
             ->execute();
 
         $items = [];
@@ -172,13 +172,13 @@ final class ApiController extends Controller
         if ($this->app->moduleManager->isActive('Billing')) {
             $billing = $this->app->moduleManager->get('Billing');
 
-            $internalRequest = new HttpRequest(new HttpUri(''));
+            $internalRequest  = new HttpRequest(new HttpUri(''));
             $internalResponse = new HttpResponse();
 
             $internalRequest->header->account = $request->header->account;
             $internalRequest->setData('name', 'base_price');
             $internalRequest->setData('item', $item->getId());
-            $internalRequest->setData('price', $request->getData('salesprice', 'int') ?? 0);
+            $internalRequest->setData('price', $request->getDataInt('salesprice') ?? 0);
 
             $billing->apiPriceCreate($internalRequest, $internalResponse);
         }
@@ -265,13 +265,13 @@ final class ApiController extends Controller
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
         $item                = new Item();
-        $item->number        = (string) ($request->getData('number') ?? '');
-        $item->salesPrice    = new Money($request->getData('salesprice', 'int') ?? 0);
-        $item->purchasePrice = new Money($request->getData('purchaseprice', 'int') ?? 0);
-        $item->info          = (string) ($request->getData('info') ?? '');
-        $item->parent        = $request->getData('parent', 'int');
-        $item->unit          = $request->getData('unit', 'int');
-        $item->setStatus((int) ($request->getData('status') ?? ItemStatus::ACTIVE));
+        $item->number        = $request->getDataString('number') ?? '';
+        $item->salesPrice    = new Money($request->getDataInt('salesprice') ?? 0);
+        $item->purchasePrice = new Money($request->getDataInt('purchaseprice') ?? 0);
+        $item->info          = $request->getDataString('info') ?? '';
+        $item->parent        = $request->getDataInt('parent');
+        $item->unit          = $request->getDataInt('unit');
+        $item->setStatus($request->getDataInt('status') ?? ItemStatus::ACTIVE);
 
         return $item;
     }
@@ -334,24 +334,17 @@ final class ApiController extends Controller
     private function createItemPriceFromRequest(RequestAbstract $request) : ItemPrice
     {
         $item                       = new ItemPrice();
-        $item->currency             = (string) ($request->getData('currency') ?? '');
-        $item->price                = new Money($request->getData('price', 'int') ?? 0);
-        $item->minQuantity          = (int) ($request->getData('minquantity') ?? 0);
-        $item->relativeDiscount     = (int) ($request->getData('relativediscount') ?? 0);
-        $item->absoluteDiscount     = (int) ($request->getData('absolutediscount') ?? 0);
-        $item->relativeUnitDiscount = (int) ($request->getData('relativeunitdiscount') ?? 0);
-        $item->absoluteUnitDiscount = (int) ($request->getData('absoluteunitdiscount') ?? 0);
-        $item->promocode            = (string) ($request->getData('promocode') ?? '');
-
-        $item->setStatus((int) ($request->getData('status') ?? ItemPriceStatus::ACTIVE));
-
-        $item->start = ($request->getData('start') === null)
-            ? null
-            : new \DateTime($request->getData('start'));
-
-        $item->end = ($request->getData('end') === null)
-            ? null
-            : new \DateTime($request->getData('end'));
+        $item->currency             = $request->getDataString('currency') ?? '';
+        $item->price                = new Money($request->getDataInt('price') ?? 0);
+        $item->minQuantity          = $request->getDataInt('minquantity') ?? 0;
+        $item->relativeDiscount     = $request->getDataInt('relativediscount') ?? 0;
+        $item->absoluteDiscount     = $request->getDataInt('absolutediscount') ?? 0;
+        $item->relativeUnitDiscount = $request->getDataInt('relativeunitdiscount') ?? 0;
+        $item->absoluteUnitDiscount = $request->getDataInt('absoluteunitdiscount') ?? 0;
+        $item->promocode            = $request->getDataString('promocode') ?? '';
+        $item->start                = $request->getDataDateTime('start');
+        $item->end                  = $request->getDataDateTime('end');
+        $item->setStatus($request->getDataInt('status') ?? ItemPriceStatus::ACTIVE);
 
         return $item;
     }
@@ -420,7 +413,7 @@ final class ApiController extends Controller
         $attribute->item = (int) $request->getData('item');
         $attribute->type = new NullItemAttributeType((int) $request->getData('type'));
 
-        if ($request->getData('value') !== null) {
+        if ($request->hasData('value')) {
             $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
         } else {
             $newRequest = clone $request;
@@ -495,11 +488,11 @@ final class ApiController extends Controller
     private function createItemAttributeTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n      = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('type') ?? 0);
-        $attrL11n->setLanguage((string) (
-            $request->getData('language') ?? $request->getLanguage()
-        ));
-        $attrL11n->content = (string) ($request->getData('title') ?? '');
+        $attrL11n->ref = $request->getDataInt('type') ?? 0;
+        $attrL11n->setLanguage(
+            $request->getDataString('language') ?? $request->getLanguage()
+        );
+        $attrL11n->content = $request->getDataString('title') ?? '';
 
         return $attrL11n;
     }
@@ -564,13 +557,13 @@ final class ApiController extends Controller
      */
     private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
     {
-        $attrType                    = new ItemAttributeType($request->getData('name') ?? '');
-        $attrType->datatype          = (int) ($request->getData('datatype') ?? 0);
-        $attrType->custom            = (bool) ($request->getData('custom') ?? false);
+        $attrType                    = new ItemAttributeType($request->getDataString('name') ?? '');
+        $attrType->datatype          = $request->getDataInt('datatype') ?? 0;
+        $attrType->custom            = $request->getDataBool('custom') ?? false;
         $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
-        $attrType->validationPattern = (string) ($request->getData('validation_pattern') ?? '');
-        $attrType->setL11n((string) ($request->getData('title') ?? ''), $request->getData('language') ?? ISO639x1Enum::_EN);
-        $attrType->setFields((int) ($request->getData('fields') ?? 0));
+        $attrType->validationPattern = $request->getDataString('validation_pattern') ?? '';
+        $attrType->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+        $attrType->setFields($request->getDataInt('fields') ?? 0);
 
         return $attrType;
     }
@@ -646,15 +639,15 @@ final class ApiController extends Controller
     {
         /** @var ItemAttributeType $type */
         $type = ItemAttributeTypeMapper::get()
-            ->where('id', (int) ($request->getData('type') ?? 0))
+            ->where('id', $request->getDataInt('type') ?? 0)
             ->execute();
 
         $attrValue            = new ItemAttributeValue();
-        $attrValue->isDefault = (bool) ($request->getData('default') ?? false);
+        $attrValue->isDefault = $request->getDataBool('default') ?? false;
         $attrValue->setValue($request->getData('value'), $type->datatype);
 
-        if ($request->getData('title') !== null) {
-            $attrValue->setL11n($request->getData('title'), $request->getData('language') ?? ISO639x1Enum::_EN);
+        if ($request->hasData('title')) {
+            $attrValue->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
         }
 
         return $attrValue;
@@ -720,11 +713,11 @@ final class ApiController extends Controller
     private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n      = new BaseStringL11n();
-        $attrL11n->ref = (int) ($request->getData('value') ?? 0);
-        $attrL11n->setLanguage((string) (
-            $request->getData('language') ?? $request->getLanguage()
-        ));
-        $attrL11n->content = (string) ($request->getData('title') ?? '');
+        $attrL11n->ref = $request->getDataInt('value') ?? 0;
+        $attrL11n->setLanguage(
+            $request->getDataString('language') ?? $request->getLanguage()
+        );
+        $attrL11n->content = $request->getDataString('title') ?? '';
 
         return $attrL11n;
     }
@@ -789,7 +782,7 @@ final class ApiController extends Controller
     private function createItemL11nTypeFromRequest(RequestAbstract $request) : ItemL11nType
     {
         $itemL11nType             = new ItemL11nType();
-        $itemL11nType->title      = (string) ($request->getData('title') ?? '');
+        $itemL11nType->title      = $request->getDataString('title') ?? '';
         $itemL11nType->isRequired = (bool) ($request->getData('is_required') ?? false);
 
         return $itemL11nType;
@@ -853,7 +846,7 @@ final class ApiController extends Controller
     private function createItemRelationTypeFromRequest(RequestAbstract $request) : ItemRelationType
     {
         $itemRelationType        = new ItemRelationType();
-        $itemRelationType->title = (string) ($request->getData('title') ?? '');
+        $itemRelationType->title = $request->getDataString('title') ?? '';
 
         return $itemRelationType;
     }
@@ -916,12 +909,12 @@ final class ApiController extends Controller
     private function createItemL11nFromRequest(RequestAbstract $request) : ItemL11n
     {
         $itemL11n       = new ItemL11n();
-        $itemL11n->item = (int) ($request->getData('item') ?? 0);
-        $itemL11n->type = new NullItemL11nType((int) ($request->getData('type') ?? 0));
-        $itemL11n->setLanguage((string) (
-            $request->getData('language') ?? $request->getLanguage()
-        ));
-        $itemL11n->description = (string) ($request->getData('description') ?? '');
+        $itemL11n->item = $request->getDataInt('item') ?? 0;
+        $itemL11n->type = new NullItemL11nType($request->getDataInt('type') ?? 0);
+        $itemL11n->setLanguage(
+            $request->getDataString('language') ?? $request->getLanguage()
+        );
+        $itemL11n->description = $request->getDataString('description') ?? '';
 
         return $itemL11n;
     }
@@ -979,6 +972,7 @@ final class ApiController extends Controller
             return;
         }
 
+        /** @var \Modules\ItemManagement\Models\Item $item */
         $item = ItemMapper::get()
             ->where('id', (int) $request->getData('item'))
             ->execute();
@@ -1000,7 +994,7 @@ final class ApiController extends Controller
                 $this->createModelRelation(
                     $request->header->account,
                     $file->getId(),
-                    $request->getData('type', 'int'),
+                    $request->getDataInt('type'),
                     MediaMapper::class,
                     'types',
                     '',

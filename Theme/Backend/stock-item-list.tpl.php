@@ -6,7 +6,7 @@
  *
  * @package   Modules\ItemManagement
  * @copyright Dennis Eichhorn
- * @license   OMS License 1.0
+ * @license   OMS License 2.0
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -117,7 +117,7 @@ echo $this->getData('nav')->render(); ?>
 
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/lang}/{/app}/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/base}/item/profile?{?}&id=' . $value->getId());
                 $image       = $value->getFileByTypeName('item_profile_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
