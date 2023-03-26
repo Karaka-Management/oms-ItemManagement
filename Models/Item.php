@@ -271,11 +271,11 @@ class Item implements \JsonSerializable
      *
      * @param string $attrName Attribute name
      *
-     * @return null|ItemAttributeValue
+     * @return null|ItemAttribute
      *
      * @since 1.0.0
      */
-    public function getAttribute(string $attrName) : ?ItemAttributeValue
+    public function getAttribute(string $attrName) : ?ItemAttribute
     {
         foreach ($this->attributes as $attribute) {
             if ($attribute->type->name === $attrName) {
