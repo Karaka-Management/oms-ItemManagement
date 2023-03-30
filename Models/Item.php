@@ -279,7 +279,7 @@ class Item implements \JsonSerializable
     {
         foreach ($this->attributes as $attribute) {
             if ($attribute->type->name === $attrName) {
-                return $attribute->value;
+                return $attribute;
             }
         }
 
