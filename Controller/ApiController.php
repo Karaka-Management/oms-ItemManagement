@@ -288,7 +288,7 @@ final class ApiController extends Controller
     private function validateItemCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['number'] = empty($request->getData('number')))) {
+        if (($val['number'] = !$request->hasData('number'))) {
             return $val;
         }
 
@@ -361,7 +361,7 @@ final class ApiController extends Controller
     private function validateItemPriceCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['price'] = empty($request->getData('price')))
+        if (($val['price'] = !$request->hasData('price'))
             || ($val['currency'] = !ISO4217CharEnum::isValidValue($request->getData('currency')))
         ) {
             return $val;
@@ -439,9 +439,9 @@ final class ApiController extends Controller
     private function validateItemAttributeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['type'] = empty($request->getData('type')))
-            || ($val['value'] = (empty($request->getData('value')) && empty($request->getData('custom'))))
-            || ($val['item'] = empty($request->getData('item')))
+        if (($val['type'] = !$request->hasData('type'))
+            || ($val['value'] = (!$request->hasData('value') && !$request->hasData('custom')))
+            || ($val['item'] = !$request->hasData('item'))
         ) {
             return $val;
         }
@@ -509,8 +509,8 @@ final class ApiController extends Controller
     private function validateItemAttributeTypeL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['type'] = empty($request->getData('type')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['type'] = !$request->hasData('type'))
         ) {
             return $val;
         }
@@ -580,8 +580,8 @@ final class ApiController extends Controller
     private function validateItemAttributeTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['name'] = empty($request->getData('name')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['name'] = !$request->hasData('name'))
         ) {
             return $val;
         }
@@ -665,8 +665,8 @@ final class ApiController extends Controller
     private function validateItemAttributeValueCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['type'] = empty($request->getData('type')))
-            || ($val['value'] = empty($request->getData('value')))
+        if (($val['type'] = !$request->hasData('type'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
@@ -734,8 +734,8 @@ final class ApiController extends Controller
     private function validateItemAttributeValueL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))
-            || ($val['value'] = empty($request->getData('value')))
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
@@ -800,7 +800,7 @@ final class ApiController extends Controller
     private function validateItemL11nTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))) {
+        if (($val['title'] = !$request->hasData('title'))) {
             return $val;
         }
 
@@ -863,7 +863,7 @@ final class ApiController extends Controller
     private function validateItemRelationTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = empty($request->getData('title')))) {
+        if (($val['title'] = !$request->hasData('title'))) {
             return $val;
         }
 
@@ -931,9 +931,9 @@ final class ApiController extends Controller
     private function validateItemL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['item'] = empty($request->getData('item')))
-            || ($val['type'] = empty($request->getData('type')))
-            || ($val['description'] = empty($request->getData('description')))
+        if (($val['item'] = !$request->hasData('item'))
+            || ($val['type'] = !$request->hasData('type'))
+            || ($val['description'] = !$request->hasData('description'))
         ) {
             return $val;
         }
@@ -1025,7 +1025,7 @@ final class ApiController extends Controller
     private function validateFileCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['item'] = empty($request->getData('item')))
+        if (($val['item'] = !$request->hasData('item'))
         ) {
             return $val;
         }
@@ -1083,7 +1083,7 @@ final class ApiController extends Controller
     private function validateNoteCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = empty($request->getData('id')))
+        if (($val['id'] = !$request->hasData('id'))
         ) {
             return $val;
         }

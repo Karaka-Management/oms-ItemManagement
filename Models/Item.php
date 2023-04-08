@@ -144,6 +144,12 @@ class Item implements \JsonSerializable
      */
     public function addL11n(ItemL11n $l11n) : void
     {
+        foreach ($this->l11n as $l11n) {
+            if ($l11n->type->title === $l11n->type->title) {
+                return;
+            }
+        }
+
         $this->l11n[] = $l11n;
     }
 

@@ -59,8 +59,20 @@ class ItemAttributeType implements \JsonSerializable
      */
     public bool $custom = false;
 
+    /**
+     * Validation pattern for the value
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $validationPattern = '';
 
+    /**
+     * Is the attribute required
+     *
+     * @var bool
+     * @since 1.0.0
+     */
     public bool $isRequired = false;
 
     /**
@@ -74,7 +86,8 @@ class ItemAttributeType implements \JsonSerializable
     /**
      * Localization
      *
-     * @var BaseStringL11n
+     * @var string|BaseStringL11n
+     * @since 1.0.0
      */
     private string | BaseStringL11n $l11n = '';
 
@@ -82,6 +95,7 @@ class ItemAttributeType implements \JsonSerializable
      * Possible default attribute values
      *
      * @var array
+     * @since 1.0.0
      */
     private array $defaults = [];
 
@@ -117,6 +131,15 @@ class ItemAttributeType implements \JsonSerializable
         return $this->id;
     }
 
+    /**
+     * Get default value by value
+     *
+     * @param mixed $value Value
+     *
+     * @return ItemAttributeValue
+     *
+     * @since 1.0.0
+     */
     public function getDefaultByValue(mixed $value) : ItemAttributeValue
     {
         foreach ($this->defaults as $default) {
