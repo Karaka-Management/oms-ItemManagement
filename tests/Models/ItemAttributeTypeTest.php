@@ -14,26 +14,26 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
-use Modules\ItemManagement\Models\ItemAttributeType;
+use Modules\Attribute\Models\AttributeType;
 use phpOMS\Localization\BaseStringL11n;
 
 /**
  * @internal
  */
-final class ItemAttributeTypeTest extends \PHPUnit\Framework\TestCase
+final class AttributeTypeTest extends \PHPUnit\Framework\TestCase
 {
-    private ItemAttributeType $attr;
+    private AttributeType $attr;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp() : void
     {
-        $this->attr = new ItemAttributeType();
+        $this->attr = new AttributeType();
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeType
+     * @covers Modules\Attribute\Models\AttributeType
      * @group module
      */
     public function testDefault() : void
@@ -47,7 +47,7 @@ final class ItemAttributeTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeType
+     * @covers Modules\Attribute\Models\AttributeType
      * @group module
      */
     public function testL11nInputOutput() : void
@@ -60,7 +60,7 @@ final class ItemAttributeTypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeType
+     * @covers Modules\Attribute\Models\AttributeType
      * @group module
      */
     public function testSerialize() : void

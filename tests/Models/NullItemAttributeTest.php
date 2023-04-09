@@ -14,29 +14,29 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
-use Modules\ItemManagement\Models\NullItemAttribute;
+use Modules\ItemManagement\Models\NullAttribute;
 
 /**
  * @internal
  */
-final class NullItemAttributeTest extends \PHPUnit\Framework\TestCase
+final class NullAttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\ItemManagement\Models\NullItemAttribute
+     * @covers Modules\ItemManagement\Models\NullAttribute
      * @group framework
      */
     public function testNull() : void
     {
-        self::assertInstanceOf('\Modules\ItemManagement\Models\ItemAttribute', new NullItemAttribute());
+        self::assertInstanceOf('\Modules\Attribute\Models\Attribute', new NullAttribute());
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\NullItemAttribute
+     * @covers Modules\ItemManagement\Models\NullAttribute
      * @group framework
      */
     public function testId() : void
     {
-        $null = new NullItemAttribute(2);
+        $null = new NullAttribute(2);
         self::assertEquals(2, $null->getId());
     }
 }

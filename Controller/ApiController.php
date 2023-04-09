@@ -15,14 +15,15 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Modules\Admin\Models\NullAccount;
-use Modules\Billing\Models\PricingMapper;
+use Modules\Attribute\Models\Attribute;
+use Modules\Attribute\Models\AttributeType;
+use Modules\Attribute\Models\AttributeValue;
+use Modules\Attribute\Models\NullAttributeType;
+use Modules\Attribute\Models\NullAttributeValue;
 use Modules\ItemManagement\Models\Item;
-use Modules\ItemManagement\Models\ItemAttribute;
 use Modules\ItemManagement\Models\ItemAttributeMapper;
-use Modules\ItemManagement\Models\ItemAttributeType;
 use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
-use Modules\ItemManagement\Models\ItemAttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11n;
@@ -35,8 +36,6 @@ use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemStatus;
-use Modules\ItemManagement\Models\NullItemAttributeType;
-use Modules\ItemManagement\Models\NullItemAttributeValue;
 use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
@@ -54,18 +53,17 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
-use phpOMS\Module\NullModule;
 use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
 
 /**
- * ItemManagement class.
+ Item* ItemManagement class.
  *
  * @package Modules\ItemManagement
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
- */
+ Item*/
 final class ApiController extends Controller
 {
     /**
@@ -83,6 +81,7 @@ final class ApiController extends Controller
      */
     public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
+        /** @var \Modules\ItemManagement\Models\ItemL11n[] $l11n */
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
@@ -95,18 +94,19 @@ final class ApiController extends Controller
             $items[] = $item->item;
         }
 
+        /** @var \Modules\ItemManagement\Models\Item[] $itemList */
+        $itemList = ItemMapper::getAll()
+            ->with('l11n')
+            ->with('l11n/type')
+            ->where('id', $items, 'IN')
+            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->where('l11n/language', $request->getLanguage())
+            ->execute();
+
         $response->header->set('Content-Type', MimeType::M_JSON, true);
         $response->set(
             $request->uri->__toString(),
-            \array_values(
-                ItemMapper::getAll()
-                    ->with('l11n')
-                    ->with('l11n/type')
-                    ->where('id', $items, 'IN')
-                    ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-                    ->where('l11n/language', $request->getLanguage())
-                    ->execute()
-            )
+            \array_values($itemList)
         );
 
         /*
@@ -201,6 +201,7 @@ final class ApiController extends Controller
             );
 
             // create type / media relation
+            /** @var \Modules\Media\Models\MediaType $profileImageType */
             $profileImageType = MediaTypeMapper::get()
                 ->where('name', 'item_profile_image')
                 ->execute();
@@ -403,23 +404,23 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemAttribute
+     * @return Attribute
      *
      * @since 1.0.0
      */
-    private function createItemAttributeFromRequest(RequestAbstract $request) : ItemAttribute
+    private function createItemAttributeFromRequest(RequestAbstract $request) : Attribute
     {
-        $attribute       = new ItemAttribute();
-        $attribute->item = (int) $request->getData('item');
-        $attribute->type = new NullItemAttributeType((int) $request->getData('type'));
+        $attribute       = new Attribute();
+        $attribute->ref  = (int) $request->getData('item');
+        $attribute->type = new NullAttributeType((int) $request->getData('type'));
 
         if ($request->hasData('value')) {
-            $attribute->value = new NullItemAttributeValue((int) $request->getData('value'));
+            $attribute->value = new NullAttributeValue((int) $request->getData('value'));
         } else {
             $newRequest = clone $request;
             $newRequest->setData('value', $request->getData('custom'), true);
 
-            $value = $this->createItemAttributeValueFromRequest($newRequest);
+            $value = $this->createAttributeValueFromRequest($newRequest);
 
             $attribute->value = $value;
         }
@@ -540,7 +541,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $attrType = $this->createItemAttributeTypeFromRequest($request);
+        $attrType = $this->createAttributeTypeFromRequest($request);
         $this->createModel($request->header->account, $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
 
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
@@ -551,13 +552,13 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemAttributeType
+     * @return AttributeType
      *
      * @since 1.0.0
      */
-    private function createItemAttributeTypeFromRequest(RequestAbstract $request) : ItemAttributeType
+    private function createAttributeTypeFromRequest(RequestAbstract $request) : AttributeType
     {
-        $attrType                    = new ItemAttributeType($request->getDataString('name') ?? '');
+        $attrType                    = new AttributeType($request->getDataString('name') ?? '');
         $attrType->datatype          = $request->getDataInt('datatype') ?? 0;
         $attrType->custom            = $request->getDataBool('custom') ?? false;
         $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
@@ -611,7 +612,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $attrValue = $this->createItemAttributeValueFromRequest($request);
+        $attrValue = $this->createAttributeValueFromRequest($request);
         $this->createModel($request->header->account, $attrValue, ItemAttributeValueMapper::class, 'attr_value', $request->getOrigin());
 
         if ($attrValue->isDefault) {
@@ -631,18 +632,18 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemAttributeValue
+     * @return AttributeValue
      *
      * @since 1.0.0
      */
-    private function createItemAttributeValueFromRequest(RequestAbstract $request) : ItemAttributeValue
+    private function createAttributeValueFromRequest(RequestAbstract $request) : AttributeValue
     {
-        /** @var ItemAttributeType $type */
+        /** @var AttributeType $type */
         $type = ItemAttributeTypeMapper::get()
             ->where('id', $request->getDataInt('type') ?? 0)
             ->execute();
 
-        $attrValue            = new ItemAttributeValue();
+        $attrValue            = new AttributeValue();
         $attrValue->isDefault = $request->getDataBool('default') ?? false;
         $attrValue->setValue($request->getData('value'), $type->datatype);
 
@@ -696,7 +697,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $attrL11n = $this->createItemAttributeValueL11nFromRequest($request);
+        $attrL11n = $this->createAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
         $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
@@ -710,7 +711,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function createItemAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
+    private function createAttributeValueL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $attrL11n      = new BaseStringL11n();
         $attrL11n->ref = $request->getDataInt('value') ?? 0;

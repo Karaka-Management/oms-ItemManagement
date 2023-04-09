@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
+use Modules\Attribute\Models\AttributeMapper;
 use Modules\Editor\Models\EditorDocMapper;
 use Modules\Media\Models\MediaMapper;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
@@ -87,7 +88,7 @@ final class ItemMapper extends DataMapperFactory
             'external' => null,
         ],
         'attributes' => [
-            'mapper'   => ItemAttributeMapper::class,
+            'mapper'   => AttributeMapper::class,
             'table'    => 'itemmgmt_item_attr',
             'self'     => 'itemmgmt_item_attr_item',
             'external' => null,

@@ -18,8 +18,8 @@ use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\SalesBillMapper;
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
-use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use Modules\Attribute\Models\AttributeTypeMapper;
+use Modules\Attribute\Models\AttributeValueMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
@@ -61,8 +61,8 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeType[] $attributes */
-        $attributes = ItemAttributeTypeMapper::getAll()
+        /** @var \Modules\Attribute\Models\AttributeType[] $attributes */
+        $attributes = AttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->getLanguage())
             ->execute();
@@ -90,8 +90,8 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeValue[] $attributes */
-        $attributes = ItemAttributeValueMapper::getAll()
+        /** @var \Modules\Attribute\Models\AttributeValue[] $attributes */
+        $attributes = AttributeValueMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->getLanguage())
             ->execute();
@@ -119,8 +119,8 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeType $attribute */
-        $attribute = ItemAttributeTypeMapper::get()
+        /** @var \Modules\Attribute\Models\AttributeType $attribute */
+        $attribute = AttributeTypeMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())
@@ -149,8 +149,8 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeValue $attribute */
-        $attribute = ItemAttributeValueMapper::get()
+        /** @var \Modules\Attribute\Models\AttributeValue $attribute */
+        $attribute = AttributeValueMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())

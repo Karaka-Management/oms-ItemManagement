@@ -22,7 +22,7 @@ use phpOMS\Uri\UriFactory;
 $item = $this->getData('item');
 
 $itemL11n      = $item->getL11ns();
-$itemAttribute = $item->getAttributes();
+$Attribute = $item->getAttributes();
 
 $notes = $item->getNotes();
 $files = $item->getFiles();
@@ -547,7 +547,7 @@ echo $this->getData('nav')->render();
                                     <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
                                 <?php $c = 0;
-                                foreach ($itemAttribute as $key => $value) : ++$c;
+                                foreach ($Attribute as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId()); ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="#"><i class="fa fa-times"></i></a>

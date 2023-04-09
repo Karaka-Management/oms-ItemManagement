@@ -16,7 +16,7 @@ namespace Modules\ItemManagement\tests\Models;
 
 use Modules\Editor\Models\EditorDoc;
 use Modules\ItemManagement\Models\Item;
-use Modules\ItemManagement\Models\ItemAttribute;
+use Modules\Attribute\Models\Attribute;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemStatus;
 use Modules\Media\Models\Media;
@@ -91,7 +91,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testAttributeInputOutput() : void
     {
-        $this->item->addAttribute(new ItemAttribute());
+        $this->item->addAttribute(new Attribute());
         self::assertCount(1, $this->item->getAttributes());
     }
 

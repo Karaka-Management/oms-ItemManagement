@@ -74,7 +74,7 @@ trait ApiControllerAttributeTrait
         $request->setData('title', 'EN:1');
         $request->setData('language', ISO639x1Enum::_EN);
 
-        $this->module->apiItemAttributeTypeCreate($request, $response);
+        $this->module->apiAttributeTypeCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
@@ -92,7 +92,7 @@ trait ApiControllerAttributeTrait
         $request->setData('type', '1');
         $request->setData('language', ISO639x1Enum::_DE);
 
-        $this->module->apiItemAttributeTypeL11nCreate($request, $response);
+        $this->module->apiAttributeTypeL11nCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->getId());
     }
 
@@ -219,7 +219,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeTypeCreate($request, $response);
+        $this->module->apiAttributeTypeCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -235,7 +235,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeTypeL11nCreate($request, $response);
+        $this->module->apiAttributeTypeL11nCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 

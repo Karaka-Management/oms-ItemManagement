@@ -15,25 +15,25 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\tests\Models;
 
 use Modules\ItemManagement\Models\AttributeValueType;
-use Modules\ItemManagement\Models\ItemAttributeValue;
+use Modules\Attribute\Models\AttributeValue;
 
 /**
  * @internal
  */
-final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
+final class AttributeValueTest extends \PHPUnit\Framework\TestCase
 {
-    private ItemAttributeValue $value;
+    private AttributeValue $value;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp() : void
     {
-        $this->value = new ItemAttributeValue();
+        $this->value = new AttributeValue();
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testDefault() : void
@@ -44,7 +44,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testValueIntInputOutput() : void
@@ -54,7 +54,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testValueFloatInputOutput() : void
@@ -64,7 +64,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testValueStringInputOutput() : void
@@ -74,7 +74,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testValueDateInputOutput() : void
@@ -85,7 +85,7 @@ final class ItemAttributeValueTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttributeValue
+     * @covers Modules\Attribute\Models\AttributeValue
      * @group module
      */
     public function testSerialize() : void

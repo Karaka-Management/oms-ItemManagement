@@ -82,7 +82,7 @@ class Item implements \JsonSerializable
     /**
      * Attributes.
      *
-     * @var ItemAttribute[]
+     * @var \Modules\Attribute\Models\Attribute[]
      * @since 1.0.0
      */
     private array $attributes = [];
@@ -226,73 +226,6 @@ class Item implements \JsonSerializable
     }
 
     /**
-     * Add attribute to item
-     *
-     * @param ItemAttribute $attribute Note
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function addAttribute(ItemAttribute $attribute) : void
-    {
-        $this->attributes[] = $attribute;
-    }
-
-    /**
-     * Get attributes
-     *
-     * @return ItemAttribute[]
-     *
-     * @since 1.0.0
-     */
-    public function getAttributes() : array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * Has attribute value
-     *
-     * @param string $attrName  Attribute name
-     * @param mixed  $attrValue Attribute value
-     *
-     * @return bool
-     *
-     * @since 1.0.0
-     */
-    public function hasAttributeValue(string $attrName, mixed $attrValue) : bool
-    {
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->type->name === $attrName && $attribute->value->getValue() === $attrValue) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Get attribute
-     *
-     * @param string $attrName Attribute name
-     *
-     * @return null|ItemAttribute
-     *
-     * @since 1.0.0
-     */
-    public function getAttribute(string $attrName) : ?ItemAttribute
-    {
-        foreach ($this->attributes as $attribute) {
-            if ($attribute->type->name === $attrName) {
-                return $attribute;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Add note to item
      *
      * @param EditorDoc $note Note
@@ -412,4 +345,6 @@ class Item implements \JsonSerializable
     {
         return $this->toArray();
     }
+
+    use \Modules\Attribute\Models\AttributeHolderTrait;
 }

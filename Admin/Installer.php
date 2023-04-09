@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
-use Modules\ItemManagement\Models\ItemAttributeValue;
+use Modules\Attribute\Models\AttributeTypeMapper;
+use Modules\Attribute\Models\AttributeValue;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
@@ -58,8 +58,8 @@ final class Installer extends InstallerAbstract
 
         /** @var array $attributes */
         $attributes = \json_decode($fileContent, true);
-        $attrTypes  = self::createItemAttributeTypes($app, $attributes);
-        $attrValues = self::createItemAttributeValues($app, $attrTypes, $attributes);
+        $attrTypes  = self::createAttributeTypes($app, $attributes);
+        $attrValues = self::createAttributeValues($app, $attrTypes, $attributes);
 
         /* Localizations */
         $fileContent = \file_get_contents(__DIR__ . '/Install/localizations.json');
@@ -109,8 +109,8 @@ final class Installer extends InstallerAbstract
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
         $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeType[] $attributeTypes */
-        $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
+        /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
+        $attributeTypes = AttributeTypeMapper::getAll()->with('defaults')->execute();
 
         /** @var \Modules\ItemManagement\Models\ItemL11nType[] $l11nTypes */
         $l11nTypes = ItemL11nTypeMapper::getAll()->execute();
@@ -187,8 +187,8 @@ final class Installer extends InstallerAbstract
     /**
      * Find attribute IDs by value
      *
-     * @param ItemAttributeValue[] $defaultValues Values to search in
-     * @param mixed                $value         Value to search for
+     * @param AttributeValue[] $defaultValues Values to search in
+     * @param mixed            $value         Value to search for
      *
      * @return int
      *
@@ -299,7 +299,7 @@ final class Installer extends InstallerAbstract
      *
      * @since 1.0.0
      */
-    private static function createItemAttributeTypes(ApplicationAbstract $app, array $attributes) : array
+    private static function createAttributeTypes(ApplicationAbstract $app, array $attributes) : array
     {
         /** @var array<string, array> $itemAttrType */
         $itemAttrType = [];
@@ -365,7 +365,7 @@ final class Installer extends InstallerAbstract
      *
      * @since 1.0.0
      */
-    private static function createItemAttributeValues(ApplicationAbstract $app, array $itemAttrType, array $attributes) : array
+    private static function createAttributeValues(ApplicationAbstract $app, array $itemAttrType, array $attributes) : array
     {
         /** @var array<string, array> $itemAttrValue */
         $itemAttrValue = [];

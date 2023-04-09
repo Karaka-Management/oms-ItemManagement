@@ -14,36 +14,36 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
-use Modules\ItemManagement\Models\ItemAttribute;
+use Modules\Attribute\Models\Attribute;
 
 /**
  * @internal
  */
-final class ItemAttributeTest extends \PHPUnit\Framework\TestCase
+final class AttributeTest extends \PHPUnit\Framework\TestCase
 {
-    private ItemAttribute $attr;
+    private Attribute $attr;
 
     /**
      * {@inheritdoc}
      */
     protected function setUp() : void
     {
-        $this->attr = new ItemAttribute();
+        $this->attr = new Attribute();
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttribute
+     * @covers Modules\Attribute\Models\Attribute
      * @group module
      */
     public function testDefault() : void
     {
         self::assertEquals(0, $this->attr->getId());
-        self::assertInstanceOf('Modules\ItemManagement\Models\ItemAttributeType', $this->attr->type);
-        self::assertInstanceOf('Modules\ItemManagement\Models\ItemAttributeValue', $this->attr->value);
+        self::assertInstanceOf('Modules\Attribute\Models\AttributeType', $this->attr->type);
+        self::assertInstanceOf('Modules\Attribute\Models\AttributeValue', $this->attr->value);
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\ItemAttribute
+     * @covers Modules\Attribute\Models\Attribute
      * @group module
      */
     public function testSerialize() : void

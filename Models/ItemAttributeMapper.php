@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
+use Modules\Attribute\Models\Attribute;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
@@ -34,7 +35,7 @@ final class ItemAttributeMapper extends DataMapperFactory
      */
     public const COLUMNS = [
         'itemmgmt_item_attr_id'    => ['name' => 'itemmgmt_item_attr_id',    'type' => 'int', 'internal' => 'id'],
-        'itemmgmt_item_attr_item'  => ['name' => 'itemmgmt_item_attr_item',  'type' => 'int', 'internal' => 'item'],
+        'itemmgmt_item_attr_item'  => ['name' => 'itemmgmt_item_attr_item',  'type' => 'int', 'internal' => 'ref'],
         'itemmgmt_item_attr_type'  => ['name' => 'itemmgmt_item_attr_type',  'type' => 'int', 'internal' => 'type'],
         'itemmgmt_item_attr_value' => ['name' => 'itemmgmt_item_attr_value', 'type' => 'int', 'internal' => 'value'],
     ];
@@ -55,6 +56,14 @@ final class ItemAttributeMapper extends DataMapperFactory
             'external' => 'itemmgmt_item_attr_value',
         ],
     ];
+
+    /**
+     * Model to use by the mapper.
+     *
+     * @var class-string
+     * @since 1.0.0
+     */
+    public const MODEL = Attribute::class;
 
     /**
      * Primary table.
