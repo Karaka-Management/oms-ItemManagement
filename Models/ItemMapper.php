@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use Modules\Attribute\Models\AttributeMapper;
 use Modules\Editor\Models\EditorDocMapper;
 use Modules\Media\Models\MediaMapper;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
@@ -26,6 +25,9 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @template T of Item
+ * @extends DataMapperFactory<T>
  */
 final class ItemMapper extends DataMapperFactory
 {
@@ -88,7 +90,7 @@ final class ItemMapper extends DataMapperFactory
             'external' => null,
         ],
         'attributes' => [
-            'mapper'   => AttributeMapper::class,
+            'mapper'   => ItemAttributeMapper::class,
             'table'    => 'itemmgmt_item_attr',
             'self'     => 'itemmgmt_item_attr_item',
             'external' => null,
