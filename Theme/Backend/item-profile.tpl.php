@@ -29,7 +29,7 @@ $files = $item->getFiles();
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
 $allInvoices       = $this->getData('allInvoices') ?? [];
-$topCustomers      = $this->getData('topCustomers') ?? [];
+$topCustomers      = $this->getData('topCustomers') ?? [[], []];
 $regionSales       = $this->getData('regionSales') ?? [];
 $countrySales      = $this->getData('countrySales') ?? [];
 $monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
@@ -46,31 +46,30 @@ echo $this->getData('nav')->render();
     <div class="box wf-100 col-xs-12">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Address'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('Attributes'); ?></label></li>
-            <li><label for="c-tab-5"><?= $this->getHtml('Sales'); ?></label></li>
-            <li><label for="c-tab-6"><?= $this->getHtml('Purchasing'); ?></label></li>
-            <li><label for="c-tab-7"><?= $this->getHtml('Production'); ?></label></li>
-            <li><label for="c-tab-8"><?= $this->getHtml('QA'); ?></label></li>
-            <li><label for="c-tab-9"><?= $this->getHtml('Packaging'); ?></label></li>
-            <li><label for="c-tab-10"><?= $this->getHtml('Accounting'); ?></label></li>
-            <li><label for="c-tab-11"><?= $this->getHtml('Stock'); ?></label></li>
-            <li><label for="c-tab-12"><?= $this->getHtml('Disposal'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label></li>
-            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
+            <li><label for="c-tab-3"><?= $this->getHtml('Attributes'); ?></label></li>
+            <li><label for="c-tab-4"><?= $this->getHtml('Pricing'); ?></label></li>
+            <li><label for="c-tab-5"><?= $this->getHtml('Procurement'); ?></label></li>
+            <li><label for="c-tab-6"><?= $this->getHtml('Production'); ?></label></li>
+            <li><label for="c-tab-7"><?= $this->getHtml('QA'); ?></label></li>
+            <li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label></li>
+            <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label></li>
+            <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
+            <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
+            <li><label for="c-tab-12"><?= $this->getHtml('Media'); ?></label></li>
+            <li><label for="c-tab-13"><?= $this->getHtml('Bills'); ?></label></li>
+            <li><label for="c-tab-14"><?= $this->getHtml('Logs'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
         <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
-        <div class="row">
+            <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
                     <section class="portlet">
                         <form>
                             <div class="portlet-body">
-                                <table class="layout wf-100">
+                              <table class="layout wf-100">
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                     <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
@@ -79,7 +78,7 @@ echo $this->getData('nav')->render();
                                     <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->description); ?>" spellcheck="false">
                                     <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
                                     <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->description); ?>" spellcheck="false">
-                                </table>
+                              </table>
                             </div>
                             <div class="portlet-foot">
                                 <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item"> <input type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
@@ -244,7 +243,7 @@ echo $this->getData('nav')->render();
                     <div class="row">
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
-                                <div class="portlet-head">Top Customers</div>
+                                <div class="portlet-head"><?= $this->getHtml('TopCustomers'); ?></div>
                                 <table id="iSalesItemList" class="default">
                                     <thead>
                                     <tr>
@@ -253,12 +252,12 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('Country'); ?>
                                         <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
-                                    <?php $i = -1; foreach ($topCustomers as $client) : ++$i;
+                                    <?php $i = -1; foreach (($topCustomers[0] ?? []) as $client) : ++$i;
                                         $url = UriFactory::build('{/base}/sales/client/profile?id=' . $client->getId());
                                     ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->profile->account->name1); ?> <?= $this->printHtml($client->profile->account->name2); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->account->name1); ?> <?= $this->printHtml($client->account->name2); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->getCountry()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= (new Money((int) $topCustomers[1][$i]['net_sales']))->getCurrency(); ?></a>
                                     <?php endforeach; ?>

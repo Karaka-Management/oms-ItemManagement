@@ -134,9 +134,9 @@ echo $this->getData('nav')->render(); ?>
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->getHtml('IMG_alt_item'); ?>" width="30" loading="lazy" class="item-image"
-                            src="<?= $image instanceof NullMedia ?
-                                        'Web/Backend/img/logo_grey.png' :
-                                        UriFactory::build($image->getPath()); ?>"></a>
+                            src="<?= $image instanceof NullMedia
+                                ? 'Web/Backend/img/logo_grey.png'
+                                : UriFactory::build($image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>

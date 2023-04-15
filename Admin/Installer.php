@@ -16,6 +16,7 @@ namespace Modules\ItemManagement\Admin;
 
 use Modules\Attribute\Models\AttributeTypeMapper;
 use Modules\Attribute\Models\AttributeValue;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
@@ -110,7 +111,7 @@ final class Installer extends InstallerAbstract
         $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
         /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
-        $attributeTypes = AttributeTypeMapper::getAll()->with('defaults')->execute();
+        $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
 
         /** @var \Modules\ItemManagement\Models\ItemL11nType[] $l11nTypes */
         $l11nTypes = ItemL11nTypeMapper::getAll()->execute();

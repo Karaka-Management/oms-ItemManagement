@@ -101,6 +101,7 @@ return ['ItemManagement' => [
     'Properties'       => 'Properties',
     'Property'         => 'Property',
     'Purchase'         => 'Purchase',
+    'Procurement'         => 'Procurement',
     'PurchasePrice'    => 'Purchase Price',
     'Purchasing'       => 'Purchasing',
     'QA'               => 'QA',
@@ -137,5 +138,6 @@ return ['ItemManagement' => [
     'Volume'           => 'Volume',
     'Warehouse'        => 'Warehouse',
     'Width'            => 'Width',
+    'TopCustomers'            => 'Top Customers',
     'YTDSales'         => 'YTD Sales',
 ]];

@@ -75,7 +75,7 @@ return [
     ],
     '^/item/profile.*$' => [
         [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementItemItem',
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementItem',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::NAME,

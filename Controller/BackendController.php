@@ -18,8 +18,8 @@ use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\SalesBillMapper;
-use Modules\Attribute\Models\AttributeTypeMapper;
-use Modules\Attribute\Models\AttributeValueMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
@@ -62,7 +62,7 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
         /** @var \Modules\Attribute\Models\AttributeType[] $attributes */
-        $attributes = AttributeTypeMapper::getAll()
+        $attributes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->getLanguage())
             ->execute();
@@ -91,7 +91,7 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
         /** @var \Modules\Attribute\Models\AttributeValue[] $attributes */
-        $attributes = AttributeValueMapper::getAll()
+        $attributes = ItemAttributeValueMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->getLanguage())
             ->execute();
@@ -120,7 +120,7 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
         /** @var \Modules\Attribute\Models\AttributeType $attribute */
-        $attribute = AttributeTypeMapper::get()
+        $attribute = ItemAttributeTypeMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())
@@ -150,7 +150,7 @@ final class BackendController extends Controller
         $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
 
         /** @var \Modules\Attribute\Models\AttributeValue $attribute */
-        $attribute = AttributeValueMapper::get()
+        $attribute = ItemAttributeValueMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())
@@ -322,7 +322,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewItemManagementItemItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
+    public function viewItemManagementItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
     {
         $head = $response->get('Content')->getData('head');
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
@@ -366,12 +366,14 @@ final class BackendController extends Controller
 
             $newestInvoices = SalesBillMapper::getAll()
                 ->with('type')
+                ->with('type/l11n')
                 ->where('type/transferType', BillTransferType::SALES)
+                ->where('type/l11n/language', $response->getLanguage())
                 ->sort('id', OrderType::DESC)
                 ->limit(5)
                 ->execute();
 
-            $topCustomers      = [];
+            $topCustomers      = SalesBillMapper::getItemTopClients($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $allInvoices       = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
             $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
@@ -417,7 +419,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementSalesItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
     {
-        return $this->viewItemManagementItemItem($request, $response, $data);
+        return $this->viewItemManagementItem($request, $response, $data);
     }
 
     /**
@@ -434,7 +436,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementPurchaseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        return $this->viewItemManagementItemItem($request, $response, $data);
+        return $this->viewItemManagementItem($request, $response, $data);
     }
 
     /**
@@ -451,7 +453,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementWarehouseItem(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        return $this->viewItemManagementItemItem($request, $response, $data);
+        return $this->viewItemManagementItem($request, $response, $data);
     }
 
     /**

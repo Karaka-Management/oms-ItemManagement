@@ -467,11 +467,171 @@
             "de": "Dual use"
         },
         "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 0,
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "contract",
+        "l11n": {
+            "en": "Contract",
+            "de": "Vertrag"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 0,
+        "values": [
+        ]
+    },
+    {
+        "name": "subscription",
+        "l11n": {
+            "en": "Subscription",
+            "de": "Abonoment"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 0,
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "subscription_interval_types",
+        "l11n": {
+            "en": "Subscription type",
+            "de": "Abonoment Typ"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0,
+                "l11n": {
+                    "en": "Manual",
+                    "de": "Manuell"
+                }
+            },
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Daily",
+                    "de": "Daily"
+                }
+            },
+            {
+                "value": 2,
+                "l11n": {
+                    "en": "Weekly",
+                    "de": "Weekly"
+                }
+            },
+            {
+                "value": 3,
+                "l11n": {
+                    "en": "Monthly",
+                    "de": "Monthly"
+                }
+            },
+            {
+                "value": 4,
+                "l11n": {
+                    "en": "Annually",
+                    "de": "Annually"
+                }
+            }
+        ]
+    },
+    {
+        "name": "subscription_interval_value",
+        "l11n": {
+            "en": "Subscription interval",
+            "de": "Abonoment Intervall"
+        },
+        "value_type": 2,
         "is_custom_allowed": true,
         "validation_pattern": "",
         "is_required": false,
         "default_value": "",
-        "values": []
+        "values": [
+        ]
+    },
+    {
+        "name": "subscription_renewal_type",
+        "l11n": {
+            "en": "Subscription renewal type",
+            "de": "Abonoment Verlaengerung Art"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0,
+                "l11n": {
+                    "en": "Manual",
+                    "de": "Manuell"
+                }
+            },
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Automatic",
+                    "de": "Automatic"
+                }
+            }
+        ]
+    },
+    {
+        "name": "subscription_interval_end",
+        "l11n": {
+            "en": "Subscription renewal end",
+            "de": "Abonoment Verlaengerung Ende"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0,
+                "l11n": {
+                    "en": "Exact",
+                    "de": "Exakt"
+                }
+            },
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "End of interval",
+                    "de": "Intervallende"
+                }
+            }
+        ]
     },
     {
         "name": "download_link",
