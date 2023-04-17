@@ -26,6 +26,7 @@ $Attribute = $item->getAttributes();
 
 $notes = $item->getNotes();
 $files = $item->getFiles();
+$itemImage = $this->getData('itemImage') ?? new NullMedia();
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
 $allInvoices       = $this->getData('allInvoices') ?? [];
@@ -86,13 +87,13 @@ echo $this->getData('nav')->render();
                         </form>
                     </section>
 
-                    <?php $image = $item->getFileByTypeName('item_profile_image'); ?>
+                    <?php $image = $itemImage; ?>
                     <section class="portlet">
                         <div class="portlet-body">
                             <img alt="<?= $this->printHtml($image->name); ?>" width="100%" loading="lazy" class="item-image"
-                                src="<?= $image instanceof NullMedia ?
-                                        'Web/Backend/img/logo_grey.png' :
-                                        UriFactory::build($image->getPath()); ?>">
+                                src="<?= $image instanceof NullMedia
+                                    ? 'Web/Backend/img/logo_grey.png'
+                                    : UriFactory::build($image->getPath()); ?>">
                         </div>
                     </section>
 
