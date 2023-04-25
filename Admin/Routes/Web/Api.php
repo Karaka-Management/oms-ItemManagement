@@ -28,5 +28,5 @@ return [
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
-    ],
+    ]
 ];

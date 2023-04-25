@@ -26,5 +26,47 @@
                 "lang": "de"
             }
         ]
+    },
+    {
+        "type": "type",
+        "name": "item_demo_download",
+        "l11n": [
+            {
+                "title": "Public Download",
+                "lang": "en"
+            },
+            {
+                "title": "Oeffentlich Download",
+                "lang": "de"
+            }
+        ]
+    },
+    {
+        "type": "type",
+        "name": "item_private_download",
+        "l11n": [
+            {
+                "title": "Private Download",
+                "lang": "en"
+            },
+            {
+                "title": "Privat Download",
+                "lang": "de"
+            }
+        ]
+    },
+    {
+        "type": "type",
+        "name": "item_purchase_download",
+        "l11n": [
+            {
+                "title": "Purchased Download",
+                "lang": "en"
+            },
+            {
+                "title": "Gekaufter Download",
+                "lang": "de"
+            }
+        ]
     }
 ]

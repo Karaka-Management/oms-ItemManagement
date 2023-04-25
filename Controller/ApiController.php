@@ -57,13 +57,13 @@ use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
 
 /**
- Item* ItemManagement class.
+ * ItemManagement class.
  *
  * @package Modules\ItemManagement
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
- Item*/
+ */
 final class ApiController extends Controller
 {
     /**

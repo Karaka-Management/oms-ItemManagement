@@ -634,19 +634,6 @@
         ]
     },
     {
-        "name": "download_link",
-        "l11n": {
-            "en": "Download link",
-            "de": "Download Link"
-        },
-        "value_type": 2,
-        "is_custom_allowed": true,
-        "validation_pattern": "",
-        "is_required": false,
-        "default_value": "",
-        "values": []
-    },
-    {
         "name": "demo_link",
         "l11n": {
             "en": "Demo link",
@@ -663,7 +650,7 @@
         "name": "one_click_pay_cc",
         "l11n": {
             "en": "One Click CC payment link",
-            "de": "One Click CC Beyahllink"
+            "de": "One Click CC Bezahl-Link"
         },
         "value_type": 2,
         "is_custom_allowed": true,
@@ -676,7 +663,7 @@
         "name": "one_click_pay_cc_id",
         "l11n": {
             "en": "One Click CC payment ID",
-            "de": "One Click CC Beyahl ID"
+            "de": "One Click CC Bezahl-ID"
         },
         "value_type": 2,
         "is_custom_allowed": true,
@@ -689,7 +676,7 @@
         "name": "one_click_pay_paypal",
         "l11n": {
             "en": "One Click Paypal payment link",
-            "de": "One Click Paypal Beyahllink"
+            "de": "One Click Paypal Bezahl-Link"
         },
         "value_type": 2,
         "is_custom_allowed": true,
