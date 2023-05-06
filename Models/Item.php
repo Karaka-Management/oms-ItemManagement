@@ -15,9 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Editor\Models\EditorDoc;
-use Modules\Media\Models\Media;
-use Modules\Media\Models\NullMedia;
-use phpOMS\Localization\Money;
+use phpOMS\Stdlib\Base\FloatInt;
 
 /**
  * Item class.
@@ -35,7 +33,7 @@ class Item implements \JsonSerializable
      * @var int
      * @since 1.0.0
      */
-    protected int $id = 0;
+    public int $id = 0;
 
     /**
      * Item number/id
@@ -49,11 +47,11 @@ class Item implements \JsonSerializable
 
     public ?int $parent = null;
 
-    private int $status = ItemStatus::ACTIVE;
+    public int $status = ItemStatus::ACTIVE;
 
-    public Money $salesPrice;
+    public FloatInt $salesPrice;
 
-    public Money $purchasePrice;
+    public FloatInt $purchasePrice;
 
     /**
      * Notes.
@@ -101,8 +99,8 @@ class Item implements \JsonSerializable
     public function __construct()
     {
         $this->createdAt     = new \DateTimeImmutable('now');
-        $this->salesPrice    = new Money();
-        $this->purchasePrice = new Money();
+        $this->salesPrice    = new FloatInt();
+        $this->purchasePrice = new FloatInt();
     }
 
     /**

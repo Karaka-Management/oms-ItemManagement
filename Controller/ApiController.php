@@ -45,7 +45,6 @@ use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
-use phpOMS\Localization\Money;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
@@ -53,6 +52,7 @@ use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
+use phpOMS\Stdlib\Base\FloatInt;
 use phpOMS\System\MimeType;
 use phpOMS\Uri\HttpUri;
 
@@ -138,7 +138,7 @@ final class ApiController extends Controller
     private function createItemDir(Item $item) : string
     {
         return '/Modules/ItemManagement/Item/'
-            . $item->getId();
+            . $item->id;
     }
 
     /**
@@ -177,7 +177,7 @@ final class ApiController extends Controller
 
             $internalRequest->header->account = $request->header->account;
             $internalRequest->setData('name', 'base_price');
-            $internalRequest->setData('item', $item->getId());
+            $internalRequest->setData('item', $item->id);
             $internalRequest->setData('price', $request->getDataInt('salesprice') ?? 0);
 
             $billing->apiPriceCreate($internalRequest, $internalResponse);
@@ -208,8 +208,8 @@ final class ApiController extends Controller
 
             $this->createModelRelation(
                 $request->header->account,
-                $uploaded[0]->getId(),
-                $profileImageType->getId(),
+                $uploaded[0]->id,
+                $profileImageType->id,
                 MediaMapper::class,
                 'types',
                 '',
@@ -219,8 +219,8 @@ final class ApiController extends Controller
             // create item relation
             $this->createModelRelation(
                 $request->header->account,
-                $item->getId(),
-                $uploaded[0]->getId(),
+                $item->id,
+                $uploaded[0]->id,
                 ItemMapper::class,
                 'files',
                 '',
@@ -267,8 +267,8 @@ final class ApiController extends Controller
     {
         $item                = new Item();
         $item->number        = $request->getDataString('number') ?? '';
-        $item->salesPrice    = new Money($request->getDataInt('salesprice') ?? 0);
-        $item->purchasePrice = new Money($request->getDataInt('purchaseprice') ?? 0);
+        $item->salesPrice    = new FloatInt($request->getDataInt('salesprice') ?? 0);
+        $item->purchasePrice = new FloatInt($request->getDataInt('purchaseprice') ?? 0);
         $item->info          = $request->getDataString('info') ?? '';
         $item->parent        = $request->getDataInt('parent');
         $item->unit          = $request->getDataInt('unit');
@@ -336,7 +336,7 @@ final class ApiController extends Controller
     {
         $item                       = new ItemPrice();
         $item->currency             = $request->getDataString('currency') ?? '';
-        $item->price                = new Money($request->getDataInt('price') ?? 0);
+        $item->price                = new FloatInt($request->getDataInt('price') ?? 0);
         $item->minQuantity          = $request->getDataInt('minquantity') ?? 0;
         $item->relativeDiscount     = $request->getDataInt('relativediscount') ?? 0;
         $item->absoluteDiscount     = $request->getDataInt('absolutediscount') ?? 0;
@@ -443,6 +443,96 @@ final class ApiController extends Controller
         if (($val['type'] = !$request->hasData('type'))
             || ($val['value'] = (!$request->hasData('value') && !$request->hasData('custom')))
             || ($val['item'] = !$request->hasData('item'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create item attribute
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemAttributeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemAttributeUpdate($request))) {
+            $response->set('attribute_update', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $old = ItemAttributeMapper::get()
+            ->with('type')
+            ->with('type/defaults')
+            ->with('value')
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $new = $this->updateItemAttributeFromRequest($request, $old->deepClone());
+        $this->updateModel($request->header->account, $old, $new, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
+
+        if ($new->value->getValue() !== $old->value->getValue()) {
+            $this->updateModel($request->header->account, $old->value, $new->value, ItemAttributeValueMapper::class, 'attribute_value', $request->getOrigin());
+        }
+
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully updated', $new);
+    }
+
+    /**
+     * Method to create item attribute from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return Attribute
+     *
+     * @since 1.0.0
+     */
+    private function updateItemAttributeFromRequest(RequestAbstract $request, Attribute $attribute) : Attribute
+    {
+        if ($attribute->type->custom) {
+            if ($request->hasData('value')) {
+                // @question: we are overwriting the old value, could there be a use case where we want to create a new value and keep the old one?
+                $attribute->value->setValue($request->getData('value'), $attribute->type->datatype);
+            }
+        } else {
+            if ($request->hasData('value')) {
+                // @todo: fix by only accepting the value id to be used
+                // this is a workaround for now because the front end doesn't allow to dynamically show default values.
+                $value = $attribute->type->getDefaultByValue($request->getData('value'));
+
+                if ($value->id !== 0) {
+                    $attribute->value = $attribute->type->getDefaultByValue($request->getData('value'));
+                }
+            }
+        }
+
+        return $attribute;
+    }
+
+    /**
+     * Validate item attribute create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateItemAttributeUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))
         ) {
             return $val;
         }
@@ -619,7 +709,7 @@ final class ApiController extends Controller
             $this->createModelRelation(
                 $request->header->account,
                 (int) $request->getData('type'),
-                $attrValue->getId(),
+                $attrValue->id,
                 ItemAttributeTypeMapper::class, 'defaults', '', $request->getOrigin()
             );
         }
@@ -742,6 +832,33 @@ final class ApiController extends Controller
         }
 
         return [];
+    }
+
+    /**
+     * Api method to handle api item attributes
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemAttribute(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemAttributeValueL11nCreate($request))) {
+            $response->set('attr_value_l11n_create', new FormValidation($val));
+            $response->header->status = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $attrL11n = $this->createAttributeValueL11nFromRequest($request);
+        $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
+        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
     }
 
     /**
@@ -994,7 +1111,7 @@ final class ApiController extends Controller
             foreach ($uploaded as $file) {
                 $this->createModelRelation(
                     $request->header->account,
-                    $file->getId(),
+                    $file->id,
                     $request->getDataInt('type'),
                     MediaMapper::class,
                     'types',
@@ -1007,7 +1124,7 @@ final class ApiController extends Controller
         $this->createModelRelation(
             $request->header->account,
             (int) $request->getData('item'),
-            \reset($uploaded)->getId(),
+            \reset($uploaded)->id,
             ItemMapper::class, 'files', '', $request->getOrigin()
         );
 
@@ -1069,7 +1186,7 @@ final class ApiController extends Controller
         }
 
         $model = $responseData['response'];
-        $this->createModelRelation($request->header->account, (int) $request->getData('id'), $model->getId(), ItemMapper::class, 'notes', '', $request->getOrigin());
+        $this->createModelRelation($request->header->account, (int) $request->getData('id'), $model->id, ItemMapper::class, 'notes', '', $request->getOrigin());
     }
 
     /**

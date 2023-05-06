@@ -48,7 +48,7 @@ trait ApiControllerItemTrait
         $request->setData('info', 'Info text');
 
         $this->module->apiItemCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -95,7 +95,7 @@ trait ApiControllerItemTrait
 
         $this->module->apiFileCreate($request, $response);
         $file = $response->get('')['response'];
-        self::assertGreaterThan(0, \reset($file)->getId());
+        self::assertGreaterThan(0, \reset($file)->id);
     }
 
     /**
@@ -125,7 +125,7 @@ trait ApiControllerItemTrait
 
         $this->module->apiFileCreate($request, $response);
         $file = $response->get('')['response'];
-        self::assertGreaterThan(0, \reset($file)->getId());
+        self::assertGreaterThan(0, \reset($file)->id);
     }
 
     /**
@@ -146,7 +146,7 @@ trait ApiControllerItemTrait
         $request->setData('plain', \preg_replace('/^.+\n/', '', $MARKDOWN));
 
         $this->module->apiNoteCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**

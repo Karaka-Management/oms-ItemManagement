@@ -42,7 +42,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->item->getId());
+        self::assertEquals(0, $this->item->id);
         self::assertEquals('', $this->item->number);
         self::assertEquals(0, $this->item->successor);
         self::assertEquals('', $this->item->info);

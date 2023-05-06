@@ -37,6 +37,6 @@ final class NullItemL11nTypeTest extends \PHPUnit\Framework\TestCase
     public function testId() : void
     {
         $null = new NullItemL11nType(2);
-        self::assertEquals(2, $null->getId());
+        self::assertEquals(2, $null->id);
     }
 }

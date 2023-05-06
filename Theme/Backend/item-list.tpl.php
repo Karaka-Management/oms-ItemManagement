@@ -129,19 +129,19 @@ echo $this->getData('nav')->render(); ?>
 
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/base}/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/base}/item/profile?{?}&id=' . $value->id);
                 $image       = $value->getFileByTypeName('item_profile_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->getHtml('IMG_alt_item'); ?>" width="30" loading="lazy" class="item-image"
-                            src="<?= $image instanceof NullMedia
+                            src="<?= $image->id === 0
                                 ? 'Web/Backend/img/logo_grey.png'
                                 : UriFactory::build($image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->description); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->salesPrice->getCurrency()); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice); ?></a>
                     <td>
                     <td>
                     <td>

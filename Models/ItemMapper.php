@@ -15,7 +15,9 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Editor\Models\EditorDocMapper;
+use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
+use Modules\Media\Models\MediaType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
@@ -96,4 +98,91 @@ final class ItemMapper extends DataMapperFactory
             'external' => null,
         ],
     ];
+
+    // @todo: experimental (not 100% working)
+    public static function getItemList(string $langugae) : array
+    {
+        // items
+        $query = <<<SQL
+        select itemmgmt_item.itemmgmt_item_id,
+            itemmgmt_item.itemmgmt_item_no,
+            itemmgmt_item.itemmgmt_item_salesprice,
+            media.media_id,
+            media.media_file,
+            media_type.media_type_id,
+            media_type.media_type_name
+        from itemmgmt_item
+        left join itemmgmt_item_media on itemmgmt_item.itemmgmt_item_id = itemmgmt_item_media.itemmgmt_item_media_item
+        left join media on itemmgmt_item_media.itemmgmt_item_media_media = media.media_id
+        left join media_type_rel on media.media_id = media_type_rel.media_type_rel_src
+        left join media_type on media_type_rel.media_type_rel_dst = media_type.media_type_id and media_type.media_type_name = 'item_profile_image'
+        SQL;
+
+        $itemsResult = self::$db->con->query($query)->fetchAll();
+        $items = [];
+
+        foreach ($itemsResult as $res) {
+            $media = null;
+            if ($res['media_id'] !== null) {
+                $mediaType = new MediaType();
+                $mediaType->id = $res['media_type_id'];
+                $mediaType->name = $res['media_type_name'];
+
+                $media = new Media();
+                $media->id = $res['media_id'];
+                $media->setPath($res['media_file']);
+            }
+
+            $item = new Item();
+            $item->id = $res['itemmgmt_item_id'];
+            $item->number = $res['itemmgmt_item_no'];
+            $item->salesPrice->setInt($res['itemmgmt_item_salesprice']);
+
+            if ($media !== null) {
+                $item->addFile($media);
+            }
+
+            $items[$item->id] = $item;
+        }
+
+        // l11ns
+        $query = <<<SQL
+        select itemmgmt_item.itemmgmt_item_id,
+            itemmgmt_item_l11n.itemmgmt_item_l11n_id,
+            itemmgmt_item_l11n.itemmgmt_item_l11n_lang,
+            itemmgmt_item_l11n.itemmgmt_item_l11n_typeref,
+            itemmgmt_item_l11n.itemmgmt_item_l11n_description,
+            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title
+        from itemmgmt_item
+        left join itemmgmt_item_l11n
+            on itemmgmt_item.itemmgmt_item_id = itemmgmt_item_l11n.itemmgmt_item_l11n_item
+        left join itemmgmt_item_l11n_type
+            on itemmgmt_item_l11n.itemmgmt_item_l11n_typeref = itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_id
+        where
+            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title in ('name1', 'name2', 'name3')
+            and itemmgmt_item_l11n.itemmgmt_item_l11n_lang = :lang
+        SQL;
+
+        $sth = self::$db->con->prepare($query);
+        $sth->execute(['lang' => $langugae]);
+
+        $l11nsResult = $sth->fetchAll();
+
+        foreach ($l11nsResult as $res) {
+            $l11nType = new ItemL11nType();
+            $l11nType->id = $res['itemmgmt_item_l11n_typeref'];
+            $l11nType->title= $res['itemmgmt_item_l11n_type_title'];
+
+            $l11n = new ItemL11n();
+            $l11n->id = $res['itemmgmt_item_l11n_id'];
+            $l11n->item = $res['itemmgmt_item_id'];
+            $l11n->type = $l11nType;
+            $l11n->description = $res['itemmgmt_item_l11n_description'];
+            $l11n->setLanguage($res['itemmgmt_item_l11n_lang']);
+
+            $items[$l11n->item]->addL11n($l11n);
+        }
+
+        return $items;
+    }
 }

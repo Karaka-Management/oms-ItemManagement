@@ -28,5 +28,25 @@ return [
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
+    ],
+    '^.*/item/attribute.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemAttributeCreate',
+            'verb'       => RouteVerb::PUT,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemAttributeUpdate',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
     ]
 ];

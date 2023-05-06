@@ -127,14 +127,14 @@ echo $this->getData('nav')->render(); ?>
                         </label>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/base}/purchase/item/profile?{?}&id=' . $value->getId());
+                $url         = UriFactory::build('{/base}/purchase/item/profile?{?}&id=' . $value->id);
                 $image       = $value->getFileByType('backend_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->getHtml('IMG_alt_item'); ?>" width="30" loading="lazy" class="item-image"
-                            src="<?= $image instanceof NullMedia ?
-                                        UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
-                                        UriFactory::build('{/base}/' . $image->getPath()); ?>"></a>
+                            src="<?= $image->id === 0 ?
+                                UriFactory::build('Web/Backend/img/user_default_' . \mt_rand(1, 6) .'.png') :
+                                UriFactory::build('{/base}/' . $image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>

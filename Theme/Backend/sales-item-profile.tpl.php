@@ -88,7 +88,7 @@ echo $this->getData('nav')->render();
                     </section>
 
                     <?php $image = $item->getFileByType(0);
-                        if (!($image instanceof NullMedia)) : ?>
+                        if ($image->id > 0) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
                             <img alt="<?= $this->printHtml($image->name); ?>" width="100%" loading="lazy" class="item-image"
@@ -171,7 +171,7 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
                                     <?php foreach ($notes as $note) :
-                                        $url = UriFactory::build('{/base}/editor/single?{?}&id=' . $note->getId());
+                                        $url = UriFactory::build('{/base}/editor/single?{?}&id=' . $note->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($note->title); ?></a>
@@ -194,7 +194,7 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
                                     <?php foreach ($files as $file) :
-                                        $url = UriFactory::build('{/base}/media/single?{?}&id=' . $file->getId());
+                                        $url = UriFactory::build('{/base}/media/single?{?}&id=' . $file->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->name); ?></a>
@@ -224,12 +224,12 @@ echo $this->getData('nav')->render();
                                     <?php
                                     /** @var \Modules\Billing\Models\Bill $invoice */
                                     foreach ($newestInvoices as $invoice) :
-                                        $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->getId());
+                                        $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
-                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/profile?{?}&id=' . $invoice->client->getId()); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/profile?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->netSales->getCurrency()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
@@ -252,7 +252,7 @@ echo $this->getData('nav')->render();
                                         <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
                                     <?php $i = -1; foreach ($topCustomers as $client) : ++$i;
-                                        $url = UriFactory::build('{/base}/sales/client/profile?id=' . $client->getId());
+                                        $url = UriFactory::build('{/base}/sales/client/profile?id=' . $client->id);
                                     ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
@@ -470,10 +470,10 @@ echo $this->getData('nav')->render();
                             <tbody>
                                 <?php $c = 0;
                                 foreach ($itemL11n as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->title); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->description); ?></a>
                                         <?php endforeach; ?>
@@ -548,10 +548,10 @@ echo $this->getData('nav')->render();
                             <tbody>
                                 <?php $c = 0;
                                 foreach ($Attribute as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->getL11n()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $value->value->getValue() instanceof \DateTime ? $value->value->getValue()->format('Y-m-d') : $this->printHtml((string) $value->value->getValue()); ?></a>
                                         <?php endforeach; ?>
@@ -630,10 +630,10 @@ echo $this->getData('nav')->render();
                                 <?php $c = 0;
                                 $l11ns   = [];
                                 foreach ($l11ns as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                         <?php endforeach; ?>
                                         <?php if ($c === 0) : ?>
@@ -761,10 +761,10 @@ echo $this->getData('nav')->render();
                             <?php $c = 0;
                             $l11ns   = [];
                             foreach ($l11ns as $key => $value) : ++$c;
-                                $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->getId()); ?>
+                                $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                 <tr data-href="<?= $url; ?>">
                                     <td><a href="#"><i class="fa fa-times"></i></a>
-                                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                                    <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($c === 0) : ?>
@@ -932,7 +932,7 @@ echo $this->getData('nav')->render();
                             <?php
                             /** @var \Modules\Billing\Models\Bill $invoice */
                             foreach ($allInvoices as $invoice) :
-                                $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->getId());
+                                $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
                                 ?>
                             <tr data-href="<?= $url; ?>">
                                 <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>

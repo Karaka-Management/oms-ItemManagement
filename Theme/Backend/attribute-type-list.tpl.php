@@ -55,10 +55,10 @@ echo $this->getData('nav')->render(); ?>
                 <?php
                 $count = 0;
                 foreach ($attributes as $key => $value) : ++$count;
-                    $url = UriFactory::build('{/base}/item/attribute/type?{?}&id=' . $value->getId());
+                    $url = UriFactory::build('{/base}/item/attribute/type?{?}&id=' . $value->id);
                 ?>
                 <tr data-href="<?= $url; ?>">
-                    <td><a href="<?= $url; ?>"><?= $value->getId(); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n()); ?></a>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>

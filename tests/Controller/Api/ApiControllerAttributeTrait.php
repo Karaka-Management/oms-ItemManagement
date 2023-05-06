@@ -39,7 +39,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_EN);
 
         $this->module->apiItemL11nTypeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -57,7 +57,7 @@ trait ApiControllerAttributeTrait
         $request->setData('description', 'Description');
 
         $this->module->apiItemL11nCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -75,7 +75,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_EN);
 
         $this->module->apiItemAttributeTypeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -93,7 +93,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
 
         $this->module->apiItemAttributeTypeL11nCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -113,7 +113,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiItemAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -132,7 +132,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiItemAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -151,7 +151,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiItemAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -170,7 +170,7 @@ trait ApiControllerAttributeTrait
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
         $this->module->apiItemAttributeValueCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**
@@ -188,7 +188,7 @@ trait ApiControllerAttributeTrait
         $request->setData('type', '1');
 
         $this->module->apiItemAttributeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->getId());
+        self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
     /**

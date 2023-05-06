@@ -13,6 +13,15 @@
 declare(strict_types=1);
 
 return ['ItemManagement' => [
+    'SalesPricing'         => 'Sales Pricing',
+    'ItemGroup'         => 'Item Group',
+    'ItemSegment'         => 'Item Segment',
+    'ItemSection'         => 'Item Section',
+    'ItemType'         => 'Item Type',
+    'ClientGroup'         => 'Client Group',
+    'ClientSegment'         => 'Client Segment',
+    'ClientSection'         => 'Client Section',
+    'ClientType'         => 'Client Type',
     'Accounting'       => 'Accounting',
     'Address'          => 'Address',
     'All'              => 'All',

@@ -16,13 +16,20 @@ namespace Modules\ItemManagement\Controller;
 
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\SettingsEnum;
+use Modules\Auditor\Models\AuditMapper;
 use Modules\Billing\Models\BillTransferType;
+use Modules\Billing\Models\Price\PriceMapper;
+use Modules\Billing\Models\Price\PriceType;
 use Modules\Billing\Models\SalesBillMapper;
+use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
+use Modules\ItemManagement\Models\ItemL11nMapper;
+use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
+use Modules\Organization\Models\UnitMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
@@ -33,6 +40,7 @@ use phpOMS\Localization\Money;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Stdlib\Base\SmartDateTime;
+use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
 
 /**
@@ -129,7 +137,12 @@ final class BackendController extends Controller
             ->where('l11n/language', $response->getLanguage())
             ->execute();
 
+        $l11ns = ItemAttributeTypeL11nMapper::getAll()
+            ->where('ref', $attribute->id)
+            ->execute();
+
         $view->addData('attribute', $attribute);
+        $view->addData('l11ns', $l11ns);
 
         return $view;
     }
@@ -342,11 +355,16 @@ final class BackendController extends Controller
             ->with('l11n/type')
             ->with('files')
             ->with('files/types')
+            ->with('attributes')
+            ->with('attributes/type')
+            ->with('attributes/type/l11n')
+            ->with('attributes/value')
             ->with('notes')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())
+            ->where('attributes/type/l11n/language', $response->getLanguage())
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->limit(5, 'files')->sort('files/id', OrderType::DESC) // @todo: limit not working!!!
+            ->limit(5, 'files')->sort('files/id', OrderType::DESC)
             ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->execute();
 
@@ -368,7 +386,7 @@ final class BackendController extends Controller
                 ->on(MediaMapper::TABLE . '.' . MediaMapper::PRIMARYFIELD, '=', MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['self'])
             ->leftJoin(MediaTypeMapper::TABLE)
                 ->on(MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['external'], '=', MediaTypeMapper::TABLE . '.' . MediaTypeMapper::PRIMARYFIELD)
-            ->where(ItemMapper::HAS_MANY['files']['self'], '=', $item->getId())
+            ->where(ItemMapper::HAS_MANY['files']['self'], '=', $item->id)
             ->where(MediaTypeMapper::TABLE . '.' . MediaTypeMapper::getColumnByMember('name'), '=', 'item_profile_image');
 
         $itemImage = MediaMapper::get()
@@ -384,15 +402,60 @@ final class BackendController extends Controller
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings->getId())->execute());
+        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings->id)->execute());
+
+        $l11nTypes = ItemL11nTypeMapper::getAll()
+            ->execute();
+        $view->setData('l11nTypes', $l11nTypes);
+
+        $l11nValues = ItemL11nMapper::getAll()
+            ->with('type')
+            ->where('item', $item->id)
+            ->execute();
+        $view->setData('l11nValues', $l11nValues);
+
+        $attributeTypes = ItemAttributeTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->getLanguage())
+            ->execute();
+        $view->setData('attributeTypes', $attributeTypes);
+
+        $units = UnitMapper::getAll()
+            ->execute();
+        $view->setData('units', $units);
+
+        $prices = PriceMapper::getAll()
+            ->where('item', $item->id)
+            ->where('type', PriceType::SALES)
+            ->where('client', null)
+            ->execute();
+        $view->setData('prices', $prices);
+
+        $audits = AuditMapper::getAll()
+            ->where('type', StringUtils::intHash(ItemMapper::class))
+            ->where('module', 'ItemManagement')
+            ->where('ref', $item->id)
+            ->execute();
+        $view->setData('audits', $audits);
+
+        $files = MediaMapper::getAll()
+            ->with('types')
+            ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
+                ->on('id', $item->id, relation: 'files') // id = item id
+            ->execute();
+        $view->setData('files', $files);
+
+        $mediaListView = new \Modules\Media\Theme\Backend\Components\Media\ListView($this->app->l11nManager, $request, $response);
+        $mediaListView->setTemplate('/Modules/Media/Theme/Backend/Components/Media/list');
+        $view->addData('medialist', $mediaListView);
 
         // stats
         if ($this->app->moduleManager->isActive('Billing')) {
-            $ytd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $mtd = SalesBillMapper::getSalesByItemId($item->getId(), new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
-            $avg = SalesBillMapper::getAvgSalesPriceByItemId($item->getId(), (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
+            $ytd = SalesBillMapper::getSalesByItemId($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $mtd = SalesBillMapper::getSalesByItemId($item->id, new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
+            $avg = SalesBillMapper::getAvgSalesPriceByItemId($item->id, (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
 
-            $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->getId());
+            $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->id);
 
             $newestInvoices = SalesBillMapper::getAll()
                 ->with('type')
@@ -403,11 +466,11 @@ final class BackendController extends Controller
                 ->limit(5)
                 ->execute();
 
-            $topCustomers      = SalesBillMapper::getItemTopClients($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $allInvoices       = SalesBillMapper::getItemBills($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $regionSales       = SalesBillMapper::getItemRegionSales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $countrySales      = SalesBillMapper::getItemCountrySales($item->getId(), new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->getId(), (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
+            $topCustomers      = SalesBillMapper::getItemTopClients($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $allInvoices       = SalesBillMapper::getItemBills($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $regionSales       = SalesBillMapper::getItemRegionSales($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $countrySales      = SalesBillMapper::getItemCountrySales($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
+            $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
         } else {
             $ytd               = new Money();
             $mtd               = new Money();

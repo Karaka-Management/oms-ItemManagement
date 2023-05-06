@@ -38,7 +38,7 @@ final class ItemL11nTest extends \PHPUnit\Framework\TestCase
      */
     public function testDefault() : void
     {
-        self::assertEquals(0, $this->l11n->getId());
+        self::assertEquals(0, $this->l11n->id);
         self::assertEquals('', $this->l11n->description);
         self::assertEquals(0, $this->l11n->item);
         self::assertEquals(ISO639x1Enum::_EN, $this->l11n->getLanguage());

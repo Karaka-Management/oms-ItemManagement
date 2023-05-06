@@ -32,7 +32,7 @@ final class ItemMapperTest extends \PHPUnit\Framework\TestCase
         $item->number = '123456789';
 
         $id = ItemMapper::create()->execute($item);
-        self::assertGreaterThan(0, $item->getId());
-        self::assertEquals($id, $item->getId());
+        self::assertGreaterThan(0, $item->id);
+        self::assertEquals($id, $item->id);
     }
 }

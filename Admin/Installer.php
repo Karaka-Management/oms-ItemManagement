@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Admin;
 
-use Modules\Attribute\Models\AttributeTypeMapper;
 use Modules\Attribute\Models\AttributeValue;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
@@ -139,7 +138,7 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $itemId = $responseData['response']->getId();
+            $itemId = $responseData['response']->id;
 
             $itemArray[] = !\is_array($responseData['response'])
                 ? $responseData['response']->toArray()
@@ -154,7 +153,7 @@ final class Installer extends InstallerAbstract
 
                     $request->header->account = 1;
                     $request->setData('item', $itemId);
-                    $request->setData('type', $l11nType->getId());
+                    $request->setData('type', $l11nType->id);
                     $request->setData('language', (string) $language);
                     $request->setData('description', (string) $l11n);
 
@@ -170,7 +169,7 @@ final class Installer extends InstallerAbstract
 
                 $request->header->account = 1;
                 $request->setData('item', $itemId);
-                $request->setData('type', $attrType->getId());
+                $request->setData('type', $attrType->id);
 
                 if ($attribute['custom'] ?? true) {
                     $request->setData('custom', $attribute['value']);
@@ -202,7 +201,7 @@ final class Installer extends InstallerAbstract
                 || $val->valueInt === $value
                 || $val->valueDec === $value
             ) {
-                return $val->getId();
+                return $val->id;
             }
         }
 
@@ -318,7 +317,7 @@ final class Installer extends InstallerAbstract
             $request->setData('title', \reset($attribute['l11n']));
             $request->setData('language', \array_keys($attribute['l11n'])[0] ?? 'en');
             $request->setData('is_required', $attribute['is_required'] ?? false);
-            $request->setData('is_custom_allowed', $attribute['is_custom_allowed'] ?? false);
+            $request->setData('custom', $attribute['is_custom_allowed'] ?? false);
             $request->setData('validation_pattern', $attribute['validation_pattern'] ?? '');
             $request->setData('datatype', (int) $attribute['value_type']);
 
