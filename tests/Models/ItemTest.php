@@ -20,6 +20,7 @@ use Modules\Attribute\Models\Attribute;
 use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemStatus;
 use Modules\Media\Models\Media;
+use phpOMS\Localization\BaseStringL11n;
 
 /**
  * @internal
@@ -101,7 +102,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testL11nInputOutput() : void
     {
-        $this->item->addL11n($t = new ItemL11n()); // has by default '' as type
+        $this->item->addL11n($t = new BaseStringL11n()); // has by default '' as type
         self::assertEquals($t, $this->item->getL11n(''));
     }
 

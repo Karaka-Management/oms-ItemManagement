@@ -26,9 +26,7 @@ use Modules\ItemManagement\Models\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\ItemAttributeValueMapper;
-use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemL11nMapper;
-use Modules\ItemManagement\Models\ItemL11nType;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\ItemPrice;
@@ -36,15 +34,16 @@ use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemStatus;
-use Modules\ItemManagement\Models\NullItemL11nType;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Localization\BaseStringL11n;
+use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
@@ -81,7 +80,7 @@ final class ApiController extends Controller
      */
     public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        /** @var \Modules\ItemManagement\Models\ItemL11n[] $l11n */
+        /** @var \Modules\ItemManagement\Models\BaseStringL11n[] $l11n */
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
@@ -893,13 +892,13 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemL11nType
+     * @return BaseStringL11nType
      *
      * @since 1.0.0
      */
-    private function createItemL11nTypeFromRequest(RequestAbstract $request) : ItemL11nType
+    private function createItemL11nTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $itemL11nType             = new ItemL11nType();
+        $itemL11nType             = new BaseStringL11nType();
         $itemL11nType->title      = $request->getDataString('title') ?? '';
         $itemL11nType->isRequired = (bool) ($request->getData('is_required') ?? false);
 
@@ -1020,19 +1019,19 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract $request Request
      *
-     * @return ItemL11n
+     * @return BaseStringL11n
      *
      * @since 1.0.0
      */
-    private function createItemL11nFromRequest(RequestAbstract $request) : ItemL11n
+    private function createItemL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $itemL11n       = new ItemL11n();
-        $itemL11n->item = $request->getDataInt('item') ?? 0;
-        $itemL11n->type = new NullItemL11nType($request->getDataInt('type') ?? 0);
+        $itemL11n       = new BaseStringL11n();
+        $itemL11n->ref  = $request->getDataInt('item') ?? 0;
+        $itemL11n->type = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
         $itemL11n->setLanguage(
             $request->getDataString('language') ?? $request->getLanguage()
         );
-        $itemL11n->description = $request->getDataString('description') ?? '';
+        $itemL11n->content = $request->getDataString('description') ?? '';
 
         return $itemL11n;
     }

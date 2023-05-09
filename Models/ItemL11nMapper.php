@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Localization\BaseStringL11n;
 
 /**
  * Item mapper class.
@@ -37,8 +38,8 @@ final class ItemL11nMapper extends DataMapperFactory
      */
     public const COLUMNS = [
         'itemmgmt_item_l11n_id'          => ['name' => 'itemmgmt_item_l11n_id',          'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_item_l11n_description' => ['name' => 'itemmgmt_item_l11n_description', 'type' => 'string', 'internal' => 'description', 'autocomplete' => true],
-        'itemmgmt_item_l11n_item'        => ['name' => 'itemmgmt_item_l11n_item',        'type' => 'int',    'internal' => 'item'],
+        'itemmgmt_item_l11n_description' => ['name' => 'itemmgmt_item_l11n_description', 'type' => 'string', 'internal' => 'content', 'autocomplete' => true],
+        'itemmgmt_item_l11n_item'        => ['name' => 'itemmgmt_item_l11n_item',        'type' => 'int',    'internal' => 'ref'],
         'itemmgmt_item_l11n_lang'        => ['name' => 'itemmgmt_item_l11n_lang',        'type' => 'string', 'internal' => 'language'],
         'itemmgmt_item_l11n_typeref'     => ['name' => 'itemmgmt_item_l11n_typeref',     'type' => 'int',    'internal' => 'type'],
     ];
@@ -71,4 +72,12 @@ final class ItemL11nMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const PRIMARYFIELD = 'itemmgmt_item_l11n_id';
+
+    /**
+     * Model to use by the mapper.
+     *
+     * @var class-string<T>
+     * @since 1.0.0
+     */
+    public const MODEL = BaseStringL11n::class;
 }

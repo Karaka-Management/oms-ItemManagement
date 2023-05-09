@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Localization\BaseStringL11nType;
 
 /**
  * Item mapper class.
@@ -24,7 +25,7 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of ItemL11nType
+ * @template T of BaseStringL11nType
  * @extends DataMapperFactory<T>
  */
 final class ItemL11nTypeMapper extends DataMapperFactory
@@ -56,4 +57,12 @@ final class ItemL11nTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const PRIMARYFIELD = 'itemmgmt_item_l11n_type_id';
+
+    /**
+     * Model to use by the mapper.
+     *
+     * @var class-string<T>
+     * @since 1.0.0
+     */
+    public const MODEL = BaseStringL11nType::class;
 }

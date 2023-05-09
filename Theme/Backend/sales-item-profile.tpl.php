@@ -74,11 +74,11 @@ echo $this->getData('nav')->render();
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                                     <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
-                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->description); ?>" spellcheck="false" required>
+                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>" spellcheck="false" required>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
-                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->description); ?>" spellcheck="false">
+                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->content); ?>" spellcheck="false">
                                     <tr><td><label for="iName3"><?= $this->getHtml('Name3'); ?></label>
-                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->description); ?>" spellcheck="false">
+                                    <tr><td><input type="text" id="iName3" name="name3" value="<?= $this->printHtml($item->getL11n('name3')->content); ?>" spellcheck="false">
                                 </table>
                             </div>
                             <div class="portlet-foot">
@@ -526,7 +526,7 @@ echo $this->getData('nav')->render();
                                         <tr>
                                             <td><label for="iText1"><?= $this->getHtml('Value'); ?></label>
                                         <tr>
-                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml($item->getL11n('name1')->description); ?>">
+                                            <td><input id="iName5" name="name5" type="text" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>">
                                         <tr>
                                             <td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                                 </table>

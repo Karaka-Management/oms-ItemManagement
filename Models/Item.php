@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Editor\Models\EditorDoc;
+use phpOMS\Localization\BaseStringL11n;
+use phpOMS\Localization\NullBaseStringL11n;
 use phpOMS\Stdlib\Base\FloatInt;
 
 /**
@@ -64,7 +66,7 @@ class Item implements \JsonSerializable
     /**
      * Localizations.
      *
-     * @var ItemL11n[]
+     * @var BaseStringL11n[]
      * @since 1.0.0
      */
     private array $l11n = [];
@@ -118,13 +120,13 @@ class Item implements \JsonSerializable
     /**
      * Add item l11n
      *
-     * @param ItemL11n $l11n Item localization
+     * @param BaseStringL11n $l11n Item localization
      *
      * @return void
      *
      * @since 1.0.0
      */
-    public function addL11n(ItemL11n $l11n) : void
+    public function addL11n(BaseStringL11n $l11n) : void
     {
         foreach ($this->l11n as $l11n) {
             if ($l11n->type->title === $l11n->type->title) {
@@ -140,11 +142,11 @@ class Item implements \JsonSerializable
      *
      * @param null|string $type Localization type
      *
-     * @return ItemL11n
+     * @return BaseStringL11n
      *
      * @since 1.0.0
      */
-    public function getL11n(string $type = null) : ItemL11n
+    public function getL11n(string $type = null) : BaseStringL11n
     {
         foreach ($this->l11n as $l11n) {
             if ($l11n->type->title === $type) {
@@ -152,13 +154,13 @@ class Item implements \JsonSerializable
             }
         }
 
-        return new NullItemL11n();
+        return new NullBaseStringL11n();
     }
 
     /**
      * Get localizations
      *
-     * @return ItemL11n[]
+     * @return BaseStringL11n[]
      *
      * @since 1.0.0
      */

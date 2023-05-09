@@ -19,6 +19,8 @@ use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\Localization\BaseStringL11n;
+use phpOMS\Localization\BaseStringL11nType;
 
 /**
  * Item mapper class.
@@ -169,18 +171,18 @@ final class ItemMapper extends DataMapperFactory
         $l11nsResult = $sth->fetchAll();
 
         foreach ($l11nsResult as $res) {
-            $l11nType = new ItemL11nType();
+            $l11nType = new BaseStringL11nType();
             $l11nType->id = $res['itemmgmt_item_l11n_typeref'];
             $l11nType->title= $res['itemmgmt_item_l11n_type_title'];
 
-            $l11n = new ItemL11n();
+            $l11n = new BaseStringL11n();
             $l11n->id = $res['itemmgmt_item_l11n_id'];
-            $l11n->item = $res['itemmgmt_item_id'];
+            $l11n->ref = $res['itemmgmt_item_id'];
             $l11n->type = $l11nType;
-            $l11n->description = $res['itemmgmt_item_l11n_description'];
+            $l11n->content = $res['itemmgmt_item_l11n_description'];
             $l11n->setLanguage($res['itemmgmt_item_l11n_lang']);
 
-            $items[$l11n->item]->addL11n($l11n);
+            $items[$l11n->ref]->addL11n($l11n);
         }
 
         return $items;
