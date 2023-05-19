@@ -138,9 +138,9 @@ echo $this->getData('nav')->render(); ?>
                                 ? 'Web/Backend/img/logo_grey.png'
                                 : UriFactory::build($image->getPath()); ?>"></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->description); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->description); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->description); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->content); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->content); ?></a>
+                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->content); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice); ?></a>
                     <td>
                     <td>

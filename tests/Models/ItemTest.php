@@ -17,7 +17,6 @@ namespace Modules\ItemManagement\tests\Models;
 use Modules\Editor\Models\EditorDoc;
 use Modules\ItemManagement\Models\Item;
 use Modules\Attribute\Models\Attribute;
-use Modules\ItemManagement\Models\ItemL11n;
 use Modules\ItemManagement\Models\ItemStatus;
 use Modules\Media\Models\Media;
 use phpOMS\Localization\BaseStringL11n;
@@ -51,7 +50,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals([], $this->item->getNotes());
         self::assertEquals([], $this->item->getFiles());
         self::assertEquals([], $this->item->getAttributes());
-        self::assertInstanceOf('Modules\ItemManagement\Models\ItemL11n', $this->item->getL11n(''));
+        self::assertInstanceOf(BaseStringL11n::class, $this->item->getL11n(''));
         self::assertInstanceOf('phpOMS\Localization\Money', $this->item->salesPrice);
         self::assertInstanceOf('phpOMS\Localization\Money', $this->item->purchasePrice);
     }

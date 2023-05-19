@@ -480,7 +480,7 @@ echo $this->getData('nav')->render();
                                         <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->title); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getLanguage()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->description); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->content); ?></a>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr>

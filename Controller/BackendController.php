@@ -468,7 +468,7 @@ final class BackendController extends Controller
 
             $topCustomers      = SalesBillMapper::getItemTopClients($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $allInvoices       = SalesBillMapper::getItemBills($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $regionSales       = SalesBillMapper::getItemRegionSales($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
+            $regionSales       = [];
             $countrySales      = SalesBillMapper::getItemCountrySales($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
             $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
         } else {
