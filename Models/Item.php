@@ -45,14 +45,44 @@ class Item implements \JsonSerializable
      */
     public string $number = '';
 
+    /**
+     * Successor value.
+     *
+     * @var int
+     * @since 1.0.0
+     */
     public int $successor = 0;
 
+    /**
+     * Parent value.
+     *
+     * @var int|null
+     * @since 1.0.0
+     */
     public ?int $parent = null;
 
+    /**
+     * Status value.
+     *
+     * @var int
+     * @since 1.0.0
+     */
     public int $status = ItemStatus::ACTIVE;
 
+    /**
+     * Sales price value.
+     *
+     * @var FloatInt
+     * @since 1.0.0
+     */
     public FloatInt $salesPrice;
 
+    /**
+     * Purchase price value.
+     *
+     * @var FloatInt
+     * @since 1.0.0
+     */
     public FloatInt $purchasePrice;
 
     /**
@@ -71,8 +101,20 @@ class Item implements \JsonSerializable
      */
     private array $l11n = [];
 
+    /**
+     * Parts list.
+     *
+     * @var int|null
+     * @since 1.0.0
+     */
     public ?int $partslist = null;
 
+    /**
+     * Disposal.
+     *
+     * @var int|null
+     * @since 1.0.0
+     */
     public ?int $disposal = null;
 
     /**
@@ -83,6 +125,12 @@ class Item implements \JsonSerializable
      */
     public \DateTimeImmutable $createdAt;
 
+    /**
+     * Info.
+     *
+     * @var string
+     * @since 1.0.0
+     */
     public string $info = '';
 
     /**

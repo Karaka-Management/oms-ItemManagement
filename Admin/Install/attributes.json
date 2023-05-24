@@ -634,19 +634,6 @@
         ]
     },
     {
-        "name": "demo_link",
-        "l11n": {
-            "en": "Demo link",
-            "de": "Demo Link"
-        },
-        "value_type": 2,
-        "is_custom_allowed": true,
-        "validation_pattern": "",
-        "is_required": false,
-        "default_value": "",
-        "values": []
-    },
-    {
         "name": "one_click_pay_cc",
         "l11n": {
             "en": "One Click CC payment link",

@@ -18,6 +18,7 @@ use Modules\Admin\Models\NullAccount;
 use Modules\Attribute\Models\Attribute;
 use Modules\Attribute\Models\AttributeType;
 use Modules\Attribute\Models\AttributeValue;
+use Modules\Attribute\Models\NullAttribute;
 use Modules\Attribute\Models\NullAttributeType;
 use Modules\Attribute\Models\NullAttributeValue;
 use Modules\ItemManagement\Models\Item;
@@ -227,7 +228,7 @@ final class ApiController extends Controller
             );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
+        $this->createStandardCreateResponse($request, $response, $item);
     }
 
     /**
@@ -319,7 +320,7 @@ final class ApiController extends Controller
 
         $item = $this->createItemPriceFromRequest($request);
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item', 'Item successfully created', $item);
+        $this->createStandardCreateResponse($request, $response, $item);
     }
 
     /**
@@ -394,8 +395,7 @@ final class ApiController extends Controller
 
         $attribute = $this->createItemAttributeFromRequest($request);
         $this->createModel($request->header->account, $attribute, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
-
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully created', $attribute);
+        $this->createStandardCreateResponse($request, $response, $attribute);
     }
 
     /**
@@ -479,13 +479,22 @@ final class ApiController extends Controller
             ->execute();
 
         $new = $this->updateItemAttributeFromRequest($request, $old->deepClone());
+
+        if ($new->id === 0) {
+            // Set response header to invalid request because of invalid data
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidUpdateResponse($request, $response, $new);
+
+            return;
+        }
+
         $this->updateModel($request->header->account, $old, $new, ItemAttributeMapper::class, 'attribute', $request->getOrigin());
 
         if ($new->value->getValue() !== $old->value->getValue()) {
             $this->updateModel($request->header->account, $old->value, $new->value, ItemAttributeValueMapper::class, 'attribute_value', $request->getOrigin());
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute', 'Attribute successfully updated', $new);
+        $this->createStandardUpdateResponse($request, $response, $new);
     }
 
     /**
@@ -499,21 +508,21 @@ final class ApiController extends Controller
      */
     private function updateItemAttributeFromRequest(RequestAbstract $request, Attribute $attribute) : Attribute
     {
-        if ($attribute->type->custom) {
-            if ($request->hasData('value')) {
-                // @question: we are overwriting the old value, could there be a use case where we want to create a new value and keep the old one?
-                $attribute->value->setValue($request->getData('value'), $attribute->type->datatype);
-            }
-        } else {
-            if ($request->hasData('value')) {
-                // @todo: fix by only accepting the value id to be used
-                // this is a workaround for now because the front end doesn't allow to dynamically show default values.
-                $value = $attribute->type->getDefaultByValue($request->getData('value'));
 
-                if ($value->id !== 0) {
-                    $attribute->value = $attribute->type->getDefaultByValue($request->getData('value'));
-                }
+        if ($attribute->type->custom) {
+            // @question: we are overwriting the old value, could there be a use case where we want to create a new value and keep the old one?
+            $attribute->value->setValue($request->getData('value'), $attribute->type->datatype);
+        } else {
+            // @todo: fix by only accepting the value id to be used
+            // this is a workaround for now because the front end doesn't allow to dynamically show default values.
+            $value = $attribute->type->getDefaultByValue($request->getData('value'));
+
+            // Couldn't find matching default value
+            if ($value->id === 0) {
+                return new NullAttribute();
             }
+
+            $attribute->value = $value;
         }
 
         return $attribute;
@@ -532,6 +541,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['id'] = !$request->hasData('id'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
@@ -563,7 +573,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createItemAttributeTypeL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeTypeL11nMapper::class, 'attr_type_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
+        $this->createStandardCreateResponse($request, $response, $attrL11n);
     }
 
     /**
@@ -632,8 +642,7 @@ final class ApiController extends Controller
 
         $attrType = $this->createAttributeTypeFromRequest($request);
         $this->createModel($request->header->account, $attrType, ItemAttributeTypeMapper::class, 'attr_type', $request->getOrigin());
-
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute type', 'Attribute type successfully created', $attrType);
+        $this->createStandardCreateResponse($request, $response, $attrType);
     }
 
     /**
@@ -713,7 +722,7 @@ final class ApiController extends Controller
             );
         }
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Attribute value', 'Attribute value successfully created', $attrValue);
+        $this->createStandardCreateResponse($request, $response, $attrValue);
     }
 
     /**
@@ -788,7 +797,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
+        $this->createStandardCreateResponse($request, $response, $attrL11n);
     }
 
     /**
@@ -857,7 +866,7 @@ final class ApiController extends Controller
 
         $attrL11n = $this->createAttributeValueL11nFromRequest($request);
         $this->createModel($request->header->account, $attrL11n, ItemAttributeValueL11nMapper::class, 'attr_value_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $attrL11n);
+        $this->createStandardCreateResponse($request, $response, $attrL11n);
     }
 
     /**
@@ -884,7 +893,7 @@ final class ApiController extends Controller
 
         $itemL11nType = $this->createItemL11nTypeFromRequest($request);
         $this->createModel($request->header->account, $itemL11nType, ItemL11nTypeMapper::class, 'item_l11n_type', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization type', 'Localization type successfully created', $itemL11nType);
+        $this->createStandardCreateResponse($request, $response, $itemL11nType);
     }
 
     /**
@@ -948,7 +957,7 @@ final class ApiController extends Controller
 
         $itemRelationType = $this->createItemRelationTypeFromRequest($request);
         $this->createModel($request->header->account, $itemRelationType, ItemRelationTypeMapper::class, 'item_relation_type', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Item relation type', 'Item relation type successfully created', $itemRelationType);
+        $this->createStandardCreateResponse($request, $response, $itemRelationType);
     }
 
     /**
@@ -1011,7 +1020,7 @@ final class ApiController extends Controller
 
         $itemL11n = $this->createItemL11nFromRequest($request);
         $this->createModel($request->header->account, $itemL11n, ItemL11nMapper::class, 'item_l11n', $request->getOrigin());
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Localization', 'Localization successfully created', $itemL11n);
+        $this->createStandardCreateResponse($request, $response, $itemL11n);
     }
 
     /**
@@ -1083,8 +1092,8 @@ final class ApiController extends Controller
         $uploadedFiles = $request->getFiles();
 
         if (empty($uploadedFiles)) {
-            $this->fillJsonResponse($request, $response, NotificationLevel::ERROR, 'Item', 'Invalid item image', $uploadedFiles);
             $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $uploadedFiles);
 
             return;
         }
@@ -1127,7 +1136,7 @@ final class ApiController extends Controller
             ItemMapper::class, 'files', '', $request->getOrigin()
         );
 
-        $this->fillJsonResponse($request, $response, NotificationLevel::OK, 'Image', 'Image successfully updated', $uploaded);
+        $this->createStandardUpdateResponse($request, $response, $uploaded);
     }
 
     /**

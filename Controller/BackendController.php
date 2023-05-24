@@ -204,7 +204,7 @@ final class BackendController extends Controller
             ->where('l11n/language', $response->getLanguage())
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('files/types/name', 'item_profile_image')
-            ->limit(25)
+            ->limit(50)
             ->execute();
 
         $view->addData('items', $items);
@@ -362,8 +362,8 @@ final class BackendController extends Controller
             ->with('notes')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->getLanguage())
-            ->where('attributes/type/l11n/language', $response->getLanguage())
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->where('attributes/type/l11n/language', $response->getLanguage())
             ->limit(5, 'files')->sort('files/id', OrderType::DESC)
             ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->execute();
@@ -410,7 +410,7 @@ final class BackendController extends Controller
 
         $l11nValues = ItemL11nMapper::getAll()
             ->with('type')
-            ->where('item', $item->id)
+            ->where('ref', $item->id)
             ->execute();
         $view->setData('l11nValues', $l11nValues);
 

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\ISO639Enum;
+use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\Http\HttpHeader;
@@ -57,9 +58,10 @@ echo $this->getData('nav')->render();
             <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label></li>
             <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
             <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
-            <li><label for="c-tab-12"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Bills'); ?></label></li>
-            <li><label for="c-tab-14"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-12"><?= $this->getHtml('Notes'); ?></label></li>
+            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label></li>
+            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label></li>
+            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label></li>
         </ul>
     </div>
     <div class="tab-content">
@@ -82,18 +84,18 @@ echo $this->getData('nav')->render();
                               </table>
                             </div>
                             <div class="portlet-foot">
-                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item"> <input type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
+                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
+                                <input class="right-xs cancel" type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
                             </div>
                         </form>
                     </section>
 
-                    <?php $image = $itemImage; ?>
                     <section class="portlet">
                         <div class="portlet-body">
-                            <img alt="<?= $this->printHtml($image->name); ?>" width="100%" loading="lazy" class="item-image"
-                                src="<?= $image->id === 0
+                            <img alt="<?= $this->printHtml($itemImage->name); ?>" width="100%" loading="lazy" class="item-image"
+                                src="<?= $itemImage->id === 0
                                     ? 'Web/Backend/img/logo_grey.png'
-                                    : UriFactory::build($image->getPath()); ?>">
+                                    : UriFactory::build($itemImage->getPath()); ?>">
                         </div>
                     </section>
 
@@ -144,15 +146,15 @@ echo $this->getData('nav')->render();
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('SalesPrice'); ?>:
-                                            <td><?= $this->getCurrency($item->salesPrice); ?>
+                                            <td><?= $this->getCurrency($item->salesPrice, format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
                                             <td><?= $this->getCurrency($item->purchasePrice); ?>
                                         <tr><td><?= $this->getHtml('Margin'); ?>:
-                                            <td><?= \round(
+                                            <td><?= $this->getNumeric(
                                                 $item->salesPrice->getInt() === 0
                                                     ? 0
-                                                    : ($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100, 2
-                                                ); ?> %
+                                                    : ($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100
+                                                , 'short'); ?> %
                                         <tr><td><?= $this->getHtml('AvgPrice'); ?>:
                                             <td><?= $this->getCurrency($this->getData('avg')); ?>
                                     </table>
@@ -164,7 +166,10 @@ echo $this->getData('nav')->render();
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
-                                <div class="portlet-head"><?= $this->getHtml('Notes'); ?></div>
+                                <div class="portlet-head row middle-xs">
+                                    <span><?= $this->getHtml('Notes'); ?></span>
+                                    <label for="c-tab-12" class="right-xs btn"><i class="fa fa-pencil"></i></a>
+                                </div>
                                 <div class="slider">
                                 <table id="iNotesItemList" class="default">
                                     <thead>
@@ -186,7 +191,10 @@ echo $this->getData('nav')->render();
 
                         <div class="col-xs-12 col-md-6">
                             <section class="portlet">
-                                <div class="portlet-head"><?= $this->getHtml('Files'); ?></div>
+                                <div class="portlet-head row middle-xs">
+                                    <span><?= $this->getHtml('Files'); ?></span>
+                                    <label for="c-tab-13" class="right-xs btn"><i class="fa fa-pencil"></i></a>
+                                </div>
                                 <div class="slider">
                                 <table id="iFilesItemList" class="default">
                                     <thead>
@@ -242,6 +250,7 @@ echo $this->getData('nav')->render();
                     </div>
 
                     <div class="row">
+                        <?php if (!empty($topCustomers[0])) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('TopCustomers'); ?></div>
@@ -265,7 +274,9 @@ echo $this->getData('nav')->render();
                                 </table>
                             </section>
                         </div>
+                        <?php endif; ?>
 
+                        <?php if (!empty($monthlySalesCosts)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Sales'); ?></div>
@@ -295,7 +306,7 @@ echo $this->getData('nav')->render();
                                                             ?>
                                                             <?= \implode(',', $temp); ?>
                                                         ],
-                                                        "yAxisID": "axis-2",
+                                                        "yAxisID": "axis2",
                                                         "fill": false,
                                                         "borderColor": "rgb(255, 99, 132)",
                                                         "backgroundColor": "rgb(255, 99, 132)"
@@ -312,47 +323,52 @@ echo $this->getData('nav')->render();
                                                             ?>
                                                             <?= \implode(',', $temp); ?>
                                                         ],
-                                                        "yAxisID": "axis-1",
+                                                        "yAxisID": "axis1",
                                                         "backgroundColor": "rgb(54, 162, 235)"
                                                     }
                                                 ]
                                             },
                                             "options": {
+                                                "responsive": true,
                                                 "scales": {
-                                                    "yAxes": [
-                                                        {
-                                                            "id": "axis-1",
-                                                            "display": true,
-                                                            "position": "left"
-                                                        },
-                                                        {
-                                                            "id": "axis-2",
-                                                            "display": true,
-                                                            "position": "right",
-                                                            "scaleLabel": {
-                                                                "display": true,
-                                                                "labelString": "<?= $this->getHtml('Margin'); ?> %"
-                                                            },
-                                                            "gridLines": {
-                                                                "display": false
-                                                            },
-                                                            "beginAtZero": true,
-                                                            "ticks": {
-                                                                "min": 0,
-                                                                "max": 100,
-                                                                "stepSize": 10
-                                                            }
+                                                    "axis1": {
+                                                        "id": "axis1",
+                                                        "display": true,
+                                                        "position": "left",
+                                                        "suggestedMin": 0,
+                                                        "ticks": {
+                                                            "stepSize": 1000
                                                         }
-                                                    ]
+                                                    },
+                                                    "axis2": {
+                                                        "id": "axis2",
+                                                        "display": true,
+                                                        "position": "right",
+                                                        "suggestedMin": 0,
+                                                        "max": 100,
+                                                        "title": {
+                                                            "display": true,
+                                                            "text": "<?= $this->getHtml('Margin'); ?> %"
+                                                        },
+                                                        "grid": {
+                                                            "display": false
+                                                        },
+                                                        "beginAtZero": true,
+                                                        "ticks": {
+                                                            "stepSize": 10
+                                                        }
+                                                    }
                                                 }
                                             }
                                     }'></canvas>
                                 </div>
                             </section>
                         </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="row">
+                        <?php if (!empty($regionSales)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head">Regions</div>
@@ -386,7 +402,9 @@ echo $this->getData('nav')->render();
                                 </div>
                             </section>
                         </div>
+                        <?php endif; ?>
 
+                        <?php if (!empty($countrySales)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Countries'); ?></div>
@@ -409,13 +427,30 @@ echo $this->getData('nav')->render();
                                                     ?>
                                                     <?= \implode(',', $temp); ?>
                                                 ],
+                                                "yAxisID": "axis1",
                                                 "backgroundColor": "rgb(54, 162, 235)"
                                             }]
+                                        },
+                                        "options": {
+                                            "responsive": true,
+                                            "scales": {
+                                                "axis1": {
+                                                    "id": "axis1",
+                                                    "display": true,
+                                                    "position": "left",
+                                                    "suggestedMin": 0,
+                                                    "ticks": {
+                                                        "stepSize": 1000
+                                                    }
+                                                }
+                                            }
                                         }
                                 }'></canvas>
                                 </div>
                             </section>
                         </div>
+                        <?php endif; ?>
+
                     </div>
                 </div>
             </div>
@@ -425,13 +460,21 @@ echo $this->getData('nav')->render();
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                        <form id="localizationForm" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post"
+                            data-ui-container="#localizationTable tbody"
+                            data-add-form="localizationForm"
+                            data-add-tpl="#localizationTable tbody .oms-add-tpl-localization">
                             <div class="portlet-head"><?= $this->getHtml('Localization'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
+                                    <div class="form-group">
+                                        <label for="iLocaliztionId"><?= $this->getHtml('ID'); ?></label>
+                                        <input type="text" id="iLocaliztionId" name="id" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    </div>
+
                                     <label for="iLocalizationLanguage"><?= $this->getHtml('Language'); ?></label>
-                                    <select id="iLocalizationLanguage" name="language">
-                                        <?php foreach ($languages as $code => $language) : ?>
+                                    <select id="iLocalizationLanguage" name="language" data-tpl-text="/language" data-tpl-value="/language">
+                                        <?php foreach ($languages as $code => $language) : $code = ISO639x1Enum::getByName($code); ?>
                                             <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                         <?php endforeach; ?>
                                     </select>
@@ -439,7 +482,7 @@ echo $this->getData('nav')->render();
 
                                 <div class="form-group">
                                     <label for="iLocalizationType"><?= $this->getHtml('Type'); ?></label>
-                                    <select id="iLocalizationType" name="type">
+                                    <select id="iLocalizationType" name="type" data-tpl-text="/type" data-tpl-value="/type">
                                         <?php
                                             $types = $this->getData('l11nTypes') ?? [];
                                             foreach ($types as $type) : ?>
@@ -450,10 +493,14 @@ echo $this->getData('nav')->render();
 
                                 <div class="form-group">
                                     <label for="iLocalizationText"><?= $this->getHtml('Text'); ?></label>
-                                    <textarea id="iLocalizationText" name="content"></textarea>
+                                    <pre class="textarea contenteditable" id="iLocalizationText" data-name="content" data-tpl-value="/l11n" contenteditable="true"></pre>
                                 </div>
                             </div>
-                            <div class="portlet-foot"><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>"></div>
+                            <div class="portlet-foot">
+                                <input id="bLocalizationAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bLocalizationSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
+                            </div>
                         </form>
                     </section>
                 </div>
@@ -462,25 +509,54 @@ echo $this->getData('nav')->render();
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="fa fa-download floatRight download btn"></i></div>
                         <div class="slider">
-                        <table id="groupTable" class="default sticky">
+                        <table id="localizationTable" class="default sticky fixed-5"
+                            data-tag="form"
+                            data-ui-element="tr"
+                            data-add-tpl=".oms-add-tpl-localization"
+                            data-update-form="localizationForm">
                             <thead>
                                 <tr>
                                     <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?>
                                     <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td><?= $this->getHtml('Language'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td class="wf-100"><?= $this->getHtml('Localization'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                             <tbody>
-                                <?php $c = 0;
+                                <template class="oms-add-tpl-attribute">
+                                    <tr data-id="" draggable="false">
+                                        <td>
+                                            <i class="fa fa-cogs btn update-form"></i>
+                                            <input id="attributeTable-remove-0" type="checkbox" class="hidden">
+                                            <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <span class="checked-visibility">
+                                                <label for="attributeTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="attributeTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
+                                        <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
+                                        <td data-tpl-text="/language" data-tpl-value="/language"></td>
+                                        <td data-tpl-text="/l11n" data-tpl-value="/l11n"></td>
+                                    </tr>
+                                </template>
+                                <?php
+                                $c = 0;
                                 $itemL11n = $this->getData('l11nValues');
-                                foreach ($itemL11n as $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
-                                    <tr data-href="<?= $url; ?>">
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->type->title); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getLanguage()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->content); ?></a>
+                                foreach ($itemL11n as $value) : ++$c; ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td>
+                                            <i class="fa fa-cogs btn update-form"></i>
+                                            <?php if (!$value->type->isRequired) : ?>
+                                            <input id="localizationTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="localizationTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <span class="checked-visibility">
+                                                <label for="localizationTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="localizationTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                            <?php endif; ?>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/type" data-tpl-value="/type" data-value="<?= $value->type->id; ?>"><?= $this->printHtml($value->type->title); ?>
+                                        <td data-tpl-text="/language" data-tpl-value="/language"><?= $this->printHtml($value->getLanguage()); ?>
+                                        <td data-tpl-text="/l11n" data-tpl-value="/l11n" data-value="<?= \nl2br($this->printHtml($value->content)); ?>"><?= \nl2br($this->printHtml(\substr($value->content, 0, 100))); ?>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr>
@@ -504,8 +580,8 @@ echo $this->getData('nav')->render();
                             <div class="portlet-head"><?= $this->getHtml('Attribute'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
-                                    <label for="iId"><?= $this->getHtml('ID'); ?></label>
-                                    <input type="text" id="iId" name="id" data-tpl-text="/id" data-tpl-value="/id" disabled>
+                                    <label for="iAttributeId"><?= $this->getHtml('ID'); ?></label>
+                                    <input type="text" id="iAttributeId" name="id" data-tpl-text="/id" data-tpl-value="/id" disabled>
                                 </div>
 
                                 <!--
@@ -524,7 +600,7 @@ echo $this->getData('nav')->render();
                                     <label for="iAttributesType"><?= $this->getHtml('Type'); ?></label>
                                     <select id="iAttributesType" name="type" data-tpl-text="/type" data-tpl-value="/type">
                                         <?php
-                                            $types = $this->getData('attributeTypes') ?? [];
+                                        $types = $this->getData('attributeTypes') ?? [];
                                         foreach ($types as $type) : ?>
                                             <option value="<?= $type->id; ?>"><?= $this->printHtml($type->getL11n()); ?>
                                         <?php endforeach; ?>
@@ -534,8 +610,9 @@ echo $this->getData('nav')->render();
                                 <div class="form-group">
                                     <label for="iAttributesUnit"><?= $this->getHtml('Unit'); ?></label>
                                     <select id="iAttributesUnit" name="unit" data-tpl-text="/unit" data-tpl-value="/unit">
+                                        <option value="">
                                         <?php
-                                            $units = $this->getData('units') ?? [];
+                                        $units = $this->getData('units') ?? [];
                                         foreach ($units as $unit) : ?>
                                             <option value="<?= $unit->id; ?>"><?= $this->printHtml($unit->name); ?>
                                         <?php endforeach; ?>
@@ -544,7 +621,7 @@ echo $this->getData('nav')->render();
 
                                 <div class="form-group">
                                     <label for="iAttributeValue"><?= $this->getHtml('Value'); ?></label>
-                                    <textarea id="iAttributeValue" name="value" data-tpl-text="/value" data-tpl-value="/value"></textarea>
+                                    <pre class="textarea contenteditable" id="iAttributeValue" data-name="value" data-tpl-value="/value" contenteditable></pre>
                                 </div>
                             </div>
                             <div class="portlet-foot">
@@ -568,7 +645,7 @@ echo $this->getData('nav')->render();
                             <thead>
                                 <tr>
                                     <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?>
                                     <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td class="wf-100"><?= $this->getHtml('Value'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
                                     <td><?= $this->getHtml('Unit'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
@@ -577,23 +654,35 @@ echo $this->getData('nav')->render();
                                     <tr data-id="" draggable="false">
                                         <td>
                                             <i class="fa fa-cogs btn update-form"></i>
-                                            <i class="fa fa-times btn remove-form"></i>
-                                        <td>
+                                            <input id="attributeTable-remove-0" type="checkbox" class="hidden">
+                                            <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <span class="checked-visibility">
+                                                <label for="attributeTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="attributeTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
                                         <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
-                                        <td data-tpl-text="/value" data-tpl-value="/value" data-value=""></td>
+                                        <td data-tpl-text="/value" data-tpl-value="/value"></td>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit"></td>
                                     </tr>
                                 </template>
-
                                 <?php $c = 0;
                                 foreach ($attribute as $key => $value) : ++$c; ?>
                                     <tr data-id="<?= $value->id; ?>">
                                         <td>
                                             <i class="fa fa-cogs btn update-form"></i>
-                                            <i class="fa fa-times btn remove-form"></i>
-                                        <td data-tpl-text="/id" data-tpl-value="/id" data-value=""><?= $value->id; ?>
+                                            <?php if (!$value->type->isRequired) : ?>
+                                            <input id="attributeTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="attributeTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
+                                            <span class="checked-visibility">
+                                                <label for="attributeTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="attributeTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                            <?php endif; ?>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
                                         <td data-tpl-text="/type" data-tpl-value="/type" data-value="<?= $value->type->id; ?>"><?= $this->printHtml($value->type->getL11n()); ?>
-                                        <td data-tpl-text="/value" data-tpl-value="/value" data-value=""><?= $value->value->getValue() instanceof \DateTime ? $value->value->getValue()->format('Y-m-d') : $this->printHtml((string) $value->value->getValue()); ?>
-                                        <td data-tpl-text="/unit" data-tpl-value="/unit" data-value="<?= $this->printHtml($value->value->unit); ?>"><?= $this->printHtml($value->value->unit); ?>
+                                        <td data-tpl-text="/value" data-tpl-value="/value"><?= $value->value->getValue() instanceof \DateTime ? $value->value->getValue()->format('Y-m-d') : $this->printHtml((string) $value->value->getValue()); ?>
+                                        <td data-tpl-text="/unit" data-tpl-value="/unit" data-value="<?= $value->value->unit; ?>"><?= $this->printHtml($value->value->unit); ?>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                 <tr>
@@ -1042,13 +1131,19 @@ echo $this->getData('nav')->render();
         <input type="radio" id="c-tab-12" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
+            </div>
+        </div>
+
+        <input type="radio" id="c-tab-13" name="tabular-2" checked>
+        <div class="tab">
+            <div class="row">
                 <div class="col-xs-12">
                     <?= $this->getData('medialist')->render($this->getData('files')); ?>
                 </div>
             </div>
         </div>
 
-        <input type="radio" id="c-tab-13" name="tabular-2" checked>
+        <input type="radio" id="c-tab-14" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
@@ -1081,7 +1176,7 @@ echo $this->getData('nav')->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-14" name="tabular-2" checked>
+        <input type="radio" id="c-tab-15" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
