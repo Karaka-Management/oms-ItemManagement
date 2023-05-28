@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Models;
 
+use Modules\Attribute\Models\Attribute;
 use Modules\Editor\Models\EditorDoc;
 use Modules\ItemManagement\Models\Item;
-use Modules\Attribute\Models\Attribute;
 use Modules\ItemManagement\Models\ItemStatus;
 use Modules\Media\Models\Media;
 use phpOMS\Localization\BaseStringL11n;

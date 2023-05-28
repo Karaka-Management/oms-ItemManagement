@@ -48,7 +48,6 @@ use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
@@ -508,7 +507,6 @@ final class ApiController extends Controller
      */
     private function updateItemAttributeFromRequest(RequestAbstract $request, Attribute $attribute) : Attribute
     {
-
         if ($attribute->type->custom) {
             // @question: we are overwriting the old value, could there be a use case where we want to create a new value and keep the old one?
             $attribute->value->setValue($request->getData('value'), $attribute->type->datatype);

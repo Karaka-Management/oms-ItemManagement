@@ -25,8 +25,8 @@ $item = $this->getData('item');
 
 $attribute = $item->getAttributes();
 
-$notes = $item->getNotes();
-$files = $item->getFiles();
+$notes     = $item->getNotes();
+$files     = $item->getFiles();
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
@@ -539,7 +539,7 @@ echo $this->getData('nav')->render();
                                     </tr>
                                 </template>
                                 <?php
-                                $c = 0;
+                                $c        = 0;
                                 $itemL11n = $this->getData('l11nValues');
                                 foreach ($itemL11n as $value) : ++$c; ?>
                                     <tr data-id="<?= $value->id; ?>">
@@ -782,7 +782,7 @@ echo $this->getData('nav')->render();
                                     <td><?= $this->getHtml('End'); ?>
                             <tbody>
                                 <?php
-                                $c = 0;
+                                $c      = 0;
                                 $prices = $this->getData('prices');
                                 foreach ($prices as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
@@ -1206,8 +1206,8 @@ echo $this->getData('nav')->render();
                                 <td><?= $this->getHtml('Date', 'Auditor'); ?>
                             <tbody>
                             <?php
-                                $count = 0;
-                                $audits = $this->getData('audits') ?? [];
+                                $count    = 0;
+                                $audits   = $this->getData('audits') ?? [];
                                 $previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
                                 $next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 

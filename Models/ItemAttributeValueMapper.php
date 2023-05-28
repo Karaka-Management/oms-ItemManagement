@@ -37,14 +37,14 @@ final class ItemAttributeValueMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_attr_value_id'            => ['name' => 'itemmgmt_attr_value_id',       'type' => 'int',      'internal' => 'id'],
-        'itemmgmt_attr_value_default'       => ['name' => 'itemmgmt_attr_value_default',  'type' => 'bool',     'internal' => 'isDefault'],
-        'itemmgmt_attr_value_valueStr'      => ['name' => 'itemmgmt_attr_value_valueStr', 'type' => 'string',   'internal' => 'valueStr'],
-        'itemmgmt_attr_value_valueInt'      => ['name' => 'itemmgmt_attr_value_valueInt', 'type' => 'int',      'internal' => 'valueInt'],
-        'itemmgmt_attr_value_valueDec'      => ['name' => 'itemmgmt_attr_value_valueDec', 'type' => 'float',    'internal' => 'valueDec'],
-        'itemmgmt_attr_value_valueDat'      => ['name' => 'itemmgmt_attr_value_valueDat', 'type' => 'DateTime', 'internal' => 'valueDat'],
-        'itemmgmt_attr_value_unit'          => ['name' => 'itemmgmt_attr_value_unit', 'type' => 'string', 'internal' => 'unit'],
-        'itemmgmt_attr_value_deptype'          => ['name' => 'itemmgmt_attr_value_deptype', 'type' => 'int', 'internal' => 'dependingAttributeType'],
+        'itemmgmt_attr_value_id'                => ['name' => 'itemmgmt_attr_value_id',       'type' => 'int',      'internal' => 'id'],
+        'itemmgmt_attr_value_default'           => ['name' => 'itemmgmt_attr_value_default',  'type' => 'bool',     'internal' => 'isDefault'],
+        'itemmgmt_attr_value_valueStr'          => ['name' => 'itemmgmt_attr_value_valueStr', 'type' => 'string',   'internal' => 'valueStr'],
+        'itemmgmt_attr_value_valueInt'          => ['name' => 'itemmgmt_attr_value_valueInt', 'type' => 'int',      'internal' => 'valueInt'],
+        'itemmgmt_attr_value_valueDec'          => ['name' => 'itemmgmt_attr_value_valueDec', 'type' => 'float',    'internal' => 'valueDec'],
+        'itemmgmt_attr_value_valueDat'          => ['name' => 'itemmgmt_attr_value_valueDat', 'type' => 'DateTime', 'internal' => 'valueDat'],
+        'itemmgmt_attr_value_unit'              => ['name' => 'itemmgmt_attr_value_unit', 'type' => 'string', 'internal' => 'unit'],
+        'itemmgmt_attr_value_deptype'           => ['name' => 'itemmgmt_attr_value_deptype', 'type' => 'int', 'internal' => 'dependingAttributeType'],
         'itemmgmt_attr_value_depvalue'          => ['name' => 'itemmgmt_attr_value_depvalue', 'type' => 'int', 'internal' => 'dependingAttributeValue'],
     ];
 

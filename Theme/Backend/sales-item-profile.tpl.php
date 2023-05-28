@@ -12,7 +12,6 @@
  */
 declare(strict_types=1);
 
-use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
@@ -22,7 +21,7 @@ use phpOMS\Uri\UriFactory;
 $item = $this->getData('item');
 
 $itemL11n      = $item->getL11ns();
-$Attribute = $item->getAttributes();
+$Attribute     = $item->getAttributes();
 
 $notes = $item->getNotes();
 $files = $item->getFiles();

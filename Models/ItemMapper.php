@@ -121,22 +121,22 @@ final class ItemMapper extends DataMapperFactory
         SQL;
 
         $itemsResult = self::$db->con->query($query)->fetchAll();
-        $items = [];
+        $items       = [];
 
         foreach ($itemsResult as $res) {
             $media = null;
             if ($res['media_id'] !== null) {
-                $mediaType = new MediaType();
-                $mediaType->id = $res['media_type_id'];
+                $mediaType       = new MediaType();
+                $mediaType->id   = $res['media_type_id'];
                 $mediaType->name = $res['media_type_name'];
 
-                $media = new Media();
+                $media     = new Media();
                 $media->id = $res['media_id'];
                 $media->setPath($res['media_file']);
             }
 
-            $item = new Item();
-            $item->id = $res['itemmgmt_item_id'];
+            $item         = new Item();
+            $item->id     = $res['itemmgmt_item_id'];
             $item->number = $res['itemmgmt_item_no'];
             $item->salesPrice->setInt($res['itemmgmt_item_salesprice']);
 
@@ -171,14 +171,14 @@ final class ItemMapper extends DataMapperFactory
         $l11nsResult = $sth->fetchAll();
 
         foreach ($l11nsResult as $res) {
-            $l11nType = new BaseStringL11nType();
-            $l11nType->id = $res['itemmgmt_item_l11n_typeref'];
+            $l11nType       = new BaseStringL11nType();
+            $l11nType->id   = $res['itemmgmt_item_l11n_typeref'];
             $l11nType->title= $res['itemmgmt_item_l11n_type_title'];
 
-            $l11n = new BaseStringL11n();
-            $l11n->id = $res['itemmgmt_item_l11n_id'];
-            $l11n->ref = $res['itemmgmt_item_id'];
-            $l11n->type = $l11nType;
+            $l11n          = new BaseStringL11n();
+            $l11n->id      = $res['itemmgmt_item_l11n_id'];
+            $l11n->ref     = $res['itemmgmt_item_id'];
+            $l11n->type    = $l11nType;
             $l11n->content = $res['itemmgmt_item_l11n_description'];
             $l11n->setLanguage($res['itemmgmt_item_l11n_lang']);
 
