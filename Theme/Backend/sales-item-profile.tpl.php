@@ -459,7 +459,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table id="groupTable" class="default">
                             <thead>
                                 <tr>
@@ -537,7 +537,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table id="groupTable" class="default">
                             <thead>
                                 <tr>
@@ -619,7 +619,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table id="iSalesItemList" class="default">
                             <thead>
                                 <tr>

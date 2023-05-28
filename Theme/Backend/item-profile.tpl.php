@@ -507,7 +507,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                         <table id="localizationTable" class="default sticky fixed-5"
                             data-tag="form"
@@ -635,7 +635,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Attributes'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Attributes'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                         <table id="attributeTable" class="default"
                             data-tag="form"
@@ -700,7 +700,7 @@ echo $this->getData('nav')->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="lni lni-download download btn end-xs"></i></div>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
@@ -756,7 +756,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                         <table id="iSalesItemList" class="default">
                             <thead>
@@ -863,7 +863,7 @@ echo $this->getData('nav')->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="lni lni-download download btn end-xs"></i></div>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
@@ -919,7 +919,7 @@ echo $this->getData('nav')->render();
 
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <table id="iSalesItemList" class="default">
                             <thead>
                                 <tr>
@@ -1181,7 +1181,7 @@ echo $this->getData('nav')->render();
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="fa fa-download floatRight download btn"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
                         <div class="slider">
                         <table class="default">
                             <colgroup>
