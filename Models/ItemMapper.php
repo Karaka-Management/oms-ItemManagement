@@ -171,9 +171,9 @@ final class ItemMapper extends DataMapperFactory
         $l11nsResult = $sth->fetchAll();
 
         foreach ($l11nsResult as $res) {
-            $l11nType       = new BaseStringL11nType();
-            $l11nType->id   = $res['itemmgmt_item_l11n_typeref'];
-            $l11nType->title= $res['itemmgmt_item_l11n_type_title'];
+            $l11nType        = new BaseStringL11nType();
+            $l11nType->id    = $res['itemmgmt_item_l11n_typeref'];
+            $l11nType->title = $res['itemmgmt_item_l11n_type_title'];
 
             $l11n          = new BaseStringL11n();
             $l11n->id      = $res['itemmgmt_item_l11n_id'];
