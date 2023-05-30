@@ -16,9 +16,9 @@ use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
 /** @var \Modules\ItemManagement\Models\Item[] $items */
-$items = $this->getData('items');
+$items = $this->data['items'];
 
-echo $this->getData('nav')->render(); ?>
+echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-xs-12">

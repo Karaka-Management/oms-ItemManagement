@@ -84,7 +84,7 @@ final class ApiController extends Controller
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('language', $request->getLanguage())
+            ->where('language', $request->header->l11n->language)
             ->where('description', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
             ->execute();
 
@@ -99,7 +99,7 @@ final class ApiController extends Controller
             ->with('l11n/type')
             ->where('id', $items, 'IN')
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('l11n/language', $request->getLanguage())
+            ->where('l11n/language', $request->header->l11n->language)
             ->execute();
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
@@ -156,7 +156,7 @@ final class ApiController extends Controller
     public function apiItemCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemCreate($request))) {
-            $response->set('item_create', new FormValidation($val));
+            $response->data['item_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -186,7 +186,7 @@ final class ApiController extends Controller
 
         $path = $this->createItemDir($item);
 
-        $uploadedFiles = $request->getFile('item_profile_image');
+        $uploadedFiles = $request->files['item_profile_image'] ?? [];
         if (!empty($uploadedFiles)) {
             // upload image
             $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
@@ -311,7 +311,7 @@ final class ApiController extends Controller
     public function apiItemPriceCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemPriceCreate($request))) {
-            $response->set('item_create', new FormValidation($val));
+            $response->data['item_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -386,7 +386,7 @@ final class ApiController extends Controller
     public function apiItemAttributeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeCreate($request))) {
-            $response->set('attribute_create', new FormValidation($val));
+            $response->data['attribute_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -464,7 +464,7 @@ final class ApiController extends Controller
     public function apiItemAttributeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeUpdate($request))) {
-            $response->set('attribute_update', new FormValidation($val));
+            $response->data['attribute_update'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -563,7 +563,7 @@ final class ApiController extends Controller
     public function apiItemAttributeTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeTypeL11nCreate($request))) {
-            $response->set('attr_type_l11n_create', new FormValidation($val));
+            $response->data['attr_type_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -588,7 +588,7 @@ final class ApiController extends Controller
         $attrL11n      = new BaseStringL11n();
         $attrL11n->ref = $request->getDataInt('type') ?? 0;
         $attrL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $attrL11n->content = $request->getDataString('title') ?? '';
 
@@ -632,7 +632,7 @@ final class ApiController extends Controller
     public function apiItemAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeTypeCreate($request))) {
-            $response->set('attr_type_create', new FormValidation($val));
+            $response->data['attr_type_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -702,7 +702,7 @@ final class ApiController extends Controller
     public function apiItemAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeValueCreate($request))) {
-            $response->set('attr_value_create', new FormValidation($val));
+            $response->data['attr_value_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -787,7 +787,7 @@ final class ApiController extends Controller
     public function apiItemAttributeValueL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeValueL11nCreate($request))) {
-            $response->set('attr_value_l11n_create', new FormValidation($val));
+            $response->data['attr_value_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -812,7 +812,7 @@ final class ApiController extends Controller
         $attrL11n      = new BaseStringL11n();
         $attrL11n->ref = $request->getDataInt('value') ?? 0;
         $attrL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $attrL11n->content = $request->getDataString('title') ?? '';
 
@@ -856,7 +856,7 @@ final class ApiController extends Controller
     public function apiItemAttribute(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemAttributeValueL11nCreate($request))) {
-            $response->set('attr_value_l11n_create', new FormValidation($val));
+            $response->data['attr_value_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -883,7 +883,7 @@ final class ApiController extends Controller
     public function apiItemL11nTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemL11nTypeCreate($request))) {
-            $response->set('item_l11n_type_create', new FormValidation($val));
+            $response->data['item_l11n_type_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -947,7 +947,7 @@ final class ApiController extends Controller
     public function apiItemRelationTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemRelationTypeCreate($request))) {
-            $response->set('item_relation_type_create', new FormValidation($val));
+            $response->data['item_relation_type_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1010,7 +1010,7 @@ final class ApiController extends Controller
     public function apiItemL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemL11nCreate($request))) {
-            $response->set('item_l11n_create', new FormValidation($val));
+            $response->data['item_l11n_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
@@ -1036,7 +1036,7 @@ final class ApiController extends Controller
         $itemL11n->ref  = $request->getDataInt('item') ?? 0;
         $itemL11n->type = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
         $itemL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $itemL11n->content = $request->getDataString('description') ?? '';
 
@@ -1081,13 +1081,13 @@ final class ApiController extends Controller
     public function apiFileCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateFileCreate($request))) {
-            $response->set('item_file_create', new FormValidation($val));
+            $response->data['item_file_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;
         }
 
-        $uploadedFiles = $request->getFiles();
+        $uploadedFiles = $request->files;
 
         if (empty($uploadedFiles)) {
             $response->header->status = RequestStatusCode::R_400;
@@ -1173,7 +1173,7 @@ final class ApiController extends Controller
     public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateNoteCreate($request))) {
-            $response->set('item_note_create', new FormValidation($val));
+            $response->data['item_note_create'] = new FormValidation($val);
             $response->header->status = RequestStatusCode::R_400;
 
             return;

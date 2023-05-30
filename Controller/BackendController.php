@@ -70,15 +70,15 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response);
 
         /** @var \Modules\Attribute\Models\AttributeType[] $attributes */
         $attributes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $view->addData('attributes', $attributes);
+        $view->data['attributes'] = $attributes;
 
         return $view;
     }
@@ -99,15 +99,15 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response);
 
         /** @var \Modules\Attribute\Models\AttributeValue[] $attributes */
         $attributes = ItemAttributeValueMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $view->addData('attributes', $attributes);
+        $view->data['attributes'] = $attributes;
 
         return $view;
     }
@@ -128,21 +128,21 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-type');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response);
 
         /** @var \Modules\Attribute\Models\AttributeType $attribute */
         $attribute = ItemAttributeTypeMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $l11ns = ItemAttributeTypeL11nMapper::getAll()
             ->where('ref', $attribute->id)
             ->execute();
 
-        $view->addData('attribute', $attribute);
-        $view->addData('l11ns', $l11ns);
+        $view->data['attribute'] = $attribute;
+        $view->data['l11ns'] = $l11ns;
 
         return $view;
     }
@@ -163,16 +163,16 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/attribute-value');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response);
 
         /** @var \Modules\Attribute\Models\AttributeValue $attribute */
         $attribute = ItemAttributeValueMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $view->addData('attribute', $attribute);
+        $view->data['attribute'] = $attribute;
 
         return $view;
     }
@@ -193,7 +193,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-list');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004801001, $request, $response);
 
         /** @var \Modules\ItemManagement\Models\Item[] $items */
         $items = ItemMapper::getAll()
@@ -201,13 +201,13 @@ final class BackendController extends Controller
             ->with('l11n/type')
             ->with('files')
             ->with('files/types')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('files/types/name', 'item_profile_image')
             ->limit(50)
             ->execute();
 
-        $view->addData('items', $items);
+        $view->data['items'] = $items;
 
         return $view;
     }
@@ -279,7 +279,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004805001, $request, $response);
 
         return $view;
     }
@@ -300,7 +300,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004806001, $request, $response);
 
         return $view;
     }
@@ -321,7 +321,7 @@ final class BackendController extends Controller
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-create');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004807001, $request, $response);
 
         return $view;
     }
@@ -340,14 +340,14 @@ final class BackendController extends Controller
      */
     public function viewItemManagementItem(RequestAbstract $request, ResponseAbstract $response, $data = null) : View
     {
-        $head = $response->get('Content')->getData('head');
+        $head = $response->get('Content')->head;
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
         $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/Chartjs/chart.js');
         $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js', ['type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-profile');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1004803001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004803001, $request, $response);
 
         /** @var \Modules\ItemManagement\Models\Item $item */
         $item = ItemMapper::get()
@@ -361,14 +361,14 @@ final class BackendController extends Controller
             ->with('attributes/value')
             ->with('notes')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('attributes/type/l11n/language', $response->getLanguage())
+            ->where('attributes/type/l11n/language', $response->header->l11n->language)
             ->limit(5, 'files')->sort('files/id', OrderType::DESC)
             ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->execute();
 
-        $view->addData('item', $item);
+        $view->data['item'] = $item;
 
         // Get item profile image
         // It might not be part of the 5 newest item files from above
@@ -395,59 +395,59 @@ final class BackendController extends Controller
             ->limit(1)
             ->execute();
 
-        $view->addData('itemImage', $itemImage);
+        $view->data['itemImage'] = $itemImage;
 
         /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->setData('defaultlocalization', LocalizationMapper::get()->where('id', (int) $settings->id)->execute());
+        $view->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
 
         $l11nTypes = ItemL11nTypeMapper::getAll()
             ->execute();
-        $view->setData('l11nTypes', $l11nTypes);
+        $view->data['l11nTypes'] = $l11nTypes;
 
         $l11nValues = ItemL11nMapper::getAll()
             ->with('type')
             ->where('ref', $item->id)
             ->execute();
-        $view->setData('l11nValues', $l11nValues);
+        $view->data['l11nValues'] = $l11nValues;
 
         $attributeTypes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
-        $view->setData('attributeTypes', $attributeTypes);
+        $view->data['attributeTypes'] = $attributeTypes;
 
         $units = UnitMapper::getAll()
             ->execute();
-        $view->setData('units', $units);
+        $view->data['units'] = $units;
 
         $prices = PriceMapper::getAll()
             ->where('item', $item->id)
             ->where('type', PriceType::SALES)
             ->where('client', null)
             ->execute();
-        $view->setData('prices', $prices);
+        $view->data['prices'] = $prices;
 
         $audits = AuditMapper::getAll()
             ->where('type', StringUtils::intHash(ItemMapper::class))
             ->where('module', 'ItemManagement')
             ->where('ref', $item->id)
             ->execute();
-        $view->setData('audits', $audits);
+        $view->data['audits'] = $audits;
 
         $files = MediaMapper::getAll()
             ->with('types')
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
                 ->on('id', $item->id, relation: 'files') // id = item id
             ->execute();
-        $view->setData('files', $files);
+        $view->data['files'] = $files;
 
         $mediaListView = new \Modules\Media\Theme\Backend\Components\Media\ListView($this->app->l11nManager, $request, $response);
         $mediaListView->setTemplate('/Modules/Media/Theme/Backend/Components/Media/list');
-        $view->addData('medialist', $mediaListView);
+        $view->data['medialist'] = $mediaListView;
 
         // stats
         if ($this->app->moduleManager->isActive('Billing')) {
@@ -461,7 +461,7 @@ final class BackendController extends Controller
                 ->with('type')
                 ->with('type/l11n')
                 ->where('type/transferType', BillTransferType::SALES)
-                ->where('type/l11n/language', $response->getLanguage())
+                ->where('type/l11n/language', $response->header->l11n->language)
                 ->sort('id', OrderType::DESC)
                 ->limit(5)
                 ->execute();
@@ -484,16 +484,16 @@ final class BackendController extends Controller
             $monthlySalesCosts = [];
         }
 
-        $view->addData('ytd', $ytd);
-        $view->addData('mtd', $mtd);
-        $view->addData('avg', $avg);
-        $view->addData('lastOrder', $lastOrder);
-        $view->addData('newestInvoices', $newestInvoices);
-        $view->addData('allInvoices', $allInvoices);
-        $view->addData('topCustomers', $topCustomers);
-        $view->addData('regionSales', $regionSales);
-        $view->addData('countrySales', $countrySales);
-        $view->addData('monthlySalesCosts', $monthlySalesCosts);
+        $view->data['ytd'] = $ytd;
+        $view->data['mtd'] = $mtd;
+        $view->data['avg'] = $avg;
+        $view->data['lastOrder'] = $lastOrder;
+        $view->data['newestInvoices'] = $newestInvoices;
+        $view->data['allInvoices'] = $allInvoices;
+        $view->data['topCustomers'] = $topCustomers;
+        $view->data['regionSales'] = $regionSales;
+        $view->data['countrySales'] = $countrySales;
+        $view->data['monthlySalesCosts'] = $monthlySalesCosts;
 
         return $view;
     }
@@ -563,14 +563,14 @@ final class BackendController extends Controller
      */
     public function viewItemSalesAnalysis(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $head = $response->get('Content')->getData('head');
+        $head = $response->get('Content')->head;
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
         $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/Chartjs/chart.js');
         $head->addAsset(AssetType::JSLATE, 'Modules/ClientManagement/Controller.js', ['type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-analysis');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001602001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001602001, $request, $response);
 
         $monthlySalesCosts = [];
         for ($i = 1; $i < 13; ++$i) {
@@ -582,7 +582,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlySalesCosts', $monthlySalesCosts);
+        $view->data['monthlySalesCosts'] = $monthlySalesCosts;
 
         /////
         $monthlySalesCustomer = [];
@@ -595,7 +595,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlySalesCustomer', $monthlySalesCustomer);
+        $view->data['monthlySalesCustomer'] = $monthlySalesCustomer;
 
         $annualSalesCustomer = [];
         for ($i = 1; $i < 11; ++$i) {
@@ -606,7 +606,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('annualSalesCustomer', $annualSalesCustomer);
+        $view->data['annualSalesCustomer'] = $annualSalesCustomer;
 
         /////
         $monthlyCustomerRetention = [];
@@ -617,7 +617,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlyCustomerRetention', $monthlyCustomerRetention);
+        $view->data['monthlyCustomerRetention'] = $monthlyCustomerRetention;
 
         /////
         $currentCustomerRegion = [
@@ -629,7 +629,7 @@ final class BackendController extends Controller
             'Other'   => (int) (\mt_rand(200, 400) / 4),
         ];
 
-        $view->addData('currentCustomerRegion', $currentCustomerRegion);
+        $view->data['currentCustomerRegion'] = $currentCustomerRegion;
 
         $annualCustomerRegion = [];
         for ($i = 1; $i < 11; ++$i) {
@@ -645,7 +645,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('annualCustomerRegion', $annualCustomerRegion);
+        $view->data['annualCustomerRegion'] = $annualCustomerRegion;
 
         /////
         $currentCustomersRep = [];
@@ -659,7 +659,7 @@ final class BackendController extends Controller
             return $b['customers'] <=> $a['customers'];
         });
 
-        $view->addData('currentCustomersRep', $currentCustomersRep);
+        $view->data['currentCustomersRep'] = $currentCustomersRep;
 
         $annualCustomersRep = [];
         for ($i = 1; $i < 13; ++$i) {
@@ -673,7 +673,7 @@ final class BackendController extends Controller
             }
         }
 
-        $view->addData('annualCustomersRep', $annualCustomersRep);
+        $view->data['annualCustomersRep'] = $annualCustomersRep;
 
         /////
         $currentCustomersCountry = [];
@@ -688,7 +688,7 @@ final class BackendController extends Controller
             return $b['customers'] <=> $a['customers'];
         });
 
-        $view->addData('currentCustomersCountry', $currentCustomersCountry);
+        $view->data['currentCustomersCountry'] = $currentCustomersCountry;
 
         $annualCustomersCountry = [];
         for ($i = 1; $i < 51; ++$i) {
@@ -706,7 +706,7 @@ final class BackendController extends Controller
             }
         }
 
-        $view->addData('annualCustomersCountry', $annualCustomersCountry);
+        $view->data['annualCustomersCountry'] = $annualCustomersCountry;
 
         /////
         $customerGroups = [];
@@ -716,7 +716,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('customerGroups', $customerGroups);
+        $view->data['customerGroups'] = $customerGroups;
 
         return $view;
     }
@@ -735,14 +735,14 @@ final class BackendController extends Controller
      */
     public function viewItemPurchaseAnalysis(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
-        $head = $response->get('Content')->getData('head');
+        $head = $response->get('Content')->head;
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/Chartjs/chart.css');
         $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/Chartjs/chart.js');
         $head->addAsset(AssetType::JSLATE, 'Modules/ClientManagement/Controller.js', ['type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-analysis');
-        $view->addData('nav', $this->app->moduleManager->get('Navigation')->createNavigationMid(1001602001, $request, $response));
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1001602001, $request, $response);
 
         $monthlySalesCosts = [];
         for ($i = 1; $i < 13; ++$i) {
@@ -754,7 +754,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlySalesCosts', $monthlySalesCosts);
+        $view->data['monthlySalesCosts'] = $monthlySalesCosts;
 
         /////
         $monthlySalesCustomer = [];
@@ -767,7 +767,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlySalesCustomer', $monthlySalesCustomer);
+        $view->data['monthlySalesCustomer'] = $monthlySalesCustomer;
 
         $annualSalesCustomer = [];
         for ($i = 1; $i < 11; ++$i) {
@@ -778,7 +778,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('annualSalesCustomer', $annualSalesCustomer);
+        $view->data['annualSalesCustomer'] = $annualSalesCustomer;
 
         /////
         $monthlyCustomerRetention = [];
@@ -789,7 +789,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('monthlyCustomerRetention', $monthlyCustomerRetention);
+        $view->data['monthlyCustomerRetention'] = $monthlyCustomerRetention;
 
         /////
         $currentCustomerRegion = [
@@ -801,7 +801,7 @@ final class BackendController extends Controller
             'Other'   => (int) (\mt_rand(200, 400) / 4),
         ];
 
-        $view->addData('currentCustomerRegion', $currentCustomerRegion);
+        $view->data['currentCustomerRegion'] = $currentCustomerRegion;
 
         $annualCustomerRegion = [];
         for ($i = 1; $i < 11; ++$i) {
@@ -817,7 +817,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('annualCustomerRegion', $annualCustomerRegion);
+        $view->data['annualCustomerRegion'] = $annualCustomerRegion;
 
         /////
         $currentCustomersRep = [];
@@ -831,7 +831,7 @@ final class BackendController extends Controller
             return $b['customers'] <=> $a['customers'];
         });
 
-        $view->addData('currentCustomersRep', $currentCustomersRep);
+        $view->data['currentCustomersRep'] = $currentCustomersRep;
 
         $annualCustomersRep = [];
         for ($i = 1; $i < 13; ++$i) {
@@ -845,7 +845,7 @@ final class BackendController extends Controller
             }
         }
 
-        $view->addData('annualCustomersRep', $annualCustomersRep);
+        $view->data['annualCustomersRep'] = $annualCustomersRep;
 
         /////
         $currentCustomersCountry = [];
@@ -860,7 +860,7 @@ final class BackendController extends Controller
             return $b['customers'] <=> $a['customers'];
         });
 
-        $view->addData('currentCustomersCountry', $currentCustomersCountry);
+        $view->data['currentCustomersCountry'] = $currentCustomersCountry;
 
         $annualCustomersCountry = [];
         for ($i = 1; $i < 51; ++$i) {
@@ -878,7 +878,7 @@ final class BackendController extends Controller
             }
         }
 
-        $view->addData('annualCustomersCountry', $annualCustomersCountry);
+        $view->data['annualCustomersCountry'] = $annualCustomersCountry;
 
         /////
         $customerGroups = [];
@@ -888,7 +888,7 @@ final class BackendController extends Controller
             ];
         }
 
-        $view->addData('customerGroups', $customerGroups);
+        $view->data['customerGroups'] = $customerGroups;
 
         return $view;
     }
