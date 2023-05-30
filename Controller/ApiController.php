@@ -84,7 +84,7 @@ final class ApiController extends Controller
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('language', $request->getLanguage())
+            ->where('language', $request->header->l11n->language)
             ->where('description', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
             ->execute();
 
@@ -99,7 +99,7 @@ final class ApiController extends Controller
             ->with('l11n/type')
             ->where('id', $items, 'IN')
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('l11n/language', $request->getLanguage())
+            ->where('l11n/language', $request->header->l11n->language)
             ->execute();
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
@@ -186,7 +186,7 @@ final class ApiController extends Controller
 
         $path = $this->createItemDir($item);
 
-        $uploadedFiles = $request->getFile('item_profile_image');
+        $uploadedFiles = $request->files['item_profile_image'] ?? [];
         if (!empty($uploadedFiles)) {
             // upload image
             $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
@@ -588,7 +588,7 @@ final class ApiController extends Controller
         $attrL11n      = new BaseStringL11n();
         $attrL11n->ref = $request->getDataInt('type') ?? 0;
         $attrL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $attrL11n->content = $request->getDataString('title') ?? '';
 
@@ -812,7 +812,7 @@ final class ApiController extends Controller
         $attrL11n      = new BaseStringL11n();
         $attrL11n->ref = $request->getDataInt('value') ?? 0;
         $attrL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $attrL11n->content = $request->getDataString('title') ?? '';
 
@@ -1036,7 +1036,7 @@ final class ApiController extends Controller
         $itemL11n->ref  = $request->getDataInt('item') ?? 0;
         $itemL11n->type = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
         $itemL11n->setLanguage(
-            $request->getDataString('language') ?? $request->getLanguage()
+            $request->getDataString('language') ?? $request->header->l11n->language
         );
         $itemL11n->content = $request->getDataString('description') ?? '';
 

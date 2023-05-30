@@ -75,7 +75,7 @@ final class BackendController extends Controller
         /** @var \Modules\Attribute\Models\AttributeType[] $attributes */
         $attributes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $view->addData('attributes', $attributes);
@@ -104,7 +104,7 @@ final class BackendController extends Controller
         /** @var \Modules\Attribute\Models\AttributeValue[] $attributes */
         $attributes = ItemAttributeValueMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $view->addData('attributes', $attributes);
@@ -134,7 +134,7 @@ final class BackendController extends Controller
         $attribute = ItemAttributeTypeMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $l11ns = ItemAttributeTypeL11nMapper::getAll()
@@ -169,7 +169,7 @@ final class BackendController extends Controller
         $attribute = ItemAttributeValueMapper::get()
             ->with('l11n')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
         $view->addData('attribute', $attribute);
@@ -201,7 +201,7 @@ final class BackendController extends Controller
             ->with('l11n/type')
             ->with('files')
             ->with('files/types')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('files/types/name', 'item_profile_image')
             ->limit(50)
@@ -361,9 +361,9 @@ final class BackendController extends Controller
             ->with('attributes/value')
             ->with('notes')
             ->where('id', (int) $request->getData('id'))
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('attributes/type/l11n/language', $response->getLanguage())
+            ->where('attributes/type/l11n/language', $response->header->l11n->language)
             ->limit(5, 'files')->sort('files/id', OrderType::DESC)
             ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->execute();
@@ -416,7 +416,7 @@ final class BackendController extends Controller
 
         $attributeTypes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
-            ->where('l11n/language', $response->getLanguage())
+            ->where('l11n/language', $response->header->l11n->language)
             ->execute();
         $view->setData('attributeTypes', $attributeTypes);
 
@@ -461,7 +461,7 @@ final class BackendController extends Controller
                 ->with('type')
                 ->with('type/l11n')
                 ->where('type/transferType', BillTransferType::SALES)
-                ->where('type/l11n/language', $response->getLanguage())
+                ->where('type/l11n/language', $response->header->l11n->language)
                 ->sort('id', OrderType::DESC)
                 ->limit(5)
                 ->execute();

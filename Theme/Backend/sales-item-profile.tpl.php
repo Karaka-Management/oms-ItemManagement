@@ -433,7 +433,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iLanguages" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -442,7 +442,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iLanguages" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -501,7 +501,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iLanguages" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -510,7 +510,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iLanguages" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -519,7 +519,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iLanguages" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -857,7 +857,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iEarningIndicator" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -866,7 +866,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iCostIndicator" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -875,7 +875,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iCostCenter" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                         <tr>
@@ -884,7 +884,7 @@ echo $this->getData('nav')->render();
                                             <td>
                                                 <select id="iCostObject" name="settings_1000000020">
                                                     <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->getLanguage() ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
+                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
                                                         <?php endforeach; ?>
                                                 </select>
                                 </table>
