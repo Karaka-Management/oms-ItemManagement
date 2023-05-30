@@ -21,7 +21,7 @@ use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Uri\UriFactory;
 
 /** @var \Modules\ItemManagement\Models\Item $item */
-$item = $this->getData('item');
+$item = $this->data['item'];
 
 $attribute = $item->getAttributes();
 
@@ -29,19 +29,19 @@ $notes     = $item->getNotes();
 $files     = $item->files;
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
-$newestInvoices    = $this->getData('newestInvoices') ?? [];
-$allInvoices       = $this->getData('allInvoices') ?? [];
+$newestInvoices    = $this->data['newestInvoices'] ?? [];
+$allInvoices       = $this->data['allInvoices'] ?? [];
 $topCustomers      = $this->getData('topCustomers') ?? [[], []];
-$regionSales       = $this->getData('regionSales') ?? [];
-$countrySales      = $this->getData('countrySales') ?? [];
-$monthlySalesCosts = $this->getData('monthlySalesCosts') ?? [];
+$regionSales       = $this->data['regionSales'] ?? [];
+$countrySales      = $this->data['countrySales'] ?? [];
+$monthlySalesCosts = $this->data['monthlySalesCosts'] ?? [];
 
 $languages = ISO639Enum::getConstants();
 
 /** @var \phpOMS\Localization\Localization $l11n */
 $l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
 
-echo $this->getData('nav')->render();
+echo $this->data['nav']->render();
 ?>
 
 <div class="tabview tab-2">
@@ -484,7 +484,7 @@ echo $this->getData('nav')->render();
                                     <label for="iLocalizationType"><?= $this->getHtml('Type'); ?></label>
                                     <select id="iLocalizationType" name="type" data-tpl-text="/type" data-tpl-value="/type">
                                         <?php
-                                            $types = $this->getData('l11nTypes') ?? [];
+                                            $types = $this->data['l11nTypes'] ?? [];
                                             foreach ($types as $type) : ?>
                                             <option value="<?= $type->id; ?>"><?= $this->printHtml($type->title); ?>
                                         <?php endforeach; ?>
@@ -540,7 +540,7 @@ echo $this->getData('nav')->render();
                                 </template>
                                 <?php
                                 $c        = 0;
-                                $itemL11n = $this->getData('l11nValues');
+                                $itemL11n = $this->data['l11nValues'];
                                 foreach ($itemL11n as $value) : ++$c; ?>
                                     <tr data-id="<?= $value->id; ?>">
                                         <td>
@@ -600,7 +600,7 @@ echo $this->getData('nav')->render();
                                     <label for="iAttributesType"><?= $this->getHtml('Type'); ?></label>
                                     <select id="iAttributesType" name="type" data-tpl-text="/type" data-tpl-value="/type">
                                         <?php
-                                        $types = $this->getData('attributeTypes') ?? [];
+                                        $types = $this->data['attributeTypes'] ?? [];
                                         foreach ($types as $type) : ?>
                                             <option value="<?= $type->id; ?>"><?= $this->printHtml($type->getL11n()); ?>
                                         <?php endforeach; ?>
@@ -612,7 +612,7 @@ echo $this->getData('nav')->render();
                                     <select id="iAttributesUnit" name="unit" data-tpl-text="/unit" data-tpl-value="/unit">
                                         <option value="">
                                         <?php
-                                        $units = $this->getData('units') ?? [];
+                                        $units = $this->data['units'] ?? [];
                                         foreach ($units as $unit) : ?>
                                             <option value="<?= $unit->id; ?>"><?= $this->printHtml($unit->name); ?>
                                         <?php endforeach; ?>
@@ -783,7 +783,7 @@ echo $this->getData('nav')->render();
                             <tbody>
                                 <?php
                                 $c      = 0;
-                                $prices = $this->getData('prices');
+                                $prices = $this->data['prices'];
                                 foreach ($prices as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
@@ -1207,7 +1207,7 @@ echo $this->getData('nav')->render();
                             <tbody>
                             <?php
                                 $count    = 0;
-                                $audits   = $this->getData('audits') ?? [];
+                                $audits   = $this->data['audits'] ?? [];
                                 $previous = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \reset($audits)->id . '&ptype=p#{\#}';
                                 $next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
