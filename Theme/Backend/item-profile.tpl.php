@@ -26,7 +26,7 @@ $item = $this->getData('item');
 $attribute = $item->getAttributes();
 
 $notes     = $item->getNotes();
-$files     = $item->getFiles();
+$files     = $item->files;
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];

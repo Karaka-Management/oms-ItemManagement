@@ -24,7 +24,7 @@ $itemL11n      = $item->getL11ns();
 $Attribute     = $item->getAttributes();
 
 $notes = $item->getNotes();
-$files = $item->getFiles();
+$files = $item->files;
 
 $newestInvoices    = $this->getData('newestInvoices') ?? [];
 $allInvoices       = $this->getData('allInvoices') ?? [];
