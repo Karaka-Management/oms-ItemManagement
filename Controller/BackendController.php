@@ -142,7 +142,7 @@ final class BackendController extends Controller
             ->execute();
 
         $view->data['attribute'] = $attribute;
-        $view->data['l11ns'] = $l11ns;
+        $view->data['l11ns']     = $l11ns;
 
         return $view;
     }
@@ -484,15 +484,15 @@ final class BackendController extends Controller
             $monthlySalesCosts = [];
         }
 
-        $view->data['ytd'] = $ytd;
-        $view->data['mtd'] = $mtd;
-        $view->data['avg'] = $avg;
-        $view->data['lastOrder'] = $lastOrder;
-        $view->data['newestInvoices'] = $newestInvoices;
-        $view->data['allInvoices'] = $allInvoices;
-        $view->data['topCustomers'] = $topCustomers;
-        $view->data['regionSales'] = $regionSales;
-        $view->data['countrySales'] = $countrySales;
+        $view->data['ytd']               = $ytd;
+        $view->data['mtd']               = $mtd;
+        $view->data['avg']               = $avg;
+        $view->data['lastOrder']         = $lastOrder;
+        $view->data['newestInvoices']    = $newestInvoices;
+        $view->data['allInvoices']       = $allInvoices;
+        $view->data['topCustomers']      = $topCustomers;
+        $view->data['regionSales']       = $regionSales;
+        $view->data['countrySales']      = $countrySales;
         $view->data['monthlySalesCosts'] = $monthlySalesCosts;
 
         return $view;
