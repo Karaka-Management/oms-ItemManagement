@@ -1180,7 +1180,7 @@ final class ApiController extends Controller
         }
 
         $request->setData('virtualpath', '/Modules/ItemManagement/Items/' . $request->getData('id'), true);
-        $this->app->moduleManager->get('Editor')->apiEditorCreate($request, $response, $data);
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorCreate($request, $response, $data);
 
         if ($response->header->status !== RequestStatusCode::R_200) {
             return;
