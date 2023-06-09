@@ -402,7 +402,8 @@ final class BackendController extends Controller
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
+        $view->data['attributeView']       = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
+        $view->data['attributeView']->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
 
         $l11nTypes = ItemL11nTypeMapper::getAll()
             ->execute();

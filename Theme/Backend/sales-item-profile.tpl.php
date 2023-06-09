@@ -42,7 +42,7 @@ echo $this->data['nav']->render();
 ?>
 
 <div class="tabview tab-2">
-    <div class="box wf-100 col-xs-12">
+    <div class="box">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label></li>
             <li><label for="c-tab-2"><?= $this->getHtml('Address'); ?></label></li>
@@ -750,7 +750,7 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12 col-md-6 col-lg-4">
                     <table id="groupTable" class="box table default">
-                        <caption><?= $this->getHtml('Prices'); ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Prices'); ?><i class="fa fa-download end-xs download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>
@@ -951,7 +951,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12">
                     <table class="default">
-                        <caption><?= $this->getHtml('Logs'); ?><i class="fa fa-download floatRight download btn"></i></caption>
+                        <caption><?= $this->getHtml('Logs'); ?><i class="fa fa-download end-xs download btn"></i></caption>
                         <thead>
                             <tr>
                                 <td>IP
