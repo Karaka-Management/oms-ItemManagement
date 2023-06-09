@@ -292,5 +292,6 @@ class Item implements \JsonSerializable
     }
 
     use \Modules\Media\Models\MediaListTrait;
+    use \Modules\Editor\Models\EditorDocListTrait;
     use \Modules\Attribute\Models\AttributeHolderTrait;
 }
