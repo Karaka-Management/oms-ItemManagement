@@ -34,7 +34,6 @@ return ['ItemManagement' => [
     'AvgPrice'                => 'Avg. Price',
     'Bills'                   => 'Bills',
     'Bonus'                   => 'Bonus',
-    'ClientGroup'             => 'Client/Group',
     'Commission'              => 'Commission',
     'Container'               => 'Container',
     'CostCenter'              => 'CostCenter',

@@ -101,8 +101,18 @@ final class ItemMapper extends DataMapperFactory
         ],
     ];
 
-    // @todo: experimental (not 100% working)
-    public static function getItemList(string $langugae) : array
+    /**
+     * Get the item list
+     *
+     * @param string $language Language
+     *
+     * @return array
+     *
+     * @todo: experimental (not 100% working)
+     *
+     * @since 1.0.0
+     */
+    public static function getItemList(string $language) : array
     {
         // items
         $query = <<<SQL
@@ -141,7 +151,7 @@ final class ItemMapper extends DataMapperFactory
             $item->salesPrice->setInt($res['itemmgmt_item_salesprice']);
 
             if ($media !== null) {
-                $item->addFile($media);
+                $item->files[$media->id] = $media;
             }
 
             $items[$item->id] = $item;
@@ -166,7 +176,7 @@ final class ItemMapper extends DataMapperFactory
         SQL;
 
         $sth = self::$db->con->prepare($query);
-        $sth->execute(['lang' => $langugae]);
+        $sth->execute(['lang' => $language]);
 
         $l11nsResult = $sth->fetchAll();
 

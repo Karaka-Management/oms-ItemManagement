@@ -86,14 +86,6 @@ class Item implements \JsonSerializable
     public FloatInt $purchasePrice;
 
     /**
-     * Notes.
-     *
-     * @var EditorDoc[]
-     * @since 1.0.0
-     */
-    private array $notes = [];
-
-    /**
      * Localizations.
      *
      * @var BaseStringL11n[]
@@ -177,7 +169,7 @@ class Item implements \JsonSerializable
     public function addL11n(BaseStringL11n $l11n) : void
     {
         foreach ($this->l11n as $l11n) {
-            if ($l11n->type->title === $l11n->type->title) {
+            if ($l11n->type?->title === $l11n->type?->title) {
                 return;
             }
         }
@@ -197,7 +189,7 @@ class Item implements \JsonSerializable
     public function getL11n(string $type = null) : BaseStringL11n
     {
         foreach ($this->l11n as $l11n) {
-            if ($l11n->type->title === $type) {
+            if ($l11n->type?->title === $type) {
                 return $l11n;
             }
         }

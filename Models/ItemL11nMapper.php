@@ -25,7 +25,7 @@ use phpOMS\Localization\BaseStringL11n;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @template T of ItemL11n
+ * @template T of BaseStringL11n
  * @extends DataMapperFactory<T>
  */
 final class ItemL11nMapper extends DataMapperFactory

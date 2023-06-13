@@ -80,7 +80,7 @@ final class ApiController extends Controller
      */
     public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
-        /** @var \Modules\ItemManagement\Models\BaseStringL11n[] $l11n */
+        /** @var BaseStringL11n[] $l11n */
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
             ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
@@ -90,7 +90,7 @@ final class ApiController extends Controller
 
         $items = [];
         foreach ($l11n as $item) {
-            $items[] = $item->item;
+            $items[] = $item->ref;
         }
 
         /** @var \Modules\ItemManagement\Models\Item[] $itemList */

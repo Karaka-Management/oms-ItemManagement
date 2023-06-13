@@ -402,27 +402,31 @@ final class BackendController extends Controller
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
-        $view->data['attributeView']       = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
+        $view->data['attributeView']                              = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
         $view->data['attributeView']->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
 
         $l11nTypes = ItemL11nTypeMapper::getAll()
             ->execute();
+
         $view->data['l11nTypes'] = $l11nTypes;
 
         $l11nValues = ItemL11nMapper::getAll()
             ->with('type')
             ->where('ref', $item->id)
             ->execute();
+
         $view->data['l11nValues'] = $l11nValues;
 
         $attributeTypes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
+
         $view->data['attributeTypes'] = $attributeTypes;
 
         $units = UnitMapper::getAll()
             ->execute();
+
         $view->data['units'] = $units;
 
         $prices = PriceMapper::getAll()
@@ -430,6 +434,7 @@ final class BackendController extends Controller
             ->where('type', PriceType::SALES)
             ->where('client', null)
             ->execute();
+
         $view->data['prices'] = $prices;
 
         $audits = AuditMapper::getAll()
@@ -437,6 +442,7 @@ final class BackendController extends Controller
             ->where('module', 'ItemManagement')
             ->where('ref', $item->id)
             ->execute();
+
         $view->data['audits'] = $audits;
 
         $files = MediaMapper::getAll()
@@ -444,6 +450,7 @@ final class BackendController extends Controller
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
                 ->on('id', $item->id, relation: 'files') // id = item id
             ->execute();
+
         $view->data['files'] = $files;
 
         $mediaListView = new \Modules\Media\Theme\Backend\Components\Media\ListView($this->app->l11nManager, $request, $response);
@@ -679,6 +686,7 @@ final class BackendController extends Controller
         /////
         $currentCustomersCountry = [];
         for ($i = 1; $i < 51; ++$i) {
+            /** @var string $country */
             $country                                           = ISO3166NameEnum::getRandom();
             $currentCustomersCountry[\substr($country, 0, 20)] = [
                 'customers' => (int) (\mt_rand(200, 400) / 12),
@@ -693,6 +701,7 @@ final class BackendController extends Controller
 
         $annualCustomersCountry = [];
         for ($i = 1; $i < 51; ++$i) {
+            /** @var string $countryCode */
             $countryCode                                          = ISO3166CharEnum::getRandom();
             $countryName                                          = ISO3166NameEnum::getByName('_' . $countryCode);
             $annualCustomersCountry[\substr($countryName, 0, 20)] = [];

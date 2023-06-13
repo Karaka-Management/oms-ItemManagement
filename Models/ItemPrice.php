@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use phpOMS\Localization\Money;
 use phpOMS\Stdlib\Base\Exception\InvalidEnumValue;
+use phpOMS\Stdlib\Base\FloatInt;
 
 /**
  * Account class.
@@ -39,7 +39,7 @@ class ItemPrice implements \JsonSerializable
 
     public string $currency = '';
 
-    public Money $price;
+    public FloatInt $price;
 
     public int $status = ItemPriceStatus::ACTIVE;
 
