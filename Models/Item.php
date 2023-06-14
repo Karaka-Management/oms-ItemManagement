@@ -236,32 +236,6 @@ class Item implements \JsonSerializable
     }
 
     /**
-     * Add note to item
-     *
-     * @param EditorDoc $note Note
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function addNote(EditorDoc $note) : void
-    {
-        $this->notes[] = $note;
-    }
-
-    /**
-     * Get notes
-     *
-     * @return EditorDoc[]
-     *
-     * @since 1.0.0
-     */
-    public function getNotes() : array
-    {
-        return $this->notes;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function toArray() : array

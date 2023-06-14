@@ -21,9 +21,9 @@ use phpOMS\Uri\UriFactory;
 $item = $this->data['item'];
 
 $itemL11n      = $item->getL11ns();
-$Attribute     = $item->getAttributes();
+$Attribute     = $item->attributes;
 
-$notes = $item->getNotes();
+$notes = $item->notes;
 $files = $item->files;
 
 $newestInvoices    = $this->data['newestInvoices'] ?? [];

@@ -23,9 +23,9 @@ use phpOMS\Uri\UriFactory;
 /** @var \Modules\ItemManagement\Models\Item $item */
 $item = $this->data['item'];
 
-$attribute = $item->getAttributes();
+$attribute = $item->attributes;
 
-$notes     = $item->getNotes();
+$notes     = $item->notes;
 $files     = $item->files;
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
@@ -573,7 +573,7 @@ echo $this->data['nav']->render();
         <div class="tab">
             <div class="row">
                 <?= $attributeView->render(
-                    $item->getAttributes(),
+                    $item->attributes,
                     $this->data['attributeTypes'] ?? [],
                     $this->data['units'] ?? [],
                     '{/api}item/attribute'
