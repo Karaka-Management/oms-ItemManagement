@@ -68,6 +68,19 @@ echo $this->data['nav']->render();
     <div class="tab-content">
         <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
+            <?php if (true) : ?>
+            <!-- If note warning exists -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="portlet highlight-1">
+                        <div class="portlet-body">
+                            Warning
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <?php endif; ?>
+
             <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
                     <section class="portlet">
@@ -109,7 +122,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-lg-9 plain-grid">
                     <div class="row">
                         <div class="col-xs-12 col-lg-4">
-                            <section class="portlet highlight-1">
+                            <section class="portlet highlight-7">
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('YTDSales'); ?>:
