@@ -68,14 +68,12 @@ echo $this->data['nav']->render();
     <div class="tab-content">
         <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
-            <?php if (true) : ?>
+            <?php if (!empty($notes) && ($warning = $item->getEditorDocByTypeName('item_backend_warning'))->id !== 0) : ?>
             <!-- If note warning exists -->
             <div class="row">
                 <div class="col-xs-12">
                     <section class="portlet highlight-1">
-                        <div class="portlet-body">
-                            Warning
-                        </div>
+                        <div class="portlet-body"><?= $this->printHtml($warning->plain); ?></div>
                     </section>
                 </div>
             </div>
