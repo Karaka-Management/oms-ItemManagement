@@ -73,6 +73,27 @@
         "values": []
     },
     {
+        "name": "internal_item",
+        "l11n": {
+            "en": "Internal item",
+            "de": "Interner Artikel"
+        },
+        "description": "Packaging material, cleaning utils, ...",
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
         "name": "segment",
         "l11n": {
             "en": "Segment",
@@ -294,6 +315,41 @@
                     "en": "Black",
                     "de": "Schwarz"
                 }
+            },
+            {
+                "value": "yellow",
+                "l11n": {
+                    "en": "Yellow",
+                    "de": "Gelb"
+                }
+            },
+            {
+                "value": "purple",
+                "l11n": {
+                    "en": "Purple",
+                    "de": "Lila"
+                }
+            },
+            {
+                "value": "orange",
+                "l11n": {
+                    "en": "Orange",
+                    "de": "Orange"
+                }
+            },
+            {
+                "value": "pink",
+                "l11n": {
+                    "en": "Pink",
+                    "de": "Pink"
+                }
+            },
+            {
+                "value": "gray",
+                "l11n": {
+                    "en": "Gray",
+                    "de": "Grau"
+                }
             }
         ]
     },
@@ -343,11 +399,20 @@
             "de": "Lizenz"
         },
         "value_type": 2,
+        "@todo": "change and implement value_type enum to allow existing enums e.g. countries, languages, ...",
         "is_custom_allowed": false,
         "validation_pattern": "",
         "is_required": false,
         "default_value": "",
-        "values": []
+        "values": [],
+        "@todo2": [
+            {
+                "value": "ISO3166CharEnum",
+                "l11n": {
+                    "ISO3166CharEnum": "ISO3166NameEnum"
+                }
+            }
+        ]
     },
     {
         "name": "it_platform",
@@ -537,14 +602,14 @@
                 "value": 1,
                 "l11n": {
                     "en": "Daily",
-                    "de": "Daily"
+                    "de": "Täglich"
                 }
             },
             {
                 "value": 2,
                 "l11n": {
                     "en": "Weekly",
-                    "de": "Weekly"
+                    "de": "Wöchentlich"
                 }
             },
             {
@@ -557,8 +622,15 @@
             {
                 "value": 4,
                 "l11n": {
+                    "en": "Quarterly",
+                    "de": "Quartärlich"
+                }
+            },
+            {
+                "value": 5,
+                "l11n": {
                     "en": "Annually",
-                    "de": "Annually"
+                    "de": "Jährlich"
                 }
             }
         ]
@@ -600,7 +672,7 @@
                 "value": 1,
                 "l11n": {
                     "en": "Automatic",
-                    "de": "Automatic"
+                    "de": "Automatisch"
                 }
             }
         ]
@@ -664,6 +736,105 @@
         "l11n": {
             "en": "One Click Paypal payment link",
             "de": "One Click Paypal Bezahl-Link"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "stock_evaluation_category",
+        "l11n": {
+            "en": "Stock evaluation category",
+            "de": "Lagerbewertungskategorie"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+        ]
+    },
+    {
+        "name": "iso_keep_dry",
+        "l11n": {
+            "en": "Keep dry",
+            "de": "Trocken halten"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "iso_temparature_lower_limit",
+        "l11n": {
+            "en": "Temperature lower limit",
+            "de": "Temperatur unteres Limit"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "iso_temparature_upper_limit",
+        "l11n": {
+            "en": "Temperature upper limit",
+            "de": "Temperatur oberes Limit"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "iso_shelf_life",
+        "l11n": {
+            "en": "Shelf life",
+            "de": "Haltbarkeit"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "country_of_origin",
+        "l11n": {
+            "en": "Country of origin",
+            "de": "Herkunftsland"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "gtin",
+        "l11n": {
+            "en": "GTIN",
+            "de": "GTIN"
         },
         "value_type": 2,
         "is_custom_allowed": true,
