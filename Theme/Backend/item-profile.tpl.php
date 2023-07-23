@@ -36,6 +36,7 @@ $regionSales       = $this->data['regionSales'] ?? [];
 $countrySales      = $this->data['countrySales'] ?? [];
 $monthlySalesCosts = $this->data['monthlySalesCosts'] ?? [];
 $attributeView = $this->data['attributeView'];
+$l11nView = $this->data['l11nView'];
 
 $languages = ISO639Enum::getConstants();
 
@@ -470,114 +471,12 @@ echo $this->data['nav']->render();
         <input type="radio" id="c-tab-2" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <form id="localizationForm" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post"
-                            data-ui-container="#localizationTable tbody"
-                            data-add-form="localizationForm"
-                            data-add-tpl="#localizationTable tbody .oms-add-tpl-localization">
-                            <div class="portlet-head"><?= $this->getHtml('Localization'); ?></div>
-                            <div class="portlet-body">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label for="iLocaliztionId"><?= $this->getHtml('ID'); ?></label>
-                                        <input type="text" id="iLocaliztionId" name="id" data-tpl-text="/id" data-tpl-value="/id" disabled>
-                                    </div>
-
-                                    <label for="iLocalizationLanguage"><?= $this->getHtml('Language'); ?></label>
-                                    <select id="iLocalizationLanguage" name="language" data-tpl-text="/language" data-tpl-value="/language">
-                                        <?php foreach ($languages as $code => $language) : $code = ISO639x1Enum::getByName($code); ?>
-                                            <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iLocalizationType"><?= $this->getHtml('Type'); ?></label>
-                                    <select id="iLocalizationType" name="type" data-tpl-text="/type" data-tpl-value="/type">
-                                        <?php
-                                            $types = $this->data['l11nTypes'] ?? [];
-                                            foreach ($types as $type) : ?>
-                                            <option value="<?= $type->id; ?>"><?= $this->printHtml($type->title); ?>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iLocalizationText"><?= $this->getHtml('Text'); ?></label>
-                                    <pre class="textarea contenteditable" id="iLocalizationText" data-name="content" data-tpl-value="/l11n" contenteditable="true"></pre>
-                                </div>
-                            </div>
-                            <div class="portlet-foot">
-                                <input id="bLocalizationAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
-                                <input id="bLocalizationSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
-                                <input type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
-                            </div>
-                        </form>
-                    </section>
-                </div>
-
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="lni lni-download download btn end-xs"></i></div>
-                        <div class="slider">
-                        <table id="localizationTable" class="default sticky fixed-5"
-                            data-tag="form"
-                            data-ui-element="tr"
-                            data-add-tpl=".oms-add-tpl-localization"
-                            data-update-form="localizationForm">
-                            <thead>
-                                <tr>
-                                    <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?>
-                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Language'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td class="wf-100"><?= $this->getHtml('Localization'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                            <tbody>
-                                <template class="oms-add-tpl-attribute">
-                                    <tr data-id="" draggable="false">
-                                        <td>
-                                            <i class="fa fa-cogs btn update-form"></i>
-                                            <input id="attributeTable-remove-0" type="checkbox" class="hidden">
-                                            <label for="attributeTable-remove-0" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
-                                            <span class="checked-visibility">
-                                                <label for="attributeTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
-                                                <label for="attributeTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
-                                            </span>
-                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
-                                        <td data-tpl-text="/type" data-tpl-value="/type" data-value=""></td>
-                                        <td data-tpl-text="/language" data-tpl-value="/language"></td>
-                                        <td data-tpl-text="/l11n" data-tpl-value="/l11n"></td>
-                                    </tr>
-                                </template>
-                                <?php
-                                $c        = 0;
-                                $itemL11n = $this->data['l11nValues'];
-                                foreach ($itemL11n as $value) : ++$c; ?>
-                                    <tr data-id="<?= $value->id; ?>">
-                                        <td>
-                                            <i class="fa fa-cogs btn update-form"></i>
-                                            <?php if (!$value->type->isRequired) : ?>
-                                            <input id="localizationTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
-                                            <label for="localizationTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="fa fa-times btn form-action"></i></label>
-                                            <span class="checked-visibility">
-                                                <label for="localizationTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
-                                                <label for="localizationTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
-                                            </span>
-                                            <?php endif; ?>
-                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
-                                        <td data-tpl-text="/type" data-tpl-value="/type" data-value="<?= $value->type->id; ?>"><?= $this->printHtml($value->type->title); ?>
-                                        <td data-tpl-text="/language" data-tpl-value="/language"><?= $this->printHtml($value->getLanguage()); ?>
-                                        <td data-tpl-text="/l11n" data-tpl-value="/l11n" data-value="<?= \nl2br($this->printHtml($value->content)); ?>"><?= \nl2br($this->printHtml(\substr($value->content, 0, 100))); ?>
-                                <?php endforeach; ?>
-                                <?php if ($c === 0) : ?>
-                                <tr>
-                                    <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                <?php endif; ?>
-                        </table>
-                        </div>
-                    </section>
-                </div>
+                <?= $l11nView->render(
+                    $this->data['l11nValues'],
+                    $this->data['l11nTypes'] ?? [],
+                    '{/api}item/l11n'
+                );
+                ?>
             </div>
         </div>
         <input type="radio" id="c-tab-3" name="tabular-2" checked>
@@ -588,7 +487,7 @@ echo $this->data['nav']->render();
                     $this->data['attributeTypes'] ?? [],
                     $this->data['units'] ?? [],
                     '{/api}item/attribute'
-                    );
+                );
                 ?>
             </div>
         </div>

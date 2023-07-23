@@ -398,12 +398,15 @@ final class BackendController extends Controller
         $view->data['itemImage'] = $itemImage;
 
         /** @var \Model\Setting $settings */
+        // @todo: this one should already be loaded in the backend application no?????????
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
 
         $view->data['attributeView']                              = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
         $view->data['attributeView']->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
+
+        $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
         $l11nTypes = ItemL11nTypeMapper::getAll()
             ->execute();

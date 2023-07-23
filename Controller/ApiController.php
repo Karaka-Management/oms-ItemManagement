@@ -44,6 +44,7 @@ use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
+use phpOMS\Localization\NullBaseStringL11n;
 use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
@@ -609,6 +610,75 @@ final class ApiController extends Controller
         $val = [];
         if (($val['title'] = !$request->hasData('title'))
             || ($val['type'] = !$request->hasData('type'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Api method to create item attribute
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+        if (!empty($val = $this->validateItemL11nUpdate($request))) {
+            $response->data['l11n_update'] = new FormValidation($val);
+            $response->header->status           = RequestStatusCode::R_400;
+
+            return;
+        }
+
+        $old = ItemL11nMapper::get()
+            ->where('id', (int) $request->getData('id'))
+            ->execute();
+
+        $new = $this->updateItemL11nFromRequest($request, clone $old);
+
+        $this->updateModel($request->header->account, $old, $new, ItemL11nMapper::class, 'l11n', $request->getOrigin());
+        $this->createStandardUpdateResponse($request, $response, $new);
+    }
+
+    /**
+     * Method to create item l11n from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return BaseStringL11n
+     *
+     * @since 1.0.0
+     */
+    private function updateItemL11nFromRequest(RequestAbstract $request, BaseStringL11n $l11n) : BaseStringL11n
+    {
+        $l11n->content = $request->getDataString('description');
+
+        return $l11n;
+    }
+
+    /**
+     * Validate item attribute create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateItemL11nUpdate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['id'] = !$request->hasData('id'))
+            || ($val['value'] = !$request->hasData('value'))
         ) {
             return $val;
         }
