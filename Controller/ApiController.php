@@ -176,7 +176,7 @@ final class ApiController extends Controller
             $internalResponse = new HttpResponse();
 
             $internalRequest->header->account = $request->header->account;
-            $internalRequest->setData('name', 'base_price');
+            $internalRequest->setData('name', 'base');
             $internalRequest->setData('item', $item->id);
             $internalRequest->setData('price', $request->getDataInt('salesprice') ?? 0);
 
@@ -506,25 +506,25 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    private function updateItemAttributeFromRequest(RequestAbstract $request, Attribute $attribute) : Attribute
+    private function updateItemAttributeFromRequest(RequestAbstract $request, Attribute $new) : Attribute
     {
-        if ($attribute->type->custom) {
+        if ($new->type->custom) {
             // @question: we are overwriting the old value, could there be a use case where we want to create a new value and keep the old one?
-            $attribute->value->setValue($request->getData('value'), $attribute->type->datatype);
+            $new->value->setValue($request->getData('value'), $new->type->datatype);
         } else {
             // @todo: fix by only accepting the value id to be used
             // this is a workaround for now because the front end doesn't allow to dynamically show default values.
-            $value = $attribute->type->getDefaultByValue($request->getData('value'));
+            $value = $new->type->getDefaultByValue($request->getData('value'));
 
             // Couldn't find matching default value
             if ($value->id === 0) {
                 return new NullAttribute();
             }
 
-            $attribute->value = $value;
+            $new->value = $value;
         }
 
-        return $attribute;
+        return $new;
     }
 
     /**
@@ -540,7 +540,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['id'] = !$request->hasData('id'))
-            || ($val['value'] = !$request->hasData('value'))
+            || ($val['value'] = (!$request->hasData('value') && !$request->hasData('custom')))
         ) {
             return $val;
         }
@@ -727,7 +727,7 @@ final class ApiController extends Controller
         $attrType                    = new AttributeType($request->getDataString('name') ?? '');
         $attrType->datatype          = $request->getDataInt('datatype') ?? 0;
         $attrType->custom            = $request->getDataBool('custom') ?? false;
-        $attrType->isRequired        = (bool) ($request->getData('is_required') ?? false);
+        $attrType->isRequired        = $request->getDataBool('is_required') ?? false;
         $attrType->validationPattern = $request->getDataString('validation_pattern') ?? '';
         $attrType->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
         $attrType->setFields($request->getDataInt('fields') ?? 0);
