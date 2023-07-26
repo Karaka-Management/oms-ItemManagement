@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use Modules\Editor\Models\EditorDocMapper;
+use Modules\ItemManagement\Models\Attribute\ItemAttributeMapper;
 use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaType;

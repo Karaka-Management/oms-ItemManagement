@@ -4,7 +4,7 @@
  *
  * PHP Version 8.1
  *
- * @package   Modules\ItemManagement\Models
+ * @package   Modules\ItemManagement\Models\Attribute
  * @copyright Dennis Eichhorn
  * @license   OMS License 2.0
  * @version   1.0.0
@@ -12,7 +12,7 @@
  */
 declare(strict_types=1);
 
-namespace Modules\ItemManagement\Models;
+namespace Modules\ItemManagement\Models\Attribute;
 
 use Modules\Attribute\Models\AttributeValue;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
@@ -20,7 +20,7 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 /**
  * Item mapper class.
  *
- * @package Modules\ItemManagement\Models
+ * @package Modules\ItemManagement\Models\Attribute
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0

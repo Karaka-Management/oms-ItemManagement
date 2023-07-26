@@ -31,7 +31,7 @@ return [
     ],
     '^.*/item/attribute.*$' => [
         [
-            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemAttributeCreate',
+            'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeCreate',
             'verb'       => RouteVerb::PUT,
             'permission' => [
                 'module' => ApiController::NAME,
@@ -40,7 +40,7 @@ return [
             ],
         ],
         [
-            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemAttributeUpdate',
+            'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeUpdate',
             'verb'       => RouteVerb::SET,
             'permission' => [
                 'module' => ApiController::NAME,

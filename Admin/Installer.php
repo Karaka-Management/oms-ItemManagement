@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Admin;
 
 use Modules\Attribute\Models\AttributeValue;
-use Modules\ItemManagement\Models\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use phpOMS\Application\ApplicationAbstract;
 use phpOMS\Config\SettingsInterface;
@@ -109,7 +109,10 @@ final class Installer extends InstallerAbstract
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
         $module = $app->moduleManager->getModuleInstance('ItemManagement');
 
-        /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
+        /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module2 */
+        $module2 = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
+
+        /** @var \Modules\Attribute\Models\Attribute\AttributeType[] $attributeTypes */
         $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
 
         /** @var \phpOMS\Localization\BaseStringL11nType[] $l11nTypes */
@@ -168,7 +171,7 @@ final class Installer extends InstallerAbstract
                 $request  = new HttpRequest(new HttpUri(''));
 
                 $request->header->account = 1;
-                $request->setData('item', $itemId);
+                $request->setData('ref', $itemId);
                 $request->setData('type', $attrType->id);
 
                 if ($attribute['custom'] ?? true) {
@@ -177,7 +180,7 @@ final class Installer extends InstallerAbstract
                     $request->setData('value', self::findAttributeIdByValue($attrType->getDefaults(), $attribute['value']));
                 }
 
-                $module->apiItemAttributeCreate($request, $response);
+                $module2->apiItemAttributeCreate($request, $response);
             }
         }
 
@@ -304,8 +307,8 @@ final class Installer extends InstallerAbstract
         /** @var array<string, array> $itemAttrType */
         $itemAttrType = [];
 
-        /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+        /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
 
         /** @var array $attribute */
         foreach ($attributes as $attribute) {
@@ -370,8 +373,8 @@ final class Installer extends InstallerAbstract
         /** @var array<string, array> $itemAttrValue */
         $itemAttrValue = [];
 
-        /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+        /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
 
         foreach ($attributes as $attribute) {
             $itemAttrValue[$attribute['name']] = [];
