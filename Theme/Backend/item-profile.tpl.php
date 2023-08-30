@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 use Modules\Media\Models\NullMedia;
 use phpOMS\Localization\ISO639Enum;
-use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\Http\HttpHeader;
@@ -35,8 +34,8 @@ $topCustomers      = $this->getData('topCustomers') ?? [[], []];
 $regionSales       = $this->data['regionSales'] ?? [];
 $countrySales      = $this->data['countrySales'] ?? [];
 $monthlySalesCosts = $this->data['monthlySalesCosts'] ?? [];
-$attributeView = $this->data['attributeView'];
-$l11nView = $this->data['l11nView'];
+$attributeView     = $this->data['attributeView'];
+$l11nView          = $this->data['l11nView'];
 
 $languages = ISO639Enum::getConstants();
 

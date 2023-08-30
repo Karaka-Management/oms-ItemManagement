@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Models;
 
-use Modules\Editor\Models\EditorDoc;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\NullBaseStringL11n;
 use phpOMS\Stdlib\Base\FloatInt;
