@@ -374,8 +374,8 @@ final class ApiController extends Controller
     public function apiItemL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
     {
         if (!empty($val = $this->validateItemL11nUpdate($request))) {
-            $response->data['l11n_update']      = new FormValidation($val);
-            $response->header->status           = RequestStatusCode::R_400;
+            $response->data['l11n_update'] = new FormValidation($val);
+            $response->header->status      = RequestStatusCode::R_400;
 
             return;
         }
@@ -401,7 +401,7 @@ final class ApiController extends Controller
      */
     private function updateItemL11nFromRequest(RequestAbstract $request, BaseStringL11n $l11n) : BaseStringL11n
     {
-        $l11n->content = $request->getDataString('description');
+        $l11n->content = $request->getDataString('description') ?? '';
 
         return $l11n;
     }

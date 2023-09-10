@@ -112,7 +112,7 @@ final class Installer extends InstallerAbstract
         /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module2 */
         $module2 = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
 
-        /** @var \Modules\Attribute\Models\Attribute\AttributeType[] $attributeTypes */
+        /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
         $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
 
         /** @var \phpOMS\Localization\BaseStringL11nType[] $l11nTypes */

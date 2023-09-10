@@ -327,7 +327,7 @@ final class ApiAttributeController extends Controller
             return;
         }
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeTypeL11n $itemAttributeTypeL11n */
+        /** @var BaseStringL11n $itemAttributeTypeL11n */
         $itemAttributeTypeL11n = ItemAttributeTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $itemAttributeTypeL11n, ItemAttributeTypeL11nMapper::class, 'item_attribute_type_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeTypeL11n);
@@ -387,7 +387,7 @@ final class ApiAttributeController extends Controller
             return;
         }
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeType $itemAttributeType */
+        /** @var AttributeType $itemAttributeType */
         $itemAttributeType = ItemAttributeTypeMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $itemAttributeType, ItemAttributeTypeMapper::class, 'item_attribute_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeType);
@@ -418,7 +418,7 @@ final class ApiAttributeController extends Controller
         /** @var AttributeValue $old */
         $old = ItemAttributeValueMapper::get()->where('id', (int) $request->getData('id'))->execute();
 
-        /** @var \Modules\Attribute\Models\Attribute $type */
+        /** @var \Modules\Attribute\Models\Attribute $attr */
         $attr = ItemAttributeMapper::get()
             ->with('type')
             ->where('id', $request->getDataInt('attribute') ?? 0)
@@ -514,7 +514,7 @@ final class ApiAttributeController extends Controller
             return;
         }
 
-        /** @var \Modules\ItemManagement\Models\ItemAttributeValueL11n $itemAttributeValueL11n */
+        /** @var BaseStringL11n $itemAttributeValueL11n */
         $itemAttributeValueL11n = ItemAttributeValueL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
         $this->deleteModel($request->header->account, $itemAttributeValueL11n, ItemAttributeValueL11nMapper::class, 'item_attribute_value_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeValueL11n);
