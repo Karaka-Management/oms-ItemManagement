@@ -49,7 +49,27 @@ return [
             ],
         ],
     ],
-    '^.*/item/l11n.*$' => [
+    '^.*/item/l11n$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nCreate',
+            'verb'       => RouteVerb::PUT,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nUpdate',
+            'verb'       => RouteVerb::SET,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/item/l11n/type$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nTypeCreate',
             'verb'       => RouteVerb::PUT,

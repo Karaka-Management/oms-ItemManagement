@@ -401,7 +401,7 @@ final class ApiController extends Controller
      */
     private function updateItemL11nFromRequest(RequestAbstract $request, BaseStringL11n $l11n) : BaseStringL11n
     {
-        $l11n->content = $request->getDataString('description') ?? '';
+        $l11n->content = $request->getDataString('content') ?? '';
 
         return $l11n;
     }
@@ -419,7 +419,7 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['id'] = !$request->hasData('id'))
-            || ($val['value'] = !$request->hasData('value'))
+            || ($val['content'] = !$request->hasData('content'))
         ) {
             return $val;
         }
@@ -598,7 +598,7 @@ final class ApiController extends Controller
         $itemL11n->setLanguage(
             $request->getDataString('language') ?? $request->header->l11n->language
         );
-        $itemL11n->content = $request->getDataString('description') ?? '';
+        $itemL11n->content = $request->getDataString('content') ?? '';
 
         return $itemL11n;
     }
@@ -617,7 +617,7 @@ final class ApiController extends Controller
         $val = [];
         if (($val['item'] = !$request->hasData('item'))
             || ($val['type'] = !$request->hasData('type'))
-            || ($val['description'] = !$request->hasData('description'))
+            || ($val['content'] = !$request->hasData('content'))
         ) {
             return $val;
         }
