@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Egenskaber',
     'Create'         => 'skab',
     'ItemManagement' => 'Vareforvaltning',
+    'Items'          => '',
     'List'           => 'Liste',
     'Types'          => 'Typer',
     'Values'         => 'Værdier',

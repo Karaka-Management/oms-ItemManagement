@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => '属性',
     'Create'         => '创建',
     'ItemManagement' => '物品管理',
+    'Items'          => '',
     'List'           => '列表',
     'Types'          => '类型',
     'Values'         => '价值',

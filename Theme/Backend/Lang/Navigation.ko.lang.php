@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => '속성',
     'Create'         => '만들다',
     'ItemManagement' => '항목 관리',
+    'Items'          => '',
     'List'           => '목록',
     'Types'          => '유형',
     'Values'         => '값',

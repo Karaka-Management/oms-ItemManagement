@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Egenskaper',
     'Create'         => 'Skape',
     'ItemManagement' => 'Varehåndtering',
+    'Items'          => '',
     'List'           => 'Liste',
     'Types'          => 'Typer',
     'Values'         => 'Verdier',

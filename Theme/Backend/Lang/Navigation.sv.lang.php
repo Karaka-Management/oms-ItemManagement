@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Attribut',
     'Create'         => 'Skapa',
     'ItemManagement' => 'Artikelhantering',
+    'Items'          => '',
     'List'           => 'Lista',
     'Types'          => 'Typer',
     'Values'         => 'Värderingar',

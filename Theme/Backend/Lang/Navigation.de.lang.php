@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Attribute',
     'Create'         => 'Erstellen',
     'ItemManagement' => 'Artikelverwaltung',
+    'Items'          => '',
     'List'           => 'Aufführen',
     'Types'          => 'Arten',
     'Values'         => 'Werte',

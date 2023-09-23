@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Attribuutit',
     'Create'         => 'Luoda',
     'ItemManagement' => 'Kohtahallinta',
+    'Items'          => '',
     'List'           => 'Lista',
     'Types'          => 'Tyypit',
     'Values'         => 'Arvot',

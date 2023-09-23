@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Атрибуты',
     'Create'         => 'Создавать',
     'ItemManagement' => 'Управление предметом',
+    'Items'          => '',
     'List'           => 'Список',
     'Types'          => 'Типы',
     'Values'         => 'Ценности',

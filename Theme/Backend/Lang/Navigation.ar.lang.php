@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'صفات',
     'Create'         => 'يخلق',
     'ItemManagement' => 'إدارة البند',
+    'Items'          => '',
     'List'           => 'قائمة',
     'Types'          => 'أنواع',
     'Values'         => 'قيم',

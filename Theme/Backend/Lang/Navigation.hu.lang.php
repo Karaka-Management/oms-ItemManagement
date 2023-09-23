@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Tulajdonságok',
     'Create'         => 'Teremt',
     'ItemManagement' => 'Elemkezelés',
+    'Items'          => '',
     'List'           => 'Lista',
     'Types'          => 'Típusok',
     'Values'         => 'Értékek',

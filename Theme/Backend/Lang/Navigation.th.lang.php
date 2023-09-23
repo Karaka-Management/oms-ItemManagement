@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'คุณลักษณะ',
     'Create'         => 'สร้าง',
     'ItemManagement' => 'การจัดการรายการ',
+    'Items'          => '',
     'List'           => 'รายการ',
     'Types'          => 'ประเภท',
     'Values'         => 'ค่า',

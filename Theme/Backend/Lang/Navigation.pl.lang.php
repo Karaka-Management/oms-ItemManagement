@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Atrybuty',
     'Create'         => 'Tworzyć',
     'ItemManagement' => 'Zarządzanie przedmiotem',
+    'Items'          => '',
     'List'           => 'Lista',
     'Types'          => 'Typy',
     'Values'         => 'Wartości',

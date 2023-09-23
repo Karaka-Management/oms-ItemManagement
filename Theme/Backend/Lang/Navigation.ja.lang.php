@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => '属性',
     'Create'         => '作成',
     'ItemManagement' => 'アイテム管理',
+    'Items'          => '',
     'List'           => 'リスト',
     'Types'          => 'タイプ',
     'Values'         => 'values',

@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Атрибути',
     'Create'         => 'Створювати',
     'ItemManagement' => 'Управління елементами',
+    'Items'          => '',
     'List'           => 'Список',
     'Types'          => 'Типи',
     'Values'         => 'Значення',

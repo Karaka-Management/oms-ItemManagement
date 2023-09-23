@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Γνωρίσματα',
     'Create'         => 'Δημιουργώ',
     'ItemManagement' => 'Διαχείριση στοιχείων',
+    'Items'          => '',
     'List'           => 'Λίστα',
     'Types'          => 'Τύποι',
     'Values'         => 'Αξίες',

@@ -18,6 +18,7 @@ return ['Navigation' => [
     'Attributes'     => 'Öznitellikler',
     'Create'         => 'Yaratmak',
     'ItemManagement' => 'Öğe Yönetimi',
+    'Items'          => '',
     'List'           => 'Liste',
     'Types'          => 'Türleri',
     'Values'         => 'Değerler',
