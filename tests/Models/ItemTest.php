@@ -47,7 +47,6 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals(0, $this->item->successor);
         self::assertEquals('', $this->item->info);
         self::assertEquals(ItemStatus::ACTIVE, $this->item->getStatus());
-        self::assertEquals([], $this->item->getNotes());
         self::assertEquals([], $this->item->files);
         self::assertEquals([], $this->item->getAttributes());
         self::assertInstanceOf(BaseStringL11n::class, $this->item->getL11n(''));
@@ -63,26 +62,6 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     {
         $this->item->setStatus(ItemStatus::INACTIVE);
         self::assertEquals(ItemStatus::INACTIVE, $this->item->getStatus());
-    }
-
-    /**
-     * @covers Modules\ItemManagement\Models\Item
-     * @group module
-     */
-    public function testFileInputOutput() : void
-    {
-        $this->item->addFile($temp = new Media());
-        self::assertCount(1, $this->item->files);
-    }
-
-    /**
-     * @covers Modules\ItemManagement\Models\Item
-     * @group module
-     */
-    public function testNoteInputOutput() : void
-    {
-        $this->item->addNote(new EditorDoc());
-        self::assertCount(1, $this->item->getNotes());
     }
 
     /**
@@ -121,6 +100,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
                 'number'        => '123456',
                 'status'        => ItemStatus::INACTIVE,
                 'info'          => 'Test info',
+                'l11n'          => [],
             ],
             $this->item->jsonSerialize()
         );

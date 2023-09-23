@@ -18,6 +18,7 @@ use Model\CoreSettings;
 use Modules\Admin\Models\AccountPermission;
 use Modules\ItemManagement\tests\Controller\Api\ApiControllerAttributeTrait;
 use Modules\ItemManagement\tests\Controller\Api\ApiControllerItemTrait;
+use Modules\ItemManagement\tests\Controller\Api\ApiControllerL11nTrait;
 use phpOMS\Account\Account;
 use phpOMS\Account\AccountManager;
 use phpOMS\Account\PermissionType;
@@ -95,4 +96,5 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
 
     use ApiControllerItemTrait;
     use ApiControllerAttributeTrait;
+    use ApiControllerL11nTrait;
 }
