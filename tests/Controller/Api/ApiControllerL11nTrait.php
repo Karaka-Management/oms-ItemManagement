@@ -52,7 +52,7 @@ trait ApiControllerL11nTrait
         $request->header->account = 1;
         $request->setData('item', '1');
         $request->setData('type', '1');
-        $request->setData('description', 'Description');
+        $request->setData('content', 'Description');
 
         $this->module->apiItemL11nCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
