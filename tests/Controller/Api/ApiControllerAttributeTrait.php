@@ -37,7 +37,7 @@ trait ApiControllerAttributeTrait
         $request->setData('name', 'test_name');
         $request->setData('language', ISO639x1Enum::_EN);
 
-        $this->module->apiItemL11nTypeCreate($request, $response);
+        $this->attrModule->apiItemL11nTypeCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -55,7 +55,7 @@ trait ApiControllerAttributeTrait
         $request->setData('type', '1');
         $request->setData('description', 'Description');
 
-        $this->module->apiItemL11nCreate($request, $response);
+        $this->attrModule->apiItemL11nCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -73,7 +73,7 @@ trait ApiControllerAttributeTrait
         $request->setData('title', 'EN:1');
         $request->setData('language', ISO639x1Enum::_EN);
 
-        $this->module->apiItemAttributeTypeCreate($request, $response);
+        $this->attrModule->apiItemAttributeTypeCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -91,7 +91,7 @@ trait ApiControllerAttributeTrait
         $request->setData('type', '1');
         $request->setData('language', ISO639x1Enum::_DE);
 
-        $this->module->apiItemAttributeTypeL11nCreate($request, $response);
+        $this->attrModule->apiItemAttributeTypeL11nCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -111,7 +111,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
-        $this->module->apiItemAttributeValueCreate($request, $response);
+        $this->attrModule->apiItemAttributeValueCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -130,7 +130,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
-        $this->module->apiItemAttributeValueCreate($request, $response);
+        $this->attrModule->apiItemAttributeValueCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -149,7 +149,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
-        $this->module->apiItemAttributeValueCreate($request, $response);
+        $this->attrModule->apiItemAttributeValueCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -168,7 +168,7 @@ trait ApiControllerAttributeTrait
         $request->setData('language', ISO639x1Enum::_DE);
         $request->setData('country', ISO3166TwoEnum::_DEU);
 
-        $this->module->apiItemAttributeValueCreate($request, $response);
+        $this->attrModule->apiItemAttributeValueCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -186,7 +186,7 @@ trait ApiControllerAttributeTrait
         $request->setData('value', '1');
         $request->setData('type', '1');
 
-        $this->module->apiItemAttributeCreate($request, $response);
+        $this->attrModule->apiItemAttributeCreate($request, $response);
         self::assertGreaterThan(0, $response->get('')['response']->id);
     }
 
@@ -202,7 +202,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeValueCreate($request, $response);
+        $this->attrModule->apiItemAttributeValueCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -218,7 +218,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeTypeCreate($request, $response);
+        $this->attrModule->apiItemAttributeTypeCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -234,7 +234,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeTypeL11nCreate($request, $response);
+        $this->attrModule->apiItemAttributeTypeL11nCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -250,7 +250,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemAttributeCreate($request, $response);
+        $this->attrModule->apiItemAttributeCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -266,7 +266,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemL11nTypeCreate($request, $response);
+        $this->attrModule->apiItemL11nTypeCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 
@@ -282,7 +282,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('invalid', '1');
 
-        $this->module->apiItemL11nCreate($request, $response);
+        $this->attrModule->apiItemL11nCreate($request, $response);
         self::assertEquals(RequestStatusCode::R_400, $response->header->status);
     }
 }

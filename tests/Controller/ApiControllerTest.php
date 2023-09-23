@@ -44,6 +44,7 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
      * @var \Modules\ItemManagement\Controller\ApiController
      */
     protected ModuleAbstract $module;
+    protected ModuleAbstract $attrModule;
 
     /**
      * {@inheritdoc}
@@ -85,9 +86,11 @@ final class ApiControllerTest extends \PHPUnit\Framework\TestCase
         $this->app->accountManager->add($account);
         $this->app->router = new WebRouter();
 
-        $this->module = $this->app->moduleManager->get('ItemManagement');
+        $this->module = $this->app->moduleManager->get('ItemManagement', 'Api');
+        $this->attrModule = $this->app->moduleManager->get('ItemManagement', 'ApiAttribute');
 
         TestUtils::setMember($this->module, 'app', $this->app);
+        TestUtils::setMember($this->attrModule, 'app', $this->app);
     }
 
     use ApiControllerItemTrait;
