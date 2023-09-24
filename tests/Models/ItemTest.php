@@ -50,8 +50,8 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals([], $this->item->files);
         self::assertEquals([], $this->item->getAttributes());
         self::assertInstanceOf(BaseStringL11n::class, $this->item->getL11n(''));
-        self::assertInstanceOf('phpOMS\Localization\Money', $this->item->salesPrice);
-        self::assertInstanceOf('phpOMS\Localization\Money', $this->item->purchasePrice);
+        self::assertInstanceOf('\phpOMS\Stdlib\Base\FloatInt', $this->item->salesPrice);
+        self::assertInstanceOf('\phpOMS\Stdlib\Base\FloatInt', $this->item->purchasePrice);
     }
 
     /**
