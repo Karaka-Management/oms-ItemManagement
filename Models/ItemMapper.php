@@ -131,7 +131,7 @@ final class ItemMapper extends DataMapperFactory
         left join media_type on media_type_rel.media_type_rel_dst = media_type.media_type_id and media_type.media_type_name = 'item_profile_image'
         SQL;
 
-        $itemsResult = self::$db->con->query($query)->fetchAll();
+        $itemsResult = self::$db->con->query($query)?->fetchAll() ?? [];
         $items       = [];
 
         foreach ($itemsResult as $res) {

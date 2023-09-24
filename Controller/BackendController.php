@@ -389,6 +389,7 @@ final class BackendController extends Controller
             ->where(ItemMapper::HAS_MANY['files']['self'], '=', $item->id)
             ->where(MediaTypeMapper::TABLE . '.' . MediaTypeMapper::getColumnByMember('name'), '=', 'item_profile_image');
 
+        /** @var \Modules\Media\Models\Media $itemImage */
         $itemImage = MediaMapper::get()
             ->with('types')
             ->where('id', $results)
@@ -397,8 +398,8 @@ final class BackendController extends Controller
 
         $view->data['itemImage'] = $itemImage;
 
-        /** @var \Model\Setting $settings */
         // @todo: this one should already be loaded in the backend application no?????????
+        /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,
         ]);
@@ -408,11 +409,13 @@ final class BackendController extends Controller
 
         $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
+        /** @var \phpOMS\Localization\BaseStringL11nType[] $l11nTypes */
         $l11nTypes = ItemL11nTypeMapper::getAll()
             ->execute();
 
         $view->data['l11nTypes'] = $l11nTypes;
 
+        /** @var \phpOMS\Localization\BaseStringL11n[] $l11nValues */
         $l11nValues = ItemL11nMapper::getAll()
             ->with('type')
             ->where('ref', $item->id)
@@ -420,6 +423,7 @@ final class BackendController extends Controller
 
         $view->data['l11nValues'] = $l11nValues;
 
+        /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
         $attributeTypes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
@@ -427,11 +431,13 @@ final class BackendController extends Controller
 
         $view->data['attributeTypes'] = $attributeTypes;
 
+        /** @var \Modules\Organization\Models\Unit[] $units */
         $units = UnitMapper::getAll()
             ->execute();
 
         $view->data['units'] = $units;
 
+        /** @var \Modules\Billing\Models\Price\Price[] $prices */
         $prices = PriceMapper::getAll()
             ->where('item', $item->id)
             ->where('type', PriceType::SALES)
@@ -440,6 +446,7 @@ final class BackendController extends Controller
 
         $view->data['prices'] = $prices;
 
+        /** @var \Modules\Auditor\Models\Audit[] $audits */
         $audits = AuditMapper::getAll()
             ->where('type', StringUtils::intHash(ItemMapper::class))
             ->where('module', 'ItemManagement')
@@ -448,6 +455,7 @@ final class BackendController extends Controller
 
         $view->data['audits'] = $audits;
 
+        /** @var \Modules\Media\Models\Media[] $files */
         $files = MediaMapper::getAll()
             ->with('types')
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
