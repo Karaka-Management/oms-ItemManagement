@@ -143,9 +143,9 @@ final class Installer extends InstallerAbstract
 
             $itemId = $responseData['response']->id;
 
-            $itemArray[] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $itemArray[] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
 
             foreach ($item['l11ns'] as $name => $l11ns) {
                 $l11nType = $l11nTypes[$name];
@@ -244,9 +244,9 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $l11nTypes[] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $l11nTypes[] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
         }
 
         return $l11nTypes;
@@ -284,9 +284,9 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $relations[] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $relations[] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
         }
 
         return $relations;
@@ -331,9 +331,9 @@ final class Installer extends InstallerAbstract
                 continue;
             }
 
-            $itemAttrType[$attribute['name']] = !\is_array($responseData['response'])
-                ? $responseData['response']->toArray()
-                : $responseData['response'];
+            $itemAttrType[$attribute['name']] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
 
             $isFirst = true;
             foreach ($attribute['l11n'] as $language => $l11n) {
@@ -402,9 +402,9 @@ final class Installer extends InstallerAbstract
                     continue;
                 }
 
-                $attrValue = !\is_array($responseData['response'])
-                    ? $responseData['response']->toArray()
-                    : $responseData['response'];
+                $attrValue = \is_array($responseData['response'])
+                    ? $responseData['response']
+                    : $responseData['response']->toArray();
 
                 $itemAttrValue[$attribute['name']][] = $attrValue;
 
