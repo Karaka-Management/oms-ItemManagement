@@ -687,6 +687,12 @@ final class ApiController extends Controller
             }
         }
 
+        if (empty($uploaded)) {
+            $this->createInvalidAddResponse($request, $response, []);
+
+            return;
+        }
+
         $this->createModelRelation(
             $request->header->account,
             (int) $request->getData('item'),
