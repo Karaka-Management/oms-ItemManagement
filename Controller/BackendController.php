@@ -258,6 +258,23 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
+    public function viewItemManagementItemCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
+    {
+        return $this->viewItemManagementItem($request, $response, $data);
+    }
+
+    /**
+     * Routing end-point for application behaviour.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
     public function viewItemManagementWarehousingList(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : RenderableInterface
     {
         return $this->viewItemManagementItemList($request, $response, $data);
