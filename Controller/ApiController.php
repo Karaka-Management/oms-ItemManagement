@@ -58,7 +58,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -66,7 +66,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         /** @var BaseStringL11n[] $l11n */
         $l11n = ItemL11nMapper::getAll()
@@ -133,7 +133,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -141,7 +141,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -288,7 +288,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -296,7 +296,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemPriceCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemPriceCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemPriceCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -363,7 +363,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -371,7 +371,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemL11nUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemL11nUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemL11nUpdate($request))) {
             $response->data['l11n_update'] = new FormValidation($val);
@@ -432,7 +432,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -440,7 +440,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemL11nTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemL11nTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemL11nTypeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -459,7 +459,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -467,7 +467,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemL11nTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemL11nTypeUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
     }
 
@@ -513,7 +513,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -521,7 +521,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemRelationTypeCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemRelationTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemRelationTypeCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -576,7 +576,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -584,7 +584,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiItemL11nCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiItemL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateItemL11nCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -647,7 +647,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -655,7 +655,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiFileCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiFileCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateFileCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
@@ -745,7 +745,7 @@ final class ApiController extends Controller
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
-     * @param mixed            $data     Generic data
+     * @param array            $data     Generic data
      *
      * @return void
      *
@@ -753,7 +753,7 @@ final class ApiController extends Controller
      *
      * @since 1.0.0
      */
-    public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    public function apiNoteCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         if (!empty($val = $this->validateNoteCreate($request))) {
             $response->header->status = RequestStatusCode::R_400;
