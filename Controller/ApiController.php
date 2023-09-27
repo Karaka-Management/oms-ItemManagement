@@ -455,6 +455,23 @@ final class ApiController extends Controller
     }
 
     /**
+     * Api method to create item l11n type
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param mixed            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemL11nTypeUpdate(RequestAbstract $request, ResponseAbstract $response, mixed $data = null) : void
+    {
+    }
+
+    /**
      * Method to create item l11n type from request.
      *
      * @param RequestAbstract $request Request
