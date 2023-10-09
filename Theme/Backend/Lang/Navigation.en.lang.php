@@ -19,6 +19,7 @@ return ['Navigation' => [
     'Create'         => 'Create',
     'ItemManagement' => 'Item Management',
     'Items'          => 'Items',
+    'Item'          => 'Item',
     'List'           => 'List',
     'Types'          => 'Types',
     'Values'         => 'Values',

@@ -186,17 +186,6 @@ return [
             ],
         ],
     ],
-    '^.*/sales/analysis/item(\?.*|$)$' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemSalesAnalysis',
-            'verb'       => RouteVerb::GET,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
-            ],
-        ],
-    ],
     '^.*/purchase/analysis/item(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemPurchaseAnalysis',

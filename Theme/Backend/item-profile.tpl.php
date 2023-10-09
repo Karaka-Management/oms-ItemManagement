@@ -347,10 +347,7 @@ echo $this->data['nav']->render();
                                                         "id": "axis1",
                                                         "display": true,
                                                         "position": "left",
-                                                        "suggestedMin": 0,
-                                                        "ticks": {
-                                                            "stepSize": 1000
-                                                        }
+                                                        "suggestedMin": 0
                                                     },
                                                     "axis2": {
                                                         "id": "axis2",
@@ -450,10 +447,7 @@ echo $this->data['nav']->render();
                                                     "id": "axis1",
                                                     "display": true,
                                                     "position": "left",
-                                                    "suggestedMin": 0,
-                                                    "ticks": {
-                                                        "stepSize": 1000
-                                                    }
+                                                    "suggestedMin": 0
                                                 }
                                             }
                                         }
@@ -485,7 +479,8 @@ echo $this->data['nav']->render();
                     $item->attributes,
                     $this->data['attributeTypes'] ?? [],
                     $this->data['units'] ?? [],
-                    '{/api}item/attribute'
+                    '{/api}item/attribute',
+                    $item->id
                 );
                 ?>
             </div>

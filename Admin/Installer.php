@@ -136,7 +136,7 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemCreate($request, $response);
 
-            $responseData = $response->get('');
+            $responseData = $response->getData('');
             if (!\is_array($responseData)) {
                 continue;
             }
@@ -174,10 +174,10 @@ final class Installer extends InstallerAbstract
                 $request->setData('ref', $itemId);
                 $request->setData('type', $attrType->id);
 
-                if ($attribute['custom'] ?? true) {
-                    $request->setData('custom', $attribute['value']);
+                if ($attribute['value'] ?? true) {
+                    $request->setData('value', $attribute['value']);
                 } else {
-                    $request->setData('value', self::findAttributeIdByValue($attrType->getDefaults(), $attribute['value']));
+                    $request->setData('value_id', self::findAttributeIdByValue($attrType->getDefaults(), $attribute['value']));
                 }
 
                 $module2->apiItemAttributeCreate($request, $response);
@@ -239,7 +239,7 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemL11nTypeCreate($request, $response);
 
-            $responseData = $response->get('');
+            $responseData = $response->getData('');
             if (!\is_array($responseData)) {
                 continue;
             }
@@ -279,7 +279,7 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemRelationTypeCreate($request, $response);
 
-            $responseData = $response->get('');
+            $responseData = $response->getData('');
             if (!\is_array($responseData)) {
                 continue;
             }
@@ -326,7 +326,7 @@ final class Installer extends InstallerAbstract
 
             $module->apiItemAttributeTypeCreate($request, $response);
 
-            $responseData = $response->get('');
+            $responseData = $response->getData('');
             if (!\is_array($responseData)) {
                 continue;
             }
@@ -397,7 +397,7 @@ final class Installer extends InstallerAbstract
 
                 $module->apiItemAttributeValueCreate($request, $response);
 
-                $responseData = $response->get('');
+                $responseData = $response->getData('');
                 if (!\is_array($responseData)) {
                     continue;
                 }

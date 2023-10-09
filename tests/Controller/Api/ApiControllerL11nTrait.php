@@ -37,7 +37,7 @@ trait ApiControllerL11nTrait
         $request->setData('language', ISO639x1Enum::_EN);
 
         $this->module->apiItemL11nTypeCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -55,7 +55,7 @@ trait ApiControllerL11nTrait
         $request->setData('content', 'Description');
 
         $this->module->apiItemL11nCreate($request, $response);
-        self::assertGreaterThan(0, $response->get('')['response']->id);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
     }
 
     /**
