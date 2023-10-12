@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Artikla',
     'Attributes'     => 'Attribuutit',
     'Create'         => 'Luoda',
+    'Item'           => '',
     'ItemManagement' => 'Kohtahallinta',
     'Items'          => '',
     'List'           => 'Lista',

@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Článek',
     'Attributes'     => 'Atributy',
     'Create'         => 'Vytvořit',
+    'Item'           => '',
     'ItemManagement' => 'Správa položek',
     'Items'          => '',
     'List'           => 'Seznam',

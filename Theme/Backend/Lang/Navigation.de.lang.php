@@ -17,9 +17,10 @@ return ['Navigation' => [
     'Article'        => 'Artikel',
     'Attributes'     => 'Attribute',
     'Create'         => 'Erstellen',
+    'Item'           => '',
     'ItemManagement' => 'Artikelverwaltung',
-    'Items'          => '',
-    'List'           => 'Aufführen',
+    'Items'          => 'Artikel',
+    'List'           => 'Liste',
     'Types'          => 'Arten',
     'Values'         => 'Werte',
 ]];

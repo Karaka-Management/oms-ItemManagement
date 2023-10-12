@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'บทความ',
     'Attributes'     => 'คุณลักษณะ',
     'Create'         => 'สร้าง',
+    'Item'           => '',
     'ItemManagement' => 'การจัดการรายการ',
     'Items'          => '',
     'List'           => 'รายการ',

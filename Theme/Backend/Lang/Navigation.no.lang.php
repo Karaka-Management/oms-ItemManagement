@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Artikkel',
     'Attributes'     => 'Egenskaper',
     'Create'         => 'Skape',
+    'Item'           => '',
     'ItemManagement' => 'Varehåndtering',
     'Items'          => '',
     'List'           => 'Liste',

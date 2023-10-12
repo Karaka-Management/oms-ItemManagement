@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => '記事',
     'Attributes'     => '属性',
     'Create'         => '作成',
+    'Item'           => '',
     'ItemManagement' => 'アイテム管理',
     'Items'          => '',
     'List'           => 'リスト',

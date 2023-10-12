@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => '기사',
     'Attributes'     => '속성',
     'Create'         => '만들다',
+    'Item'           => '',
     'ItemManagement' => '항목 관리',
     'Items'          => '',
     'List'           => '목록',

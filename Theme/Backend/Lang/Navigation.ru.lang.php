@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Статья',
     'Attributes'     => 'Атрибуты',
     'Create'         => 'Создавать',
+    'Item'           => '',
     'ItemManagement' => 'Управление предметом',
     'Items'          => '',
     'List'           => 'Список',

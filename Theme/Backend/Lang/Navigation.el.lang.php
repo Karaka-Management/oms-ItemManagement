@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Αρθρο',
     'Attributes'     => 'Γνωρίσματα',
     'Create'         => 'Δημιουργώ',
+    'Item'           => '',
     'ItemManagement' => 'Διαχείριση στοιχείων',
     'Items'          => '',
     'List'           => 'Λίστα',

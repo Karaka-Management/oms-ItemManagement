@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'مقالة - سلعة',
     'Attributes'     => 'صفات',
     'Create'         => 'يخلق',
+    'Item'           => '',
     'ItemManagement' => 'إدارة البند',
     'Items'          => '',
     'List'           => 'قائمة',

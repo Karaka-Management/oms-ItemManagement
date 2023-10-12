@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Artigo',
     'Attributes'     => 'Atributos',
     'Create'         => 'Crio',
+    'Item'           => '',
     'ItemManagement' => 'Gerenciamento de itens',
     'Items'          => '',
     'List'           => 'Lista',

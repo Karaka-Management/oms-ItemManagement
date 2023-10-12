@@ -380,16 +380,16 @@
         "values": []
     },
     {
-        "name": "origin",
-        "l11n": {
-            "en": "Country of origin",
-            "de": "Herkunftsland"
-        },
-        "value_type": 2,
-        "is_custom_allowed": false,
+        "name": "releasedate",
+        "value_type": 4,
+        "is_custom_allowed": true,
         "validation_pattern": "",
-        "is_required": true,
+        "is_required": false,
         "default_value": "",
+        "l11n": {
+            "en": "Release date",
+            "de": "Veröffentlichungsdatum"
+        },
         "values": []
     },
     {
@@ -451,6 +451,32 @@
                 }
             }
         ]
+    },
+    {
+        "name": "brand",
+        "l11n": {
+            "en": "Brand",
+            "de": "Marke"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "model",
+        "l11n": {
+            "en": "Model",
+            "de": "Modell"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
     },
     {
         "name": "os",
@@ -829,6 +855,163 @@
         "is_required": false,
         "default_value": "",
         "values": []
+    },
+    {
+        "name": "country_of_assembly",
+        "l11n": {
+            "en": "Country of assembly",
+            "de": "Fertigungsland"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "country_of_last_processing",
+        "l11n": {
+            "en": "Country of last processing",
+            "de": "Letztes Herstellungsland"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "consumablefor",
+        "l11n": {
+            "en": "Consumable for",
+            "de": "Verbrauchsmaterial für"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "successorof",
+        "l11n": {
+            "en": "Successor of",
+            "de": "Nachfolger von"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "variantof",
+        "l11n": {
+            "en": "Variant of",
+            "de": "Variante von"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "accessoryfor",
+        "l11n": {
+            "en": "Accessory for",
+            "de": "Zusatz zu"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "sparepartfor",
+        "l11n": {
+            "en": "Spare part for",
+            "de": "Ersatzteil zu"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "isfamilyfriendly",
+        "l11n": {
+            "en": "Is family friendly",
+            "de": "Ist Familienfreundlich"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 0,
+        "values": [
+            {
+                "value": 0
+            },
+            {
+                "value": 1
+            }
+        ]
+    },
+    {
+        "name": "item_condition",
+        "l11n": {
+            "en": "Item condition",
+            "de": "Artikelzustand"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": "new",
+                "is_default": true,
+                "l11n": {
+                    "en": "New",
+                    "de": "Neu"
+                }
+            },
+            {
+                "value": "used",
+                "is_default": true,
+                "l11n": {
+                    "en": "Used",
+                    "de": "Gebraucht"
+                }
+            },
+            {
+                "value": "damaged",
+                "is_default": true,
+                "l11n": {
+                    "en": "Damaged",
+                    "de": "Beschädigt"
+                }
+            },
+            {
+                "value": "broken",
+                "is_default": true,
+                "l11n": {
+                    "en": "Broken",
+                    "de": "Funktionsunfähig"
+                }
+            }
+        ]
     },
     {
         "name": "gtin",

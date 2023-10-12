@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Madde',
     'Attributes'     => 'Öznitellikler',
     'Create'         => 'Yaratmak',
+    'Item'           => '',
     'ItemManagement' => 'Öğe Yönetimi',
     'Items'          => '',
     'List'           => 'Liste',

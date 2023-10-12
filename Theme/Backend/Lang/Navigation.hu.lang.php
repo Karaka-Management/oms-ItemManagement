@@ -17,6 +17,7 @@ return ['Navigation' => [
     'Article'        => 'Cikk',
     'Attributes'     => 'Tulajdonságok',
     'Create'         => 'Teremt',
+    'Item'           => '',
     'ItemManagement' => 'Elemkezelés',
     'Items'          => '',
     'List'           => 'Lista',
