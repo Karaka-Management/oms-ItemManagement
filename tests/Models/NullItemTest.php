@@ -23,7 +23,7 @@ final class NullItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @covers Modules\ItemManagement\Models\NullItem
-     * @group framework
+     * @group module
      */
     public function testNull() : void
     {
@@ -32,11 +32,21 @@ final class NullItemTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers Modules\ItemManagement\Models\NullItem
-     * @group framework
+     * @group module
      */
     public function testId() : void
     {
         $null = new NullItem(2);
         self::assertEquals(2, $null->id);
+    }
+
+    /**
+     * @covers Modules\ItemManagement\Models\NullItem
+     * @group module
+     */
+    public function testJsonSerialize() : void
+    {
+        $null = new NullItem(2);
+        self::assertEquals(['id' => 2], $null);
     }
 }
