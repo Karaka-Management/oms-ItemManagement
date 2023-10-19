@@ -177,7 +177,7 @@ final class Installer extends InstallerAbstract
                 if ($attribute['value'] ?? true) {
                     $request->setData('value', $attribute['value']);
                 } else {
-                    $request->setData('value_id', self::findAttributeIdByValue($attrType->getDefaults(), $attribute['value']));
+                    $request->setData('value_id', self::findAttributeIdByValue($attrType->defaults, $attribute['value']));
                 }
 
                 $module2->apiItemAttributeCreate($request, $response);
