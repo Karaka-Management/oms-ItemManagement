@@ -124,8 +124,8 @@ final class ApiController extends Controller
      */
     private function createItemDir(Item $item) : string
     {
-        return '/Modules/ItemManagement/Item/'
-            . $item->id;
+        return '/Modules/ItemManagement/Items/'
+            . (empty($item->number) ? $item->id : $item->number);
     }
 
     /**
