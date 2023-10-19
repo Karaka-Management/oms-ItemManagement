@@ -86,7 +86,7 @@ echo $this->data['nav']->render();
                             <div class="portlet-body">
                               <table class="layout wf-100">
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="fa fa-book"></i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
+                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                                     <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>" spellcheck="false" required>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
@@ -180,7 +180,7 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head row middle-xs">
                                     <span><?= $this->getHtml('Notes'); ?></span>
-                                    <label for="c-tab-12" class="right-xs btn"><i class="fa fa-pencil"></i></a>
+                                    <label for="c-tab-12" class="right-xs btn"><i class="g-icon">edit</i></a>
                                 </div>
                                 <div class="slider">
                                 <table id="iNotesItemList" class="default">
@@ -205,7 +205,7 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head row middle-xs">
                                     <span><?= $this->getHtml('Files'); ?></span>
-                                    <label for="c-tab-13" class="right-xs btn"><i class="fa fa-pencil"></i></a>
+                                    <label for="c-tab-13" class="right-xs btn"><i class="g-icon">edit</i></a>
                                 </div>
                                 <div class="slider">
                                 <table id="iFilesItemList" class="default">
@@ -491,7 +491,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="g-icon download btn end-xs">download</i></div>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
@@ -547,14 +547,14 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table id="iSalesItemList" class="default">
                             <thead>
                                 <tr>
                                     <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                     <td><?= $this->getHtml('Price'); ?>
                                     <td><?= $this->getHtml('Quantity'); ?>
                                     <td><?= $this->getHtml('Discount'); ?>
@@ -578,7 +578,7 @@ echo $this->data['nav']->render();
                                 foreach ($prices as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="#"><i class="g-icon">close</i></a>
                                         <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->price->getAmount()); ?></a>
@@ -654,7 +654,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="g-icon download btn end-xs">download</i></div>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
@@ -710,20 +710,20 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <table id="iSalesItemList" class="default">
                             <thead>
                                 <tr>
                                     <td>
-                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
-                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc fa fa-chevron-up"></i><i class="sort-desc fa fa-chevron-down"></i>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                             <tbody>
                                 <?php $c = 0;
                                 $l11ns   = [];
                                 foreach ($l11ns as $key => $value) : ++$c;
                                     $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
                                     <tr data-href="<?= $url; ?>">
-                                        <td><a href="#"><i class="fa fa-times"></i></a>
+                                        <td><a href="#"><i class="g-icon">close</i></a>
                                         <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
                                 <?php endforeach; ?>
@@ -972,7 +972,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="lni lni-download download btn end-xs"></i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table class="default">
                             <colgroup>

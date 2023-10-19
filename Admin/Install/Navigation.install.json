@@ -7,7 +7,7 @@
         "name": "ItemManagement",
         "uri": null,
         "target": "self",
-        "icon": "fa fa-usd",
+        "icon": "local_mall",
         "order": 35,
         "from": "ItemManagement",
         "permission": { "permission": 2, "category": null, "element": null },
