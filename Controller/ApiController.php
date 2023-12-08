@@ -97,7 +97,7 @@ final class ApiController extends Controller
         );
 
         /*
-        @todo: BIG TODO.
+        @todo BIG TODO.
         This is the query I want to be used internally:
 
         select itemmgmt_item.itemmgmt_item_no, itemmgmt_item_l11n.itemmgmt_item_l11n_description

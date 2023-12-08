@@ -520,7 +520,7 @@ echo $this->data['nav']->render();
                                 <div class="form-group">
                                     <label for="iGeneralPrice"><?= $this->getHtml('Price'); ?></label>
                                     <input id="iGeneralPrice" name="generalprice" type="number" step="0.0001" value="<?= $this->printHtml('0.00'); ?>">
-                                    <!-- todo: maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
+                                    <!-- @todo maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
                                 </div>
 
                                 <div class="form-group">
@@ -683,7 +683,7 @@ echo $this->data['nav']->render();
                                 <div class="form-group">
                                     <label for="iGeneralPrice"><?= $this->getHtml('Price'); ?></label>
                                     <input id="iGeneralPrice" name="generalprice" type="number" step="0.0001" value="<?= $this->printHtml('0.00'); ?>">
-                                    <!-- todo: maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
+                                    <!-- @todo maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
                                 </div>
 
                                 <div class="form-group">

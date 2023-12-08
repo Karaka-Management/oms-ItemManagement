@@ -391,7 +391,7 @@ final class BackendController extends Controller
 
         // Get item profile image
         // It might not be part of the 5 newest item files from above
-        // @todo: It would be nice to have something like this as a default method in the model e.g.
+        // @todo It would be nice to have something like this as a default method in the model e.g.
         // ItemManagement::getRelations()->with('types')->where(...);
         // This should return the relations and NOT the model itself
         $query   = new Builder($this->app->dbPool->get());
@@ -417,7 +417,7 @@ final class BackendController extends Controller
 
         $view->data['itemImage'] = $itemImage;
 
-        // @todo: this one should already be loaded in the backend application no?????????
+        // @todo this one should already be loaded in the backend application no?????????
         /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, [
             SettingsEnum::DEFAULT_LOCALIZATION,

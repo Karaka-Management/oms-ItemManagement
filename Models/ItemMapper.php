@@ -109,7 +109,7 @@ final class ItemMapper extends DataMapperFactory
      *
      * @return array
      *
-     * @todo: experimental (not 100% working)
+     * @todo experimental (not 100% working)
      *
      * @since 1.0.0
      */
