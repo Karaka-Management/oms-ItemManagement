@@ -12,28 +12,26 @@
  */
 declare(strict_types=1);
 
+use Modules\Billing\Models\BillTransferType;
+use Modules\Billing\Models\SalesBillMapper;
 use Modules\Media\Models\NullMedia;
+use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
 use phpOMS\Message\Http\HttpHeader;
+use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Uri\UriFactory;
 
 /** @var \Modules\ItemManagement\Models\Item $item */
 $item = $this->data['item'];
 
-$attribute = $item->attributes;
-
 $notes     = $item->notes;
 $files     = $item->files;
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
-$newestInvoices    = $this->data['newestInvoices'] ?? [];
 $allInvoices       = $this->data['allInvoices'] ?? [];
 $topCustomers      = $this->getData('topCustomers') ?? [[], []];
-$regionSales       = $this->data['regionSales'] ?? [];
-$countrySales      = $this->data['countrySales'] ?? [];
-$monthlySalesCosts = $this->data['monthlySalesCosts'] ?? [];
 $attributeView     = $this->data['attributeView'];
 $l11nView          = $this->data['l11nView'];
 
@@ -48,21 +46,21 @@ echo $this->data['nav']->render();
 <div class="tabview tab-2">
     <div class="box">
         <ul class="tab-links">
-            <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Attributes'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('SalesPricing'); ?></label></li>
-            <li><label for="c-tab-5"><?= $this->getHtml('Procurement'); ?></label></li>
-            <li><label for="c-tab-6"><?= $this->getHtml('Production'); ?></label></li>
-            <li><label for="c-tab-7"><?= $this->getHtml('QA'); ?></label></li>
-            <li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label></li>
-            <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label></li>
-            <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label></li>
-            <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label></li>
-            <li><label for="c-tab-12"><?= $this->getHtml('Notes'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label></li>
-            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label>
+            <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label>
+            <li><label for="c-tab-3"><?= $this->getHtml('Attributes'); ?></label>
+            <li><label for="c-tab-4"><?= $this->getHtml('SalesPricing'); ?></label>
+            <li><label for="c-tab-5"><?= $this->getHtml('Procurement'); ?></label>
+            <li><label for="c-tab-6"><?= $this->getHtml('Production'); ?></label>
+            <li><label for="c-tab-7"><?= $this->getHtml('QA'); ?></label>
+            <li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label>
+            <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label>
+            <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label>
+            <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label>
+            <li><label for="c-tab-12"><?= $this->getHtml('Notes'); ?></label>
+            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label>
+            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label>
+            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label>
         </ul>
     </div>
     <div class="tab-content">
@@ -118,19 +116,18 @@ echo $this->data['nav']->render();
                     </section>
                 </div>
                 <div class="col-xs-12 col-lg-9 plain-grid">
+                    <?php if ($this->data['hasBilling']) : ?>
                     <div class="row">
                         <div class="col-xs-12 col-lg-4">
                             <section class="portlet highlight-7">
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('YTDSales'); ?>:
-                                            <td><?= $this->getCurrency($this->getData('ytd')); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfYear($this->data['business_start']), new \DateTime('now')), format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('MTDSales'); ?>:
-                                            <td><?= $this->getCurrency($this->getData('mtd')); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfMonth(), new \DateTime('now')), format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('ILV'); ?>:
-                                            <td>
-                                        <tr><td><?= $this->getHtml('MRR'); ?>:
-                                            <td>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getILVHistoric($item->id), format: 'medium'); ?>
                                     </table>
                                 </div>
                             </section>
@@ -141,13 +138,11 @@ echo $this->data['nav']->render();
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('LastOrder'); ?>:
-                                            <td><?= $this->getData('lastOrder') !== null ? $this->getData('lastOrder')->format('Y-m-d H:i') : ''; ?>
+                                            <td><?= SalesBillMapper::getItemLastOrder($item->id)?->format('Y-m-d'); ?>
                                         <tr><td><?= $this->getHtml('PriceChange'); ?>:
                                             <td>
                                         <tr><td><?= $this->getHtml('Created'); ?>:
                                             <td><?= $item->createdAt->format('Y-m-d H:i'); ?>
-                                        <tr><td><?= $this->getHtml('Modified'); ?>:
-                                            <td>
                                     </table>
                                 </div>
                             </section>
@@ -160,7 +155,7 @@ echo $this->data['nav']->render();
                                         <tr><td><?= $this->getHtml('SalesPrice'); ?>:
                                             <td><?= $this->getCurrency($item->salesPrice, format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
-                                            <td><?= $this->getCurrency($item->purchasePrice); ?>
+                                            <td><?= $this->getCurrency($item->purchasePrice, format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('Margin'); ?>:
                                             <td><?= $this->getNumeric(
                                                 $item->salesPrice->getInt() === 0
@@ -168,12 +163,13 @@ echo $this->data['nav']->render();
                                                     : ($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100
                                                 , 'short'); ?> %
                                         <tr><td><?= $this->getHtml('AvgPrice'); ?>:
-                                            <td><?= $this->getCurrency($this->getData('avg')); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getItemAvgSalesPrice($item->id, (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now')), format: 'medium'); ?>
                                     </table>
                                 </div>
                             </section>
                         </div>
                     </div>
+                    <?php endif; ?>
 
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
@@ -183,7 +179,7 @@ echo $this->data['nav']->render();
                                     <label for="c-tab-12" class="right-xs btn"><i class="g-icon">edit</i></a>
                                 </div>
                                 <div class="slider">
-                                <table id="iNotesItemList" class="default">
+                                <table id="iNotesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td class="wf-100"><?= $this->getHtml('Title'); ?>
@@ -208,7 +204,7 @@ echo $this->data['nav']->render();
                                     <label for="c-tab-13" class="right-xs btn"><i class="g-icon">edit</i></a>
                                 </div>
                                 <div class="slider">
-                                <table id="iFilesItemList" class="default">
+                                <table id="iFilesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td class="wf-100"><?= $this->getHtml('Title'); ?>
@@ -229,12 +225,13 @@ echo $this->data['nav']->render();
                         </div>
                     </div>
 
+                    <?php if ($this->data['hasBilling']) : ?>
                     <div class="row">
                         <div class="col-xs-12">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
                                 <div class="slider">
-                                <table id="iSalesItemList" class="default">
+                                <table id="iSalesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td><?= $this->getHtml('Number'); ?>
@@ -244,6 +241,15 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('Date'); ?>
                                     <tbody>
                                     <?php
+                                    $newestInvoices = SalesBillMapper::getAll()
+                                        ->with('type')
+                                        ->with('type/l11n')
+                                        ->where('type/transferType', BillTransferType::SALES)
+                                        ->where('type/l11n/language', $this->response->header->l11n->language)
+                                        ->sort('id', OrderType::DESC)
+                                        ->limit(5)
+                                        ->execute();
+
                                     /** @var \Modules\Billing\Models\Bill $invoice */
                                     foreach ($newestInvoices as $invoice) :
                                         $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
@@ -260,13 +266,17 @@ echo $this->data['nav']->render();
                             </section>
                         </div>
                     </div>
+                    <?php endif; ?>
 
+                    <?php if ($this->data['hasBilling']) :
+                        $topCustomers = SalesBillMapper::getItemTopClients($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'), 5);
+                    ?>
                     <div class="row">
                         <?php if (!empty($topCustomers[0])) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('TopCustomers'); ?></div>
-                                <table id="iSalesItemList" class="default">
+                                <table id="iSalesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td><?= $this->getHtml('Number'); ?>
@@ -288,7 +298,9 @@ echo $this->data['nav']->render();
                         </div>
                         <?php endif; ?>
 
-                        <?php if (!empty($monthlySalesCosts)) : ?>
+                        <?php
+                        $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
+                        if (!empty($monthlySalesCosts)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Sales'); ?></div>
@@ -377,7 +389,9 @@ echo $this->data['nav']->render();
                     </div>
 
                     <div class="row">
-                        <?php if (!empty($regionSales)) : ?>
+                        <?php
+                        $regionSales = [];
+                        if (!empty($regionSales)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head">Regions</div>
@@ -413,7 +427,9 @@ echo $this->data['nav']->render();
                         </div>
                         <?php endif; ?>
 
-                        <?php if (!empty($countrySales)) : ?>
+                        <?php
+                        $countrySales = SalesBillMapper::getItemCountrySales($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'), 5);
+                        if (!empty($countrySales)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Countries'); ?></div>
@@ -456,8 +472,8 @@ echo $this->data['nav']->render();
                             </section>
                         </div>
                         <?php endif; ?>
-
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -472,6 +488,7 @@ echo $this->data['nav']->render();
                 ?>
             </div>
         </div>
+
         <input type="radio" id="c-tab-3" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
@@ -485,6 +502,7 @@ echo $this->data['nav']->render();
                 ?>
             </div>
         </div>
+
         <input type="radio" id="c-tab-4" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
@@ -549,7 +567,7 @@ echo $this->data['nav']->render();
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                        <table id="iSalesItemList" class="default">
+                        <table id="iSalesItemList" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -711,7 +729,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="iSalesItemList" class="default">
+                        <table id="iSalesItemList" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -920,18 +938,13 @@ echo $this->data['nav']->render();
         </div>
 
         <input type="radio" id="c-tab-12" name="tabular-2" checked>
-        <div class="tab">
-            <div class="row">
-            </div>
+        <div class="tab col-simple">
+            <?= $this->data['note']->render('item-note', 'notes', $item->notes); ?>
         </div>
 
         <input type="radio" id="c-tab-13" name="tabular-2" checked>
-        <div class="tab">
-            <div class="row">
-                <div class="col-xs-12">
-                    <?= $this->getData('medialist')->render($this->getData('files')); ?>
-                </div>
-            </div>
+        <div class="tab col-simple">
+            <?= $this->data['media-upload']->render('item-file', 'files', '', $this->data['files']); ?>
         </div>
 
         <input type="radio" id="c-tab-14" name="tabular-2" checked>
@@ -940,7 +953,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
-                        <table id="iSalesItemList" class="default">
+                        <table id="iSalesItemList" class="default sticky">
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('Number'); ?>
@@ -950,6 +963,8 @@ echo $this->data['nav']->render();
                                 <td><?= $this->getHtml('Date'); ?>
                             <tbody>
                             <?php
+                            $allInvoices = SalesBillMapper::getItemBills($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'));
+
                             /** @var \Modules\Billing\Models\Bill $invoice */
                             foreach ($allInvoices as $invoice) :
                                 $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
@@ -974,7 +989,7 @@ echo $this->data['nav']->render();
                     <div class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                        <table class="default">
+                        <table class="default sticky">
                             <colgroup>
                                 <col style="width: 75px">
                                 <col style="width: 150px">

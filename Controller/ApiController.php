@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Modules\Admin\Models\NullAccount;
+use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
@@ -24,11 +25,14 @@ use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemStatus;
+use Modules\ItemManagement\Models\PermissionCategory;
+use Modules\ItemManagement\Models\SettingsEnum as ItemSettingsEnum;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Media\Models\PathSettings;
+use phpOMS\Account\PermissionType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO4217CharEnum;
@@ -36,6 +40,7 @@ use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
+use phpOMS\Message\NotificationLevel;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
@@ -215,7 +220,38 @@ final class ApiController extends Controller
             );
         }
 
+        $this->createItemSegmentation($request, $response, $item);
+
         $this->createStandardCreateResponse($request, $response, $item);
+    }
+
+    private function createItemSegmentation(RequestAbstract $request, ResponseAbstract $response, Item $item) : void
+    {
+        /** @var \Model\Setting $settings */
+        $settings = $this->app->appSettings->get(null, [
+            ItemSettingsEnum::DEFAULT_SEGMENTATION,
+        ]);
+
+        $segmentation = \json_decode($settings->content, true);
+        if ($segmentation === false) {
+            return;
+        }
+
+        $types = ItemAttributeTypeMapper::get()
+            ->where('name', \array_keys($segmentation), 'IN')
+            ->execute();
+
+        foreach ($types as $type) {
+            $internalResponse = clone $response;
+            $internalRequest  = new HttpRequest(new HttpUri(''));
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->setData('ref', $item->id);
+            $internalRequest->setData('type', $type->id);
+            $internalRequest->setData('value_id', $segmentation[$type->name]);
+
+            $this->app->moduleManager->get('ItemManagement', 'ApiAttribute')->apiItemAttributeCreate($internalRequest, $internalResponse);
+        }
     }
 
     /**
@@ -796,5 +832,61 @@ final class ApiController extends Controller
         }
 
         return [];
+    }
+
+    /**
+     * Api method to update Note
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiNoteUpdate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        $accountId = $request->header->account;
+        if (!$this->app->accountManager->get($accountId)->hasPermission(
+            PermissionType::MODIFY, $this->app->unitId, $this->app->appId, self::NAME, PermissionCategory::NOTE, $request->getDataInt('id'))
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorUpdate($request, $response, $data);
+    }
+
+    /**
+     * Api method to delete Note
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiNoteDelete(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        $accountId = $request->header->account;
+        if (!$this->app->accountManager->get($accountId)->hasPermission(
+            PermissionType::DELETE, $this->app->unitId, $this->app->appId, self::NAME, PermissionCategory::NOTE, $request->getDataInt('id'))
+        ) {
+            $this->fillJsonResponse($request, $response, NotificationLevel::HIDDEN, '', '', []);
+            $response->header->status = RequestStatusCode::R_403;
+
+            return;
+        }
+
+        $this->app->moduleManager->get('Editor', 'Api')->apiEditorDelete($request, $response, $data);
     }
 }

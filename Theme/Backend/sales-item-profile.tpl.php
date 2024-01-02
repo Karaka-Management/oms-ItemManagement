@@ -44,21 +44,21 @@ echo $this->data['nav']->render();
 <div class="tabview tab-2">
     <div class="box">
         <ul class="tab-links">
-            <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label></li>
-            <li><label for="c-tab-2"><?= $this->getHtml('Address'); ?></label></li>
-            <li><label for="c-tab-3"><?= $this->getHtml('Localization'); ?></label></li>
-            <li><label for="c-tab-4"><?= $this->getHtml('Attributes'); ?></label></li>
-            <li><label for="c-tab-5"><?= $this->getHtml('Sales'); ?></label></li>
-            <li><label for="c-tab-6"><?= $this->getHtml('Purchasing'); ?></label></li>
-            <li><label for="c-tab-7"><?= $this->getHtml('Production'); ?></label></li>
-            <li><label for="c-tab-8"><?= $this->getHtml('QA'); ?></label></li>
-            <li><label for="c-tab-9"><?= $this->getHtml('Packaging'); ?></label></li>
-            <li><label for="c-tab-10"><?= $this->getHtml('Accounting'); ?></label></li>
-            <li><label for="c-tab-11"><?= $this->getHtml('Stock'); ?></label></li>
-            <li><label for="c-tab-12"><?= $this->getHtml('Disposal'); ?></label></li>
-            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label></li>
-            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label></li>
-            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label></li>
+            <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label>
+            <li><label for="c-tab-2"><?= $this->getHtml('Address'); ?></label>
+            <li><label for="c-tab-3"><?= $this->getHtml('Localization'); ?></label>
+            <li><label for="c-tab-4"><?= $this->getHtml('Attributes'); ?></label>
+            <li><label for="c-tab-5"><?= $this->getHtml('Sales'); ?></label>
+            <li><label for="c-tab-6"><?= $this->getHtml('Purchasing'); ?></label>
+            <li><label for="c-tab-7"><?= $this->getHtml('Production'); ?></label>
+            <li><label for="c-tab-8"><?= $this->getHtml('QA'); ?></label>
+            <li><label for="c-tab-9"><?= $this->getHtml('Packaging'); ?></label>
+            <li><label for="c-tab-10"><?= $this->getHtml('Accounting'); ?></label>
+            <li><label for="c-tab-11"><?= $this->getHtml('Stock'); ?></label>
+            <li><label for="c-tab-12"><?= $this->getHtml('Disposal'); ?></label>
+            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label>
+            <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label>
+            <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label>
         </ul>
     </div>
     <div class="tab-content">
@@ -163,7 +163,7 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Notes'); ?></div>
                                 <div class="slider">
-                                <table id="iNotesItemList" class="default">
+                                <table id="iNotesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td class="wf-100"><?= $this->getHtml('Title'); ?>
@@ -185,7 +185,7 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Documents'); ?></div>
                                 <div class="slider">
-                                <table id="iFilesItemList" class="default">
+                                <table id="iFilesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td class="wf-100"><?= $this->getHtml('Title'); ?>
@@ -211,7 +211,7 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
                                 <div class="slider">
-                                <table id="iSalesItemList" class="default">
+                                <table id="iSalesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td><?= $this->getHtml('Number'); ?>
@@ -242,7 +242,7 @@ echo $this->data['nav']->render();
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head">Top Customers</div>
-                                <table id="iSalesItemList" class="default">
+                                <table id="iSalesItemList" class="default sticky">
                                     <thead>
                                     <tr>
                                         <td><?= $this->getHtml('Number'); ?>
@@ -459,7 +459,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Localizations'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="groupTable" class="default">
+                        <table id="groupTable" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -537,7 +537,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Groups'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="groupTable" class="default">
+                        <table id="groupTable" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -619,7 +619,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="iSalesItemList" class="default">
+                        <table id="iSalesItemList" class="default sticky">
                             <thead>
                                 <tr>
                                     <td>
@@ -919,7 +919,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
-                        <table id="iSalesItemList" class="default">
+                        <table id="iSalesItemList" class="default sticky">
                             <thead>
                             <tr>
                                 <td><?= $this->getHtml('Number'); ?>
@@ -950,7 +950,7 @@ echo $this->data['nav']->render();
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
-                    <table class="default">
+                    <table class="default sticky">
                         <caption><?= $this->getHtml('Logs'); ?><i class="g-icon end-xs download btn">download</i></caption>
                         <thead>
                             <tr>

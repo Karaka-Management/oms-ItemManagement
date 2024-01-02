@@ -593,7 +593,7 @@ echo $this->data['nav']->render(); ?>
             $footerView->setPage(1);
             ?>
             <div class="box w-100">
-                <table class="default">
+                <table class="default sticky">
                     <caption><?= $this->getHtml('Logs'); ?><i class="g-icon end-xs download btn">download</i></caption>
                     <thead>
                     <tr>

@@ -20,8 +20,10 @@ use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
+use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
+use phpOMS\Stdlib\Base\FloatInt;
 
 /**
  * Item mapper class.

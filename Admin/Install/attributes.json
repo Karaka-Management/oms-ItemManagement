@@ -136,6 +136,27 @@
         ]
     },
     {
+        "name": "sales_group",
+        "l11n": {
+            "en": "Sales Group",
+            "de": "Umsatzgruppe"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Sales Group 1",
+                    "de": "Umsatzgruppe 1"
+                }
+            }
+        ]
+    },
+    {
         "name": "product_group",
         "l11n": {
             "en": "Product Group",
@@ -150,8 +171,8 @@
             {
                 "value": 1,
                 "l11n": {
-                    "en": "Group 1",
-                    "de": "Gruppe 1"
+                    "en": "Product Group 1",
+                    "de": "Produktgruppe 1"
                 }
             }
         ]

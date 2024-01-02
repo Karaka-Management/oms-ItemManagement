@@ -29,6 +29,7 @@ use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
+use Modules\Organization\Models\Attribute\UnitAttributeMapper;
 use Modules\Organization\Models\UnitMapper;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
@@ -55,7 +56,7 @@ use phpOMS\Views\View;
 final class BackendController extends Controller
 {
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -84,7 +85,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -113,7 +114,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -148,7 +149,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -178,7 +179,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -213,7 +214,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -230,7 +231,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -247,7 +248,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -264,7 +265,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -281,7 +282,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -302,7 +303,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -323,7 +324,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -344,7 +345,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -417,6 +418,15 @@ final class BackendController extends Controller
 
         $view->data['itemImage'] = $itemImage;
 
+        $businessStart = UnitAttributeMapper::get()
+            ->with('type')
+            ->with('value')
+            ->where('ref', $this->app->unitId)
+            ->where('type/name', 'business_year_start')
+            ->execute();
+
+        $view->data['business_start'] = $businessStart->id === 0 ? 1 : $businessStart->value->getValue();
+
         // @todo this one should already be loaded in the backend application no?????????
         /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, [
@@ -469,8 +479,10 @@ final class BackendController extends Controller
         $audits = AuditMapper::getAll()
             ->where('type', StringUtils::intHash(ItemMapper::class))
             ->where('module', 'ItemManagement')
-            ->where('ref', $item->id)
+            ->where('ref', (string) $item->id)
             ->execute();
+
+        // @todo join audit with files, attributes, localization, prices, notes, ...
 
         $view->data['audits'] = $audits;
 
@@ -483,61 +495,16 @@ final class BackendController extends Controller
 
         $view->data['files'] = $files;
 
-        $mediaListView = new \Modules\Media\Theme\Backend\Components\Media\ListView($this->app->l11nManager, $request, $response);
-        $mediaListView->setTemplate('/Modules/Media/Theme/Backend/Components/Media/list');
-        $view->data['medialist'] = $mediaListView;
+        $view->data['media-upload'] = new \Modules\Media\Theme\Backend\Components\Upload\BaseView($this->app->l11nManager, $request, $response);
+        $view->data['note'] = new \Modules\Editor\Theme\Backend\Components\Note\BaseView($this->app->l11nManager, $request, $response);
 
-        // stats
-        if ($this->app->moduleManager->isActive('Billing')) {
-            $ytd = SalesBillMapper::getSalesByItemId($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $mtd = SalesBillMapper::getSalesByItemId($item->id, new SmartDateTime('Y-m-01'), new SmartDateTime('now'));
-            $avg = SalesBillMapper::getAvgSalesPriceByItemId($item->id, (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now'));
-
-            $lastOrder = SalesBillMapper::getLastOrderDateByItemId($item->id);
-
-            $newestInvoices = SalesBillMapper::getAll()
-                ->with('type')
-                ->with('type/l11n')
-                ->where('type/transferType', BillTransferType::SALES)
-                ->where('type/l11n/language', $response->header->l11n->language)
-                ->sort('id', OrderType::DESC)
-                ->limit(5)
-                ->execute();
-
-            $topCustomers      = SalesBillMapper::getItemTopClients($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $allInvoices       = SalesBillMapper::getItemBills($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'));
-            $regionSales       = [];
-            $countrySales      = SalesBillMapper::getItemCountrySales($item->id, new SmartDateTime('Y-01-01'), new SmartDateTime('now'), 5);
-            $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
-        } else {
-            $ytd               = new Money();
-            $mtd               = new Money();
-            $avg               = new Money();
-            $lastOrder         = null;
-            $newestInvoices    = [];
-            $allInvoices       = [];
-            $topCustomers      = [];
-            $regionSales       = [];
-            $countrySales      = [];
-            $monthlySalesCosts = [];
-        }
-
-        $view->data['ytd']               = $ytd;
-        $view->data['mtd']               = $mtd;
-        $view->data['avg']               = $avg;
-        $view->data['lastOrder']         = $lastOrder;
-        $view->data['newestInvoices']    = $newestInvoices;
-        $view->data['allInvoices']       = $allInvoices;
-        $view->data['topCustomers']      = $topCustomers;
-        $view->data['regionSales']       = $regionSales;
-        $view->data['countrySales']      = $countrySales;
-        $view->data['monthlySalesCosts'] = $monthlySalesCosts;
+        $view->data['hasBilling'] = $this->app->moduleManager->isActive('Billing');
 
         return $view;
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -554,7 +521,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -571,7 +538,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -588,7 +555,7 @@ final class BackendController extends Controller
     }
 
     /**
-     * Routing end-point for application behaviour.
+     * Routing end-point for application behavior.
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
