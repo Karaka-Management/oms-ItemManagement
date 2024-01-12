@@ -23,4 +23,5 @@ return ['Navigation' => [
     'List'           => 'List',
     'Types'          => 'Types',
     'Values'         => 'Values',
+    'Materials'         => 'Materials',
 ]];

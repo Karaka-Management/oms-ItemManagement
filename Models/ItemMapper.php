@@ -20,10 +20,8 @@ use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
-use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
-use phpOMS\Stdlib\Base\FloatInt;
 
 /**
  * Item mapper class.
@@ -48,6 +46,7 @@ final class ItemMapper extends DataMapperFactory
         'itemmgmt_item_id'            => ['name' => 'itemmgmt_item_id',            'type' => 'int',          'internal' => 'id'],
         'itemmgmt_item_no'            => ['name' => 'itemmgmt_item_no',            'type' => 'string',       'internal' => 'number', 'autocomplete' => true],
         'itemmgmt_item_status'        => ['name' => 'itemmgmt_item_status',        'type' => 'int',          'internal' => 'status'],
+        'itemmgmt_item_stockidentifier'        => ['name' => 'itemmgmt_item_stockidentifier',        'type' => 'int',          'internal' => 'stockIdentifier'],
         'itemmgmt_item_info'          => ['name' => 'itemmgmt_item_info',          'type' => 'string',       'internal' => 'info'],
         'itemmgmt_item_salesprice'    => ['name' => 'itemmgmt_item_salesprice',    'type' => 'Serializable', 'internal' => 'salesPrice'],
         'itemmgmt_item_purchaseprice' => ['name' => 'itemmgmt_item_purchaseprice', 'type' => 'Serializable', 'internal' => 'purchasePrice'],
@@ -101,6 +100,12 @@ final class ItemMapper extends DataMapperFactory
             'table'    => 'itemmgmt_item_attr',
             'self'     => 'itemmgmt_item_attr_item',
             'external' => null,
+        ],
+        'container' => [
+            'mapper'       => ContainerMapper::class,
+            'table'        => 'itemmgmt_item_container',
+            'self'         => 'itemmgmt_item_container_item',
+            'external'     => null,
         ],
     ];
 

@@ -36,7 +36,7 @@ $monthlySalesCosts = $this->data['monthlySalesCosts'] ?? [];
 $languages = ISO639Enum::getConstants();
 
 /** @var \phpOMS\Localization\Localization $l11n */
-$l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
+$l11n = $this->getData('default_localization') ?? new NullLocalization();
 
 echo $this->data['nav']->render();
 ?>

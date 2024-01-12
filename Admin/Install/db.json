@@ -38,6 +38,11 @@
                 "default": null,
                 "null": true
             },
+            "itemmgmt_item_stockidentifier": {
+                "name": "itemmgmt_item_stockidentifier",
+                "type": "TINYINT(1)",
+                "null": false
+            },
             "itemmgmt_item_parent": {
                 "name": "itemmgmt_item_parent",
                 "type": "INT(11)",
@@ -101,6 +106,158 @@
             },
             "itemmgmt_item_relation_dst": {
                 "name": "itemmgmt_item_relation_dst",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            }
+        }
+    },
+    "itemmgmt_item_container": {
+        "name": "itemmgmt_item_container",
+        "fields": {
+            "itemmgmt_item_container_id": {
+                "name": "itemmgmt_item_container_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_item_container_name": {
+                "name": "itemmgmt_item_container_name",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "itemmgmt_item_container_quantity": {
+                "name": "itemmgmt_item_container_quantity",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_weight": {
+                "name": "itemmgmt_item_container_weight",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_width": {
+                "name": "itemmgmt_item_container_width",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_height": {
+                "name": "itemmgmt_item_container_height",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_length": {
+                "name": "itemmgmt_item_container_length",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_volume": {
+                "name": "itemmgmt_item_container_volume",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_item": {
+                "name": "itemmgmt_item_container_item",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_item",
+                "foreignKey": "itemmgmt_item_id"
+            }
+        }
+    },
+    "itemmgmt_material_type": {
+        "name": "itemmgmt_material_type",
+        "fields": {
+            "itemmgmt_material_type_id": {
+                "name": "itemmgmt_material_type_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_material_type_name": {
+                "name": "itemmgmt_material_type_name",
+                "type": "VARCHAR(255)",
+                "null": false,
+                "unique": true
+            }
+        }
+    },
+    "itemmgmt_material_type_l11n": {
+        "name": "itemmgmt_material_type_l11n",
+        "fields": {
+            "itemmgmt_material_type_l11n_id": {
+                "name": "itemmgmt_material_type_l11n_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_material_type_l11n_title": {
+                "name": "itemmgmt_material_type_l11n_title",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
+            "itemmgmt_material_type_l11n_type": {
+                "name": "itemmgmt_material_type_l11n_type",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_material_type",
+                "foreignKey": "itemmgmt_material_type_id"
+            },
+            "itemmgmt_material_type_l11n_language": {
+                "name": "itemmgmt_material_type_l11n_language",
+                "type": "VARCHAR(2)",
+                "default": null,
+                "null": true,
+                "foreignTable": "language",
+                "foreignKey": "language_639_1"
+            }
+        }
+    },
+    "itemmgmt_material": {
+        "name": "itemmgmt_material",
+        "fields": {
+            "itemmgmt_material_id": {
+                "name": "itemmgmt_material_id",
+                "type": "INT",
+                "null": false,
+                "primary": true,
+                "autoincrement": true
+            },
+            "itemmgmt_material_category": {
+                "description": "product, packaging",
+                "name": "itemmgmt_material_category",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "itemmgmt_material_subcategory": {
+                "description": "primary, secondary, tertiary, retail",
+                "name": "itemmgmt_material_subcategory",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_material_type": {
+                "name": "itemmgmt_material_type",
+                "type": "INT",
+                "null": false,
+                "foreignTable": "itemmgmt_material_type",
+                "foreignKey": "itemmgmt_material_type_id"
+            },
+            "itemmgmt_material_quantity": {
+                "name": "itemmgmt_material_quantity",
+                "type": "INT",
+                "null": false
+            },
+            "itemmgmt_material_unit": {
+                "name": "itemmgmt_material_unit",
+                "type": "VARCHAR(25)",
+                "null": false
+            },
+            "itemmgmt_material_item": {
+                "name": "itemmgmt_material_item",
                 "type": "INT",
                 "null": false,
                 "foreignTable": "itemmgmt_item",
@@ -197,6 +354,11 @@
             },
             "itemmgmt_attr_type_custom": {
                 "name": "itemmgmt_attr_type_custom",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "itemmgmt_attr_type_repeatable": {
+                "name": "itemmgmt_attr_type_repeatable",
                 "type": "TINYINT(1)",
                 "null": false
             },

@@ -13,12 +13,19 @@
 declare(strict_types=1);
 
 use Modules\Billing\Models\BillTransferType;
+use Modules\Billing\Models\Price\PriceType;
 use Modules\Billing\Models\SalesBillMapper;
 use Modules\Media\Models\NullMedia;
+use Modules\WarehouseManagement\Models\StockLocationMapper;
+use Modules\WarehouseManagement\Models\StockMapper;
 use phpOMS\DataStorage\Database\Query\OrderType;
+use phpOMS\Localization\ISO3166CharEnum;
+use phpOMS\Localization\ISO3166NameEnum;
+use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\NullLocalization;
+use phpOMS\Localization\RegionEnum;
 use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Uri\UriFactory;
@@ -38,7 +45,11 @@ $l11nView          = $this->data['l11nView'];
 $languages = ISO639Enum::getConstants();
 
 /** @var \phpOMS\Localization\Localization $l11n */
-$l11n = $this->getData('defaultlocalization') ?? new NullLocalization();
+$l11n = $this->getData('default_localization') ?? new NullLocalization();
+
+$regions = RegionEnum::getConstants();
+$countries = ISO3166CharEnum::getConstants();
+$currencies = ISO4217CharEnum::getConstants();
 
 echo $this->data['nav']->render();
 ?>
@@ -49,16 +60,15 @@ echo $this->data['nav']->render();
             <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label>
             <li><label for="c-tab-2"><?= $this->getHtml('Localization'); ?></label>
             <li><label for="c-tab-3"><?= $this->getHtml('Attributes'); ?></label>
+            <!--<li><label for="c-tab-16"><?= $this->getHtml('Container'); ?></label>-->
             <li><label for="c-tab-4"><?= $this->getHtml('SalesPricing'); ?></label>
             <li><label for="c-tab-5"><?= $this->getHtml('Procurement'); ?></label>
-            <li><label for="c-tab-6"><?= $this->getHtml('Production'); ?></label>
-            <li><label for="c-tab-7"><?= $this->getHtml('QA'); ?></label>
-            <li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label>
+            <!--<li><label for="c-tab-6"><?= $this->getHtml('Materials'); ?></label>-->
+            <!--<li><label for="c-tab-8"><?= $this->getHtml('Packaging'); ?></label>-->
             <li><label for="c-tab-9"><?= $this->getHtml('Accounting'); ?></label>
             <li><label for="c-tab-10"><?= $this->getHtml('Stock'); ?></label>
-            <li><label for="c-tab-11"><?= $this->getHtml('Disposal'); ?></label>
             <li><label for="c-tab-12"><?= $this->getHtml('Notes'); ?></label>
-            <li><label for="c-tab-13"><?= $this->getHtml('Media'); ?></label>
+            <li><label for="c-tab-13"><?= $this->getHtml('Files'); ?></label>
             <li><label for="c-tab-14"><?= $this->getHtml('Bills'); ?></label>
             <li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label>
         </ul>
@@ -162,8 +172,6 @@ echo $this->data['nav']->render();
                                                     ? 0
                                                     : ($item->salesPrice->getInt() - $item->purchasePrice->getInt()) / $item->salesPrice->getInt() * 100
                                                 , 'short'); ?> %
-                                        <tr><td><?= $this->getHtml('AvgPrice'); ?>:
-                                            <td><?= $this->getCurrency(SalesBillMapper::getItemAvgSalesPrice($item->id, (new SmartDateTime('now'))->smartModify(-1), new SmartDateTime('now')), format: 'medium'); ?>
                                     </table>
                                 </div>
                             </section>
@@ -503,122 +511,134 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-4" name="tabular-2" checked>
+        <input type="radio" id="c-tab-16" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <form id="itemContainerForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                            data-ui-container="#itemContainerTable tbody"
+                            data-add-form="itemContainerForm"
+                            data-add-tpl="#itemContainerTable tbody .oms-add-tpl-itemContainer">
+                            <div class="portlet-head"><?= $this->getHtml('Container'); ?></div>
                             <div class="portlet-body">
+                                <input id="iContainerId" class="hidden" name="id" type="number" data-tpl-text="/id" data-tpl-value="/id">
+                                <input id="iContainerItemId" class="hidden" name="item" type="text" value="<?= $item->id; ?>">
+                                <input id="iContainerItemType" class="hidden" name="type" type="text" value="<?= PriceType::SALES; ?>">
+
                                 <div class="form-group">
-                                    <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
-                                    <select id="iAttributesLanguage" name="language">
-                                        <?php foreach ($languages as $code => $language) : ?>
-                                            <option value="<?= $this->printHtml($code); ?>"><?= $this->printHtml($language); ?>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <label for="iContainerName"><?= $this->getHtml('Name'); ?></label>
+                                    <input id="iContainerName" name="name" type="text" data-tpl-text="/name" data-tpl-value="/name">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iGeneralPriceStart"><?= $this->getHtml('Start'); ?></label>
-                                    <input id="iGeneralPriceStart" name="generalpricestart" type="datetime-local" value="<?= $this->printHtml(''); ?>">
+                                    <label for="iContainerQuantity"><?= $this->getHtml('Quantity'); ?></label>
+                                    <input id="iContainerQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iGeneralPriceEnd"><?= $this->getHtml('End'); ?></label>
-                                    <input id="iGeneralPriceEnd" name="generalpriceend" type="datetime-local" value="<?= $this->printHtml(''); ?>">
+                                    <label for="iContainerWeight"><?= $this->getHtml('Weight'); ?></label>
+                                    <input id="iContainerWeight" name="weight" type="number" data-tpl-text="/weight" data-tpl-value="/weight">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iPQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                                    <input id="iPQuantity" name="quantity" type="text" placeholder="">
+                                    <label for="iContainerWidth"><?= $this->getHtml('WidthLength'); ?></label>
+                                    <input id="iContainerWidth" name="width" type="number" data-tpl-text="/width" data-tpl-value="/width">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iGeneralPrice"><?= $this->getHtml('Price'); ?></label>
-                                    <input id="iGeneralPrice" name="generalprice" type="number" step="0.0001" value="<?= $this->printHtml('0.00'); ?>">
-                                    <!-- @todo maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
+                                    <label for="iContainerHeight"><?= $this->getHtml('Height'); ?></label>
+                                    <input id="iContainerHeight" name="height" type="number" data-tpl-text="/height" data-tpl-value="/height">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iDiscount"><?= $this->getHtml('Discount'); ?></label>
-                                    <input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                                    <label for="iContainerDepth"><?= $this->getHtml('Depth'); ?></label>
+                                    <input id="iContainerDepth" name="depth" type="number" data-tpl-text="/depth" data-tpl-value="/depth">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iDiscountP"><?= $this->getHtml('DiscountP'); ?></label>
-                                    <input id="iDiscountP" name="discountp" type="number" step="any" min="0" placeholder="">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iBonus"><?= $this->getHtml('Bonus'); ?></label>
-                                    <input id="iBonus" name="bonus" type="number" step="any" min="0" placeholder="">
+                                    <label for="iContainerVolume"><?= $this->getHtml('Volume'); ?></label>
+                                    <input id="iContainerVolume" name="volume" type="number" data-tpl-text="/volume" data-tpl-value="/volume">
                                 </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bPriceItemAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bPriceItemSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input id="bPriceItemCancel" type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
                             </div>
                         </form>
                     </section>
                 </div>
 
-                <div class="col-xs-12">
+                <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Container'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
-                        <table id="iSalesItemList" class="default sticky">
+                        <table id="itemContainerTable" class="default sticky"
+                            data-tag="form"
+                            data-ui-element="tr"
+                            data-add-tpl=".oms-add-tpl-itemContainer"
+                            data-update-form="itemContainerForm">
                             <thead>
                                 <tr>
                                     <td>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                     <td><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
-                                    <td><?= $this->getHtml('Price'); ?>
                                     <td><?= $this->getHtml('Quantity'); ?>
-                                    <td><?= $this->getHtml('Discount'); ?>
-                                    <td><?= $this->getHtml('DiscountP'); ?>
-                                    <td><?= $this->getHtml('Bonus'); ?>
-                                    <td><?= $this->getHtml('ItemGroup'); ?>
-                                    <td><?= $this->getHtml('ItemSegment'); ?>
-                                    <td><?= $this->getHtml('ItemSection'); ?>
-                                    <td><?= $this->getHtml('ItemType'); ?>
-                                    <td><?= $this->getHtml('ClientGroup'); ?>
-                                    <td><?= $this->getHtml('ClientSegment'); ?>
-                                    <td><?= $this->getHtml('ClientSection'); ?>
-                                    <td><?= $this->getHtml('ClientType'); ?>
-                                    <td><?= $this->getHtml('Country'); ?>
-                                    <td><?= $this->getHtml('Start'); ?>
-                                    <td><?= $this->getHtml('End'); ?>
+                                    <td><?= $this->getHtml('Weight'); ?>
+                                    <td><?= $this->getHtml('WidthLength'); ?>
+                                    <td><?= $this->getHtml('Height'); ?>
+                                    <td><?= $this->getHtml('Depth'); ?>
+                                    <td><?= $this->getHtml('Volume'); ?>
                             <tbody>
+                                <template class="oms-add-tpl-itemContainer">
+                                    <tr class="animated medium-duration greenCircleFade" data-id="" draggable="false">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <input id="itemContainerTable-remove-0" type="checkbox" class="hidden">
+                                            <label for="itemContainerTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemContainerTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemContainerTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
+                                        <td data-tpl-text="/name" data-tpl-value="/name" data-value=""></td>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"></td>
+                                        <td data-tpl-text="/weight" data-tpl-value="/weight"></td>
+                                        <td data-tpl-text="/width" data-tpl-value="/width"></td>
+                                        <td data-tpl-text="/height" data-tpl-value="/height"></td>
+                                        <td data-tpl-text="/depth" data-tpl-value="/discount"></td>
+                                        <td data-tpl-text="/volume" data-tpl-value="/volume"></td>
+                                    </tr>
+                                </template>
                                 <?php
                                 $c      = 0;
-                                $prices = $this->data['prices'];
-                                foreach ($prices as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
-                                    <tr data-href="<?= $url; ?>">
-                                        <td><a href="#"><i class="g-icon">close</i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->price->getAmount()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->quantity); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->discount); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->discountPercentage); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->bonus); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->itemgroup->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->itemsegment->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->itemsection->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->itemtype->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->clientgroup->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->clientsegment->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->clientsection->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->clienttype->getL11n()); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->clientcountry); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->start?->format('Y-m-d')); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml((string) $value->end?->format('Y-m-d')); ?></a>
+                                $containers = $this->data['containers'] ?? [];
+                                foreach ($containers as $key => $value) : ++$c;
+                                ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <?php if ($value->name !== 'base') : ?>
+                                            <input id="itemContainerTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="itemContainerTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemContainerTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemContainerTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                            <?php endif; ?>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml($value->promocode); ?>
+                                        <td data-tpl-text="/weight" data-tpl-value="/weight"><?= $this->printHtml($value->price->getAmount()); ?>
+                                        <td data-tpl-text="/width" data-tpl-value="/width"><?= $this->printHtml($value->currency); ?>
+                                        <td data-tpl-text="/height" data-tpl-value="/height"><?= $this->printHtml((string) $value->quantity); ?>
+                                        <td data-tpl-text="/depth" data-tpl-value="/depth"><?= $this->printHtml((string) $value->discount); ?>
+                                        <td data-tpl-text="/volume" data-tpl-value="/volume"><?= $this->printHtml((string) $value->discountPercentage); ?>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                     <tr>
-                                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                        <td colspan="22" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                 <?php endif; ?>
                         </table>
                         </div>
@@ -626,41 +646,404 @@ echo $this->data['nav']->render();
                 </div>
             </div>
         </div>
+
+        <input type="radio" id="c-tab-4" name="tabular-2" checked>
+        <div class="tab">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <section class="portlet">
+                        <form id="itemSalesPriceForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                            data-ui-container="#itemSalesPriceTable tbody"
+                            data-add-form="itemSalesPriceForm"
+                            data-add-tpl="#itemSalesPriceTable tbody .oms-add-tpl-itemSalesPrice">
+                            <div class="portlet-head"><?= $this->getHtml('Pricing'); ?></div>
+                            <div class="portlet-body">
+                                <input id="iPriceId" class="hidden" name="id" type="number" data-tpl-text="/id" data-tpl-value="/id">
+                                <input id="iPriceItemId" class="hidden" name="item" type="text" value="<?= $item->id; ?>">
+                                <input id="iPriceItemType" class="hidden" name="type" type="text" value="<?= PriceType::SALES; ?>">
+
+                                <div class="form-group">
+                                    <label for="iPriceName"><?= $this->getHtml('Name'); ?></label>
+                                    <input id="iPriceName" name="name" type="text" data-tpl-text="/name" data-tpl-value="/name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iPricePromo"><?= $this->getHtml('Promocode'); ?></label>
+                                    <input id="iPricePromo" name="promocode" type="text" data-tpl-text="/promocode" data-tpl-value="/promocode">
+                                </div>
+                            </div>
+                            <div class="portlet-separator"></div>
+                            <div class="portlet-body">
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPricePrice"><?= $this->getHtml('Price'); ?></label>
+                                            <div class="flex-line wf-100">
+                                                <div class="fixed">
+                                                    <select id="iPriceCurrency" name="currency" data-tpl-text="/currency" data-tpl-value="/currency">
+                                                        <?php foreach ($currencies as $currency) : ?>
+                                                        <option value="<?= $currency; ?>"<?= $this->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <input id="iPricePrice" class="wf-100" name="price_new" type="number" data-tpl-text="/price" data-tpl-value="/price">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceQuantity"><?= $this->getHtml('Quantity'); ?></label>
+                                            <input id="iPriceQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceDiscount"><?= $this->getHtml('Discount'); ?></label>
+                                            <input id="iPriceDiscount" name="discount" type="number" data-tpl-text="/discount" data-tpl-value="/discount">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceDiscountP"><?= $this->getHtml('DiscountP'); ?></label>
+                                            <input id="iPriceDiscountP" name="discountPercentage" type="number" data-tpl-text="/discountp" data-tpl-value="/discountp">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iPriceBonus"><?= $this->getHtml('Bonus'); ?></label>
+                                    <input id="iPriceBonus" name="bonus" type="number" data-tpl-text="/bonus" data-tpl-value="/bonus">
+                                </div>
+                            </div>
+                            <div class="portlet-separator"></div>
+                            <div class="portlet-body">
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceItemSegment"><?= $this->getHtml('ItemSegment'); ?></label>
+                                            <select id="iPriceItemSegment" name="itemsegment" data-tpl-text="/item_segment" data-tpl-value="/item_segment">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['defaultAttributeTypes']['segment'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceItemSection"><?= $this->getHtml('ItemSection'); ?></label>
+                                            <select id="iPriceItemSection" name="itemsection" data-tpl-text="/item_section" data-tpl-value="/item_section">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['defaultAttributeTypes']['section'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceItemSalesGroup"><?= $this->getHtml('ItemSalesGroup'); ?></label>
+                                            <select id="iPriceItemSalesGroup" name="itemsalesgroup" data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['defaultAttributeTypes']['sales_group'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceItemProductGroup"><?= $this->getHtml('ItemProductGroup'); ?></label>
+                                            <select id="iPriceItemProductGroup" name="itemproductgroup" data-tpl-text="/item_productgroup" data-tpl-value="/item_productgroup">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['defaultAttributeTypes']['product_group'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceItemType"><?= $this->getHtml('ItemType'); ?></label>
+                                            <select id="iPriceItemType" name="itemtype" data-tpl-text="/item_producttype" data-tpl-value="/item_producttype">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['defaultAttributeTypes']['product_type'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceClientSegment"><?= $this->getHtml('ClientSegment'); ?></label>
+                                            <select id="iPriceClientSegment" name="clientsegment" data-tpl-text="/item_account_segment" data-tpl-value="/item_account_segment">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['clientSegmentationTypes']['segment'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceClientSection"><?= $this->getHtml('ClientSection'); ?></label>
+                                            <select id="iPriceClientSection" name="clientsection" data-tpl-text="/item_account_section" data-tpl-value="/item_account_section">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['clientSegmentationTypes']['section'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceClientSalesGroup"><?= $this->getHtml('ClientGroup'); ?></label>
+                                            <select id="iPriceClientSalesGroup" name="clientgroup" data-tpl-text="/item_account_salesgroup" data-tpl-value="/item_account_salesgroup">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['clientSegmentationTypes']['sales_group'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceClientType"><?= $this->getHtml('ClientType'); ?></label>
+                                            <select id="iPriceClientType" name="clienttype" data-tpl-text="/item_account_type" data-tpl-value="/item_account_type">
+                                                <option selected>
+                                                <?php
+                                                $types = $this->data['clientSegmentationTypes']['product_type'] ?? null;
+                                                foreach ($types?->defaults ?? [] as $value) : ?>
+                                                    <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getL11n()); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="iPriceClientRegion"><?= $this->getHtml('Region'); ?></label>
+                                            <select id="iPriceClientRegion" name="region" data-tpl-text="/item_account_region" data-tpl-value="/item_account_type">
+                                                <option selected>
+                                                <?php
+                                                foreach ($regions as $value) : ?>
+                                                    <option value="<?= $value; ?>"><?= $this->printHtml($value); ?>
+                                                <?php endforeach; ?>
+                                                <?php
+                                                foreach ($countries as $value) : ?>
+                                                    <option value="<?= $value; ?>"><?= $this->printHtml(ISO3166NameEnum::getByName('_' . $value)); ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet-separator"></div>
+                            <div class="portlet-body">
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceItemStart"><?= $this->getHtml('Start'); ?></label>
+                                            <input id="iPriceItemStart" name="start" type="datetime-local" data-tpl-text="/item_start" data-tpl-value="/item_start">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPriceItemEnd"><?= $this->getHtml('End'); ?></label>
+                                            <input id="iPriceItemEnd" name="end" type="datetime-local" data-tpl-text="/item_end" data-tpl-value="/item_end">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portlet-foot">
+                                <input id="bPriceItemAdd" formmethod="put" type="submit" class="add-form" value="<?= $this->getHtml('Add', '0', '0'); ?>">
+                                <input id="bPriceItemSave" formmethod="post" type="submit" class="save-form hidden button save" value="<?= $this->getHtml('Update', '0', '0'); ?>">
+                                <input id="bPriceItemCancel" type="submit" class="cancel-form hidden button close" value="<?= $this->getHtml('Cancel', '0', '0'); ?>">
+                            </div>
+                        </form>
+                    </section>
+                </div>
+
+                <div class="col-xs-12 col-md-6">
+                    <section class="portlet">
+                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <div class="slider">
+                        <table id="itemSalesPriceTable" class="default sticky"
+                            data-tag="form"
+                            data-ui-element="tr"
+                            data-add-tpl=".oms-add-tpl-itemSalesPrice"
+                            data-update-form="itemSalesPriceForm">
+                            <thead>
+                                <tr>
+                                    <td>
+                                    <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td><?= $this->getHtml('Promocode'); ?>
+                                    <td><?= $this->getHtml('Price'); ?>
+                                    <td>
+                                    <td><?= $this->getHtml('Quantity'); ?>
+                                    <td><?= $this->getHtml('Discount'); ?>
+                                    <td><?= $this->getHtml('DiscountP'); ?>
+                                    <td><?= $this->getHtml('Bonus'); ?>
+                                    <td><?= $this->getHtml('ItemSegment'); ?>
+                                    <td><?= $this->getHtml('ItemSection'); ?>
+                                    <td><?= $this->getHtml('ItemSalesGroup'); ?>
+                                    <td><?= $this->getHtml('ItemProductGroup'); ?>
+                                    <td><?= $this->getHtml('ItemType'); ?>
+                                    <td><?= $this->getHtml('ClientSegment'); ?>
+                                    <td><?= $this->getHtml('ClientSection'); ?>
+                                    <td><?= $this->getHtml('ClientGroup'); ?>
+                                    <td><?= $this->getHtml('ClientType'); ?>
+                                    <td><?= $this->getHtml('Region'); ?>
+                                    <td><?= $this->getHtml('Start'); ?>
+                                    <td><?= $this->getHtml('End'); ?>
+                            <tbody>
+                                <template class="oms-add-tpl-itemSalesPrice">
+                                    <tr class="animated medium-duration greenCircleFade" data-id="" draggable="false">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <input id="itemSalesPriceTable-remove-0" type="checkbox" class="hidden">
+                                            <label for="itemSalesPriceTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemSalesPriceTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemSalesPriceTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
+                                        <td data-tpl-text="/name" data-tpl-value="/name" data-value=""></td>
+                                        <td data-tpl-text="/promo" data-tpl-value="/promo" data-value=""></td>
+                                        <td data-tpl-text="/price" data-tpl-value="/price"></td>
+                                        <td data-tpl-text="/currency" data-tpl-value="/currency"></td>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"></td>
+                                        <td data-tpl-text="/discount" data-tpl-value="/discount"></td>
+                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"></td>
+                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"></td>
+                                        <td data-tpl-text="/item_segment" data-tpl-value="/item_segment"></td>
+                                        <td data-tpl-text="/item_section" data-tpl-value="/item_section"></td>
+                                        <td data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup"></td>
+                                        <td data-tpl-text="/item_productgroup" data-tpl-value="/item_productgroup"></td>
+                                        <td data-tpl-text="/item_producttype" data-tpl-value="/item_producttype"></td>
+                                        <td data-tpl-text="/item_account_segment" data-tpl-value="/item_account_segment"></td>
+                                        <td data-tpl-text="/item_account_section" data-tpl-value="/item_account_section"></td>
+                                        <td data-tpl-text="/item_account_group" data-tpl-value="/item_account_group"></td>
+                                        <td data-tpl-text="/item_account_type" data-tpl-value="/item_account_type"></td>
+                                        <td data-tpl-text="/item_account_region" data-tpl-value="/item_account_region"></td>
+                                        <td data-tpl-text="/item_start" data-tpl-value="/item_start"></td>
+                                        <td data-tpl-text="/item_end" data-tpl-value="/item_end"></td>
+                                    </tr>
+                                </template>
+                                <?php
+                                $c      = 0;
+                                $prices = $this->data['prices'];
+                                foreach ($prices as $key => $value) : ++$c;
+                                ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <?php if ($value->name !== 'base') : ?>
+                                            <input id="itemSalesPriceTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="itemSalesPriceTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemSalesPriceTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemSalesPriceTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                            <?php endif; ?>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
+                                        <td data-tpl-text="/promocode" data-tpl-value="/promocode"><?= $this->printHtml($value->promocode); ?>
+                                        <td data-tpl-text="/price" data-tpl-value="/price"><?= $this->printHtml($value->price->getAmount()); ?>
+                                        <td data-tpl-text="/currency" data-tpl-value="/currency"><?= $this->printHtml($value->currency); ?>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml((string) $value->quantity); ?>
+                                        <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $this->printHtml((string) $value->discount); ?>
+                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->printHtml((string) $value->discountPercentage); ?>
+                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $this->printHtml((string) $value->bonus); ?>
+                                        <td data-tpl-text="/item_segment" data-tpl-value="/item_segment"><?= $this->printHtml((string) $value->itemsegment->getL11n()); ?>
+                                        <td data-tpl-text="/item_section" data-tpl-value="/item_section"><?= $this->printHtml((string) $value->itemsection->getL11n()); ?>
+                                        <td data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup"><?= $this->printHtml((string) $value->itemsalesgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_productgroup" data-tpl-value="/item_productgroup"><?= $this->printHtml((string) $value->itemproductgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_producttype" data-tpl-value="/item_producttype"><?= $this->printHtml((string) $value->itemtype->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_segment" data-tpl-value="/item_account_segment"><?= $this->printHtml((string) $value->clientsegment->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_section" data-tpl-value="/item_account_section"><?= $this->printHtml((string) $value->clientsection->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_group" data-tpl-value="/item_account_group"><?= $this->printHtml((string) $value->clientgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_type" data-tpl-value="/item_account_type"><?= $this->printHtml((string) $value->clienttype->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_region" data-tpl-value="/item_account_region"><?= $this->printHtml((string) $value->clientcountry); ?>
+                                        <td data-tpl-text="/item_start" data-tpl-value="/item_start"><?= $value->start?->format('Y-m-d'); ?>
+                                        <td data-tpl-text="/item_end" data-tpl-value="/item_end"><?= $value->end?->format('Y-m-d'); ?>
+                                <?php endforeach; ?>
+                                <?php if ($c === 0) : ?>
+                                    <tr>
+                                        <td colspan="22" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                <?php endif; ?>
+                        </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
         <input type="radio" id="c-tab-5" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form action="<?= UriFactory::build('{/api}...'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('Purchase'); ?></div>
+                        <form id="itemProcurementForm" action="<?= UriFactory::build('{/api}item/procurement'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Procurement'); ?></div>
                             <div class="portlet-body">
-                                <table class="layout wf-100">
-                                    <tbody>
-                                        <tr>
-                                            <td><label for="iPVariation"><?= $this->getHtml('Stock'); ?></label>
-                                        <tr>
-                                            <td><select id="iPVariation" name="pvariation">
-                                                    <option value="0">
-                                                </select>
-                                        <tr>
-                                            <td><label for="iPName"><?= $this->getHtml('ReorderLevel'); ?></label>
-                                        <tr>
-                                            <td><input id="iPName" name="pname" type="text" placeholder="">
-                                        <tr>
-                                            <td><label for="iPName"><?= $this->getHtml('MinimumLevel'); ?></label>
-                                        <tr>
-                                            <td><input id="iPName" name="pname" type="text" placeholder="">
-                                        <tr>
-                                            <td><label for="iPName"><?= $this->getHtml('MaximumLevel'); ?></label>
-                                        <tr>
-                                            <td><input id="iPName" name="pname" type="text" placeholder="">
-                                        <tr>
-                                            <td><label for="iPName"><?= $this->getHtml('Leadtime'); ?></label>
-                                        <tr>
-                                            <td><input id="iPName" name="pname" type="number" min="0" step="1" placeholder="">
-                                        <tr>
-                                            <td>
-                                </table>
+                                <div class="form-group">
+                                    <label for="iPName"><?= $this->getHtml('PrimarySupplier'); ?></label>
+                                    <input id="iPName" name="pname" type="text" placeholder="">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iPriceLeadTime"><?= $this->getHtml('LeadTime'); ?></label>
+                                    <input id="iPriceLeadTime" name="leadtime" type="number" data-tpl-text="/leadtime" data-tpl-value="/leadtime">
+                                </div>
+
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPName"><?= $this->getHtml('MinimumLevel'); ?></label>
+                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPName"><?= $this->getHtml('MaximumLevel'); ?></label>
+                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPName"><?= $this->getHtml('MaximumOrderInterval'); ?></label>
+                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPName"><?= $this->getHtml('MinimumOrderQuantity'); ?></label>
+                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="portlet-foot">
                                 <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
@@ -671,52 +1054,91 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
+                        <form id="itemPurchasePriceForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                            data-ui-container="#itemPurchasePriceTable tbody"
+                            data-add-form="itemPurchasePriceForm"
+                            data-add-tpl="#itemPurchasePriceTable tbody .oms-add-tpl-itemPurchasePrice">
                             <div class="portlet-head"><?= $this->getHtml('Pricing'); ?><i class="g-icon download btn end-xs">download</i></div>
                             <div class="portlet-body">
+                                <input id="iPurchasePriceId" class="hidden" name="id" type="number" data-tpl-text="/id" data-tpl-value="/id">
+                                <input id="iPurchasePriceItemId" class="hidden" name="item" type="text" value="<?= $item->id; ?>">
+                                <input id="iPurchasePriceItemType" class="hidden" name="type" type="text" value="<?= PriceType::PURCHASE; ?>">
+
                                 <div class="form-group">
-                                    <label for="iAttributesLanguage"><?= $this->getHtml('CustomerGroup'); ?></label>
-                                    <select id="iAttributesLanguage" name="language">
-                                        <?php foreach ($languages as $code => $language) : ?>
-                                            <option value="<?= $this->printHtml($code); ?>"><?= $this->printHtml($language); ?>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <label for="iPurchasePriceName"><?= $this->getHtml('Name'); ?></label>
+                                    <input id="iPurchasePriceName" name="name" type="text" data-tpl-text="/name" data-tpl-value="/name">
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iGeneralPriceStart"><?= $this->getHtml('Start'); ?></label>
-                                    <input id="iGeneralPriceStart" name="generalpricestart" type="datetime-local" value="<?= $this->printHtml(''); ?>">
+                                    <label for="iPurchasePriceSupplier"><?= $this->getHtml('Supplier'); ?></label>
+                                    <input id="iPurchasePriceSupplier" name="supplier" type="text" data-tpl-text="/supplier" data-tpl-value="/supplier">
+                                </div>
+                            </div>
+                            <div class="portlet-separator"></div>
+                            <div class="portlet-body">
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchasePricePrice"><?= $this->getHtml('Price'); ?></label>
+                                            <div class="flex-line wf-100">
+                                                <div class="fixed">
+                                                    <select id="iPurchasePriceCurrency" name="currency" data-tpl-text="/currency" data-tpl-value="/currency">
+                                                        <?php foreach ($currencies as $currency) : ?>
+                                                        <option value="<?= $currency; ?>"<?= $this->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <input id="iPurchasePricePrice" class="wf-100" name="price_new" type="number" data-tpl-text="/price" data-tpl-value="/price">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchasePriceQuantity"><?= $this->getHtml('Quantity'); ?></label>
+                                            <input id="iPurchasePriceQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchasePriceDiscount"><?= $this->getHtml('Discount'); ?></label>
+                                            <input id="iPurchasePriceDiscount" name="discount" type="number" data-tpl-text="/discount" data-tpl-value="/discount">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchasePriceDiscountP"><?= $this->getHtml('DiscountP'); ?></label>
+                                            <input id="iPurchasePriceDiscountP" name="discountPercentage" type="number" data-tpl-text="/discountp" data-tpl-value="/discountp">
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="iGeneralPriceEnd"><?= $this->getHtml('End'); ?></label>
-                                    <input id="iGeneralPriceEnd" name="generalpriceend" type="datetime-local" value="<?= $this->printHtml(''); ?>">
+                                    <label for="iPurchasePriceBonus"><?= $this->getHtml('Bonus'); ?></label>
+                                    <input id="iPurchasePriceBonus" name="bonus" type="number" data-tpl-text="/bonus" data-tpl-value="/bonus">
                                 </div>
+                            </div>
+                            <div class="portlet-separator"></div>
+                            <div class="portlet-body">
+                                <div class="flex-line">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchaseItemStart"><?= $this->getHtml('Start'); ?></label>
+                                            <input id="iPurchaseItemStart" name="start" type="datetime-local" data-tpl-text="/purchase_start" data-tpl-value="/purchase_start">
+                                        </div>
+                                    </div>
 
-                                <div class="form-group">
-                                    <label for="iPQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                                    <input id="iPQuantity" name="quantity" type="text" placeholder="">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iGeneralPrice"><?= $this->getHtml('Price'); ?></label>
-                                    <input id="iGeneralPrice" name="generalprice" type="number" step="0.0001" value="<?= $this->printHtml('0.00'); ?>">
-                                    <!-- @todo maybe add promotion key/password here for online shop to provide special prices for certain customer groups -->
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iDiscount"><?= $this->getHtml('Discount'); ?></label>
-                                    <input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iDiscountP"><?= $this->getHtml('DiscountP'); ?></label>
-                                    <input id="iDiscountP" name="discountp" type="number" step="any" min="0" placeholder="">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="iBonus"><?= $this->getHtml('Bonus'); ?></label>
-                                    <input id="iBonus" name="bonus" type="number" step="any" min="0" placeholder="">
+                                    <div>
+                                        <div class="form-group">
+                                            <label for="iPurchaseItemEnd"><?= $this->getHtml('End'); ?></label>
+                                            <input id="iPurchaseItemEnd" name="end" type="datetime-local" data-tpl-text="/purchase_end" data-tpl-value="/purchase_end">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="portlet-foot">
@@ -728,198 +1150,170 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12">
                     <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Prices'); ?><i class="g-icon download btn end-xs">download</i></div>
-                        <table id="iSalesItemList" class="default sticky">
+                        <div class="portlet-head"><?= $this->getHtml('Suppliers'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <div class="slider">
+                        <table id="itemPurchasePriceTable" class="default sticky"
+                            data-tag="form"
+                            data-ui-element="tr"
+                            data-add-tpl=".oms-add-tpl-itemPurchasePrice"
+                            data-update-form="itemPurchasePriceForm">
                             <thead>
                                 <tr>
                                     <td>
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
-                                    <td class="wf-100"><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
+                                    <td><?= $this->getHtml('Supplier'); ?>
+                                    <td><?= $this->getHtml('Price'); ?>
+                                    <td>
+                                    <td><?= $this->getHtml('Quantity'); ?>
+                                    <td><?= $this->getHtml('Discount'); ?>
+                                    <td><?= $this->getHtml('DiscountP'); ?>
+                                    <td><?= $this->getHtml('Bonus'); ?>
+                                    <td><?= $this->getHtml('Start'); ?>
+                                    <td><?= $this->getHtml('End'); ?>
                             <tbody>
-                                <?php $c = 0;
-                                $l11ns   = [];
-                                foreach ($l11ns as $key => $value) : ++$c;
-                                    $url = UriFactory::build('{/base}/admin/group/settings?{?}&id=' . $value->id); ?>
-                                    <tr data-href="<?= $url; ?>">
-                                        <td><a href="#"><i class="g-icon">close</i></a>
-                                        <td><a href="<?= $url; ?>"><?= $value->id; ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($value->name); ?></a>
+                                <template class="oms-add-tpl-itemPurchasePrice">
+                                    <tr class="animated medium-duration greenCircleFade" data-id="" draggable="false">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <input id="itemPurchasePriceTable-remove-0" type="checkbox" class="hidden">
+                                            <label for="itemPurchasePriceTable-remove-0" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemPurchasePriceTable-remove-0" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemPurchasePriceTable-remove-0" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"></td>
+                                        <td data-tpl-text="/name" data-tpl-value="/name" data-value=""></td>
+                                        <td data-tpl-text="/promo" data-tpl-value="/promo" data-value=""></td>
+                                        <td data-tpl-text="/price" data-tpl-value="/price"></td>
+                                        <td data-tpl-text="/currency" data-tpl-value="/currency"></td>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"></td>
+                                        <td data-tpl-text="/discount" data-tpl-value="/discount"></td>
+                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"></td>
+                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"></td>
+                                        <td data-tpl-text="/item_start" data-tpl-value="/item_start"></td>
+                                        <td data-tpl-text="/item_end" data-tpl-value="/item_end"></td>
+                                    </tr>
+                                </template>
+                                <?php
+                                $c      = 0;
+                                $prices = $this->data['purchase_prices'];
+                                foreach ($prices as $key => $value) : ++$c;
+                                ?>
+                                    <tr data-id="<?= $value->id; ?>">
+                                        <td>
+                                            <i class="g-icon btn update-form">settings</i>
+                                            <?php if ($value->name !== 'base') : ?>
+                                            <input id="itemPurchasePriceTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                            <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                            <span class="checked-visibility">
+                                                <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                                <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                            </span>
+                                            <?php endif; ?>
+                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                        <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
+                                        <td data-tpl-text="/promocode" data-tpl-value="/promocode"><?= $this->printHtml($value->promocode); ?>
+                                        <td data-tpl-text="/price" data-tpl-value="/price"><?= $this->printHtml($value->price->getAmount()); ?>
+                                        <td data-tpl-text="/currency" data-tpl-value="/currency"><?= $this->printHtml($value->currency); ?>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml((string) $value->quantity); ?>
+                                        <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $this->printHtml((string) $value->discount); ?>
+                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->printHtml((string) $value->discountPercentage); ?>
+                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $this->printHtml((string) $value->bonus); ?>
+                                        <td data-tpl-text="/item_segment" data-tpl-value="/item_segment"><?= $this->printHtml((string) $value->itemsegment->getL11n()); ?>
+                                        <td data-tpl-text="/item_section" data-tpl-value="/item_section"><?= $this->printHtml((string) $value->itemsection->getL11n()); ?>
+                                        <td data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup"><?= $this->printHtml((string) $value->itemsalesgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_productgroup" data-tpl-value="/item_productgroup"><?= $this->printHtml((string) $value->itemproductgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_producttype" data-tpl-value="/item_producttype"><?= $this->printHtml((string) $value->itemtype->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_segment" data-tpl-value="/item_account_segment"><?= $this->printHtml((string) $value->clientsegment->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_section" data-tpl-value="/item_account_section"><?= $this->printHtml((string) $value->clientsection->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_group" data-tpl-value="/item_account_group"><?= $this->printHtml((string) $value->clientgroup->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_type" data-tpl-value="/item_account_type"><?= $this->printHtml((string) $value->clienttype->getL11n()); ?>
+                                        <td data-tpl-text="/item_account_region" data-tpl-value="/item_account_region"><?= $this->printHtml((string) $value->clientcountry); ?>
+                                        <td data-tpl-text="/item_start" data-tpl-value="/item_start"><?= $value->start?->format('Y-m-d'); ?>
+                                        <td data-tpl-text="/item_end" data-tpl-value="/item_end"><?= $value->end?->format('Y-m-d'); ?>
                                 <?php endforeach; ?>
                                 <?php if ($c === 0) : ?>
                                     <tr>
-                                        <td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                        <td colspan="22" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
                                 <?php endif; ?>
                         </table>
+                        </div>
                     </section>
                 </div>
             </div>
         </div>
-        <input type="radio" id="c-tab-6" name="tabular-2" checked>
-        <div class="tab">
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('PartsList'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
 
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('UsedIn'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('ProductionSteps'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Machines'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Documents'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-            </div>
-        </div>
-        <input type="radio" id="c-tab-7" name="tabular-2" checked>
-        <div class="tab">
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Issues'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('UsedIn'); ?></div>
-                        <div class="portlet-body"></div>
-                    </section>
-                </div>
-            </div>
-        </div>
         <input type="radio" id="c-tab-8" name="tabular-2" checked>
         <div class="tab">
-            <div class="row">
-                <div class="col-xs-12 col-md-6">
-                    <section class="portlet">
-                        <form action="<?= UriFactory::build('{/api}...'); ?>" method="post">
-                            <div class="portlet-head"><?= $this->getHtml('General'); ?></div>
-                            <div class="portlet-body">
-                                <table class="layout wf-100">
-                                    <tbody>
-                                        <tr>
-                                            <td><label for="iPVariation"><?= $this->getHtml('Container'); ?></label>
-                                        <tr>
-                                            <td><select id="iPVariation" name="pvariation">
-                                                    <option value="0">
-                                                </select>
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('Quantity'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('GrossWeight'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('NetWeight'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('Width'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('Height'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('Length'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                        <tr>
-                                            <td><label for="iDiscount"><?= $this->getHtml('Volume'); ?></label>
-                                        <tr>
-                                            <td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
-                                </table>
-                            </div>
-                            <div class="portlet-foot">
-                                <input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
-                            </div>
-                        </form>
-                    </section>
-                </div>
-            </div>
         </div>
+
         <input type="radio" id="c-tab-9" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
-                    <section class="box wf-100">
-                        <header>
-                            <h1><?= $this->getHtml('General'); ?></h1>
-                        </header>
-                        <div class="inner">
-                            <form id="item-edit" action="<?= UriFactory::build('{/api}itemmgmt/item'); ?>" method="post">
-                                <table class="layout wf-100">
-                                    <tbody>
-                                        <tr>
-                                            <td><label for="iEarningIndicator"><?= $this->getHtml('EarningIndicator'); ?></label>
-                                        <tr>
-                                            <td>
-                                                <select id="iEarningIndicator" name="settings_1000000020">
-                                                    <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
-                                                        <?php endforeach; ?>
-                                                </select>
-                                        <tr>
-                                            <td><label for="iCostIndicator"><?= $this->getHtml('CostIndicator'); ?></label>
-                                        <tr>
-                                            <td>
-                                                <select id="iCostIndicator" name="settings_1000000020">
-                                                    <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
-                                                        <?php endforeach; ?>
-                                                </select>
-                                        <tr>
-                                            <td><label for="iCostCenter"><?= $this->getHtml('CostCenter'); ?></label>
-                                        <tr>
-                                            <td>
-                                                <select id="iCostCenter" name="settings_1000000020">
-                                                    <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
-                                                        <?php endforeach; ?>
-                                                </select>
-                                        <tr>
-                                            <td><label for="iCostObject"><?= $this->getHtml('CostObject'); ?></label>
-                                        <tr>
-                                            <td>
-                                                <select id="iCostObject" name="settings_1000000020">
-                                                    <?php foreach ($languages as $code => $language) : ?>
-                                                        <option value="<?= $this->printHtml($code); ?>" <?= $this->printHtml(\strtolower($code) === $l11n->language ? ' selected' : ''); ?>><?= $this->printHtml($language); ?>
-                                                        <?php endforeach; ?>
-                                                </select>
-                                </table>
-                            </form>
-                        </div>
+                    <section class="portlet">
+                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/accounting'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Accounting'); ?></div>
+                            <div class="portlet-body">
+                                <div class="form-group">
+                                    <label for="iItemEarningIndicator"><?= $this->getHtml('EarningIndicator'); ?></label>
+                                    <select id="iItemEarningIndicator" name="earningindicator">
+                                        <option>
+                                        <?php
+                                            $attr = $this->data['defaultAttributeTypes']['sales_tax_code'] ?? null;
+                                            foreach ($attr?->defaults ?? [] as $value) : ?>
+                                            <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iItemCostIndicator"><?= $this->getHtml('CostIndicator'); ?></label>
+                                    <select id="ItemCostIndicator" name="costindicator">
+                                        <option>
+                                        <?php
+                                            $attr = $this->data['defaultAttributeTypes']['purchase_tax_code'] ?? null;
+                                            foreach ($attr?->defaults ?? [] as $value) : ?>
+                                            <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iItemCostCenter"><?= $this->getHtml('CostCenter'); ?></label>
+                                    <select id="iItemCostCenter" name="costcenter">
+                                        <option>
+                                        <?php
+                                        $costcenters = \Modules\Accounting\Models\CostCenterMapper::getAll()
+                                            ->with('l11n')
+                                            ->where('l11n/language', $this->response->header->l11n->language)
+                                            ->execute();
+                                        foreach ($costcenters as $cc) : ?>
+                                            <option value="<?= $cc->id ?>"><?= $this->printHtml($cc->code . ' ' . $cc->getL11n()); ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iItemCostObject"><?= $this->getHtml('CostObject'); ?></label>
+                                    <select id="iItemCostObject" name="costobject">
+                                        <option>
+                                        <?php
+                                        $costobjects = \Modules\Accounting\Models\CostObjectMapper::getAll()
+                                            ->with('l11n')
+                                            ->where('l11n/language', $this->response->header->l11n->language)
+                                            ->execute();
+                                        foreach ($costobjects as $co) : ?>
+                                            <option value="<?= $co->id ?>"><?= $this->printHtml($co->code . ' ' . $co->getL11n()); ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="portlet-foot">
+                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                            </div>
+                        </form>
                     </section>
                 </div>
             </div>
@@ -927,13 +1321,78 @@ echo $this->data['nav']->render();
 
         <input type="radio" id="c-tab-10" name="tabular-2" checked>
         <div class="tab">
-            <div class="row">
-            </div>
-        </div>
+        <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <section class="portlet">
+                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/stock'); ?>" method="post">
+                            <div class="portlet-head"><?= $this->getHtml('Stock'); ?></div>
+                            <div class="portlet-body">
+                                <!--
+                                <div class="form-group">
+                                    <label for="iItemStockDefault"><?= $this->getHtml('DefaultStock'); ?></label>
+                                    <select id="iItemStockDefault" name="stockdefaultstock">
+                                    <?php
+                                        $stocks = StockMapper::getAll()->execute();
+                                        foreach ($stocks as $stock) :
+                                    ?>
+                                        <option value="<?= $stock->id; ?>"><?= $this->printHtml($stock->name); ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                </div>
 
-        <input type="radio" id="c-tab-11" name="tabular-2" checked>
-        <div class="tab">
-            <div class="row">
+                                <div class="form-group">
+                                    <label for="iItemStockLocation"><?= $this->getHtml('DefaultStockLocation'); ?></label>
+                                    <select id="iItemStockLocation" name="stockdefaultlocation">
+                                    <?php
+                                        $stocks = StockLocationMapper::getAll()->execute();
+                                        foreach ($stocks as $stock) :
+                                    ?>
+                                        <option value="<?= $stock->id; ?>"><?= $this->printHtml($stock->name); ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                    </select>
+                                </div>
+                                -->
+
+                                <div class="form-group">
+                                    <label for="iItemStockInventory"><?= $this->getHtml('Inventory'); ?></label>
+                                    <select id="iItemStockInventory" name="stockinventory">
+                                    <?php
+                                        $attr = $this->data['defaultAttributeTypes']['has_inventory'] ?? null;
+                                        foreach ($attr?->defaults ?? [] as $value) : ?>
+                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iItemStockIdentifier"><?= $this->getHtml('Identifier'); ?></label>
+                                    <select id="iItemStockIdentifier" name="stockidentifier">
+                                    <?php
+                                        $attr = $this->data['defaultAttributeTypes']['inventory_identifier'] ?? null;
+                                        foreach ($attr?->defaults ?? [] as $value) : ?>
+                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iItemStockTaking"><?= $this->getHtml('Stocktaking'); ?></label>
+                                    <select id="iItemStockTaking" name="stocktaking">
+                                    <?php
+                                        $attr = $this->data['defaultAttributeTypes']['stocktaking_type'] ?? null;
+                                        foreach ($attr?->defaults ?? [] as $value) : ?>
+                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                    <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="portlet-foot">
+                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                            </div>
+                        </form>
+                    </section>
+                </div>
             </div>
         </div>
 
@@ -953,6 +1412,7 @@ echo $this->data['nav']->render();
                 <div class="col-xs-12">
                     <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('RecentInvoices'); ?></div>
+                        <div class="slider">
                         <table id="iSalesItemList" class="default sticky">
                             <thead>
                             <tr>
@@ -977,6 +1437,7 @@ echo $this->data['nav']->render();
                                 <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
                             <?php endforeach; ?>
                         </table>
+                        </div>
                     </section>
                 </div>
             </div>

@@ -68,6 +68,8 @@ class Item implements \JsonSerializable
      */
     public int $status = ItemStatus::ACTIVE;
 
+    public int $stockIdentifier = StockIdentifierType::NONE;
+
     /**
      * Sales price value.
      *
@@ -131,6 +133,8 @@ class Item implements \JsonSerializable
      * @since 1.0.0
      */
     public ?int $unit = null;
+
+    public array $container = [];
 
     /**
      * Constructor.

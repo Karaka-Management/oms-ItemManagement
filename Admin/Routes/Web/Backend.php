@@ -197,4 +197,26 @@ return [
             ],
         ],
     ],
+    '^.*/item/material/list\?.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialList',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::MATERIAL,
+            ],
+        ],
+    ],
+    '^.*/item/material/view\?.*$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialView',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::MATERIAL,
+            ],
+        ],
+    ],
 ];

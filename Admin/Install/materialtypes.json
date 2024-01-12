@@ -1,0 +1,107 @@
+[
+    {
+		"name": "plastic",
+		"l11n": {
+			"en": "Plastic",
+			"de": "Plastik"
+		}
+	},
+    {
+		"name": "cardboard",
+		"l11n": {
+			"en": "Cardboard",
+			"de": "Karton"
+		}
+	},
+    {
+		"name": "glass",
+		"l11n": {
+			"en": "Glas",
+			"de": "Glas"
+		}
+	},
+    {
+		"name": "paper",
+		"l11n": {
+			"en": "Paper",
+			"de": "Papier"
+		}
+	},
+    {
+		"name": "paperboard",
+		"l11n": {
+			"en": "Paperboard",
+			"de": "Pappe"
+		}
+	},
+    {
+		"name": "aluminum",
+		"l11n": {
+			"en": "Aluminum",
+			"de": "Aluminium"
+		}
+	},
+    {
+		"name": "tinplate",
+		"l11n": {
+			"en": "Tin plate",
+			"de": "Weißblech"
+		}
+	},
+    {
+		"name": "bubble_wrap",
+		"l11n": {
+			"en": "Bubble Wrap",
+			"de": "Blisterfolie"
+		}
+	},
+    {
+		"name": "foam",
+		"l11n": {
+			"en": "Foam",
+			"de": "Schaum"
+		}
+	},
+    {
+		"name": "plastic_foil",
+		"l11n": {
+			"en": "Plastic foil",
+			"de": "Plastikfolie"
+		}
+	},
+    {
+		"name": "plastic_pallet",
+		"l11n": {
+			"en": "Plastic pallet",
+			"de": "Plastikpalette"
+		}
+	},
+    {
+		"name": "wood_pallet",
+		"l11n": {
+			"en": "Wood pallet",
+			"de": "Holzpalette"
+		}
+	},
+    {
+		"name": "wood",
+		"l11n": {
+			"en": "Wood",
+			"de": "Holz"
+		}
+	},
+    {
+		"name": "steel",
+		"l11n": {
+			"en": "Steel",
+			"de": "Stahl"
+		}
+	},
+    {
+		"name": "composite",
+		"l11n": {
+			"en": "Composite",
+			"de": "Verbund"
+		}
+	}
+]

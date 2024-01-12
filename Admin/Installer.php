@@ -50,6 +50,8 @@ final class Installer extends InstallerAbstract
     {
         parent::install($app, $info, $cfgHandler);
 
+        \Modules\Admin\Admin\Installer::installExternal($app, ['path' => __DIR__ . '/Install/Admin.install.json']);
+
         /* Attributes */
         $fileContent = \file_get_contents(__DIR__ . '/Install/attributes.json');
         if ($fileContent === false) {
@@ -90,6 +92,16 @@ final class Installer extends InstallerAbstract
         /** @var array $items */
         $items     = \json_decode($fileContent, true);
         $itemArray = self::createItems($app, $items);
+
+        /* Material types */
+        $fileContent = \file_get_contents(__DIR__ . '/Install/materialtypes.json');
+        if ($fileContent === false) {
+            return;
+        }
+
+        /** @var array $types */
+        $types     = \json_decode($fileContent, true);
+        $materialTypeArray = self::createMaterialTypes($app, $types);
     }
 
     /**
@@ -429,5 +441,65 @@ final class Installer extends InstallerAbstract
         }
 
         return $itemAttrValue;
+    }
+
+    /**
+     * Install default material types
+     *
+     * @param ApplicationAbstract $app   Application
+     * @param array               $types Material type definitions
+     *
+     * @return array
+     *
+     * @since 1.0.0
+     */
+    private static function createMaterialTypes(ApplicationAbstract $app, array $types) : array
+    {
+        /** @var array<string, array> $itemMaterialType */
+        $itemMaterialType = [];
+
+        /** @var \Modules\ItemManagement\Controller\ApiController $module */
+        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'Api');
+
+        /** @var array $type */
+        foreach ($types as $type) {
+            $response = new HttpResponse();
+            $request  = new HttpRequest(new HttpUri(''));
+
+            $request->header->account = 1;
+            $request->setData('name', $type['name'] ?? '');
+            $request->setData('title', \reset($type['l11n']));
+
+            $module->apiItemMaterialTypeCreate($request, $response);
+
+            $responseData = $response->getData('');
+            if (!\is_array($responseData)) {
+                continue;
+            }
+
+            $itemMaterialType[$type['name']] = \is_array($responseData['response'])
+                ? $responseData['response']
+                : $responseData['response']->toArray();
+
+            $isFirst = true;
+            foreach ($type['l11n'] as $language => $l11n) {
+                if ($isFirst) {
+                    $isFirst = false;
+                    continue;
+                }
+
+                $response = new HttpResponse();
+                $request  = new HttpRequest(new HttpUri(''));
+
+                $request->header->account = 1;
+                $request->setData('title', $l11n);
+                $request->setData('language', $language);
+                $request->setData('type', $itemMaterialType[$type['name']]['id']);
+
+                $module->apiItemMaterialTypeL11nCreate($request, $response);
+            }
+        }
+
+        return $itemMaterialType;
     }
 }

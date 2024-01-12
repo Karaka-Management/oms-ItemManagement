@@ -17,24 +17,20 @@ namespace Modules\ItemManagement\Models;
 use phpOMS\Stdlib\Base\Enum;
 
 /**
- * Permission category enum.
+ * Default settings enum.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
-abstract class PermissionCategory extends Enum
+abstract class StockIdentifierType extends Enum
 {
-    public const SALES_ITEM = 1;
+    public const NONE = 0;
 
-    public const PURCHASE_ITEM = 2;
+    public const NUMBER = 1;
 
-    public const STOCK_ITEM = 3;
+    public const LOT = 2;
 
-    public const ATTRIBUTE = 4;
-
-    public const NOTE = 5;
-
-    public const MATERIAL = 6;
+    public const SN = 3;
 }

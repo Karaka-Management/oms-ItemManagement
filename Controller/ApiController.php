@@ -25,8 +25,11 @@ use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemStatus;
+use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
+use Modules\ItemManagement\Models\MaterialTypeMapper;
 use Modules\ItemManagement\Models\PermissionCategory;
 use Modules\ItemManagement\Models\SettingsEnum as ItemSettingsEnum;
+use Modules\ItemManagement\Models\StockIdentifierType;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
 use Modules\Media\Models\MediaMapper;
@@ -36,6 +39,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
 use phpOMS\Localization\ISO4217CharEnum;
+use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
@@ -170,7 +174,7 @@ final class ApiController extends Controller
             $internalRequest->header->account = $request->header->account;
             $internalRequest->setData('name', 'base');
             $internalRequest->setData('item', $item->id);
-            $internalRequest->setData('price', $request->getDataInt('salesprice') ?? 0);
+            $internalRequest->setData('price_new', $request->getDataInt('salesprice') ?? 0);
 
             $billing->apiPriceCreate($internalRequest, $internalResponse);
         }
@@ -228,12 +232,10 @@ final class ApiController extends Controller
     private function createItemSegmentation(RequestAbstract $request, ResponseAbstract $response, Item $item) : void
     {
         /** @var \Model\Setting $settings */
-        $settings = $this->app->appSettings->get(null, [
-            ItemSettingsEnum::DEFAULT_SEGMENTATION,
-        ]);
+        $settings = $this->app->appSettings->get(null, ItemSettingsEnum::DEFAULT_SEGMENTATION);
 
         $segmentation = \json_decode($settings->content, true);
-        if ($segmentation === false) {
+        if ($segmentation === false || $segmentation === null) {
             return;
         }
 
@@ -290,6 +292,7 @@ final class ApiController extends Controller
     {
         $item                = new Item();
         $item->number        = $request->getDataString('number') ?? '';
+        $item->stockIdentifier          = $request->getDataInt('stockidentifier') ?? StockIdentifierType::NONE;
         $item->salesPrice    = new FloatInt($request->getDataInt('salesprice') ?? 0);
         $item->purchasePrice = new FloatInt($request->getDataInt('purchaseprice') ?? 0);
         $item->info          = $request->getDataString('info') ?? '';
@@ -385,7 +388,7 @@ final class ApiController extends Controller
     private function validateItemPriceCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['price'] = !$request->hasData('price'))
+        if (($val['price_new'] = !$request->hasData('price_new'))
             || ($val['currency'] = !ISO4217CharEnum::isValidValue($request->getData('currency')))
         ) {
             return $val;
@@ -888,5 +891,139 @@ final class ApiController extends Controller
         }
 
         $this->app->moduleManager->get('Editor', 'Api')->apiEditorDelete($request, $response, $data);
+    }
+
+    /**
+     * Api method to create item material type
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemMaterialTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateMaterialTypeCreate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        $materialType = $this->createMaterialTypeFromRequest($request);
+        $this->createModel($request->header->account, $materialType, MaterialTypeMapper::class, 'material_type', $request->getOrigin());
+        $this->createStandardCreateResponse($request, $response, $materialType);
+    }
+
+    /**
+     * Validate material create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateMaterialTypeCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['name'] = !$request->hasData('name'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create material from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return BaseStringL11nType
+     *
+     * @since 1.0.0
+     */
+    private function createMaterialTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
+    {
+        $materialType                    = new BaseStringL11nType($request->getDataString('name') ?? '');
+        $materialType->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+
+        return $materialType;
+    }
+
+    /**
+     * Api method to create item material l11n
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
+    public function apiItemMaterialTypeL11nCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        if (!empty($val = $this->validateMaterialTypeL11nCreate($request))) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        $materialL11n = $this->createMaterialTypeL11nFromRequest($request);
+        $this->createModel($request->header->account, $materialL11n, MaterialTypeL11nMapper::class, 'material_type_l11n', $request->getOrigin());
+        $this->createStandardCreateResponse($request, $response, $materialL11n);
+    }
+
+    /**
+     * Validate material l11n create request
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return array<string, bool>
+     *
+     * @since 1.0.0
+     */
+    private function validateMaterialTypeL11nCreate(RequestAbstract $request) : array
+    {
+        $val = [];
+        if (($val['title'] = !$request->hasData('title'))
+            || ($val['type'] = !$request->hasData('type'))
+        ) {
+            return $val;
+        }
+
+        return [];
+    }
+
+    /**
+     * Method to create material l11n from request.
+     *
+     * @param RequestAbstract $request Request
+     *
+     * @return BaseStringL11n
+     *
+     * @since 1.0.0
+     */
+    private function createMaterialTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
+    {
+        $materialL11n      = new BaseStringL11n();
+        $materialL11n->ref = $request->getDataInt('type') ?? 0;
+        $materialL11n->setLanguage(
+            $request->getDataString('language') ?? $request->header->l11n->language
+        );
+        $materialL11n->content = $request->getDataString('title') ?? '';
+
+        return $materialL11n;
     }
 }

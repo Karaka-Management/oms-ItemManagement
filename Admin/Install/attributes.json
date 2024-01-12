@@ -1,5 +1,270 @@
 [
     {
+        "name": "primary_supplier",
+        "l11n": {
+            "en": "Primary Supplier",
+            "de": "Hauptlieferant"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "lead_time",
+        "l11n": {
+            "en": "Lead time",
+            "de": "Lieferzeit"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "qc_time",
+        "l11n": {
+            "en": "QC time",
+            "de": "QC Zeit"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "maximum_stock_quantity",
+        "l11n": {
+            "en": "Maximum stock quantity",
+            "de": "Maximale Lagermenge"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "minimum_stock_quantity",
+        "l11n": {
+            "en": "Minimum stock quantity",
+            "de": "Minimale Lagermenge"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "maximum_order_interval",
+        "l11n": {
+            "en": "Maximum order interval",
+            "de": "Maximale Bestellhäufigkeit"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "minimum_order_quantity",
+        "l11n": {
+            "en": "MOQ",
+            "de": "Mindestbestellmenge"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "order_suggestion_type",
+        "l11n": {
+            "en": "Order suggestion type",
+            "de": "Bestellvorschlags Art"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 4,
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Available",
+                    "de": "Verfügbar"
+                }
+            },
+            {
+                "value": 2,
+                "l11n": {
+                    "en": "Historic",
+                    "de": "Historisch"
+                }
+            },
+            {
+                "value": 4,
+                "l11n": {
+                    "en": "Trend",
+                    "de": "Trend"
+                }
+            }
+        ]
+    },
+    {
+        "name": "order_suggestion_optimization_type",
+        "l11n": {
+            "en": "Order optimization type",
+            "de": "Bestelloptimierung"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 3,
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Price",
+                    "de": "Preis"
+                }
+            },
+            {
+                "value": 2,
+                "l11n": {
+                    "en": "Just in time",
+                    "de": "Just in time"
+                }
+            },
+            {
+                "value": 3,
+                "l11n": {
+                    "en": "Availability",
+                    "de": "Verfügbarkeit"
+                }
+            }
+        ]
+    },
+    {
+        "name": "order_suggestion_history_duration",
+        "l11n": {
+            "en": "Order suggestion historic data",
+            "de": "Historische Bestelldaten"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 36,
+        "values": [
+            {"value": 1},{"value": 2},{"value": 3},{"value": 4},{"value": 5},{"value": 6},
+            {"value": 7},{"value": 8},{"value": 9},{"value": 10},{"value": 11},{"value": 12},
+            {"value": 13},{"value": 14},{"value": 15},{"value": 16},{"value": 17},{"value": 18},
+            {"value": 19},{"value": 20},{"value": 21},{"value": 22},{"value": 23},{"value": 24},
+            {"value": 25},{"value": 26},{"value": 27},{"value": 28},{"value": 29},{"value": 30},
+            {"value": 31},{"value": 32},{"value": 33},{"value": 34},{"value": 35},{"value": 36}
+        ]
+    },
+    {
+        "name": "order_suggestion_averaging_method",
+        "l11n": {
+            "en": "Order suggestion averaging method",
+            "de": "Bestellvorschlag Durchschnittsmethode"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 2,
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Mean",
+                    "de": "Durchschnitt"
+                }
+            },
+            {
+                "value": 2,
+                "l11n": {
+                    "en": "Median",
+                    "de": "Median"
+                }
+            },
+            {
+                "value": 3,
+                "l11n": {
+                    "en": "Weighted mean",
+                    "de": "Gewichtetes Mittel"
+                }
+            }
+        ]
+    },
+    {
+        "name": "order_suggestion_comparison_duration_type",
+        "l11n": {
+            "en": "Order suggestion comparison type",
+            "de": "Bestellvorschlagsvergleich"
+        },
+        "value_type": 1,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": 2,
+        "values": [
+            {
+                "value": 1,
+                "l11n": {
+                    "en": "Annually",
+                    "de": "Jährlich"
+                }
+            },
+            {
+                "value": 2,
+                "l11n": {
+                    "en": "Monthly",
+                    "de": "Monatlich"
+                }
+            },
+            {
+                "value": 3,
+                "l11n": {
+                    "en": "Weekly",
+                    "de": "Wöchentlich"
+                }
+            },
+            {
+                "value": 4,
+                "l11n": {
+                    "en": "Monthly/Yearly",
+                    "de": "Monatlich/Jährlich"
+                }
+            },
+            {
+                "value": 5,
+                "l11n": {
+                    "en": "Weekly/Yearly",
+                    "de": "Wöchentlich/Jährlich"
+                }
+            }
+        ]
+    },
+    {
         "name": "shop_item",
         "l11n": {
             "en": "Shop item",
@@ -238,7 +503,7 @@
     {
         "name": "purchase_tax_code",
         "l11n": {
-            "en": "Purchse tax code",
+            "en": "Purchase tax code",
             "de": "VSt. code"
         },
         "value_type": 2,
@@ -313,7 +578,7 @@
                 "value": "green",
                 "l11n": {
                     "en": "Green",
-                    "de": "Gruen"
+                    "de": "Grün"
                 }
             },
             {
@@ -397,6 +662,32 @@
         "l11n": {
             "en": "Weight",
             "de": "Gewicht"
+        },
+        "values": []
+    },
+    {
+        "name": "height",
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "l11n": {
+            "en": "Height",
+            "de": "Höhe"
+        },
+        "values": []
+    },
+    {
+        "name": "volume",
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "l11n": {
+            "en": "Volume",
+            "de": "Volumen"
         },
         "values": []
     },
@@ -558,19 +849,6 @@
                 "is_default": true
             }
         ]
-    },
-    {
-        "name": "minimum_order",
-        "l11n": {
-            "en": "MOQ",
-            "de": "Mindestbestellmenge"
-        },
-        "value_type": 1,
-        "is_custom_allowed": true,
-        "validation_pattern": "",
-        "is_required": false,
-        "default_value": "",
-        "values": []
     },
     {
         "name": "dual_use",
@@ -1046,5 +1324,54 @@
         "is_required": false,
         "default_value": "",
         "values": []
+    },
+    {
+        "name": "eu_medical_device_class",
+        "l11n": {
+            "en": "EU Medical device class",
+            "de": "EU Medizinproduktklasse"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": "I"
+            },
+            {
+                "value": "IIa"
+            },
+            {
+                "value": "IIb"
+            },
+            {
+                "value": "III"
+            }
+        ]
+    },
+    {
+        "name": "fda_medical_regulatory_class",
+        "l11n": {
+            "en": "FDA Medical regulatory class",
+            "de": "FDA regulatorische Klasse"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": [
+            {
+                "value": "I"
+            },
+            {
+                "value": "II"
+            },
+            {
+                "value": "III"
+            }
+        ]
     }
 ]

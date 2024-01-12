@@ -17,16 +17,19 @@ namespace Modules\ItemManagement\Controller;
 use Modules\Admin\Models\LocalizationMapper;
 use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
-use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\Price\PriceMapper;
 use Modules\Billing\Models\Price\PriceType;
-use Modules\Billing\Models\SalesBillMapper;
+use Modules\ClientManagement\Models\Attribute\ClientAttributeTypeMapper;
+use Modules\ClientManagement\Models\Attribute\ClientAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\Attribute\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeValueMapper;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
+use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
+use Modules\ItemManagement\Models\MaterialTypeMapper;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Organization\Models\Attribute\UnitAttributeMapper;
@@ -35,12 +38,11 @@ use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\DataStorage\Database\Query\OrderType;
+use phpOMS\DataStorage\Database\Query\Where;
 use phpOMS\Localization\ISO3166CharEnum;
 use phpOMS\Localization\ISO3166NameEnum;
-use phpOMS\Localization\Money;
 use phpOMS\Message\RequestAbstract;
 use phpOMS\Message\ResponseAbstract;
-use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Utils\StringUtils;
 use phpOMS\Views\View;
 
@@ -373,19 +375,17 @@ final class BackendController extends Controller
         $item = ItemMapper::get()
             ->with('l11n')
             ->with('l11n/type')
-            ->with('files')
+            ->with('files')->limit(5, 'files')->sort('files/id', OrderType::DESC)
+            ->with('notes')->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->with('files/types')
             ->with('attributes')
             ->with('attributes/type')
             ->with('attributes/type/l11n')
             ->with('attributes/value')
-            ->with('notes')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('attributes/type/l11n/language', $response->header->l11n->language)
-            ->limit(5, 'files')->sort('files/id', OrderType::DESC)
-            ->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
             ->execute();
 
         $view->data['item'] = $item;
@@ -429,12 +429,12 @@ final class BackendController extends Controller
 
         // @todo this one should already be loaded in the backend application no?????????
         /** @var \Model\Setting $settings */
-        $settings = $this->app->appSettings->get(null, [
-            SettingsEnum::DEFAULT_LOCALIZATION,
-        ]);
+        $settings = $this->app->appSettings->get(null, SettingsEnum::DEFAULT_LOCALIZATION);
+
+        $view->data['default_localization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
 
         $view->data['attributeView']                              = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
-        $view->data['attributeView']->data['defaultlocalization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
+        $view->data['attributeView']->data['default_localization'] = $view->data['default_localization'];
 
         $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
@@ -474,6 +474,50 @@ final class BackendController extends Controller
             ->execute();
 
         $view->data['prices'] = $prices;
+
+        /** @var \Modules\Billing\Models\Price\Price[] $prices */
+        $prices = PriceMapper::getAll()
+            ->where('item', $item->id)
+            ->where('type', PriceType::PURCHASE)
+            ->execute();
+
+        $view->data['purchase_prices'] = $prices;
+
+        $tmp = ItemAttributeTypeMapper::getAll()
+            ->with('defaults')
+            ->with('defaults/l11n')
+            ->where('name', [
+                'segment', 'section', 'sales_group', 'product_group', 'product_type',
+                'sales_tax_code', 'purchase_tax_code',
+                //'has_inventory', 'inventory_identifier', 'stocktaking_type',
+            ], 'IN')
+            ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
+                ->where(ItemAttributeValueL11nMapper::getColumnByMember('ref'), '=', null)
+                ->orWhere(ItemAttributeValueL11nMapper::getColumnByMember('language'), '=', $response->header->l11n->language))
+            ->execute();
+
+        $defaultAttributeTypes = [];
+        foreach ($tmp as $t) {
+            $defaultAttributeTypes[$t->name] = $t;
+        }
+
+        $view->data['defaultAttributeTypes'] = $defaultAttributeTypes;
+
+        $tmp = ClientAttributeTypeMapper::getAll()
+            ->with('defaults')
+            ->with('defaults/l11n')
+            ->where('name', ['segment', 'section', 'client_group', 'client_type'], 'IN')
+            ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
+                ->where(ClientAttributeValueL11nMapper::getColumnByMember('ref'), '=', null)
+                ->orWhere(ClientAttributeValueL11nMapper::getColumnByMember('language'), '=', $response->header->l11n->language))
+            ->execute();
+
+        $clientSegmentationTypes = [];
+        foreach ($tmp as $t) {
+            $clientSegmentationTypes[$t->name] = $t;
+        }
+
+        $view->data['clientSegmentationTypes'] = $clientSegmentationTypes;
 
         /** @var \Modules\Auditor\Models\Audit[] $audits */
         $audits = AuditMapper::getAll()
@@ -724,6 +768,68 @@ final class BackendController extends Controller
         }
 
         $view->data['customerGroups'] = $customerGroups;
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewMaterialList(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/material-type-list');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
+
+        $view->data['types'] = MaterialTypeMapper::getAll()
+            ->with('l11n')
+            ->where('l11n/language', $response->header->l11n->language)
+            ->execute();
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewMaterialView(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/material-view');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1002901101, $request, $response);
+
+        $view->data['type'] = MaterialTypeMapper::get()
+            ->with('l11n')
+            ->where('id', (int) $request->getData('id'))
+            ->where('l11n/language', $response->header->l11n->language)
+            ->execute();
+
+        $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
+
+        /** @var \phpOMS\Localization\BaseStringL11n[] $l11nValues */
+        $l11nValues = MaterialTypeL11nMapper::getAll()
+            ->where('ref', $view->data['type']->id)
+            ->execute();
+
+        $view->data['l11nValues'] = $l11nValues;
 
         return $view;
     }

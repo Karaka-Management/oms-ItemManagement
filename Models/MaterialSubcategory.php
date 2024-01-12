@@ -17,24 +17,30 @@ namespace Modules\ItemManagement\Models;
 use phpOMS\Stdlib\Base\Enum;
 
 /**
- * Permission category enum.
+ * Default settings enum.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
  */
-abstract class PermissionCategory extends Enum
+abstract class MaterialSubcategory extends Enum
 {
-    public const SALES_ITEM = 1;
+    // packaging
+    public const PRIMARY = 0; // Verkaufsverpackung
 
-    public const PURCHASE_ITEM = 2;
+    public const SECONDARY = 1;
 
-    public const STOCK_ITEM = 3;
+    public const TERTIARY = 2; // Transportverpackung
 
-    public const ATTRIBUTE = 4;
+    public const RETAIL = 3; // Umverpackung
 
-    public const NOTE = 5;
+    // product
+    // RHB
+    public const RAW_MATERIAL = 100;
 
-    public const MATERIAL = 6;
+    public const AUXILIARY_MATERIAL = 101;
+
+    public const SUPPLIES = 102;
+
 }
