@@ -37,10 +37,10 @@ final class MaterialTypeL11nMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_material_type_l11n_id'    => ['name' => 'itemmgmt_material_type_l11n_id',    'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_material_type_l11n_title' => ['name' => 'itemmgmt_material_type_l11n_title', 'type' => 'string', 'internal' => 'content', 'autocomplete' => true],
-        'itemmgmt_material_type_l11n_type'  => ['name' => 'itemmgmt_material_type_l11n_type',  'type' => 'int',    'internal' => 'ref'],
-        'itemmgmt_material_type_l11n_language'  => ['name' => 'itemmgmt_material_type_l11n_language',  'type' => 'string', 'internal' => 'language'],
+        'itemmgmt_material_type_l11n_id'       => ['name' => 'itemmgmt_material_type_l11n_id',    'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_material_type_l11n_title'    => ['name' => 'itemmgmt_material_type_l11n_title', 'type' => 'string', 'internal' => 'content', 'autocomplete' => true],
+        'itemmgmt_material_type_l11n_type'     => ['name' => 'itemmgmt_material_type_l11n_type',  'type' => 'int',    'internal' => 'ref'],
+        'itemmgmt_material_type_l11n_language' => ['name' => 'itemmgmt_material_type_l11n_language',  'type' => 'string', 'internal' => 'language'],
     ];
 
     /**

@@ -134,6 +134,12 @@ class Item implements \JsonSerializable
      */
     public ?int $unit = null;
 
+    /**
+     * Containers
+     *
+     * @var Container[]
+     * @since 1.0.0
+     */
     public array $container = [];
 
     /**
@@ -146,18 +152,6 @@ class Item implements \JsonSerializable
         $this->createdAt     = new \DateTimeImmutable('now');
         $this->salesPrice    = new FloatInt();
         $this->purchasePrice = new FloatInt();
-    }
-
-    /**
-     * Get id.
-     *
-     * @return int Model id
-     *
-     * @since 1.0.0
-     */
-    public function getId() : int
-    {
-        return $this->id;
     }
 
     /**
@@ -189,7 +183,7 @@ class Item implements \JsonSerializable
      *
      * @since 1.0.0
      */
-    public function getL11n(string $type = null) : BaseStringL11n
+    public function getL11n(?string $type = null) : BaseStringL11n
     {
         foreach ($this->l11n as $l11n) {
             if ($l11n->type?->title === $type) {
@@ -210,32 +204,6 @@ class Item implements \JsonSerializable
     public function getL11ns() : array
     {
         return $this->l11n;
-    }
-
-    /**
-     * Get status.
-     *
-     * @return int
-     *
-     * @since 1.0.0
-     */
-    public function getStatus() : int
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set status.
-     *
-     * @param int $status Status
-     *
-     * @return void
-     *
-     * @since 1.0.0
-     */
-    public function setStatus(int $status) : void
-    {
-        $this->status = $status;
     }
 
     /**

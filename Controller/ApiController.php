@@ -15,13 +15,13 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Controller;
 
 use Modules\Admin\Models\NullAccount;
+use Modules\Billing\Models\Price\PriceType;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
+use Modules\ItemManagement\Models\Container;
 use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
-use Modules\ItemManagement\Models\ItemPrice;
-use Modules\ItemManagement\Models\ItemPriceStatus;
 use Modules\ItemManagement\Models\ItemRelationType;
 use Modules\ItemManagement\Models\ItemRelationTypeMapper;
 use Modules\ItemManagement\Models\ItemStatus;
@@ -38,7 +38,6 @@ use Modules\Media\Models\PathSettings;
 use phpOMS\Account\PermissionType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
-use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Message\Http\HttpRequest;
@@ -50,7 +49,6 @@ use phpOMS\Message\ResponseAbstract;
 use phpOMS\Model\Message\FormValidation;
 use phpOMS\Stdlib\Base\FloatInt;
 use phpOMS\System\MimeType;
-use phpOMS\Uri\HttpUri;
 
 /**
  * ItemManagement class.
@@ -165,22 +163,52 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
         $this->app->dbPool->get()->con->commit();
 
-        if ($this->app->moduleManager->isActive('Billing')) {
-            $billing = $this->app->moduleManager->get('Billing');
+        // Define default item containers
+        $types = ItemAttributeTypeMapper::getAll()
+            ->where('name', ['default_sales_container', 'default_purchase_container'], 'IN')
+            ->execute();
 
-            $internalRequest  = new HttpRequest(new HttpUri(''));
+        foreach ($types as $type) {
+            $internalResponse = clone $response;
+            $internalRequest  = new HttpRequest();
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->setData('ref', $item->id);
+            $internalRequest->setData('type', $type->id);
+            $internalRequest->setData('value', \reset($item->container)->id);
+
+            $this->app->moduleManager->get('ItemManagement', 'ApiAttribute')->apiItemAttributeCreate($internalRequest, $internalResponse);
+        }
+
+        if ($this->app->moduleManager->isActive('Billing')) {
+            $billing = $this->app->moduleManager->get('Billing', 'ApiPrice');
+
+            // Sales price
+            $internalRequest  = new HttpRequest();
             $internalResponse = new HttpResponse();
 
             $internalRequest->header->account = $request->header->account;
-            $internalRequest->setData('name', 'base');
+            $internalRequest->setData('name', 'default');
+            $internalRequest->setData('type', PriceType::SALES);
             $internalRequest->setData('item', $item->id);
-            $internalRequest->setData('price_new', $request->getDataInt('salesprice') ?? 0);
+            $internalRequest->setData('price_new', $request->getDataString('salesprice') ?? 0);
+
+            $billing->apiPriceCreate($internalRequest, $internalResponse);
+
+            // Purchase price
+            $internalRequest  = new HttpRequest();
+            $internalResponse = new HttpResponse();
+
+            $internalRequest->header->account = $request->header->account;
+            $internalRequest->setData('name', 'default');
+            $internalRequest->setData('type', PriceType::PURCHASE);
+            $internalRequest->setData('item', $item->id);
+            $internalRequest->setData('price_new', $request->getDataString('purchaseprice') ?? 0);
 
             $billing->apiPriceCreate($internalRequest, $internalResponse);
         }
 
         $this->createMediaDirForItem($item->number, $request->header->account);
-
         $path = $this->createItemDir($item);
 
         $uploadedFiles = $request->files['item_profile_image'] ?? [];
@@ -239,13 +267,13 @@ final class ApiController extends Controller
             return;
         }
 
-        $types = ItemAttributeTypeMapper::get()
+        $types = ItemAttributeTypeMapper::getAll()
             ->where('name', \array_keys($segmentation), 'IN')
             ->execute();
 
         foreach ($types as $type) {
             $internalResponse = clone $response;
-            $internalRequest  = new HttpRequest(new HttpUri(''));
+            $internalRequest  = new HttpRequest();
 
             $internalRequest->header->account = $request->header->account;
             $internalRequest->setData('ref', $item->id);
@@ -290,15 +318,21 @@ final class ApiController extends Controller
      */
     private function createItemFromRequest(RequestAbstract $request) : Item
     {
-        $item                = new Item();
-        $item->number        = $request->getDataString('number') ?? '';
-        $item->stockIdentifier          = $request->getDataInt('stockidentifier') ?? StockIdentifierType::NONE;
-        $item->salesPrice    = new FloatInt($request->getDataInt('salesprice') ?? 0);
-        $item->purchasePrice = new FloatInt($request->getDataInt('purchaseprice') ?? 0);
-        $item->info          = $request->getDataString('info') ?? '';
-        $item->parent        = $request->getDataInt('parent');
-        $item->unit          = $request->getDataInt('unit');
-        $item->setStatus($request->getDataInt('status') ?? ItemStatus::ACTIVE);
+        $item                  = new Item();
+        $item->number          = $request->getDataString('number') ?? '';
+        $item->stockIdentifier = $request->getDataInt('stockidentifier') ?? StockIdentifierType::NONE;
+        $item->salesPrice      = new FloatInt($request->getDataString('salesprice') ?? 0);
+        $item->purchasePrice   = new FloatInt($request->getDataString('purchaseprice') ?? 0);
+        $item->info            = $request->getDataString('info') ?? '';
+        $item->parent          = $request->getDataInt('parent');
+        $item->unit            = $request->getDataInt('unit');
+        $item->status          = ItemStatus::tryFromValue($request->getDataInt('status')) ?? ItemStatus::ACTIVE;
+
+        $container           = new Container();
+        $container->name     = 'default';
+        $container->quantity = \pow(10, FloatInt::MAX_DECIMALS);
+
+        $item->container[] = $container;
 
         return $item;
     }
@@ -316,81 +350,6 @@ final class ApiController extends Controller
     {
         $val = [];
         if (($val['number'] = !$request->hasData('number'))) {
-            return $val;
-        }
-
-        return [];
-    }
-
-    /**
-     * Api method to create item
-     *
-     * @param RequestAbstract  $request  Request
-     * @param ResponseAbstract $response Response
-     * @param array            $data     Generic data
-     *
-     * @return void
-     *
-     * @api
-     *
-     * @since 1.0.0
-     */
-    public function apiItemPriceCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
-    {
-        if (!empty($val = $this->validateItemPriceCreate($request))) {
-            $response->header->status = RequestStatusCode::R_400;
-            $this->createInvalidCreateResponse($request, $response, $val);
-
-            return;
-        }
-
-        $item = $this->createItemPriceFromRequest($request);
-        $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
-        $this->createStandardCreateResponse($request, $response, $item);
-    }
-
-    /**
-     * Method to create item from request.
-     *
-     * @param RequestAbstract $request Request
-     *
-     * @return ItemPrice
-     *
-     * @since 1.0.0
-     */
-    private function createItemPriceFromRequest(RequestAbstract $request) : ItemPrice
-    {
-        $item                       = new ItemPrice();
-        $item->currency             = $request->getDataString('currency') ?? '';
-        $item->price                = new FloatInt($request->getDataInt('price') ?? 0);
-        $item->minQuantity          = $request->getDataInt('minquantity') ?? 0;
-        $item->relativeDiscount     = $request->getDataInt('relativediscount') ?? 0;
-        $item->absoluteDiscount     = $request->getDataInt('absolutediscount') ?? 0;
-        $item->relativeUnitDiscount = $request->getDataInt('relativeunitdiscount') ?? 0;
-        $item->absoluteUnitDiscount = $request->getDataInt('absoluteunitdiscount') ?? 0;
-        $item->promocode            = $request->getDataString('promocode') ?? '';
-        $item->start                = $request->getDataDateTime('start');
-        $item->end                  = $request->getDataDateTime('end');
-        $item->setStatus($request->getDataInt('status') ?? ItemPriceStatus::ACTIVE);
-
-        return $item;
-    }
-
-    /**
-     * Validate item create request
-     *
-     * @param RequestAbstract $request Request
-     *
-     * @return array<string, bool>
-     *
-     * @since 1.0.0
-     */
-    private function validateItemPriceCreate(RequestAbstract $request) : array
-    {
-        $val = [];
-        if (($val['price_new'] = !$request->hasData('price_new'))
-            || ($val['currency'] = !ISO4217CharEnum::isValidValue($request->getData('currency')))
-        ) {
             return $val;
         }
 
@@ -648,13 +607,11 @@ final class ApiController extends Controller
      */
     private function createItemL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $itemL11n       = new BaseStringL11n();
-        $itemL11n->ref  = $request->getDataInt('item') ?? 0;
-        $itemL11n->type = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
-        $itemL11n->setLanguage(
-            $request->getDataString('language') ?? $request->header->l11n->language
-        );
-        $itemL11n->content = $request->getDataString('content') ?? '';
+        $itemL11n           = new BaseStringL11n();
+        $itemL11n->ref      = $request->getDataInt('item') ?? 0;
+        $itemL11n->type     = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
+        $itemL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
+        $itemL11n->content  = $request->getDataString('content') ?? '';
 
         return $itemL11n;
     }
@@ -952,8 +909,11 @@ final class ApiController extends Controller
      */
     private function createMaterialTypeFromRequest(RequestAbstract $request) : BaseStringL11nType
     {
-        $materialType                    = new BaseStringL11nType($request->getDataString('name') ?? '');
-        $materialType->setL11n($request->getDataString('title') ?? '', $request->getDataString('language') ?? ISO639x1Enum::_EN);
+        $materialType = new BaseStringL11nType($request->getDataString('name') ?? '');
+        $materialType->setL11n(
+            $request->getDataString('title') ?? '',
+            ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? ISO639x1Enum::_EN
+        );
 
         return $materialType;
     }
@@ -1017,12 +977,10 @@ final class ApiController extends Controller
      */
     private function createMaterialTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
-        $materialL11n      = new BaseStringL11n();
-        $materialL11n->ref = $request->getDataInt('type') ?? 0;
-        $materialL11n->setLanguage(
-            $request->getDataString('language') ?? $request->header->l11n->language
-        );
-        $materialL11n->content = $request->getDataString('title') ?? '';
+        $materialL11n           = new BaseStringL11n();
+        $materialL11n->ref      = $request->getDataInt('type') ?? 0;
+        $materialL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
+        $materialL11n->content  = $request->getDataString('title') ?? '';
 
         return $materialL11n;
     }

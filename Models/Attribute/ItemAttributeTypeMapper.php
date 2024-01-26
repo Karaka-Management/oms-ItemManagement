@@ -42,7 +42,8 @@ final class ItemAttributeTypeMapper extends DataMapperFactory
         'itemmgmt_attr_type_datatype'   => ['name' => 'itemmgmt_attr_type_datatype',   'type' => 'int',    'internal' => 'datatype'],
         'itemmgmt_attr_type_fields'     => ['name' => 'itemmgmt_attr_type_fields',   'type' => 'int',    'internal' => 'fields'],
         'itemmgmt_attr_type_custom'     => ['name' => 'itemmgmt_attr_type_custom',   'type' => 'bool',   'internal' => 'custom'],
-        'itemmgmt_attr_type_repeatable'     => ['name' => 'itemmgmt_attr_type_repeatable',   'type' => 'bool',   'internal' => 'repeatable'],
+        'itemmgmt_attr_type_repeatable' => ['name' => 'itemmgmt_attr_type_repeatable',   'type' => 'bool',   'internal' => 'repeatable'],
+        'itemmgmt_attr_type_internal'   => ['name' => 'itemmgmt_attr_type_internal',   'type' => 'bool',   'internal' => 'isInternal'],
         'itemmgmt_attr_type_pattern'    => ['name' => 'itemmgmt_attr_type_pattern',  'type' => 'string', 'internal' => 'validationPattern'],
         'itemmgmt_attr_type_required'   => ['name' => 'itemmgmt_attr_type_required', 'type' => 'bool',   'internal' => 'isRequired'],
     ];

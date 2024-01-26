@@ -18,7 +18,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/item/attribute/type/list.*$' => [
+    '^.*/item/attribute/type/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypeList',
             'verb'       => RouteVerb::GET,
@@ -29,7 +29,7 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute/type\?.*$' => [
+    '^.*/item/attribute/type(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeType',
             'verb'       => RouteVerb::GET,
@@ -40,7 +40,7 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute/value.*$' => [
+    '^.*/item/attribute/value(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
             'verb'       => RouteVerb::GET,
@@ -51,7 +51,7 @@ return [
             ],
         ],
     ],
-    '^/item/list.*$' => [
+    '^/item/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementItemList',
             'verb'       => RouteVerb::GET,
@@ -62,7 +62,7 @@ return [
             ],
         ],
     ],
-    '^/item/create.*$' => [
+    '^/item/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementItemCreate',
             'verb'       => RouteVerb::GET,
@@ -73,7 +73,7 @@ return [
             ],
         ],
     ],
-    '^/item/profile.*$' => [
+    '^/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementItem',
             'verb'       => RouteVerb::GET,
@@ -85,7 +85,7 @@ return [
         ],
     ],
 
-    '^.*/sales/item/list.*$' => [
+    '^.*/sales/item/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesList',
             'verb'       => RouteVerb::GET,
@@ -96,7 +96,7 @@ return [
             ],
         ],
     ],
-    '^.*/sales/item/create.*$' => [
+    '^.*/sales/item/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesCreate',
             'verb'       => RouteVerb::GET,
@@ -107,7 +107,7 @@ return [
             ],
         ],
     ],
-    '^.*/sales/item/profile.*$' => [
+    '^.*/sales/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesItem',
             'verb'       => RouteVerb::GET,
@@ -119,7 +119,7 @@ return [
         ],
     ],
 
-    '^.*/purchase/item/list.*$' => [
+    '^.*/purchase/item/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseList',
             'verb'       => RouteVerb::GET,
@@ -130,7 +130,7 @@ return [
             ],
         ],
     ],
-    '^.*/purchase/item/create.*$' => [
+    '^.*/purchase/item/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseCreate',
             'verb'       => RouteVerb::GET,
@@ -141,7 +141,7 @@ return [
             ],
         ],
     ],
-    '^.*/purchase/item/profile.*$' => [
+    '^.*/purchase/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseItem',
             'verb'       => RouteVerb::GET,
@@ -153,7 +153,7 @@ return [
         ],
     ],
 
-    '^.*/warehouse/item/list.*$' => [
+    '^.*/warehouse/item/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingList',
             'verb'       => RouteVerb::GET,
@@ -164,7 +164,7 @@ return [
             ],
         ],
     ],
-    '.*/warehouse/item/create.*$' => [
+    '.*/warehouse/item/create(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingCreate',
             'verb'       => RouteVerb::GET,
@@ -175,7 +175,7 @@ return [
             ],
         ],
     ],
-    '^.*/warehouse/item/profile.*$' => [
+    '^.*/warehouse/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehouseItem',
             'verb'       => RouteVerb::GET,
@@ -186,7 +186,7 @@ return [
             ],
         ],
     ],
-    '^.*/purchase/analysis/item(\?.*|$)$' => [
+    '^.*/purchase/analysis/item(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemPurchaseAnalysis',
             'verb'       => RouteVerb::GET,
@@ -197,7 +197,7 @@ return [
             ],
         ],
     ],
-    '^.*/item/material/list\?.*$' => [
+    '^.*/item/material/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialList',
             'verb'       => RouteVerb::GET,
@@ -208,7 +208,7 @@ return [
             ],
         ],
     ],
-    '^.*/item/material/view\?.*$' => [
+    '^.*/item/material/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialView',
             'verb'       => RouteVerb::GET,

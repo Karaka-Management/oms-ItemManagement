@@ -18,7 +18,6 @@ use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
 use phpOMS\System\MimeType;
-use phpOMS\Uri\HttpUri;
 use phpOMS\Utils\TestUtils;
 
 trait ApiControllerItemTrait
@@ -41,7 +40,7 @@ trait ApiControllerItemTrait
     public function testApiItemCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('number', '123456');
@@ -58,7 +57,7 @@ trait ApiControllerItemTrait
     public function testApiItemCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -74,7 +73,7 @@ trait ApiControllerItemTrait
     public function testApiItemProfileImageCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         \copy(__DIR__ . '/m_icon.png', __DIR__ . '/m_icon_tmp.png');
 
@@ -105,7 +104,7 @@ trait ApiControllerItemTrait
     public function testApiItemFileCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         \copy(__DIR__ . '/Test file.txt', __DIR__ . '/Test file_tmp.txt');
 
@@ -135,7 +134,7 @@ trait ApiControllerItemTrait
     public function testApiItemNoteCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
 
@@ -156,7 +155,7 @@ trait ApiControllerItemTrait
     public function testApiFileCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -172,7 +171,7 @@ trait ApiControllerItemTrait
     public function testApiNoteCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');

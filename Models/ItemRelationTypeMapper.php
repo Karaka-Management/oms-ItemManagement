@@ -36,8 +36,8 @@ final class ItemRelationTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_item_relation_type_id'       => ['name' => 'itemmgmt_item_relation_type_id',    'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_item_relation_type_title'    => ['name' => 'itemmgmt_item_relation_type_title', 'type' => 'string', 'internal' => 'title'],
+        'itemmgmt_item_relation_type_id'    => ['name' => 'itemmgmt_item_relation_type_id',    'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_item_relation_type_title' => ['name' => 'itemmgmt_item_relation_type_title', 'type' => 'string', 'internal' => 'title'],
     ];
 
     /**

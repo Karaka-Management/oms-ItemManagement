@@ -37,8 +37,8 @@ final class MaterialTypeMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_material_type_id'         => ['name' => 'itemmgmt_material_type_id',       'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_material_type_name'       => ['name' => 'itemmgmt_material_type_name',     'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
+        'itemmgmt_material_type_id'   => ['name' => 'itemmgmt_material_type_id',       'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_material_type_name' => ['name' => 'itemmgmt_material_type_name',     'type' => 'string', 'internal' => 'title', 'autocomplete' => true],
     ];
 
     /**
@@ -54,7 +54,7 @@ final class MaterialTypeMapper extends DataMapperFactory
             'self'     => 'itemmgmt_material_type_l11n_type',
             'column'   => 'content',
             'external' => null,
-        ]
+        ],
     ];
 
     /**

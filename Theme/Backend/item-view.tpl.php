@@ -24,7 +24,6 @@ use phpOMS\Localization\ISO3166NameEnum;
 use phpOMS\Localization\ISO4217CharEnum;
 use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\Money;
-use phpOMS\Localization\NullLocalization;
 use phpOMS\Localization\RegionEnum;
 use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Stdlib\Base\SmartDateTime;
@@ -37,18 +36,15 @@ $notes     = $item->notes;
 $files     = $item->files;
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
-$allInvoices       = $this->data['allInvoices'] ?? [];
-$topCustomers      = $this->getData('topCustomers') ?? [[], []];
-$attributeView     = $this->data['attributeView'];
-$l11nView          = $this->data['l11nView'];
+$allInvoices   = $this->data['allInvoices'] ?? [];
+$topCustomers  = $this->getData('topCustomers') ?? [[], []];
+$attributeView = $this->data['attributeView'];
+$l11nView      = $this->data['l11nView'];
 
 $languages = ISO639Enum::getConstants();
 
-/** @var \phpOMS\Localization\Localization $l11n */
-$l11n = $this->getData('default_localization') ?? new NullLocalization();
-
-$regions = RegionEnum::getConstants();
-$countries = ISO3166CharEnum::getConstants();
+$regions    = RegionEnum::getConstants();
+$countries  = ISO3166CharEnum::getConstants();
 $currencies = ISO4217CharEnum::getConstants();
 
 echo $this->data['nav']->render();
@@ -94,7 +90,7 @@ echo $this->data['nav']->render();
                             <div class="portlet-body">
                               <table class="layout wf-100">
                                     <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input type="number" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
+                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input type="text" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
                                     <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
                                     <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>" spellcheck="false" required>
                                     <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
@@ -133,11 +129,11 @@ echo $this->data['nav']->render();
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('YTDSales'); ?>:
-                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfYear($this->data['business_start']), new \DateTime('now')), format: 'medium'); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfYear($this->data['business_start']), new \DateTime('now')), symbol: '', format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('MTDSales'); ?>:
-                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfMonth(), new \DateTime('now')), format: 'medium'); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getItemNetSales($item->id, SmartDateTime::startOfMonth(), new \DateTime('now')), symbol: '', format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('ILV'); ?>:
-                                            <td><?= $this->getCurrency(SalesBillMapper::getILVHistoric($item->id), format: 'medium'); ?>
+                                            <td><?= $this->getCurrency(SalesBillMapper::getILVHistoric($item->id), symbol: '', format: 'medium'); ?>
                                     </table>
                                 </div>
                             </section>
@@ -163,9 +159,9 @@ echo $this->data['nav']->render();
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('SalesPrice'); ?>:
-                                            <td><?= $this->getCurrency($item->salesPrice, format: 'medium'); ?>
+                                            <td><?= $this->getCurrency($item->salesPrice, symbol: '', format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
-                                            <td><?= $this->getCurrency($item->purchasePrice, format: 'medium'); ?>
+                                            <td><?= $this->getCurrency($item->purchasePrice, symbol: '', format: 'medium'); ?>
                                         <tr><td><?= $this->getHtml('Margin'); ?>:
                                             <td><?= $this->getNumeric(
                                                 $item->salesPrice->getInt() === 0
@@ -193,13 +189,19 @@ echo $this->data['nav']->render();
                                         <td class="wf-100"><?= $this->getHtml('Title'); ?>
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
-                                    <?php foreach ($notes as $note) :
-                                        $url = UriFactory::build('{/base}/editor/single?{?}&id=' . $note->id);
-                                        ?>
+                                    <?php
+                                    $count = 0;
+                                    foreach ($notes as $note) :
+                                        ++$count;
+                                        $url = UriFactory::build('{/base}/editor/view?{?}&id=' . $note->id);
+                                    ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($note->title); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($note->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
+                                    <?php if ($count === 0) : ?>
+                                    <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <?php endif; ?>
                                 </table>
                                 </div>
                             </section>
@@ -219,14 +221,20 @@ echo $this->data['nav']->render();
                                         <td>
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
-                                    <?php foreach ($files as $file) :
-                                        $url = UriFactory::build('{/base}/media/single?{?}&id=' . $file->id);
-                                        ?>
+                                    <?php
+                                    $count = 0;
+                                    foreach ($files as $file) :
+                                        ++$count;
+                                        $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
+                                    ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->name); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->extension); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
+                                    <?php if ($count === 0) : ?>
+                                    <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <?php endif; ?>
                                 </table>
                                 </div>
                             </section>
@@ -258,17 +266,23 @@ echo $this->data['nav']->render();
                                         ->limit(5)
                                         ->execute();
 
+                                    $count = 0;
+
                                     /** @var \Modules\Billing\Models\Bill $invoice */
                                     foreach ($newestInvoices as $invoice) :
+                                        ++$count;
                                         $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
-                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/profile?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales); ?></a>
+                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
+                                    <?php if ($count === 0) : ?>
+                                    <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                                    <?php endif; ?>
                                 </table>
                                 </div>
                             </section>
@@ -293,12 +307,12 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
                                     <?php $i = -1; foreach (($topCustomers[0] ?? []) as $client) : ++$i;
-                                        $url = UriFactory::build('{/base}/sales/client/profile?id=' . $client->id);
+                                        $url = UriFactory::build('{/base}/sales/client/view?id=' . $client->id);
                                     ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->account->name1); ?> <?= $this->printHtml($client->account->name2); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->getCountry()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->country); ?></a>
                                         <td><a href="<?= $url; ?>"><?= (new Money((int) $topCustomers[1][$i]['net_sales']))->getCurrency(); ?></a>
                                     <?php endforeach; ?>
                                 </table>
@@ -333,7 +347,7 @@ echo $this->data['nav']->render();
                                                             <?php
                                                                 $temp = [];
                                                                 foreach ($monthlySalesCosts as $monthly) {
-                                                                    $temp[] = \round(((((int) $monthly['net_sales']) - ((int) $monthly['net_costs'])) / ((int) $monthly['net_sales'])) * 100, 2);
+                                                                    $temp[] = \round(((int) $monthly['net_sales']) === 0 ? 0 : ((((int) $monthly['net_sales']) - ((int) $monthly['net_costs'])) / ((int) $monthly['net_sales'])) * 100, 2);
                                                                 }
                                                             ?>
                                                             <?= \implode(',', $temp); ?>
@@ -394,9 +408,7 @@ echo $this->data['nav']->render();
                             </section>
                         </div>
                         <?php endif; ?>
-                    </div>
 
-                    <div class="row">
                         <?php
                         $regionSales = [];
                         if (!empty($regionSales)) : ?>
@@ -585,6 +597,7 @@ echo $this->data['nav']->render();
                                     <td><?= $this->getHtml('ID', '0', '0'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                     <td><?= $this->getHtml('Name'); ?><i class="sort-asc g-icon">expand_less</i><i class="sort-desc g-icon">expand_more</i>
                                     <td><?= $this->getHtml('Quantity'); ?>
+                                    <td><?= $this->getHtml('Decimals'); ?>
                                     <td><?= $this->getHtml('Weight'); ?>
                                     <td><?= $this->getHtml('WidthLength'); ?>
                                     <td><?= $this->getHtml('Height'); ?>
@@ -604,6 +617,7 @@ echo $this->data['nav']->render();
                                         <td data-tpl-text="/id" data-tpl-value="/id"></td>
                                         <td data-tpl-text="/name" data-tpl-value="/name" data-value=""></td>
                                         <td data-tpl-text="/quantity" data-tpl-value="/quantity"></td>
+                                        <td data-tpl-text="/decimals" data-tpl-value="/decimals"></td>
                                         <td data-tpl-text="/weight" data-tpl-value="/weight"></td>
                                         <td data-tpl-text="/width" data-tpl-value="/width"></td>
                                         <td data-tpl-text="/height" data-tpl-value="/height"></td>
@@ -612,14 +626,14 @@ echo $this->data['nav']->render();
                                     </tr>
                                 </template>
                                 <?php
-                                $c      = 0;
+                                $c          = 0;
                                 $containers = $this->data['containers'] ?? [];
                                 foreach ($containers as $key => $value) : ++$c;
                                 ?>
                                     <tr data-id="<?= $value->id; ?>">
                                         <td>
                                             <i class="g-icon btn update-form">settings</i>
-                                            <?php if ($value->name !== 'base') : ?>
+                                            <?php if ($value->name !== 'default') : ?>
                                             <input id="itemContainerTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
                                             <label for="itemContainerTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                             <span class="checked-visibility">
@@ -630,6 +644,7 @@ echo $this->data['nav']->render();
                                         <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
                                         <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
                                         <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml($value->promocode); ?>
+                                        <td data-tpl-text="/decimals" data-tpl-value="/decimals"><?= $this->printHtml($value->promocode); ?>
                                         <td data-tpl-text="/weight" data-tpl-value="/weight"><?= $this->printHtml($value->price->getAmount()); ?>
                                         <td data-tpl-text="/width" data-tpl-value="/width"><?= $this->printHtml($value->currency); ?>
                                         <td data-tpl-text="/height" data-tpl-value="/height"><?= $this->printHtml((string) $value->quantity); ?>
@@ -682,7 +697,7 @@ echo $this->data['nav']->render();
                                                 <div class="fixed">
                                                     <select id="iPriceCurrency" name="currency" data-tpl-text="/currency" data-tpl-value="/currency">
                                                         <?php foreach ($currencies as $currency) : ?>
-                                                        <option value="<?= $currency; ?>"<?= $this->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
+                                                        <option value="<?= $currency; ?>"<?= $this->data['attributeView']->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -947,14 +962,17 @@ echo $this->data['nav']->render();
                                     </tr>
                                 </template>
                                 <?php
-                                $c      = 0;
-                                $prices = $this->data['prices'];
-                                foreach ($prices as $key => $value) : ++$c;
+                                $c = 0;
+                                foreach ($this->data['prices'] as $key => $value) :
+                                    if ($value->type !== PriceType::SALES) {
+                                        continue;
+                                    }
+                                    ++$c;
                                 ?>
                                     <tr data-id="<?= $value->id; ?>">
                                         <td>
                                             <i class="g-icon btn update-form">settings</i>
-                                            <?php if ($value->name !== 'base') : ?>
+                                            <?php if ($value->name !== 'default') : ?>
                                             <input id="itemSalesPriceTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
                                             <label for="itemSalesPriceTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
                                             <span class="checked-visibility">
@@ -965,12 +983,12 @@ echo $this->data['nav']->render();
                                         <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
                                         <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
                                         <td data-tpl-text="/promocode" data-tpl-value="/promocode"><?= $this->printHtml($value->promocode); ?>
-                                        <td data-tpl-text="/price" data-tpl-value="/price"><?= $this->printHtml($value->price->getAmount()); ?>
+                                        <td data-tpl-text="/price" data-tpl-value="/price"><?= $this->printHtml($value->priceNew->getAmount()); ?>
                                         <td data-tpl-text="/currency" data-tpl-value="/currency"><?= $this->printHtml($value->currency); ?>
-                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml((string) $value->quantity); ?>
-                                        <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $this->printHtml((string) $value->discount); ?>
-                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->printHtml((string) $value->discountPercentage); ?>
-                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $this->printHtml((string) $value->bonus); ?>
+                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $value->quantity->getAmount(); ?>
+                                        <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $value->discount->getAmount(); ?>
+                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->getPercentage($value->discountPercentage->value / 10000 / 100); ?>
+                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $value->bonus->getAmount(); ?>
                                         <td data-tpl-text="/item_segment" data-tpl-value="/item_segment"><?= $this->printHtml((string) $value->itemsegment->getL11n()); ?>
                                         <td data-tpl-text="/item_section" data-tpl-value="/item_section"><?= $this->printHtml((string) $value->itemsection->getL11n()); ?>
                                         <td data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup"><?= $this->printHtml((string) $value->itemsalesgroup->getL11n()); ?>
@@ -1084,7 +1102,7 @@ echo $this->data['nav']->render();
                                                 <div class="fixed">
                                                     <select id="iPurchasePriceCurrency" name="currency" data-tpl-text="/currency" data-tpl-value="/currency">
                                                         <?php foreach ($currencies as $currency) : ?>
-                                                        <option value="<?= $currency; ?>"<?= $this->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
+                                                        <option value="<?= $currency; ?>"<?= $this->data['attributeView']->data['default_localization']->currency === $currency ? ' selected' : ''; ?>><?= $this->printHtml($currency); ?>
                                                         <?php endforeach; ?>
                                                     </select>
                                                 </div>
@@ -1196,47 +1214,40 @@ echo $this->data['nav']->render();
                                     </tr>
                                 </template>
                                 <?php
-                                $c      = 0;
-                                $prices = $this->data['purchase_prices'];
-                                foreach ($prices as $key => $value) : ++$c;
+                                $c = 0;
+                                foreach ($this->data['prices'] as $key => $value) :
+                                    if ($value->type !== PriceType::PURCHASE) {
+                                        continue;
+                                    }
+                                    ++$c;
                                 ?>
-                                    <tr data-id="<?= $value->id; ?>">
-                                        <td>
-                                            <i class="g-icon btn update-form">settings</i>
-                                            <?php if ($value->name !== 'base') : ?>
-                                            <input id="itemPurchasePriceTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
-                                            <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
-                                            <span class="checked-visibility">
-                                                <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
-                                                <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
-                                            </span>
-                                            <?php endif; ?>
-                                        <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
-                                        <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
-                                        <td data-tpl-text="/promocode" data-tpl-value="/promocode"><?= $this->printHtml($value->promocode); ?>
-                                        <td data-tpl-text="/price" data-tpl-value="/price"><?= $this->printHtml($value->price->getAmount()); ?>
-                                        <td data-tpl-text="/currency" data-tpl-value="/currency"><?= $this->printHtml($value->currency); ?>
-                                        <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $this->printHtml((string) $value->quantity); ?>
-                                        <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $this->printHtml((string) $value->discount); ?>
-                                        <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->printHtml((string) $value->discountPercentage); ?>
-                                        <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $this->printHtml((string) $value->bonus); ?>
-                                        <td data-tpl-text="/item_segment" data-tpl-value="/item_segment"><?= $this->printHtml((string) $value->itemsegment->getL11n()); ?>
-                                        <td data-tpl-text="/item_section" data-tpl-value="/item_section"><?= $this->printHtml((string) $value->itemsection->getL11n()); ?>
-                                        <td data-tpl-text="/item_salesgroup" data-tpl-value="/item_salesgroup"><?= $this->printHtml((string) $value->itemsalesgroup->getL11n()); ?>
-                                        <td data-tpl-text="/item_productgroup" data-tpl-value="/item_productgroup"><?= $this->printHtml((string) $value->itemproductgroup->getL11n()); ?>
-                                        <td data-tpl-text="/item_producttype" data-tpl-value="/item_producttype"><?= $this->printHtml((string) $value->itemtype->getL11n()); ?>
-                                        <td data-tpl-text="/item_account_segment" data-tpl-value="/item_account_segment"><?= $this->printHtml((string) $value->clientsegment->getL11n()); ?>
-                                        <td data-tpl-text="/item_account_section" data-tpl-value="/item_account_section"><?= $this->printHtml((string) $value->clientsection->getL11n()); ?>
-                                        <td data-tpl-text="/item_account_group" data-tpl-value="/item_account_group"><?= $this->printHtml((string) $value->clientgroup->getL11n()); ?>
-                                        <td data-tpl-text="/item_account_type" data-tpl-value="/item_account_type"><?= $this->printHtml((string) $value->clienttype->getL11n()); ?>
-                                        <td data-tpl-text="/item_account_region" data-tpl-value="/item_account_region"><?= $this->printHtml((string) $value->clientcountry); ?>
-                                        <td data-tpl-text="/item_start" data-tpl-value="/item_start"><?= $value->start?->format('Y-m-d'); ?>
-                                        <td data-tpl-text="/item_end" data-tpl-value="/item_end"><?= $value->end?->format('Y-m-d'); ?>
-                                <?php endforeach; ?>
-                                <?php if ($c === 0) : ?>
-                                    <tr>
-                                        <td colspan="22" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                                <?php endif; ?>
+                                <tr data-id="<?= $value->id; ?>">
+                                    <td>
+                                        <i class="g-icon btn update-form">settings</i>
+                                        <?php if ($value->name !== 'default') : ?>
+                                        <input id="itemPurchasePriceTable-remove-<?= $value->id; ?>" type="checkbox" class="hidden">
+                                        <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="checked-visibility-alt"><i class="g-icon btn form-action">close</i></label>
+                                        <span class="checked-visibility">
+                                            <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="link default"><?= $this->getHtml('Cancel', '0', '0'); ?></label>
+                                            <label for="itemPurchasePriceTable-remove-<?= $value->id; ?>" class="remove-form link cancel"><?= $this->getHtml('Delete', '0', '0'); ?></label>
+                                        </span>
+                                        <?php endif; ?>
+                                    <td data-tpl-text="/id" data-tpl-value="/id"><?= $value->id; ?>
+                                    <td data-tpl-text="/name" data-tpl-value="/name"><?= $this->printHtml($value->name); ?>
+                                    <td data-tpl-text="/supplier" data-tpl-value="/supplier"><?= $this->printHtml($value->supplier->number); ?>
+                                    <td data-tpl-text="/price" data-tpl-value="/price"><?= $value->priceNew->getAmount(); ?>
+                                    <td data-tpl-text="/currency" data-tpl-value="/currency"><?= $this->printHtml($value->currency); ?>
+                                    <td data-tpl-text="/quantity" data-tpl-value="/quantity"><?= $value->quantity->getAmount(); ?>
+                                    <td data-tpl-text="/discount" data-tpl-value="/discount"><?= $value->discount->getAmount(); ?>
+                                    <td data-tpl-text="/discountp" data-tpl-value="/discountp"><?= $this->getPercentage($value->discountPercentage->value / 10000 / 100); ?>
+                                    <td data-tpl-text="/bonus" data-tpl-value="/bonus"><?= $value->bonus->getAmount(); ?>
+                                    <td data-tpl-text="/item_start" data-tpl-value="/item_start"><?= $value->start?->format('Y-m-d'); ?>
+                                    <td data-tpl-text="/item_end" data-tpl-value="/item_end"><?= $value->end?->format('Y-m-d'); ?>
+                            <?php endforeach; ?>
+                            <?php if ($c === 0) : ?>
+                                <tr>
+                                    <td colspan="22" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                            <?php endif; ?>
                         </table>
                         </div>
                     </section>
@@ -1263,7 +1274,7 @@ echo $this->data['nav']->render();
                                         <?php
                                             $attr = $this->data['defaultAttributeTypes']['sales_tax_code'] ?? null;
                                             foreach ($attr?->defaults ?? [] as $value) : ?>
-                                            <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                            <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getValue()); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1275,7 +1286,7 @@ echo $this->data['nav']->render();
                                         <?php
                                             $attr = $this->data['defaultAttributeTypes']['purchase_tax_code'] ?? null;
                                             foreach ($attr?->defaults ?? [] as $value) : ?>
-                                            <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                            <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getValue()); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1290,7 +1301,7 @@ echo $this->data['nav']->render();
                                             ->where('l11n/language', $this->response->header->l11n->language)
                                             ->execute();
                                         foreach ($costcenters as $cc) : ?>
-                                            <option value="<?= $cc->id ?>"><?= $this->printHtml($cc->code . ' ' . $cc->getL11n()); ?>
+                                            <option value="<?= $cc->id; ?>"><?= $this->printHtml($cc->code . ' ' . $cc->getL11n()); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1305,7 +1316,7 @@ echo $this->data['nav']->render();
                                             ->where('l11n/language', $this->response->header->l11n->language)
                                             ->execute();
                                         foreach ($costobjects as $co) : ?>
-                                            <option value="<?= $co->id ?>"><?= $this->printHtml($co->code . ' ' . $co->getL11n()); ?>
+                                            <option value="<?= $co->id; ?>"><?= $this->printHtml($co->code . ' ' . $co->getL11n()); ?>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1360,7 +1371,7 @@ echo $this->data['nav']->render();
                                     <?php
                                         $attr = $this->data['defaultAttributeTypes']['has_inventory'] ?? null;
                                         foreach ($attr?->defaults ?? [] as $value) : ?>
-                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                        <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getValue()); ?>
                                     <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1371,7 +1382,7 @@ echo $this->data['nav']->render();
                                     <?php
                                         $attr = $this->data['defaultAttributeTypes']['inventory_identifier'] ?? null;
                                         foreach ($attr?->defaults ?? [] as $value) : ?>
-                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                        <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getValue()); ?>
                                     <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1382,7 +1393,7 @@ echo $this->data['nav']->render();
                                     <?php
                                         $attr = $this->data['defaultAttributeTypes']['stocktaking_type'] ?? null;
                                         foreach ($attr?->defaults ?? [] as $value) : ?>
-                                        <option value="<?= $value->id ?>"><?= $this->printHtml($value->getValue()); ?>
+                                        <option value="<?= $value->id; ?>"><?= $this->printHtml($value->getValue()); ?>
                                     <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -1425,17 +1436,23 @@ echo $this->data['nav']->render();
                             <?php
                             $allInvoices = SalesBillMapper::getItemBills($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'));
 
+                            $count = 0;
+
                             /** @var \Modules\Billing\Models\Bill $invoice */
                             foreach ($allInvoices as $invoice) :
+                                ++$count;
                                 $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
                                 ?>
                             <tr data-href="<?= $url; ?>">
                                 <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
-                                <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
                             <?php endforeach; ?>
+                            <?php if ($count === 0) : ?>
+                            <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
+                            <?php endif; ?>
                         </table>
                         </div>
                     </section>
@@ -1448,7 +1465,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12">
                     <div class="portlet">
-                        <div class="portlet-head"><?= $this->getHtml('Audits', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
+                        <div class="portlet-head"><?= $this->getHtml('Logs', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table class="default sticky">
                             <colgroup>
@@ -1479,7 +1496,7 @@ echo $this->data['nav']->render();
                                 $next     = empty($audits) ? HttpHeader::getAllHeaders()['Referer'] ?? 'admin/module/settings?id={?id}#{\#}' : 'admin/module/settings?{?}&audit=' . \end($audits)->id . '&ptype=n#{\#}';
 
                                 foreach ($audits as $key => $audit) : ++$count;
-                                    $url = UriFactory::build('{/base}/admin/audit/single?{?}&id=' . $audit->id); ?>
+                                    $url = UriFactory::build('{/base}/admin/audit/view?{?}&id=' . $audit->id); ?>
                                 <tr tabindex="0" data-href="<?= $url; ?>">
                                     <td><?= $audit->id; ?>
                                     <td><?= $this->printHtml($audit->module); ?>

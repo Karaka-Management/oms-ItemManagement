@@ -18,7 +18,7 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
-    '^.*/item/find.*$' => [
+    '^.*/item/find(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemFind',
             'verb'       => RouteVerb::GET,

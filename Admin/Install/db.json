@@ -128,9 +128,19 @@
                 "type": "VARCHAR(255)",
                 "null": false
             },
+            "itemmgmt_item_container_unit": {
+                "name": "itemmgmt_item_container_unit",
+                "type": "VARCHAR(255)",
+                "null": false
+            },
             "itemmgmt_item_container_quantity": {
                 "name": "itemmgmt_item_container_quantity",
                 "type": "INT",
+                "null": false
+            },
+            "itemmgmt_item_container_decimals": {
+                "name": "itemmgmt_item_container_decimals",
+                "type": "TINYINT(1)",
                 "null": false
             },
             "itemmgmt_item_container_weight": {
@@ -359,6 +369,11 @@
             },
             "itemmgmt_attr_type_repeatable": {
                 "name": "itemmgmt_attr_type_repeatable",
+                "type": "TINYINT(1)",
+                "null": false
+            },
+            "itemmgmt_attr_type_internal": {
+                "name": "itemmgmt_attr_type_internal",
                 "type": "TINYINT(1)",
                 "null": false
             },

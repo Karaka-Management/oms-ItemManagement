@@ -43,15 +43,15 @@ final class ItemMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_item_id'            => ['name' => 'itemmgmt_item_id',            'type' => 'int',          'internal' => 'id'],
-        'itemmgmt_item_no'            => ['name' => 'itemmgmt_item_no',            'type' => 'string',       'internal' => 'number', 'autocomplete' => true],
-        'itemmgmt_item_status'        => ['name' => 'itemmgmt_item_status',        'type' => 'int',          'internal' => 'status'],
-        'itemmgmt_item_stockidentifier'        => ['name' => 'itemmgmt_item_stockidentifier',        'type' => 'int',          'internal' => 'stockIdentifier'],
-        'itemmgmt_item_info'          => ['name' => 'itemmgmt_item_info',          'type' => 'string',       'internal' => 'info'],
-        'itemmgmt_item_salesprice'    => ['name' => 'itemmgmt_item_salesprice',    'type' => 'Serializable', 'internal' => 'salesPrice'],
-        'itemmgmt_item_purchaseprice' => ['name' => 'itemmgmt_item_purchaseprice', 'type' => 'Serializable', 'internal' => 'purchasePrice'],
-        'itemmgmt_item_parent'        => ['name' => 'itemmgmt_item_parent', 'type' => 'int', 'internal' => 'parent'],
-        'itemmgmt_item_unit'          => ['name' => 'itemmgmt_item_unit', 'type' => 'int', 'internal' => 'unit'],
+        'itemmgmt_item_id'              => ['name' => 'itemmgmt_item_id',            'type' => 'int',          'internal' => 'id'],
+        'itemmgmt_item_no'              => ['name' => 'itemmgmt_item_no',            'type' => 'string',       'internal' => 'number', 'autocomplete' => true],
+        'itemmgmt_item_status'          => ['name' => 'itemmgmt_item_status',        'type' => 'int',          'internal' => 'status'],
+        'itemmgmt_item_stockidentifier' => ['name' => 'itemmgmt_item_stockidentifier',        'type' => 'int',          'internal' => 'stockIdentifier'],
+        'itemmgmt_item_info'            => ['name' => 'itemmgmt_item_info',          'type' => 'string',       'internal' => 'info'],
+        'itemmgmt_item_salesprice'      => ['name' => 'itemmgmt_item_salesprice',    'type' => 'Serializable', 'internal' => 'salesPrice'],
+        'itemmgmt_item_purchaseprice'   => ['name' => 'itemmgmt_item_purchaseprice', 'type' => 'Serializable', 'internal' => 'purchasePrice'],
+        'itemmgmt_item_parent'          => ['name' => 'itemmgmt_item_parent', 'type' => 'int', 'internal' => 'parent'],
+        'itemmgmt_item_unit'            => ['name' => 'itemmgmt_item_unit', 'type' => 'int', 'internal' => 'unit'],
     ];
 
     /**
@@ -102,10 +102,10 @@ final class ItemMapper extends DataMapperFactory
             'external' => null,
         ],
         'container' => [
-            'mapper'       => ContainerMapper::class,
-            'table'        => 'itemmgmt_item_container',
-            'self'         => 'itemmgmt_item_container_item',
-            'external'     => null,
+            'mapper'   => ContainerMapper::class,
+            'table'    => 'itemmgmt_item_container',
+            'self'     => 'itemmgmt_item_container_item',
+            'external' => null,
         ],
     ];
 
@@ -198,12 +198,12 @@ final class ItemMapper extends DataMapperFactory
             $l11nType->id    = $res['itemmgmt_item_l11n_typeref'];
             $l11nType->title = $res['itemmgmt_item_l11n_type_title'];
 
-            $l11n          = new BaseStringL11n();
-            $l11n->id      = $res['itemmgmt_item_l11n_id'];
-            $l11n->ref     = $res['itemmgmt_item_id'];
-            $l11n->type    = $l11nType;
-            $l11n->content = $res['itemmgmt_item_l11n_description'];
-            $l11n->setLanguage($res['itemmgmt_item_l11n_lang']);
+            $l11n           = new BaseStringL11n();
+            $l11n->id       = $res['itemmgmt_item_l11n_id'];
+            $l11n->ref      = $res['itemmgmt_item_id'];
+            $l11n->type     = $l11nType;
+            $l11n->content  = $res['itemmgmt_item_l11n_description'];
+            $l11n->language = $res['itemmgmt_item_l11n_lang'];
 
             $items[$l11n->ref]->addL11n($l11n);
         }

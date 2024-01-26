@@ -44,9 +44,9 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertEquals('', $this->item->number);
         self::assertEquals(0, $this->item->successor);
         self::assertEquals('', $this->item->info);
-        self::assertEquals(ItemStatus::ACTIVE, $this->item->getStatus());
+        self::assertEquals(ItemStatus::ACTIVE, $this->item->status);
         self::assertEquals([], $this->item->files);
-        self::assertEquals([], $this->item->getAttributes());
+        self::assertEquals([], $this->item->attributes);
         self::assertInstanceOf(BaseStringL11n::class, $this->item->getL11n(''));
         self::assertInstanceOf('\phpOMS\Stdlib\Base\FloatInt', $this->item->salesPrice);
         self::assertInstanceOf('\phpOMS\Stdlib\Base\FloatInt', $this->item->purchasePrice);
@@ -56,20 +56,10 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
      * @covers Modules\ItemManagement\Models\Item
      * @group module
      */
-    public function testStatusInputOutput() : void
-    {
-        $this->item->setStatus(ItemStatus::INACTIVE);
-        self::assertEquals(ItemStatus::INACTIVE, $this->item->getStatus());
-    }
-
-    /**
-     * @covers Modules\ItemManagement\Models\Item
-     * @group module
-     */
     public function testAttributeInputOutput() : void
     {
         $this->item->addAttribute(new Attribute());
-        self::assertCount(1, $this->item->getAttributes());
+        self::assertCount(1, $this->item->attributes);
     }
 
     /**
@@ -88,17 +78,17 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
      */
     public function testSerialize() : void
     {
-        $this->item->number        = '123456';
-        $this->item->setStatus(ItemStatus::INACTIVE);
-        $this->item->info = 'Test info';
+        $this->item->number = '123456';
+        $this->item->status = ItemStatus::INACTIVE;
+        $this->item->info   = 'Test info';
 
         self::assertEquals(
             [
-                'id'            => 0,
-                'number'        => '123456',
-                'status'        => ItemStatus::INACTIVE,
-                'info'          => 'Test info',
-                'l11n'          => [],
+                'id'     => 0,
+                'number' => '123456',
+                'status' => ItemStatus::INACTIVE,
+                'info'   => 'Test info',
+                'l11n'   => [],
             ],
             $this->item->jsonSerialize()
         );

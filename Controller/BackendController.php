@@ -14,22 +14,20 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Controller;
 
-use Modules\Admin\Models\LocalizationMapper;
-use Modules\Admin\Models\SettingsEnum;
 use Modules\Auditor\Models\AuditMapper;
-use Modules\Billing\Models\Price\PriceMapper;
-use Modules\Billing\Models\Price\PriceType;
 use Modules\ClientManagement\Models\Attribute\ClientAttributeTypeMapper;
 use Modules\ClientManagement\Models\Attribute\ClientAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeValueMapper;
+use Modules\ItemManagement\Models\Item;
 use Modules\ItemManagement\Models\ItemL11nMapper;
 use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
 use Modules\ItemManagement\Models\MaterialTypeMapper;
+use Modules\ItemManagement\Models\StockIdentifierType;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Organization\Models\Attribute\UnitAttributeMapper;
@@ -200,6 +198,7 @@ final class BackendController extends Controller
 
         /** @var \Modules\ItemManagement\Models\Item[] $items */
         $items = ItemMapper::getAll()
+            ->with('container') // @todo change to only get the default sales container
             ->with('l11n')
             ->with('l11n/type')
             ->with('files')
@@ -211,6 +210,73 @@ final class BackendController extends Controller
             ->execute();
 
         $view->data['items'] = $items;
+
+        // Stock distribution
+        $dists    = [];
+        $reserved = [];
+        $ordered  = [];
+        if ($this->app->moduleManager->isActive('WarehouseManagement')) {
+            $itemIds = \array_map(function (Item $item) { return $item->id;
+            }, $items);
+            $itemIdsString = \implode(',', $itemIds);
+
+            // @todo only select sales stock. Therefore we need a place to define the sales stock(s)
+            $temp = \Modules\WarehouseManagement\Models\StockDistributionMapper::getAll()
+                ->where('item', $itemIds, 'IN')
+                ->execute();
+
+            foreach ($temp as $t) {
+                if (!isset($dists[$t->item])) {
+                    $dists[$t->item] = [];
+                }
+
+                // @todo These numbers might need adjustments for delivery notes/invoices depending on
+                // how we implement them in the warehouse management (maybe flag them in the transaction protocol as reserved?)
+                // also remember the SD issue where delivery notes can be technically still in stock -> stock value still belongs to company
+                // solution: "just" do a soft adjust of the available numbers?! but don't change the actual stock in the db
+                // the SD solution where actually delivered delivery notes can be adjusted after "archiving" will not be allowed
+                // to allow them to see what happened with such a delivery note maybe we can implement a view shows how many of the items are
+                // actually still outstanding. This shouldn't be anything special since we need importing of delivery notes anyways and marking
+                // old delivery note elements in a way to show which line items or even sub-line items got invoiced/returned etc.
+                $dists[$t->item][] = $t;
+            }
+
+            $stockIdentifier = StockIdentifierType::NONE;
+
+            $sql = <<<SQL
+            SELECT billing_bill_element.billing_bill_element_item,
+                billing_type.billing_type_name,
+                SUM(billing_bill_element.billing_bill_element_quantity) AS quantity
+            FROM billing_bill_element
+            LEFT JOIN itemmgmt_item ON billing_bill_element.billing_bill_element_item = itemmgmt_item.itemmgmt_item_id
+            LEFT JOIN billing_bill ON billing_bill_element.billing_bill_element_bill = billing_bill.billing_bill_id
+            LEFT JOIN billing_type ON billing_bill.billing_bill_type = billing_type.billing_type_id
+            WHERE billing_bill_element.billing_bill_element_item IN ({$itemIdsString})
+                AND itemmgmt_item.itemmgmt_item_stockidentifier != {$stockIdentifier}
+                AND billing_type.billing_type_name IN ('sales_order_confirmation', 'purchase_order')
+            GROUP BY billing_bill_element.billing_bill_element_item, billing_type.billing_type_name;
+            SQL;
+
+            $query   = new Builder($this->app->dbPool->get());
+            $results = $query->raw($sql)->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+            foreach ($results as $result) {
+                if (!isset($reserved[(int) $result['billing_bill_element_item']])) {
+                    $reserved[$t->item] = 0;
+                    $ordered[$t->item]  = 0;
+                }
+
+                if ($result['billing_type_name'] === 'sales_order_confirmation') {
+                    $reserved[(int) $result['billing_bill_element_item']] += (int) $result['quantity'];
+                } else {
+                    $ordered[(int) $result['billing_bill_element_item']] += (int) $result['quantity'];
+                }
+            }
+        }
+
+        $view->data['dists']    = $dists;
+        $view->data['reserved'] = $reserved;
+        $view->data['ordered']  = $ordered;
 
         return $view;
     }
@@ -368,11 +434,11 @@ final class BackendController extends Controller
         $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js', ['nonce' => $nonce, 'type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
-        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-profile');
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004803001, $request, $response);
 
-        /** @var \Modules\ItemManagement\Models\Item $item */
-        $item = ItemMapper::get()
+        /** @var \Modules\ItemManagement\Models\Item */
+        $view->data['item'] = ItemMapper::get()
             ->with('l11n')
             ->with('l11n/type')
             ->with('files')->limit(5, 'files')->sort('files/id', OrderType::DESC)
@@ -382,13 +448,13 @@ final class BackendController extends Controller
             ->with('attributes/type')
             ->with('attributes/type/l11n')
             ->with('attributes/value')
+            //->with('attributes/value/l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
             ->where('attributes/type/l11n/language', $response->header->l11n->language)
+            //->where('attributes/value/l11n/language', $response->header->l11n->language)
             ->execute();
-
-        $view->data['item'] = $item;
 
         // Get item profile image
         // It might not be part of the 5 newest item files from above
@@ -406,17 +472,15 @@ final class BackendController extends Controller
                 ->on(MediaMapper::TABLE . '.' . MediaMapper::PRIMARYFIELD, '=', MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['self'])
             ->leftJoin(MediaTypeMapper::TABLE)
                 ->on(MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['external'], '=', MediaTypeMapper::TABLE . '.' . MediaTypeMapper::PRIMARYFIELD)
-            ->where(ItemMapper::HAS_MANY['files']['self'], '=', $item->id)
+            ->where(ItemMapper::HAS_MANY['files']['self'], '=', $view->data['item']->id)
             ->where(MediaTypeMapper::TABLE . '.' . MediaTypeMapper::getColumnByMember('name'), '=', 'item_profile_image');
 
-        /** @var \Modules\Media\Models\Media $itemImage */
-        $itemImage = MediaMapper::get()
+        /** @var \Modules\Media\Models\Media */
+        $view->data['itemImage'] = MediaMapper::get()
             ->with('types')
             ->where('id', $results)
             ->limit(1)
             ->execute();
-
-        $view->data['itemImage'] = $itemImage;
 
         $businessStart = UnitAttributeMapper::get()
             ->with('type')
@@ -427,61 +491,40 @@ final class BackendController extends Controller
 
         $view->data['business_start'] = $businessStart->id === 0 ? 1 : $businessStart->value->getValue();
 
-        // @todo this one should already be loaded in the backend application no?????????
-        /** @var \Model\Setting $settings */
-        $settings = $this->app->appSettings->get(null, SettingsEnum::DEFAULT_LOCALIZATION);
-
-        $view->data['default_localization'] = LocalizationMapper::get()->where('id', (int) $settings->id)->execute();
-
-        $view->data['attributeView']                              = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
-        $view->data['attributeView']->data['default_localization'] = $view->data['default_localization'];
+        $view->data['attributeView']                               = new \Modules\Attribute\Theme\Backend\Components\AttributeView($this->app->l11nManager, $request, $response);
+        $view->data['attributeView']->data['default_localization'] = $this->app->l11nServer;
 
         $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
-        /** @var \phpOMS\Localization\BaseStringL11nType[] $l11nTypes */
-        $l11nTypes = ItemL11nTypeMapper::getAll()
+        /** @var \phpOMS\Localization\BaseStringL11nType[] */
+        $view->data['l11nTypes'] = ItemL11nTypeMapper::getAll()
             ->execute();
 
-        $view->data['l11nTypes'] = $l11nTypes;
-
-        /** @var \phpOMS\Localization\BaseStringL11n[] $l11nValues */
-        $l11nValues = ItemL11nMapper::getAll()
+        /** @var \phpOMS\Localization\BaseStringL11n[] */
+        $view->data['l11nValues'] = ItemL11nMapper::getAll()
             ->with('type')
-            ->where('ref', $item->id)
+            ->where('ref', $view->data['item']->id)
             ->execute();
 
-        $view->data['l11nValues'] = $l11nValues;
-
-        /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
-        $attributeTypes = ItemAttributeTypeMapper::getAll()
+        /** @var \Modules\Attribute\Models\AttributeType[] */
+        $view->data['attributeTypes'] = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $view->data['attributeTypes'] = $attributeTypes;
-
-        /** @var \Modules\Organization\Models\Unit[] $units */
-        $units = UnitMapper::getAll()
+        /** @var \Modules\Organization\Models\Unit[] */
+        $view->data['units'] = UnitMapper::getAll()
             ->execute();
 
-        $view->data['units'] = $units;
+        $view->data['hasBilling'] = $this->app->moduleManager->isActive('Billing');
 
-        /** @var \Modules\Billing\Models\Price\Price[] $prices */
-        $prices = PriceMapper::getAll()
-            ->where('item', $item->id)
-            ->where('type', PriceType::SALES)
-            ->where('client', null)
-            ->execute();
-
-        $view->data['prices'] = $prices;
-
-        /** @var \Modules\Billing\Models\Price\Price[] $prices */
-        $prices = PriceMapper::getAll()
-            ->where('item', $item->id)
-            ->where('type', PriceType::PURCHASE)
-            ->execute();
-
-        $view->data['purchase_prices'] = $prices;
+        /** @var \Modules\Billing\Models\Price\Price[] */
+        $view->data['prices'] = $view->data['hasBilling']
+            ? \Modules\Billing\Models\Price\PriceMapper::getAll()
+                ->where('item', $view->data['item']->id)
+                ->where('client', null)
+                ->execute()
+            : [];
 
         $tmp = ItemAttributeTypeMapper::getAll()
             ->with('defaults')
@@ -519,30 +562,24 @@ final class BackendController extends Controller
 
         $view->data['clientSegmentationTypes'] = $clientSegmentationTypes;
 
-        /** @var \Modules\Auditor\Models\Audit[] $audits */
-        $audits = AuditMapper::getAll()
+        /** @var \Modules\Auditor\Models\Audit[] */
+        $view->data['audits'] = AuditMapper::getAll()
             ->where('type', StringUtils::intHash(ItemMapper::class))
             ->where('module', 'ItemManagement')
-            ->where('ref', (string) $item->id)
+            ->where('ref', (string) $view->data['item']->id)
             ->execute();
 
         // @todo join audit with files, attributes, localization, prices, notes, ...
 
-        $view->data['audits'] = $audits;
-
-        /** @var \Modules\Media\Models\Media[] $files */
-        $files = MediaMapper::getAll()
+        /** @var \Modules\Media\Models\Media[] */
+        $view->data['files'] = MediaMapper::getAll()
             ->with('types')
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
-                ->on('id', $item->id, relation: 'files') // id = item id
+                ->on('id', $view->data['item']->id, relation: 'files') // id = item id
             ->execute();
 
-        $view->data['files'] = $files;
-
         $view->data['media-upload'] = new \Modules\Media\Theme\Backend\Components\Upload\BaseView($this->app->l11nManager, $request, $response);
-        $view->data['note'] = new \Modules\Editor\Theme\Backend\Components\Note\BaseView($this->app->l11nManager, $request, $response);
-
-        $view->data['hasBilling'] = $this->app->moduleManager->isActive('Billing');
+        $view->data['note']         = new \Modules\Editor\Theme\Backend\Components\Note\BaseView($this->app->l11nManager, $request, $response);
 
         return $view;
     }

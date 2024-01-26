@@ -42,5 +42,4 @@ abstract class MaterialSubcategory extends Enum
     public const AUXILIARY_MATERIAL = 101;
 
     public const SUPPLIES = 102;
-
 }

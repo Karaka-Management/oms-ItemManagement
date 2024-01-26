@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Modules\ItemManagement\Models;
 
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
-use phpOMS\Localization\BaseStringL11nType;
 
 /**
  * Item mapper class.
@@ -37,12 +36,12 @@ final class MaterialMapper extends DataMapperFactory
      * @since 1.0.0
      */
     public const COLUMNS = [
-        'itemmgmt_material_id'         => ['name' => 'itemmgmt_material_id',       'type' => 'int',    'internal' => 'id'],
-        'itemmgmt_material_category'       => ['name' => 'itemmgmt_material_category',     'type' => 'int', 'internal' => 'category'],
-        'itemmgmt_material_subcategory'       => ['name' => 'itemmgmt_material_subcategory',     'type' => 'int', 'internal' => 'subcategory'],
-        'itemmgmt_material_type'       => ['name' => 'itemmgmt_material_type',     'type' => 'int', 'internal' => 'type'],
-        'itemmgmt_material_unit'       => ['name' => 'itemmgmt_material_unit',     'type' => 'int', 'internal' => 'unit'],
-        'itemmgmt_material_item'       => ['name' => 'itemmgmt_material_item',     'type' => 'int', 'internal' => 'item'],
+        'itemmgmt_material_id'          => ['name' => 'itemmgmt_material_id',       'type' => 'int',    'internal' => 'id'],
+        'itemmgmt_material_category'    => ['name' => 'itemmgmt_material_category',     'type' => 'int', 'internal' => 'category'],
+        'itemmgmt_material_subcategory' => ['name' => 'itemmgmt_material_subcategory',     'type' => 'int', 'internal' => 'subcategory'],
+        'itemmgmt_material_type'        => ['name' => 'itemmgmt_material_type',     'type' => 'int', 'internal' => 'type'],
+        'itemmgmt_material_unit'        => ['name' => 'itemmgmt_material_unit',     'type' => 'int', 'internal' => 'unit'],
+        'itemmgmt_material_item'        => ['name' => 'itemmgmt_material_item',     'type' => 'int', 'internal' => 'item'],
     ];
 
     /**

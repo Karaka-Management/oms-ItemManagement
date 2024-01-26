@@ -1,5 +1,31 @@
 [
     {
+        "name": "default_sales_container",
+        "l11n": {
+            "en": "Default sales container",
+            "de": "Standard Verkaufsgebinde"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "default_purchase_container",
+        "l11n": {
+            "en": "Default purchase container",
+            "de": "Standard Einkaufsgebinde"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": true,
+        "default_value": "",
+        "values": []
+    },
+    {
         "name": "primary_supplier",
         "l11n": {
             "en": "Primary Supplier",
@@ -1373,5 +1399,33 @@
                 "value": "III"
             }
         ]
+    },
+    {
+        "name": "costcenter",
+        "l11n": {
+            "en": "Cost Center",
+            "de": "Kostenstelle"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "internal": true,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "costobject",
+        "l11n": {
+            "en": "Cost Center",
+            "de": "Kostenstelle"
+        },
+        "value_type": 2,
+        "is_custom_allowed": false,
+        "validation_pattern": "",
+        "is_required": false,
+        "internal": true,
+        "default_value": "",
+        "values": []
     }
 ]

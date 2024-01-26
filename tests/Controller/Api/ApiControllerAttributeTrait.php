@@ -19,7 +19,6 @@ use phpOMS\Localization\ISO639x1Enum;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
-use phpOMS\Uri\HttpUri;
 
 trait ApiControllerAttributeTrait
 {
@@ -30,7 +29,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeTypeCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('name', 'test_attribute');
@@ -48,7 +47,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeTypeL11nCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('title', 'DE:2');
@@ -66,7 +65,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeValueIntCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('default', '1');
@@ -86,7 +85,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeValueStrCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('type', '1');
@@ -105,7 +104,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeValueFloatCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('type', '1');
@@ -124,7 +123,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeValueDatCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('type', '1');
@@ -143,7 +142,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeCreate() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('ref', '1');
@@ -161,7 +160,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeValueCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -177,7 +176,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeTypeCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -193,7 +192,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeTypeL11nCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');
@@ -209,7 +208,7 @@ trait ApiControllerAttributeTrait
     public function testApiItemAttributeCreateInvalidData() : void
     {
         $response = new HttpResponse();
-        $request  = new HttpRequest(new HttpUri(''));
+        $request  = new HttpRequest();
 
         $request->header->account = 1;
         $request->setData('invalid', '1');

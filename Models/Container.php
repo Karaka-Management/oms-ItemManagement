@@ -34,7 +34,11 @@ class Container implements \JsonSerializable
 
     public string $name = '';
 
+    public string $unit = 'pcs';
+
     public int $quantity = 0;
+
+    public int $quantityDecimals = 0;
 
     public int $weight = 0;
 

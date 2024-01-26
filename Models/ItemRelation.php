@@ -63,7 +63,7 @@ class ItemRelation implements \JsonSerializable
      *
      * @since 1.0.0
      */
-    public function __construct(ItemRelationType $type = null)
+    public function __construct(?ItemRelationType $type = null)
     {
         $this->type = $type ?? new ItemRelationType();
     }

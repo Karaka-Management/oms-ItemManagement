@@ -12,6 +12,8 @@
  */
 declare(strict_types=1);
 
+use Modules\ItemManagement\Models\StockIdentifierType;
+use phpOMS\Stdlib\Base\FloatInt;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Views\View $this */
@@ -128,7 +130,7 @@ echo $this->data['nav']->render(); ?>
 
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/base}/item/profile?{?}&id=' . $value->id);
+                $url         = UriFactory::build('{/base}/item/view?{?}&id=' . $value->id);
                 $image       = $value->getFileByTypeName('item_profile_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
@@ -140,10 +142,37 @@ echo $this->data['nav']->render(); ?>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->content); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->content); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->content); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice); ?></a>
-                    <td>
-                    <td>
-                    <td>
+                    <td class="rightText"><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice, symbol: ''); ?></a>
+                    <?php if ($value->stockIdentifier === StockIdentifierType::NONE) : ?>
+                        <td>
+                        <td>
+                        <td>
+                    <?php else : ?>
+                    <td class="rightText"><a href="<?= $url; ?>">
+                        <?php
+                            $sum = 0;
+                            foreach ($this->data['dists'][$value->id] ?? [] as $dist) {
+                                $sum += $dist->quantity;
+                            }
+                            $total = new FloatInt($sum);
+
+                            echo $total->getAmount(\reset($value->container)->quantityDecimals);
+                        ?></a>
+
+                    <td class="rightText"><a href="<?= $url; ?>">
+                        <?php
+                            $total = new FloatInt($this->data['reserved'][$value->id] ?? 0);
+
+                            echo $total->getAmount(\reset($value->container)->quantityDecimals);
+                        ?></a>
+
+                    <td class="rightText"><a href="<?= $url; ?>">
+                        <?php
+                            $total = new FloatInt($this->data['ordered'][$value->id] ?? 0);
+
+                            echo $total->getAmount(\reset($value->container)->quantityDecimals);
+                        ?></a>
+                    <?php endif; ?>
                 <?php endforeach; ?>
                 <?php if ($count === 0) : ?>
                     <tr><td colspan="9" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>

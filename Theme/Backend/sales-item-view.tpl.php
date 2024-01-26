@@ -20,8 +20,8 @@ use phpOMS\Uri\UriFactory;
 /** @var \Modules\ItemManagement\Models\Item $item */
 $item = $this->data['item'];
 
-$itemL11n      = $item->getL11ns();
-$Attribute     = $item->attributes;
+$itemL11n  = $item->getL11ns();
+$Attribute = $item->attributes;
 
 $notes = $item->notes;
 $files = $item->files;
@@ -143,9 +143,9 @@ echo $this->data['nav']->render();
                                 <div class="portlet-body">
                                     <table class="wf-100">
                                         <tr><td><?= $this->getHtml('SalesPrice'); ?>:
-                                            <td><?= $item->salesPrice->getCurrency(); ?>
+                                            <td><?= $item->salesPrice->getAmount(); ?>
                                         <tr><td><?= $this->getHtml('PurchasePrice'); ?>:
-                                            <td><?= $item->purchasePrice->getCurrency(); ?>
+                                            <td><?= $item->purchasePrice->getAmount(); ?>
                                         <tr><td><?= $this->getHtml('Margin'); ?>:
                                             <td><?= $item->salesPrice->getInt() === 0
                                                 ? '0.00'
@@ -170,7 +170,7 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
                                     <?php foreach ($notes as $note) :
-                                        $url = UriFactory::build('{/base}/editor/single?{?}&id=' . $note->id);
+                                        $url = UriFactory::build('{/base}/editor/view?{?}&id=' . $note->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($note->title); ?></a>
@@ -193,7 +193,7 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('CreatedAt'); ?>
                                     <tbody>
                                     <?php foreach ($files as $file) :
-                                        $url = UriFactory::build('{/base}/media/single?{?}&id=' . $file->id);
+                                        $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->name); ?></a>
@@ -228,8 +228,8 @@ echo $this->data['nav']->render();
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
-                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/profile?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->netSales->getCurrency()); ?></a>
+                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->netSales->getAmount()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                 </table>
@@ -251,12 +251,12 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('Net'); ?>
                                     <tbody>
                                     <?php $i = -1; foreach ($topCustomers as $client) : ++$i;
-                                        $url = UriFactory::build('{/base}/sales/client/profile?id=' . $client->id);
+                                        $url = UriFactory::build('{/base}/sales/client/view?id=' . $client->id);
                                     ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->profile->account->name1); ?> <?= $this->printHtml($client->profile->account->name2); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->getCountry()); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->country); ?></a>
                                         <td><a href="<?= $url; ?>"><?= (new Money((int) $topCustomers[1][$i]['net_sales']))->getCurrency(); ?></a>
                                     <?php endforeach; ?>
                                 </table>

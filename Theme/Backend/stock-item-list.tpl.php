@@ -116,7 +116,7 @@ echo $this->data['nav']->render(); ?>
 
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
-                $url         = UriFactory::build('{/base}/item/profile?{?}&id=' . $value->id);
+                $url         = UriFactory::build('{/base}/item/view?{?}&id=' . $value->id);
                 $image       = $value->getFileByTypeName('item_profile_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
