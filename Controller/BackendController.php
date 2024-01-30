@@ -262,8 +262,8 @@ final class BackendController extends Controller
 
             foreach ($results as $result) {
                 if (!isset($reserved[(int) $result['billing_bill_element_item']])) {
-                    $reserved[$t->item] = 0;
-                    $ordered[$t->item]  = 0;
+                    $reserved[(int) $result['billing_bill_element_item']] = 0;
+                    $ordered[(int) $result['billing_bill_element_item']]  = 0;
                 }
 
                 if ($result['billing_type_name'] === 'sales_order_confirmation') {

@@ -258,6 +258,8 @@ echo $this->data['nav']->render();
                                     <tbody>
                                     <?php
                                     $newestInvoices = SalesBillMapper::getAll()
+                                        ->with('client')
+                                        ->with('client/account')
                                         ->with('type')
                                         ->with('type/l11n')
                                         ->where('type/transferType', BillTransferType::SALES)
