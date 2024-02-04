@@ -214,7 +214,7 @@ final class ApiController extends Controller
         $uploadedFiles = $request->files['item_profile_image'] ?? [];
         if (!empty($uploadedFiles)) {
             // upload image
-            $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+            $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
                 files: $uploadedFiles,
@@ -676,7 +676,7 @@ final class ApiController extends Controller
 
         $path = $this->createItemDir($item);
 
-        $uploaded = $this->app->moduleManager->get('Media')->uploadFiles(
+        $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
             names: $request->getDataList('names'),
             fileNames: $request->getDataList('filenames'),
             files: $uploadedFiles,

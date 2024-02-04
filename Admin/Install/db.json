@@ -43,6 +43,11 @@
                 "type": "TINYINT(1)",
                 "null": false
             },
+            "itemmgmt_item_createdat": {
+                "name": "itemmgmt_item_createdat",
+                "type": "DATETIME",
+                "null": false
+            },
             "itemmgmt_item_parent": {
                 "name": "itemmgmt_item_parent",
                 "type": "INT(11)",

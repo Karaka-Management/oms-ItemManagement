@@ -616,10 +616,7 @@ echo $this->data['nav']->render(); ?>
 </div>
 
 <!--
-@todo
-    maybe put a master variations selection at the beginning so that you need to change it for other variations...
-    this way you will however not be able to see all at once only one at a time
-    make container in packaging department that can be used by packaging for sales and purchase
+@todo make container in packaging department that can be used by packaging for sales and purchase
     Shelf life (stock???)
     Packaging dimension+weight+units for different types (pallet, case etc.)
     Language for all variations based on variables: e.g. ${size} T-shirt in ${color}

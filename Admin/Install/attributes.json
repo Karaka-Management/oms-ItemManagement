@@ -91,10 +91,10 @@
         "values": []
     },
     {
-        "name": "maximum_order_interval",
+        "name": "minimum_order_quantity",
         "l11n": {
-            "en": "Maximum order interval",
-            "de": "Maximale Bestellhäufigkeit"
+            "en": "MOQ",
+            "de": "Mindestbestellmenge"
         },
         "value_type": 1,
         "is_custom_allowed": true,
@@ -104,10 +104,23 @@
         "values": []
     },
     {
-        "name": "minimum_order_quantity",
+        "name": "order_quantity_steps",
         "l11n": {
-            "en": "MOQ",
-            "de": "Mindestbestellmenge"
+            "en": "Order quantity steps",
+            "de": "Bestellschritte"
+        },
+        "value_type": 1,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
+        "name": "minimum_stock_range",
+        "l11n": {
+            "en": "Minimum stock range",
+            "de": "Mindestreichweite"
         },
         "value_type": 1,
         "is_custom_allowed": true,

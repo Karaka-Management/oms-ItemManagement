@@ -323,7 +323,7 @@ echo $this->data['nav']->render();
                         <?php endif; ?>
 
                         <?php
-                        $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
+                        $monthlySalesCosts = SalesBillMapper::getItemMonthlySalesCosts([$item->id], (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'));
                         if (!empty($monthlySalesCosts)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
