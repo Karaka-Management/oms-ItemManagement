@@ -27,7 +27,6 @@ use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
 use Modules\ItemManagement\Models\MaterialTypeMapper;
-use Modules\ItemManagement\Models\StockIdentifierType;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Organization\Models\Attribute\UnitAttributeMapper;
@@ -772,7 +771,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewMaterialList(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    public function viewItemMaterialList(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/material-type-list');
@@ -798,7 +797,7 @@ final class BackendController extends Controller
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    public function viewMaterialView(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    public function viewItemMaterialView(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/material-view');

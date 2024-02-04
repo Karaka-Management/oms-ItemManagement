@@ -28,6 +28,7 @@ return ['ItemManagement' => [
     'ClientSegment'        => 'Client Segment',
     'ClientType'           => 'Client Type',
     'Commission'           => 'Commission',
+    'Material'           => 'Material',
     'Container'            => 'Container',
     'CostCenter'           => 'CostCenter',
     'CostIndicator'        => 'Cost Indicator',

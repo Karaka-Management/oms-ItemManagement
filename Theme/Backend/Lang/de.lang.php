@@ -142,6 +142,7 @@ return ['ItemManagement' => [
     'Promocode'            => 'Promocode',
     'Region'               => 'Region',
     'Materials'            => 'Materialien',
+    'Material'            => 'Material',
     'Weight'               => 'Gewicht',
     'Depth'                => 'Tiefe',
     'WidthLength'          => 'Breite/Länge',
