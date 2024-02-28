@@ -57,6 +57,12 @@ use phpOMS\System\MimeType;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @todo Import item prices from csv/excel sheet
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/15
+ *
+ * @todo Perform inflation increase on all items
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/16
  */
 final class ApiController extends Controller
 {
@@ -75,33 +81,79 @@ final class ApiController extends Controller
      */
     public function apiItemFind(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
+        // @question How to handle empty search?
+        //      1. Return empty
+        //      2. Return normal item list with default limit
+
         /** @var BaseStringL11n[] $l11n */
         $l11n = ItemL11nMapper::getAll()
             ->with('type')
-            ->where('type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('language', $request->header->l11n->language)
-            ->where('description', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->where('type/title', ['internal_matchcodes'], 'IN')
+            ->where('language', $response->header->l11n->language)
+            ->where('content', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+            ->limit($request->getDataInt('limit') ?? 50)
             ->execute();
 
-        $items = [];
-        foreach ($l11n as $item) {
-            $items[] = $item->ref;
+        if (empty($l11n)) {
+            $l11n = ItemL11nMapper::getAll()
+                ->with('type')
+                ->where('type/title',  ['name1', 'name2'], 'IN')
+                ->where('language', $response->header->l11n->language)
+                ->where('content', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
+                ->limit($request->getDataInt('limit') ?? 50)
+                ->execute();
         }
 
-        /** @var \Modules\ItemManagement\Models\Item[] $itemList */
-        $itemList = ItemMapper::getAll()
-            ->with('l11n')
-            ->with('l11n/type')
-            ->where('id', $items, 'IN')
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
-            ->where('l11n/language', $request->header->l11n->language)
-            ->execute();
+        if (empty($l11n)) {
+            $searches = \explode(' ', $request->getDataString('search') ?? '');
+            foreach ($searches as $search) {
+                $l11n = ItemL11nMapper::getAll()
+                    ->with('type')
+                    ->where('type/title', ['internal_matchcodes'], 'IN')
+                    ->where('language', $response->header->l11n->language)
+                    ->where('content', '%' . $search . '%', 'LIKE')
+                    ->limit($request->getDataInt('limit') ?? 50)
+                    ->execute();
+
+                if (!empty($l11n)) {
+                    break;
+                }
+            }
+
+            if (empty($l11n)) {
+                foreach ($searches as $search) {
+                    $l11n = ItemL11nMapper::getAll()
+                        ->with('type')
+                        ->where('type/title', ['name1', 'name2'], 'IN')
+                        ->where('language', $response->header->l11n->language)
+                        ->where('content', '%' . $search . '%', 'LIKE')
+                        ->limit($request->getDataInt('limit') ?? 50)
+                        ->execute();
+
+                    if (!empty($l11n)) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        $itemList = [];
+        if (!empty($l11n)) {
+            $itemIds = \array_map(function (BaseStringL11n $l) {
+                return $l->ref;
+            }, $l11n);
+
+            $itemList = ItemMapper::getAll()
+                ->with('l11n')
+                ->with('l11n/type')
+                ->where('l11n/type/title', ['name1', 'name2'], 'IN')
+                ->where('l11n/language', $request->header->l11n->language)
+                ->where('id', $itemIds, 'IN')
+                ->execute();
+        }
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
-        $response->set(
-            $request->uri->__toString(),
-            \array_values($itemList)
-        );
+        $response->set($request->uri->__toString(), \array_values($itemList));
 
         /*
         @todo BIG TODO.
@@ -112,7 +164,7 @@ final class ApiController extends Controller
         left join itemmgmt_item_l11n on itemmgmt_item.itemmgmt_item_id = itemmgmt_item_l11n.itemmgmt_item_l11n_item
         left join itemmgmt_item_l11n_type on itemmgmt_item_l11n.itemmgmt_item_l11n_typeref = itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_id
         where
-            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title IN ("name1", "name2", "name3")
+            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title IN ("name1", "name2")
             AND itemmgmt_item_l11n.itemmgmt_item_l11n_lang = "en"
             AND itemmgmt_item_l11n.itemmgmt_item_l11n_description LIKE "%Doc%"
 
@@ -133,6 +185,26 @@ final class ApiController extends Controller
     {
         return '/Modules/ItemManagement/Items/'
             . (empty($item->number) ? $item->id : $item->number);
+    }
+
+    public function apiItemListExport(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
+    {
+        $items = [];
+
+        /** @var Item $item */
+        foreach (ItemMapper::yield()->execute() as $item) {
+            $items[] = [
+                'id' => $item->id,
+                'name1' => $item->getL11n('name1')->content,
+                'name2' => $item->getL11n('name2')->content,
+            ];
+        }
+
+        $report = new \Modules\Exchange\Models\Report();
+        $report->data = $items;
+
+        $this->app->moduleManager->get('Exchange', 'Api')
+            ->apiExportReport($request, $response, $report, $request->getDataString('type') ?? 'csv');
     }
 
     /**
@@ -203,6 +275,7 @@ final class ApiController extends Controller
             $internalRequest->setData('name', 'default');
             $internalRequest->setData('type', PriceType::PURCHASE);
             $internalRequest->setData('item', $item->id);
+            $internalRequest->setData('supplier', $request->getDataInt('supplier'));
             $internalRequest->setData('price_new', $request->getDataString('purchaseprice') ?? 0);
 
             $billing->apiPriceCreate($internalRequest, $internalResponse);
@@ -325,12 +398,12 @@ final class ApiController extends Controller
         $item->purchasePrice   = new FloatInt($request->getDataString('purchaseprice') ?? 0);
         $item->info            = $request->getDataString('info') ?? '';
         $item->parent          = $request->getDataInt('parent');
-        $item->unit            = $request->getDataInt('unit');
+        $item->unit            = $request->getDataInt('unit') ?? $this->app->unitId;
         $item->status          = ItemStatus::tryFromValue($request->getDataInt('status')) ?? ItemStatus::ACTIVE;
 
         $container           = new Container();
         $container->name     = 'default';
-        $container->quantity = \pow(10, FloatInt::MAX_DECIMALS);
+        $container->quantity = FloatInt::DIVISOR;
 
         $item->container[] = $container;
 

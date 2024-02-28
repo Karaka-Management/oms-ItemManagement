@@ -60,7 +60,7 @@ final class Installer extends InstallerAbstract
         $attrTypes  = self::createAttributeTypes($app, $attributes);
         $attrValues = self::createAttributeValues($app, $attrTypes, $attributes);
 
-        $data    = \json_decode(\file_get_contents(__DIR__ . '/Install/Admin.install.json'), true);
+        $data = include __DIR__ . '/Install/Admin.install.php';
         $content = \json_decode($data[0]['content'], true);
 
         foreach ($content as $type => $_) {
@@ -126,10 +126,10 @@ final class Installer extends InstallerAbstract
         $itemArray = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+        $module = $app->moduleManager->get('ItemManagement');
 
         /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module2 */
-        $module2 = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
+        $module2 = $app->moduleManager->get('ItemManagement', 'ApiAttribute');
 
         /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
         $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
@@ -246,7 +246,7 @@ final class Installer extends InstallerAbstract
         $l11nTypes = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+        $module = $app->moduleManager->get('ItemManagement');
 
         foreach ($l11ns as $l11n) {
             $response = new HttpResponse();
@@ -287,7 +287,7 @@ final class Installer extends InstallerAbstract
         $relations = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement');
+        $module = $app->moduleManager->get('ItemManagement');
 
         foreach ($rels as $rel) {
             $response = new HttpResponse();
@@ -327,7 +327,7 @@ final class Installer extends InstallerAbstract
         $itemAttrType = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
+        $module = $app->moduleManager->get('ItemManagement', 'ApiAttribute');
 
         /** @var array $attribute */
         foreach ($attributes as $attribute) {
@@ -395,7 +395,7 @@ final class Installer extends InstallerAbstract
         $itemAttrValue = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiAttributeController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'ApiAttribute');
+        $module = $app->moduleManager->get('ItemManagement', 'ApiAttribute');
 
         foreach ($attributes as $attribute) {
             $itemAttrValue[$attribute['name']] = [];
@@ -468,7 +468,7 @@ final class Installer extends InstallerAbstract
         $itemMaterialType = [];
 
         /** @var \Modules\ItemManagement\Controller\ApiController $module */
-        $module = $app->moduleManager->getModuleInstance('ItemManagement', 'Api');
+        $module = $app->moduleManager->get('ItemManagement', 'Api');
 
         /** @var array $type */
         foreach ($types as $type) {

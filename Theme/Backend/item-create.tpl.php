@@ -95,7 +95,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-2" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-2' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Property'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -114,7 +114,7 @@ echo $this->data['nav']->render(); ?>
                     </form>
                 </div>
             </section>
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Language'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -133,7 +133,7 @@ echo $this->data['nav']->render(); ?>
                     </form>
                 </div>
             </section>
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Language'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -153,7 +153,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Attribute'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -172,7 +172,7 @@ echo $this->data['nav']->render(); ?>
                     </form>
                 </div>
             </section>
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Language'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -191,7 +191,7 @@ echo $this->data['nav']->render(); ?>
                     </form>
                 </div>
             </section>
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Language'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -213,7 +213,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-4" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-4' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Sales'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -255,7 +255,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Price'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -291,7 +291,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-5" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-5' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Purchase'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -324,7 +324,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Price'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -348,7 +348,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Stock'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -372,7 +372,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Supplier'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -390,7 +390,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-6" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-6' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Accounting'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -411,7 +411,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-7" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-7' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Production'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -441,7 +441,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-8" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-8' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('StockList'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -459,7 +459,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-9" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-9' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('QM'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -472,7 +472,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-10" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-10' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Packaging'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -504,7 +504,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-11" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-11' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Media'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -520,7 +520,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-12" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-12' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Stock'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -533,7 +533,7 @@ echo $this->data['nav']->render(); ?>
                 </div>
             </section>
 
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Stock'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -557,7 +557,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-13" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-13' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Disposal'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">
@@ -570,7 +570,7 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-14" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-14' ? ' checked' : ''; ?>>
         <div class="tab">
-            <section class="box w-33 floatLeft">
+            <section class="box w-33 lf">
                 <header><h1><?= $this->getHtml('Files'); ?></h1></header>
                 <div class="inner">
                     <form action="<?= \phpOMS\Uri\UriFactory::build('{/api}...'); ?>" method="post">

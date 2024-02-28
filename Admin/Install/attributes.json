@@ -26,19 +26,6 @@
         "values": []
     },
     {
-        "name": "primary_supplier",
-        "l11n": {
-            "en": "Primary Supplier",
-            "de": "Hauptlieferant"
-        },
-        "value_type": 1,
-        "is_custom_allowed": true,
-        "validation_pattern": "",
-        "is_required": false,
-        "default_value": "",
-        "values": []
-    },
-    {
         "name": "lead_time",
         "l11n": {
             "en": "Lead time",
@@ -52,10 +39,10 @@
         "values": []
     },
     {
-        "name": "qc_time",
+        "name": "admin_time",
         "l11n": {
-            "en": "QC time",
-            "de": "QC Zeit"
+            "en": "Admin time",
+            "de": "Verabeitungszeit"
         },
         "value_type": 1,
         "is_custom_allowed": true,
@@ -569,9 +556,9 @@
         "values": []
     },
     {
-        "name": "hc_code",
+        "name": "hs_code",
         "l11n": {
-            "en": "HC-code",
+            "en": "HS-code",
             "de": "Zolltarifnummer"
         },
         "value_type": 2,
@@ -731,7 +718,7 @@
         "values": []
     },
     {
-        "name": "releasedate",
+        "name": "release_date",
         "value_type": 4,
         "is_custom_allowed": true,
         "validation_pattern": "",

@@ -27,10 +27,12 @@ use Modules\ItemManagement\Models\ItemL11nTypeMapper;
 use Modules\ItemManagement\Models\ItemMapper;
 use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
 use Modules\ItemManagement\Models\MaterialTypeMapper;
+use Modules\ItemManagement\Models\PermissionCategory;
 use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Organization\Models\Attribute\UnitAttributeMapper;
 use Modules\Organization\Models\UnitMapper;
+use phpOMS\Account\PermissionType;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
@@ -51,6 +53,9 @@ use phpOMS\Views\View;
  * @link    https://jingga.app
  * @since   1.0.0
  * @codeCoverageIgnore
+ *
+ * @feature Show additional important item information for sales/purchase, currently too controlling/stats focused.
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/3
  */
 final class BackendController extends Controller
 {
@@ -203,8 +208,9 @@ final class BackendController extends Controller
             ->with('files')
             ->with('files/types')
             ->where('l11n/language', $response->header->l11n->language)
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->where('l11n/type/title', ['name1', 'name2'], 'IN')
             ->where('files/types/name', 'item_profile_image')
+            ->where('unit', $this->app->unitId)
             ->limit(50)
             ->execute();
 
@@ -381,9 +387,9 @@ final class BackendController extends Controller
         $head  = $response->data['Content']->head;
         $nonce = $this->app->appSettings->getOption('script-nonce');
 
-        $head->addAsset(AssetType::CSS, 'Resources/chartjs/chart.css');
-        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/chart.js', ['nonce' => $nonce]);
-        $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js', ['nonce' => $nonce, 'type' => 'module']);
+        $head->addAsset(AssetType::CSS, 'Resources/chartjs/chart.css?v=' . $this->app->version);
+        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/chart.js?v=' . $this->app->version, ['nonce' => $nonce]);
+        $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js?v=' . self::VERSION, ['nonce' => $nonce, 'type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-view');
@@ -403,7 +409,7 @@ final class BackendController extends Controller
             //->with('attributes/value/l11n')
             ->where('id', (int) $request->getData('id'))
             ->where('l11n/language', $response->header->l11n->language)
-            ->where('l11n/type/title', ['name1', 'name2', 'name3'], 'IN')
+            ->where('l11n/type/title', ['name1', 'name2'], 'IN')
             ->where('attributes/type/l11n/language', $response->header->l11n->language)
             //->where('attributes/value/l11n/language', $response->header->l11n->language)
             ->execute();
@@ -471,6 +477,8 @@ final class BackendController extends Controller
         /** @var \Modules\Billing\Models\Price\Price[] */
         $view->data['prices'] = $view->data['hasBilling']
             ? \Modules\Billing\Models\Price\PriceMapper::getAll()
+                ->with('supplier')
+                ->with('supplier/account')
                 ->where('item', $view->data['item']->id)
                 ->where('client', null)
                 ->execute()
@@ -512,12 +520,24 @@ final class BackendController extends Controller
 
         $view->data['clientSegmentationTypes'] = $clientSegmentationTypes;
 
-        /** @var \Modules\Auditor\Models\Audit[] */
-        $view->data['audits'] = AuditMapper::getAll()
-            ->where('type', StringUtils::intHash(ItemMapper::class))
-            ->where('module', 'ItemManagement')
-            ->where('ref', (string) $view->data['item']->id)
-            ->execute();
+        $logs = [];
+        if ($this->app->accountManager->get($request->header->account)->hasPermission(
+                PermissionType::READ,
+                $this->app->unitId,
+                null,
+                self::NAME,
+                PermissionCategory::ITEM_LOG,
+            )
+        ) {
+            /** @var \Modules\Auditor\Models\Audit[] */
+            $logs = AuditMapper::getAll()
+                ->where('type', StringUtils::intHash(ItemMapper::class))
+                ->where('module', 'ItemManagement')
+                ->where('ref', (string) $view->data['item']->id)
+                ->execute();
+        }
+
+        $view->data['logs'] = $logs;
 
         // @todo join audit with files, attributes, localization, prices, notes, ...
 
@@ -602,9 +622,9 @@ final class BackendController extends Controller
         $head  = $response->data['Content']->head;
         $nonce = $this->app->appSettings->getOption('script-nonce');
 
-        $head->addAsset(AssetType::CSS, 'Resources/chartjs/chart.css');
-        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/chart.js', ['nonce' => $nonce]);
-        $head->addAsset(AssetType::JSLATE, 'Modules/Sales/Controller/Controller.js', ['nonce' => $nonce, 'type' => 'module']);
+        $head->addAsset(AssetType::CSS, 'Resources/chartjs/chart.css?v=' . $this->app->version);
+        $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/chart.js?v=' . $this->app->version, ['nonce' => $nonce]);
+        $head->addAsset(AssetType::JSLATE, 'Modules/Sales/Controller/Controller.js?v=' . self::VERSION, ['nonce' => $nonce, 'type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-analysis');

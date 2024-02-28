@@ -28,7 +28,9 @@ abstract class ItemStatus extends Enum
 {
     public const ACTIVE = 1;
 
-    public const INACTIVE = 2;
+    public const DRAFT = 2;
 
-    public const PREVIEW = 3;
+    public const INACTIVE = 3;
+
+    public const DISCONTINUED = 4;
 }

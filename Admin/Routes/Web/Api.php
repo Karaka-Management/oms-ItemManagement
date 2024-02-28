@@ -18,6 +18,17 @@ use phpOMS\Account\PermissionType;
 use phpOMS\Router\RouteVerb;
 
 return [
+    '^.*/item/list(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemListExport',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
     '^.*/item/find(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemFind',

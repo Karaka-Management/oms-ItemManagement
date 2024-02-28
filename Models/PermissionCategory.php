@@ -37,4 +37,6 @@ abstract class PermissionCategory extends Enum
     public const NOTE = 5;
 
     public const MATERIAL = 6;
+
+    public const ITEM_LOG = 101;
 }

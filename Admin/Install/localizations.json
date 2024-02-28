@@ -12,6 +12,10 @@
 		"is_required": false
 	},
 	{
+		"name": "internal_matchcodes",
+		"is_required": false
+	},
+	{
 		"name": "description_short",
 		"is_required": false
 	},

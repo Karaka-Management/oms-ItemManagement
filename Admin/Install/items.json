@@ -4,9 +4,13 @@
         "l11ns": {
             "name1": {
                 "en": "Freight",
-                "de": "Freight"
+                "de": "Transportkosten"
             },
-            "description_short": {}
+            "description_short": {},
+            "internal_matchcodes": {
+                "en": "fuel, handling, freight, shipping",
+                "de": "versand, transport, fracht"
+            }
         },
         "primary_image": "",
         "keywords": {},
@@ -24,7 +28,103 @@
         "l11ns": {
             "name1": {
                 "en": "Insurance",
-                "de": "Insurance"
+                "de": "Versicherung"
+            },
+            "description_short": {},
+            "internal_matchcodes": {
+                "en": "insurance",
+                "de": "versicherung"
+            }
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    },
+    {
+        "number": "3",
+        "l11ns": {
+            "name1": {
+                "en": "Customs",
+                "de": "Einfuhrsteuer"
+            },
+            "description_short": {},
+            "internal_matchcodes": {
+                "en": "customs",
+                "de": "zoll, einfuhrumsatz"
+            }
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    },
+    {
+        "number": "4",
+        "l11ns": {
+            "name1": {
+                "en": "Other invoice fees",
+                "de": "Sonstige Gebühren"
+            },
+            "description_short": {},
+            "internal_matchcodes": {
+                "en": "fee, surcharge",
+                "de": "gebühr"
+            }
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    },
+    {
+        "number": "5",
+        "l11ns": {
+            "name1": {
+                "en": "Packaging materials",
+                "de": "Verpackungsmaterial"
+            },
+            "description_short": {},
+            "internal_matchcodes": {
+                "en": "packaging",
+                "de": "verpackung"
+            }
+        },
+        "primary_image": "",
+        "keywords": {},
+        "attributes": [
+            {
+                "type": "bill_fees",
+                "value": 1,
+                "custom": false
+            }
+        ],
+        "variants": []
+    },
+    {
+        "number": "99",
+        "l11ns": {
+            "name1": {
+                "en": "Discount",
+                "de": "Rabatt"
             },
             "description_short": {}
         },

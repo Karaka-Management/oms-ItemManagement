@@ -55,25 +55,13 @@ echo $this->data['nav']->render(); ?>
                         <label>
                             <i class="filter g-icon">filter_alt</i>
                         </label>
-                    <td><?= $this->getHtml('Name'); ?>
+                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
                         <label for="iSalesItemList-sort-5">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-5">
                             <i class="sort-asc g-icon">expand_less</i>
                         </label>
                         <label for="iSalesItemList-sort-6">
                             <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-6">
-                            <i class="sort-desc g-icon">expand_more</i>
-                        </label>
-                        <label>
-                            <i class="filter g-icon">filter_alt</i>
-                        </label>
-                    <td class="wf-100"><?= $this->getHtml('Name'); ?>
-                        <label for="iSalesItemList-sort-7">
-                            <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-7">
-                            <i class="sort-asc g-icon">expand_less</i>
-                        </label>
-                        <label for="iSalesItemList-sort-8">
-                            <input type="radio" name="iSalesItemList-sort" id="iSalesItemList-sort-8">
                             <i class="sort-desc g-icon">expand_more</i>
                         </label>
                         <label>
@@ -141,14 +129,13 @@ echo $this->data['nav']->render(); ?>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->number); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name1')->content); ?></a>
                     <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name2')->content); ?></a>
-                    <td><a href="<?= $url; ?>"><?= $this->printHtml($value->getL11n('name3')->content); ?></a>
-                    <td class="rightText"><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice, symbol: ''); ?></a>
+                    <td class="rT"><a href="<?= $url; ?>"><?= $this->getCurrency($value->salesPrice, symbol: ''); ?></a>
                     <?php if ($value->stockIdentifier === StockIdentifierType::NONE) : ?>
                         <td>
                         <td>
                         <td>
                     <?php else : ?>
-                    <td class="rightText"><a href="<?= $url; ?>">
+                    <td class="rT"><a href="<?= $url; ?>">
                         <?php
                             $sum = 0;
                             foreach ($this->data['dists'][$value->id] ?? [] as $dist) {
@@ -159,14 +146,14 @@ echo $this->data['nav']->render(); ?>
                             echo $total->getAmount(\reset($value->container)->quantityDecimals);
                         ?></a>
 
-                    <td class="rightText"><a href="<?= $url; ?>">
+                    <td class="rT"><a href="<?= $url; ?>">
                         <?php
                             $total = new FloatInt($this->data['reserved'][$value->id] ?? 0);
 
                             echo $total->getAmount(\reset($value->container)->quantityDecimals);
                         ?></a>
 
-                    <td class="rightText"><a href="<?= $url; ?>">
+                    <td class="rT"><a href="<?= $url; ?>">
                         <?php
                             $total = new FloatInt($this->data['ordered'][$value->id] ?? 0);
 

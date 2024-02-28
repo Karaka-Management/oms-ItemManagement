@@ -185,7 +185,7 @@ final class ItemMapper extends DataMapperFactory
         left join itemmgmt_item_l11n_type
             on itemmgmt_item_l11n.itemmgmt_item_l11n_typeref = itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_id
         where
-            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title in ('name1', 'name2', 'name3')
+            itemmgmt_item_l11n_type.itemmgmt_item_l11n_type_title in ('name1', 'name2')
             and itemmgmt_item_l11n.itemmgmt_item_l11n_lang = :lang
         SQL;
 
