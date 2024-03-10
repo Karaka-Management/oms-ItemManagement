@@ -13,22 +13,24 @@
 declare(strict_types=1);
 
 use Modules\Attribute\Models\AttributeValueType;
-use phpOMS\Localization\ISO639Enum;
+use Modules\Attribute\Models\NullAttributeType;
+use phpOMS\Uri\UriFactory;
 
 $types = AttributeValueType::getConstants();
 
-$attribute = $this->data['attribute'];
-$l11ns     = $this->data['l11ns'];
+$attribute = $this->data['attribute'] ?? new NullAttributeType();
+
+$isNew = $attribute->id === 0;
 
 echo $this->data['nav']->render(); ?>
 
 <div class="row">
     <div class="col-md-6 col-xs-12">
         <section id="task" class="portlet">
+            <form id="attributeForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item/attribute/type'); ?>">
             <div class="portlet-head"><?= $this->getHtml('Attribute', 'Attribute', 'Backend'); ?></div>
-
             <div class="portlet-body">
-            <div class="form-group">
+                <div class="form-group">
                     <label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
                     <input type="text" value="<?= $this->printHtml((string) $attribute->id); ?>" disabled>
                 </div>
@@ -68,31 +70,23 @@ echo $this->data['nav']->render(); ?>
                     </label>
                 </div>
             </div>
+            <div class="portlet-foot">
+                <?php if ($isNew) : ?>
+                    <input id="iCreateSubmit" type="Submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                <?php else : ?>
+                    <input id="iSaveSubmit" type="Submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                <?php endif; ?>
+            </div>
+            </form>
         </section>
     </div>
+</div>
 
-    <div class="col-xs-12 col-md-6">
-        <div class="portlet">
-            <div class="portlet-head"><?= $this->getHtml('Language', '0', '0'); ?><i class="g-icon download btn end-xs">download</i></div>
-            <table class="default sticky">
-                <thead>
-                    <tr>
-                        <td>
-                        <td>
-                        <td><?= $this->getHtml('Language', '0', '0'); ?>
-                        <td class="wf-100"><?= $this->getHtml('Title', 'Attribute', 'Backend'); ?>
-                <tbody>
-                    <?php $c = 0; foreach ($l11ns as $key => $value) : ++$c; ?>
-                    <tr>
-                        <td><a href="#"><i class="g-icon">close</i></a>
-                        <td><a href="#"><i class="g-icon">settings</i></a>
-                        <td><?= ISO639Enum::getByName('_' . \strtoupper($value->language)); ?>
-                        <td><?= $value->content; ?>
-                    <?php endforeach; ?>
-                    <?php if ($c === 0) : ?>
-                    <tr><td colspan="3" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
-                    <?php endif; ?>
-            </table>
-        </div>
-    </div>
+<div class="row">
+    <?= $this->data['l11nView']->render(
+        $this->data['l11nValues'],
+        [],
+        '{/api}item/attribute/l11n'
+    );
+    ?>
 </div>

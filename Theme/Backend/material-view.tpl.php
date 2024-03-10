@@ -12,20 +12,20 @@
  */
 declare(strict_types=1);
 
+use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Localization\BaseStringL11nType */
-$type = $this->data['type'];
+$type = $this->data['type'] ?? new NullBaseStringL11nType();
+
+$isNew = $type->id === 0;
 
 /** @var \phpOMS\Views\View $this */
 echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <div class="portlet">
-            <form id="materialForm" method="POST" action="<?= UriFactory::build('{/api}item/material'); ?>"
-                data-ui-container="#materialTable tbody"
-                data-add-form="materialForm"
-                data-add-tpl="#materialTable tbody .oms-add-tpl-material">
+            <form id="materialForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item/material'); ?>">
                 <div class="portlet-head"><?= $this->getHtml('Material'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">
@@ -36,7 +36,11 @@ echo $this->data['nav']->render(); ?>
 
                 <div class="portlet-foot">
                     <input type="hidden" name="id" value="<?= $type->id; ?>">
-                    <input id="iSubmit" name="submit" type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                    <?php if ($isNew) : ?>
+                        <input id="iCreateSubmit" type="Submit" value="<?= $this->getHtml('Create', '0', '0'); ?>">
+                    <?php else : ?>
+                        <input id="iSaveSubmit" type="Submit" value="<?= $this->getHtml('Save', '0', '0'); ?>">
+                    <?php endif; ?>
                 </div>
             </form>
         </div>

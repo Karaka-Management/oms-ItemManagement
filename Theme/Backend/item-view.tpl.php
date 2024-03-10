@@ -547,32 +547,32 @@ echo $this->data['nav']->render();
 
                                 <div class="form-group">
                                     <label for="iContainerQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                                    <input id="iContainerQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
+                                    <input id="iContainerQuantity" name="quantity" type="number" step="any" data-tpl-text="/quantity" data-tpl-value="/quantity">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iContainerWeight"><?= $this->getHtml('Weight'); ?></label>
-                                    <input id="iContainerWeight" name="weight" type="number" data-tpl-text="/weight" data-tpl-value="/weight">
+                                    <input id="iContainerWeight" name="weight" type="number" step="any" data-tpl-text="/weight" data-tpl-value="/weight">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iContainerWidth"><?= $this->getHtml('WidthLength'); ?></label>
-                                    <input id="iContainerWidth" name="width" type="number" data-tpl-text="/width" data-tpl-value="/width">
+                                    <input id="iContainerWidth" name="width" type="number" step="any" data-tpl-text="/width" data-tpl-value="/width">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iContainerHeight"><?= $this->getHtml('Height'); ?></label>
-                                    <input id="iContainerHeight" name="height" type="number" data-tpl-text="/height" data-tpl-value="/height">
+                                    <input id="iContainerHeight" name="height" type="number" step="any" data-tpl-text="/height" data-tpl-value="/height">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iContainerDepth"><?= $this->getHtml('Depth'); ?></label>
-                                    <input id="iContainerDepth" name="depth" type="number" data-tpl-text="/depth" data-tpl-value="/depth">
+                                    <input id="iContainerDepth" name="depth" type="number" step="any" data-tpl-text="/depth" data-tpl-value="/depth">
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iContainerVolume"><?= $this->getHtml('Volume'); ?></label>
-                                    <input id="iContainerVolume" name="volume" type="number" data-tpl-text="/volume" data-tpl-value="/volume">
+                                    <input id="iContainerVolume" name="volume" type="number" step="any" data-tpl-text="/volume" data-tpl-value="/volume">
                                 </div>
                             </div>
                             <div class="portlet-foot">
@@ -704,7 +704,7 @@ echo $this->data['nav']->render();
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <input id="iPricePrice" class="wf-100" name="price_new" type="number" data-tpl-text="/price" data-tpl-value="/price">
+                                                    <input id="iPricePrice" class="wf-100" name="price_new" type="number" step="any" data-tpl-text="/price" data-tpl-value="/price">
                                                 </div>
                                             </div>
                                         </div>
@@ -712,7 +712,7 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPriceQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                                            <input id="iPriceQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
+                                            <input id="iPriceQuantity" name="quantity" type="number" step="any" data-tpl-text="/quantity" data-tpl-value="/quantity">
                                         </div>
                                     </div>
                                 </div>
@@ -721,21 +721,21 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPriceDiscount"><?= $this->getHtml('Discount'); ?></label>
-                                            <input id="iPriceDiscount" name="discount" type="number" data-tpl-text="/discount" data-tpl-value="/discount">
+                                            <input id="iPriceDiscount" name="discount" type="number" step="any" data-tpl-text="/discount" data-tpl-value="/discount">
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="form-group">
                                             <label for="iPriceDiscountR"><?= $this->getHtml('DiscountP'); ?></label>
-                                            <input id="iPriceDiscountR" name="discountPercentage" type="number" data-tpl-text="/discountr" data-tpl-value="/discountr">
+                                            <input id="iPriceDiscountR" name="discountPercentage" type="number" step="any" data-tpl-text="/discountr" data-tpl-value="/discountr">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iPriceBonus"><?= $this->getHtml('Bonus'); ?></label>
-                                    <input id="iPriceBonus" name="bonus" type="number" data-tpl-text="/bonus" data-tpl-value="/bonus">
+                                    <input id="iPriceBonus" name="bonus" type="number" step="any" data-tpl-text="/bonus" data-tpl-value="/bonus">
                                 </div>
                             </div>
                             <div class="portlet-separator"></div>
@@ -1104,7 +1104,7 @@ echo $this->data['nav']->render();
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <input id="iPurchasePricePrice" class="wf-100" name="price_new" type="number" data-tpl-text="/price" data-tpl-value="/price">
+                                                    <input id="iPurchasePricePrice" class="wf-100" name="price_new" type="number" step="any" data-tpl-text="/price" data-tpl-value="/price">
                                                 </div>
                                             </div>
                                         </div>
@@ -1112,7 +1112,7 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPurchasePriceQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                                            <input id="iPurchasePriceQuantity" name="quantity" type="number" data-tpl-text="/quantity" data-tpl-value="/quantity">
+                                            <input id="iPurchasePriceQuantity" name="quantity" type="number" step="any" data-tpl-text="/quantity" data-tpl-value="/quantity">
                                         </div>
                                     </div>
                                 </div>
@@ -1121,21 +1121,21 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPurchasePriceDiscount"><?= $this->getHtml('Discount'); ?></label>
-                                            <input id="iPurchasePriceDiscount" name="discount" type="number" data-tpl-text="/discount" data-tpl-value="/discount">
+                                            <input id="iPurchasePriceDiscount" name="discount" type="number" step="any" data-tpl-text="/discount" data-tpl-value="/discount">
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="form-group">
                                             <label for="iPurchasePriceDiscountP"><?= $this->getHtml('DiscountP'); ?></label>
-                                            <input id="iPurchasePriceDiscountP" name="discountPercentage" type="number" data-tpl-text="/discountr" data-tpl-value="/discountr">
+                                            <input id="iPurchasePriceDiscountP" name="discountPercentage" type="number" step="any" data-tpl-text="/discountr" data-tpl-value="/discountr">
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="iPurchasePriceBonus"><?= $this->getHtml('Bonus'); ?></label>
-                                    <input id="iPurchasePriceBonus" name="bonus" type="number" data-tpl-text="/bonus" data-tpl-value="/bonus">
+                                    <input id="iPurchasePriceBonus" name="bonus" type="number" step="any" data-tpl-text="/bonus" data-tpl-value="/bonus">
                                 </div>
                             </div>
                             <div class="portlet-separator"></div>

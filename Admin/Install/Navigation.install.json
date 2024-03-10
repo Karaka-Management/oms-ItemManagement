@@ -29,7 +29,7 @@
                 "children": [
                     {
                         "id": 1004802002,
-                        "pid": "/item",
+                        "pid": "/item/attribute",
                         "type": 3,
                         "subtype": 1,
                         "name": "Types",
@@ -44,7 +44,7 @@
                     },
                     {
                         "id": 1004802003,
-                        "pid": "/item",
+                        "pid": "/item/attribute",
                         "type": 3,
                         "subtype": 1,
                         "name": "Values",
@@ -134,7 +134,38 @@
                 "from": "ItemManagement",
                 "permission": { "permission": 2, "category": null, "element": null },
                 "parent": 1004801001,
-                "children": []
+                "children": [
+                    {
+                        "id": 1004804002,
+                        "pid": "/item/material",
+                        "type": 3,
+                        "subtype": 1,
+                        "name": "List",
+                        "uri": "{/base}/item/material/list?{?}",
+                        "target": "self",
+                        "icon": null,
+                        "order": 5,
+                        "from": "ItemManagement",
+                        "permission": { "permission": 2, "category": null, "element": null },
+                        "parent": 1004802001,
+                        "children": []
+                    },
+                    {
+                        "id": 1004804003,
+                        "pid": "/item/material",
+                        "type": 3,
+                        "subtype": 1,
+                        "name": "Create",
+                        "uri": "{/base}/item/material/create?{?}",
+                        "target": "self",
+                        "icon": null,
+                        "order": 10,
+                        "from": "ItemManagement",
+                        "permission": { "permission": 2, "category": null, "element": null },
+                        "parent": 1004802001,
+                        "children": []
+                    }
+                ]
             }
         ]
     },
@@ -340,7 +371,7 @@
         "children": [
             {
                 "id": 1004808101,
-                "pid": "ac2ed3d0212c51b3ba19a5c862eca728c3cb9d18",
+                "pid": "/production/item",
                 "type": 3,
                 "subtype": 1,
                 "name": "List",
@@ -354,7 +385,7 @@
                 "children": [
                     {
                         "id": 1004808301,
-                        "pid": "ac2ed3d0212c51b3ba19a5c862eca728c3cb9d18",
+                        "pid": "/production/item",
                         "type": 3,
                         "subtype": 1,
                         "name": "Item",
@@ -371,7 +402,7 @@
             },
             {
                 "id": 1004808201,
-                "pid": "ac2ed3d0212c51b3ba19a5c862eca728c3cb9d18",
+                "pid": "/production/item",
                 "type": 3,
                 "subtype": 1,
                 "name": "Create",

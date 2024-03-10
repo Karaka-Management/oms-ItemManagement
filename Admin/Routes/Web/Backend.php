@@ -197,6 +197,41 @@ return [
             ],
         ],
     ],
+
+    '^.*/production/item/list(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementProductionList',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/production/item/create(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementProductionCreate',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/production/item/view(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementProductionItem',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+
     '^.*/item/material/list(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialList',
