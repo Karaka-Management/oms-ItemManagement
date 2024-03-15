@@ -61,6 +61,8 @@ final class Installer extends InstallerAbstract
         $attrValues = self::createAttributeValues($app, $attrTypes, $attributes);
 
         $data = include __DIR__ . '/Install/Admin.install.php';
+
+        /** @var array $content */
         $content = \json_decode($data[0]['content'], true);
 
         foreach ($content as $type => $_) {

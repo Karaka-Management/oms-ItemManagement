@@ -95,6 +95,7 @@ final class ApiController extends Controller
             ->execute();
 
         if (empty($l11n)) {
+            /** @var BaseStringL11n[] $l11n */
             $l11n = ItemL11nMapper::getAll()
                 ->with('type')
                 ->where('type/title',  ['name1', 'name2'], 'IN')
@@ -107,6 +108,7 @@ final class ApiController extends Controller
         if (empty($l11n)) {
             $searches = \explode(' ', $request->getDataString('search') ?? '');
             foreach ($searches as $search) {
+                /** @var BaseStringL11n[] $l11n */
                 $l11n = ItemL11nMapper::getAll()
                     ->with('type')
                     ->where('type/title', ['internal_matchcodes'], 'IN')
@@ -122,6 +124,7 @@ final class ApiController extends Controller
 
             if (empty($l11n)) {
                 foreach ($searches as $search) {
+                    /** @var BaseStringL11n[] $l11n */
                     $l11n = ItemL11nMapper::getAll()
                         ->with('type')
                         ->where('type/title', ['name1', 'name2'], 'IN')
@@ -139,10 +142,11 @@ final class ApiController extends Controller
 
         $itemList = [];
         if (!empty($l11n)) {
-            $itemIds = \array_map(function (BaseStringL11n $l) {
+            $itemIds = \array_map(function (BaseStringL11n $l) : int {
                 return $l->ref;
             }, $l11n);
 
+            /** @var Item[] $itemList */
             $itemList = ItemMapper::getAll()
                 ->with('l11n')
                 ->with('l11n/type')
@@ -187,6 +191,19 @@ final class ApiController extends Controller
             . (empty($item->number) ? $item->id : $item->number);
     }
 
+    /**
+     * Api method to export items items
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return void
+     *
+     * @api
+     *
+     * @since 1.0.0
+     */
     public function apiItemListExport(RequestAbstract $request, ResponseAbstract $response, array $data = []) : void
     {
         $items = [];
@@ -194,13 +211,13 @@ final class ApiController extends Controller
         /** @var Item $item */
         foreach (ItemMapper::yield()->execute() as $item) {
             $items[] = [
-                'id' => $item->id,
+                'id'    => $item->id,
                 'name1' => $item->getL11n('name1')->content,
                 'name2' => $item->getL11n('name2')->content,
             ];
         }
 
-        $report = new \Modules\Exchange\Models\Report();
+        $report       = new \Modules\Exchange\Models\Report();
         $report->data = $items;
 
         $this->app->moduleManager->get('Exchange', 'Api')
@@ -236,20 +253,24 @@ final class ApiController extends Controller
         $this->app->dbPool->get()->con->commit();
 
         // Define default item containers
+        /** @var \Modules\Attribute\Models\AttributeType[] $types */
         $types = ItemAttributeTypeMapper::getAll()
             ->where('name', ['default_sales_container', 'default_purchase_container'], 'IN')
             ->execute();
 
-        foreach ($types as $type) {
-            $internalResponse = clone $response;
-            $internalRequest  = new HttpRequest();
+        $primaryContainer = \reset($item->container);
+        if ($primaryContainer !== false) {
+            foreach ($types as $type) {
+                $internalResponse = clone $response;
+                $internalRequest  = new HttpRequest();
 
-            $internalRequest->header->account = $request->header->account;
-            $internalRequest->setData('ref', $item->id);
-            $internalRequest->setData('type', $type->id);
-            $internalRequest->setData('value', \reset($item->container)->id);
+                $internalRequest->header->account = $request->header->account;
+                $internalRequest->setData('ref', $item->id);
+                $internalRequest->setData('type', $type->id);
+                $internalRequest->setData('value', $primaryContainer->id);
 
-            $this->app->moduleManager->get('ItemManagement', 'ApiAttribute')->apiItemAttributeCreate($internalRequest, $internalResponse);
+                $this->app->moduleManager->get('ItemManagement', 'ApiAttribute')->apiItemAttributeCreate($internalRequest, $internalResponse);
+            }
         }
 
         if ($this->app->moduleManager->isActive('Billing')) {
@@ -330,16 +351,31 @@ final class ApiController extends Controller
         $this->createStandardCreateResponse($request, $response, $item);
     }
 
+    /**
+     * Create item segmentation.
+     *
+     * Default: segment->section->sales_group->product_group and to the side product_type
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param Item             $item     Item
+     *
+     * @return void
+     *
+     * @since 1.0.0
+     */
     private function createItemSegmentation(RequestAbstract $request, ResponseAbstract $response, Item $item) : void
     {
         /** @var \Model\Setting $settings */
         $settings = $this->app->appSettings->get(null, ItemSettingsEnum::DEFAULT_SEGMENTATION);
 
+        /** @var array $segmentation */
         $segmentation = \json_decode($settings->content, true);
         if ($segmentation === false || $segmentation === null) {
             return;
         }
 
+        /** @var \Modules\Attribute\Models\AttributeType[] $types */
         $types = ItemAttributeTypeMapper::getAll()
             ->where('name', \array_keys($segmentation), 'IN')
             ->execute();

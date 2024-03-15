@@ -435,7 +435,6 @@ final class BackendController extends Controller
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-view');
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004803001, $request, $response);
 
-        /** @var \Modules\ItemManagement\Models\Item */
         $view->data['item'] = ItemMapper::get()
             ->with('l11n')
             ->with('l11n/type')
@@ -471,7 +470,6 @@ final class BackendController extends Controller
             ->where(ItemMapper::HAS_MANY['files']['self'], '=', $view->data['item']->id)
             ->where(MediaTypeMapper::TABLE . '.' . MediaTypeMapper::getColumnByMember('name'), '=', 'item_profile_image');
 
-        /** @var \Modules\Media\Models\Media */
         $view->data['itemImage'] = MediaMapper::get()
             ->with('types')
             ->where('id', $results)
@@ -492,29 +490,24 @@ final class BackendController extends Controller
 
         $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
-        /** @var \phpOMS\Localization\BaseStringL11nType[] */
         $view->data['l11nTypes'] = ItemL11nTypeMapper::getAll()
             ->execute();
 
-        /** @var \phpOMS\Localization\BaseStringL11n[] */
         $view->data['l11nValues'] = ItemL11nMapper::getAll()
             ->with('type')
             ->where('ref', $view->data['item']->id)
             ->execute();
 
-        /** @var \Modules\Attribute\Models\AttributeType[] */
         $view->data['attributeTypes'] = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        /** @var \Modules\Organization\Models\Unit[] */
         $view->data['units'] = UnitMapper::getAll()
             ->execute();
 
         $view->data['hasBilling'] = $this->app->moduleManager->isActive('Billing');
 
-        /** @var \Modules\Billing\Models\Price\Price[] */
         $view->data['prices'] = $view->data['hasBilling']
             ? \Modules\Billing\Models\Price\PriceMapper::getAll()
                 ->with('supplier')
@@ -533,8 +526,8 @@ final class BackendController extends Controller
                 //'has_inventory', 'inventory_identifier', 'stocktaking_type',
             ], 'IN')
             ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
-                ->where(ItemAttributeValueL11nMapper::getColumnByMember('ref'), '=', null)
-                ->orWhere(ItemAttributeValueL11nMapper::getColumnByMember('language'), '=', $response->header->l11n->language))
+                ->where(ItemAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
+                ->orWhere(ItemAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
             ->execute();
 
         $defaultAttributeTypes = [];
@@ -549,8 +542,8 @@ final class BackendController extends Controller
             ->with('defaults/l11n')
             ->where('name', ['segment', 'section', 'client_group', 'client_type'], 'IN')
             ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
-                ->where(ClientAttributeValueL11nMapper::getColumnByMember('ref'), '=', null)
-                ->orWhere(ClientAttributeValueL11nMapper::getColumnByMember('language'), '=', $response->header->l11n->language))
+                ->where(ClientAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
+                ->orWhere(ClientAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
             ->execute();
 
         $clientSegmentationTypes = [];
@@ -569,7 +562,7 @@ final class BackendController extends Controller
                 PermissionCategory::ITEM_LOG,
             )
         ) {
-            /** @var \Modules\Auditor\Models\Audit[] */
+            /** @var \Modules\Auditor\Models\Audit[] $logs */
             $logs = AuditMapper::getAll()
                 ->where('type', StringUtils::intHash(ItemMapper::class))
                 ->where('module', 'ItemManagement')
@@ -581,7 +574,6 @@ final class BackendController extends Controller
 
         // @todo join audit with files, attributes, localization, prices, notes, ...
 
-        /** @var \Modules\Media\Models\Media[] */
         $view->data['files'] = MediaMapper::getAll()
             ->with('types')
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations

@@ -522,6 +522,7 @@
         "is_required": true,
         "default_value": "",
         "values": [
+            { "value": "GENERAL" },
             { "value": "SOFTWARE" },
             { "value": "SERVICE" }
         ]
@@ -538,6 +539,7 @@
         "is_required": true,
         "default_value": "",
         "values": [
+            { "value": "GENERAL" },
             { "value": "SOFTWARE" },
             { "value": "SERVICE" }
         ]
