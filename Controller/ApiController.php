@@ -209,7 +209,7 @@ final class ApiController extends Controller
         $items = [];
 
         /** @var Item $item */
-        foreach (ItemMapper::yield()->execute() as $item) {
+        foreach (ItemMapper::yield()->executeYield() as $item) {
             $items[] = [
                 'id'    => $item->id,
                 'name1' => $item->getL11n('name1')->content,

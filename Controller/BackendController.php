@@ -517,6 +517,7 @@ final class BackendController extends Controller
                 ->execute()
             : [];
 
+        /** @var \Modules\Attribute\Models\AttributeType[] $tmp */
         $tmp = ItemAttributeTypeMapper::getAll()
             ->with('defaults')
             ->with('defaults/l11n')
@@ -537,6 +538,7 @@ final class BackendController extends Controller
 
         $view->data['defaultAttributeTypes'] = $defaultAttributeTypes;
 
+        /** @var \Modules\Attribute\Models\AttributeType[] $tmp */
         $tmp = ClientAttributeTypeMapper::getAll()
             ->with('defaults')
             ->with('defaults/l11n')
