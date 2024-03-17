@@ -40,7 +40,7 @@ final class MaterialMapper extends DataMapperFactory
         'itemmgmt_material_category'    => ['name' => 'itemmgmt_material_category',     'type' => 'int', 'internal' => 'category'],
         'itemmgmt_material_subcategory' => ['name' => 'itemmgmt_material_subcategory',     'type' => 'int', 'internal' => 'subcategory'],
         'itemmgmt_material_type'        => ['name' => 'itemmgmt_material_type',     'type' => 'int', 'internal' => 'type'],
-        'itemmgmt_material_unit'        => ['name' => 'itemmgmt_material_unit',     'type' => 'int', 'internal' => 'unit'],
+        'itemmgmt_material_unit'        => ['name' => 'itemmgmt_material_unit',     'type' => 'string', 'internal' => 'unit'],
         'itemmgmt_material_item'        => ['name' => 'itemmgmt_material_item',     'type' => 'int', 'internal' => 'item'],
     ];
 

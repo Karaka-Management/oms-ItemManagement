@@ -43,7 +43,7 @@ class Material implements \JsonSerializable
 
     public int $quantity = 0;
 
-    public int $unit = 0;
+    public string $unit = 'pcs';
 
     public int $item = 0;
 
