@@ -17,11 +17,11 @@ return ['Navigation' => [
     'Article'        => 'Artikel',
     'Attributes'     => 'Attribute',
     'Create'         => 'Erstellen',
-    'Item'           => '',
+    'Item'           => 'Artikel',
     'ItemManagement' => 'Artikelverwaltung',
     'Items'          => 'Artikel',
     'List'           => 'Liste',
-    'Types'          => 'Arten',
+    'Types'          => 'Typen',
     'Values'         => 'Werte',
     'Materials'      => 'Materialien',
 ]];
