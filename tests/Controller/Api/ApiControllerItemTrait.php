@@ -34,7 +34,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemCreate() : void
@@ -51,7 +51,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemCreateInvalidData() : void
@@ -67,7 +67,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemProfileImageCreate() : void
@@ -98,7 +98,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemFileCreate() : void
@@ -128,7 +128,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemNoteCreate() : void
@@ -149,7 +149,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiFileCreateInvalidData() : void
@@ -165,7 +165,7 @@ trait ApiControllerItemTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiNoteCreateInvalidData() : void

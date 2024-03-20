@@ -22,7 +22,7 @@ use Modules\ItemManagement\Models\NullItem;
 final class NullItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\ItemManagement\Models\NullItem
+     * @covers \Modules\ItemManagement\Models\NullItem
      * @group module
      */
     public function testNull() : void
@@ -31,7 +31,7 @@ final class NullItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\NullItem
+     * @covers \Modules\ItemManagement\Models\NullItem
      * @group module
      */
     public function testId() : void
@@ -41,7 +41,7 @@ final class NullItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\NullItem
+     * @covers \Modules\ItemManagement\Models\NullItem
      * @group module
      */
     public function testJsonSerialize() : void

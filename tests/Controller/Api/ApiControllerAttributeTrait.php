@@ -23,7 +23,7 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerAttributeTrait
 {
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeTypeCreate() : void
@@ -41,7 +41,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeTypeL11nCreate() : void
@@ -59,7 +59,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeValueIntCreate() : void
@@ -79,7 +79,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeValueStrCreate() : void
@@ -98,7 +98,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeValueFloatCreate() : void
@@ -117,7 +117,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeValueDatCreate() : void
@@ -136,7 +136,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeCreate() : void
@@ -154,7 +154,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeValueCreateInvalidData() : void
@@ -170,7 +170,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeTypeCreateInvalidData() : void
@@ -186,7 +186,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeTypeL11nCreateInvalidData() : void
@@ -202,7 +202,7 @@ trait ApiControllerAttributeTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemAttributeCreateInvalidData() : void

@@ -23,7 +23,7 @@ use Modules\ItemManagement\Models\ItemMapper;
 final class ItemMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @covers Modules\ItemManagement\Models\ItemMapper
+     * @covers \Modules\ItemManagement\Models\ItemMapper
      * @group module
      */
     public function testCR() : void

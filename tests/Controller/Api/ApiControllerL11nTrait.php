@@ -22,7 +22,7 @@ use phpOMS\Message\Http\RequestStatusCode;
 trait ApiControllerL11nTrait
 {
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemL11nTypeCreate() : void
@@ -40,7 +40,7 @@ trait ApiControllerL11nTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemL11nCreate() : void
@@ -58,7 +58,7 @@ trait ApiControllerL11nTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemL11nTypeCreateInvalidData() : void
@@ -74,7 +74,7 @@ trait ApiControllerL11nTrait
     }
 
     /**
-     * @covers Modules\ItemManagement\Controller\ApiController
+     * @covers \Modules\ItemManagement\Controller\ApiController
      * @group module
      */
     public function testApiItemL11nCreateInvalidData() : void

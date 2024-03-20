@@ -35,7 +35,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\Item
+     * @covers \Modules\ItemManagement\Models\Item
      * @group module
      */
     public function testDefault() : void
@@ -53,7 +53,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\Item
+     * @covers \Modules\ItemManagement\Models\Item
      * @group module
      */
     public function testAttributeInputOutput() : void
@@ -63,7 +63,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\Item
+     * @covers \Modules\ItemManagement\Models\Item
      * @group module
      */
     public function testL11nInputOutput() : void
@@ -73,7 +73,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Modules\ItemManagement\Models\Item
+     * @covers \Modules\ItemManagement\Models\Item
      * @group module
      */
     public function testSerialize() : void
