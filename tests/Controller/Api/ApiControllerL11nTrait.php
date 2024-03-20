@@ -23,8 +23,8 @@ trait ApiControllerL11nTrait
 {
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemL11nTypeCreate() : void
     {
         $response = new HttpResponse();
@@ -41,8 +41,8 @@ trait ApiControllerL11nTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemL11nCreate() : void
     {
         $response = new HttpResponse();
@@ -59,8 +59,8 @@ trait ApiControllerL11nTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemL11nTypeCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -75,8 +75,8 @@ trait ApiControllerL11nTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemL11nCreateInvalidData() : void
     {
         $response = new HttpResponse();

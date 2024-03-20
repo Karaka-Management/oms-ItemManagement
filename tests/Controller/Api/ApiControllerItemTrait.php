@@ -35,8 +35,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemCreate() : void
     {
         $response = new HttpResponse();
@@ -52,8 +52,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -68,8 +68,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemProfileImageCreate() : void
     {
         $response = new HttpResponse();
@@ -99,8 +99,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemFileCreate() : void
     {
         $response = new HttpResponse();
@@ -129,8 +129,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemNoteCreate() : void
     {
         $response = new HttpResponse();
@@ -150,8 +150,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiFileCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -166,8 +166,8 @@ trait ApiControllerItemTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiNoteCreateInvalidData() : void
     {
         $response = new HttpResponse();

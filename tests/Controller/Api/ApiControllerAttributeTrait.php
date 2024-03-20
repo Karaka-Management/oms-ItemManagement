@@ -24,8 +24,8 @@ trait ApiControllerAttributeTrait
 {
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeTypeCreate() : void
     {
         $response = new HttpResponse();
@@ -42,8 +42,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeTypeL11nCreate() : void
     {
         $response = new HttpResponse();
@@ -60,8 +60,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeValueIntCreate() : void
     {
         $response = new HttpResponse();
@@ -80,8 +80,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeValueStrCreate() : void
     {
         $response = new HttpResponse();
@@ -99,8 +99,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeValueFloatCreate() : void
     {
         $response = new HttpResponse();
@@ -118,8 +118,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeValueDatCreate() : void
     {
         $response = new HttpResponse();
@@ -137,8 +137,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeCreate() : void
     {
         $response = new HttpResponse();
@@ -155,8 +155,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeValueCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -171,8 +171,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeTypeCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -187,8 +187,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeTypeL11nCreateInvalidData() : void
     {
         $response = new HttpResponse();
@@ -203,8 +203,8 @@ trait ApiControllerAttributeTrait
 
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
-     * @group module
      */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeCreateInvalidData() : void
     {
         $response = new HttpResponse();

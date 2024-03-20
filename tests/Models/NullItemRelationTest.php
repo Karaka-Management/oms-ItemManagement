@@ -19,31 +19,23 @@ use Modules\ItemManagement\Models\NullItemRelation;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\ItemManagement\Models\NullItemRelation::class)]
 final class NullItemRelationTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\ItemManagement\Models\NullItemRelation
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testNull() : void
     {
         self::assertInstanceOf('\Modules\ItemManagement\Models\ItemRelation', new NullItemRelation());
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\NullItemRelation
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testId() : void
     {
         $null = new NullItemRelation(2);
         self::assertEquals(2, $null->id);
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\NullItemRelation
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testJsonSerialize() : void
     {
         $null = new NullItemRelation(2);

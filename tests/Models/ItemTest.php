@@ -22,6 +22,7 @@ use phpOMS\Localization\BaseStringL11n;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\ItemManagement\Models\Item::class)]
 final class ItemTest extends \PHPUnit\Framework\TestCase
 {
     private Item $item;
@@ -34,10 +35,7 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         $this->item = new Item();
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\Item
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testDefault() : void
     {
         self::assertEquals(0, $this->item->id);
@@ -52,30 +50,21 @@ final class ItemTest extends \PHPUnit\Framework\TestCase
         self::assertInstanceOf('\phpOMS\Stdlib\Base\FloatInt', $this->item->purchasePrice);
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\Item
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testAttributeInputOutput() : void
     {
         $this->item->addAttribute(new Attribute());
         self::assertCount(1, $this->item->attributes);
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\Item
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testL11nInputOutput() : void
     {
         $this->item->addL11n($t = new BaseStringL11n()); // has by default '' as type
         self::assertEquals($t, $this->item->getL11n(''));
     }
 
-    /**
-     * @covers \Modules\ItemManagement\Models\Item
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testSerialize() : void
     {
         $this->item->number = '123456';

@@ -20,12 +20,10 @@ use Modules\ItemManagement\Models\ItemMapper;
 /**
  * @internal
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\Modules\ItemManagement\Models\ItemMapper::class)]
 final class ItemMapperTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @covers \Modules\ItemManagement\Models\ItemMapper
-     * @group module
-     */
+    #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testCR() : void
     {
         $item         = new Item();
