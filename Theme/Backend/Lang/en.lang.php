@@ -125,6 +125,7 @@ return ['ItemManagement' => [
     'Text'                 => 'Text',
     'TimeUnit'             => 'Unit of time',
     'Title'                => 'Title',
+    'Defaults'                => 'Defaults',
     'TopCustomers'         => 'Top Customers',
     'Tracking'             => 'Tracking',
     'TradingUnit'          => 'Trading Unit',

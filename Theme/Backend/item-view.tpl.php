@@ -26,6 +26,7 @@ use phpOMS\Localization\ISO639Enum;
 use phpOMS\Localization\Money;
 use phpOMS\Localization\RegionEnum;
 use phpOMS\Message\Http\HttpHeader;
+use phpOMS\Stdlib\Base\FloatInt;
 use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Uri\UriFactory;
 
@@ -257,16 +258,7 @@ echo $this->data['nav']->render();
                                         <td><?= $this->getHtml('Date'); ?>
                                     <tbody>
                                     <?php
-                                    $newestInvoices = SalesBillMapper::getAll()
-                                        ->with('client')
-                                        ->with('client/account')
-                                        ->with('type')
-                                        ->with('type/l11n')
-                                        ->where('type/transferType', BillTransferType::SALES)
-                                        ->where('type/l11n/language', $this->response->header->l11n->language)
-                                        ->sort('id', OrderType::DESC)
-                                        ->limit(5)
-                                        ->execute();
+                                    $newestInvoices = SalesBillMapper::getItemBills($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'), 5);
 
                                     $count = 0;
 
@@ -280,7 +272,7 @@ echo $this->data['nav']->render();
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
                                         <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->createdAt->format('Y-m-d')); ?></a>
+                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->performanceDate->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
                                     <?php if ($count === 0) : ?>
                                     <tr><td colspan="5" class="empty"><?= $this->getHtml('Empty', '0', '0'); ?>
@@ -293,7 +285,7 @@ echo $this->data['nav']->render();
                     <?php endif; ?>
 
                     <?php if ($this->data['hasBilling']) :
-                        $topCustomers = SalesBillMapper::getItemTopClients($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'), 5);
+                        $topCustomers = SalesBillMapper::getItemTopClients($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'), 5);
                     ?>
                     <div class="row">
                         <?php if (!empty($topCustomers[0])) : ?>
@@ -313,7 +305,7 @@ echo $this->data['nav']->render();
                                     ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->number); ?></a>
-                                        <td><a href="<?= $url; ?>"><?= $this->printHtml($client->account->name1); ?> <?= $this->printHtml($client->account->name2); ?></a>
+                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/view?{?}&id=' . $client->id); ?>"><?= $this->printHtml($client->account->name1); ?> <?= $this->printHtml($client->account->name2); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($client->mainAddress->country); ?></a>
                                         <td><a href="<?= $url; ?>"><?= (new Money((int) $topCustomers[1][$i]['net_sales']))->getCurrency(); ?></a>
                                     <?php endforeach; ?>
@@ -329,7 +321,8 @@ echo $this->data['nav']->render();
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Sales'); ?></div>
                                 <div class="portlet-body">
-                                    <canvas id="sales-region" data-chart='{
+                                    <div style="position: relative; width: 100%; height: 100%; aspect-ratio: 2;">
+                                    <canvas id="sales-history" data-chart='{
                                             "type": "bar",
                                             "data": {
                                                 "labels": [
@@ -366,7 +359,7 @@ echo $this->data['nav']->render();
                                                             <?php
                                                                 $temp = [];
                                                                 foreach ($monthlySalesCosts as $monthly) {
-                                                                    $temp[] = ((int) $monthly['net_sales']) / 1000;
+                                                                    $temp[] = ((int) $monthly['net_sales']) / 10000;
                                                                 }
                                                             ?>
                                                             <?= \implode(',', $temp); ?>
@@ -383,7 +376,10 @@ echo $this->data['nav']->render();
                                                         "id": "axis1",
                                                         "display": true,
                                                         "position": "left",
-                                                        "suggestedMin": 0
+                                                        "suggestedMin": 0,
+                                                        "ticks": {
+                                                            "precision": 0
+                                                        }
                                                     },
                                                     "axis2": {
                                                         "id": "axis2",
@@ -406,61 +402,31 @@ echo $this->data['nav']->render();
                                                 }
                                             }
                                     }'></canvas>
+                                    </div>
                                 </div>
                             </section>
                         </div>
                         <?php endif; ?>
 
                         <?php
-                        $regionSales = [];
-                        if (!empty($regionSales)) : ?>
-                        <div class="col-xs-12 col-lg-6">
-                            <section class="portlet">
-                                <div class="portlet-head">Regions</div>
-                                <div class="portlet-body">
-                                    <canvas id="sales-region" data-chart='{
-                                        "type": "pie",
-                                        "data": {
-                                            "labels": [
-                                                    "Europe", "America", "Asia", "Africa", "CIS", "Other"
-                                                ],
-                                            "datasets": [{
-                                                "data": [
-                                                    <?= (int) ($regionSales['Europe'] ?? 0) / 1000; ?>,
-                                                    <?= (int) ($regionSales['America'] ?? 0) / 1000; ?>,
-                                                    <?= (int) ($regionSales['Asia'] ?? 0) / 1000; ?>,
-                                                    <?= (int) ($regionSales['Africa'] ?? 0) / 1000; ?>,
-                                                    <?= (int) ($regionSales['CIS'] ?? 0) / 1000; ?>,
-                                                    <?= (int) ($regionSales['Other'] ?? 0) / 1000; ?>
-                                                ],
-                                                "backgroundColor": [
-                                                    "rgb(255, 99, 132)",
-                                                    "rgb(255, 159, 64)",
-                                                    "rgb(255, 205, 86)",
-                                                    "rgb(75, 192, 192)",
-                                                    "rgb(54, 162, 235)",
-                                                    "rgb(153, 102, 255)"
-                                                ]
-                                            }]
-                                        }
-                                }'></canvas>
-                                </div>
-                            </section>
-                        </div>
-                        <?php endif; ?>
-
-                        <?php
-                        $countrySales = SalesBillMapper::getItemCountrySales($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'), 5);
+                        $countrySales = SalesBillMapper::getItemCountrySales($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'), 5);
                         if (!empty($countrySales)) : ?>
                         <div class="col-xs-12 col-lg-6">
                             <section class="portlet">
                                 <div class="portlet-head"><?= $this->getHtml('Countries'); ?></div>
                                 <div class="portlet-body">
-                                    <canvas id="sales-region" data-chart='{
+                                    <div style="position: relative; width: 100%; height: 100%; aspect-ratio: 2;">
+                                    <canvas id="sales-countries" data-chart='{
                                         "type": "bar",
                                         "data": {
                                             "labels": [
-                                                    <?= '"' . \implode('", "', \array_keys($countrySales)) . '"'; ?>
+                                                <?php
+                                                    $temp = [];
+                                                    foreach ($countrySales as $country) {
+                                                        $temp[] = ISO3166NameEnum::getBy2Code($country['country']);
+                                                    }
+                                                ?>
+                                                <?= '"' . \implode('", "', $temp) . '"'; ?>
                                                 ],
                                             "datasets": [{
                                                 "label": "YTD",
@@ -469,7 +435,7 @@ echo $this->data['nav']->render();
                                                     <?php
                                                         $temp = [];
                                                         foreach ($countrySales as $country) {
-                                                            $temp[] = ((int) $country) / 1000;
+                                                            $temp[] = (float) (((int) $country['net_sales']) / FloatInt::DIVISOR);
                                                         }
                                                     ?>
                                                     <?= \implode(',', $temp); ?>
@@ -485,11 +451,15 @@ echo $this->data['nav']->render();
                                                     "id": "axis1",
                                                     "display": true,
                                                     "position": "left",
-                                                    "suggestedMin": 0
+                                                    "suggestedMin": 0,
+                                                    "ticks": {
+                                                        "precision": 0
+                                                    }
                                                 }
                                             }
                                         }
-                                }'></canvas>
+                                    }'></canvas>
+                                    </div>
                                 </div>
                             </section>
                         </div>
@@ -505,7 +475,7 @@ echo $this->data['nav']->render();
                 <?= $l11nView->render(
                     $this->data['l11nValues'],
                     $this->data['l11nTypes'] ?? [],
-                    '{/api}item/l11n'
+                    '{/api}item/l11n?csrf={$CSRF}'
                 );
                 ?>
             </div>
@@ -518,7 +488,7 @@ echo $this->data['nav']->render();
                     $item->attributes,
                     $this->data['attributeTypes'] ?? [],
                     $this->data['units'] ?? [],
-                    '{/api}item/attribute',
+                    '{/api}item/attribute?csrf={$CSRF}',
                     $item->id
                 );
                 ?>
@@ -530,7 +500,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemContainerForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                        <form id="itemContainerForm" action="<?= UriFactory::build('{/api}bill/price?csrf={$CSRF}'); ?>" method="post"
                             data-ui-container="#itemContainerTable tbody"
                             data-add-form="itemContainerForm"
                             data-add-tpl="#itemContainerTable tbody .oms-add-tpl-itemContainer">
@@ -669,7 +639,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemSalesPriceForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                        <form id="itemSalesPriceForm" action="<?= UriFactory::build('{/api}bill/price?csrf={$CSRF}'); ?>" method="post"
                             data-ui-container="#itemSalesPriceTable tbody"
                             data-add-form="itemSalesPriceForm"
                             data-add-tpl="#itemSalesPriceTable tbody .oms-add-tpl-itemSalesPrice">
@@ -1020,7 +990,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemProcurementForm" action="<?= UriFactory::build('{/api}item/procurement'); ?>" method="post">
+                        <form id="itemProcurementForm" action="<?= UriFactory::build('{/api}item/procurement?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Procurement'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
@@ -1032,14 +1002,14 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPName"><?= $this->getHtml('MinimumLevel'); ?></label>
-                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                            <input id="iPName" name="pname" type="text">
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="form-group">
                                             <label for="iPName"><?= $this->getHtml('MaximumLevel'); ?></label>
-                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                            <input id="iPName" name="pname" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -1048,14 +1018,14 @@ echo $this->data['nav']->render();
                                     <div>
                                         <div class="form-group">
                                             <label for="iPName"><?= $this->getHtml('MaximumOrderInterval'); ?></label>
-                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                            <input id="iPName" name="pname" type="text">
                                         </div>
                                     </div>
 
                                     <div>
                                         <div class="form-group">
                                             <label for="iPName"><?= $this->getHtml('MinimumOrderQuantity'); ?></label>
-                                            <input id="iPName" name="pname" type="text" placeholder="">
+                                            <input id="iPName" name="pname" type="text">
                                         </div>
                                     </div>
                                 </div>
@@ -1069,7 +1039,7 @@ echo $this->data['nav']->render();
 
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemPurchasePriceForm" action="<?= UriFactory::build('{/api}bill/price'); ?>" method="post"
+                        <form id="itemPurchasePriceForm" action="<?= UriFactory::build('{/api}bill/price?csrf={$CSRF}'); ?>" method="post"
                             data-ui-container="#itemPurchasePriceTable tbody"
                             data-add-form="itemPurchasePriceForm"
                             data-add-tpl="#itemPurchasePriceTable tbody .oms-add-tpl-itemPurchasePrice">
@@ -1261,7 +1231,7 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/accounting'); ?>" method="post">
+                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/accounting?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Accounting'); ?></div>
                             <div class="portlet-body">
                                 <div class="form-group">
@@ -1332,7 +1302,7 @@ echo $this->data['nav']->render();
         <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <section class="portlet">
-                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/stock'); ?>" method="post">
+                        <form id="itemAccounting" action="<?= UriFactory::build('{/api}item/stock?csrf={$CSRF}'); ?>" method="post">
                             <div class="portlet-head"><?= $this->getHtml('Stock'); ?></div>
                             <div class="portlet-body">
                                 <!--
@@ -1429,6 +1399,7 @@ echo $this->data['nav']->render();
                                 <td class="wf-100"><?= $this->getHtml('Name'); ?>
                                 <td><?= $this->getHtml('Net'); ?>
                                 <td><?= $this->getHtml('Date'); ?>
+                                <td><?= $this->getHtml('Created'); ?>
                             <tbody>
                             <?php
                             $allInvoices = SalesBillMapper::getItemBills($item->id, SmartDateTime::startOfYear($this->data['business_start']), new SmartDateTime('now'));
@@ -1445,6 +1416,7 @@ echo $this->data['nav']->render();
                                 <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
                                 <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
+                                <td><a href="<?= $url; ?>"><?= $invoice->performanceDate->format('Y-m-d'); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
                             <?php endforeach; ?>
                             <?php if ($count === 0) : ?>
@@ -1509,10 +1481,12 @@ echo $this->data['nav']->render();
                             <?php endif; ?>
                         </table>
                         </div>
+                        <!--
                         <div class="portlet-foot">
                             <a tabindex="0" class="button" href="<?= UriFactory::build($previous); ?>"><?= $this->getHtml('Previous', '0', '0'); ?></a>
                             <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
                         </div>
+                        -->
                     </div>
                 </div>
             </div>

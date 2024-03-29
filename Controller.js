@@ -41,6 +41,7 @@ omsApp.Modules.ItemManagement = class {
         const self = this;
         const data = JSON.parse(chart.getAttribute('data-chart'));
 
+        /** global: Chart */
         const myChart = new Chart(chart.getContext('2d'), data);
     };
 };

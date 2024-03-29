@@ -29,7 +29,7 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute/type(\?.*$|$)' => [
+    '^.*/item/attribute/type/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeType',
             'verb'       => RouteVerb::GET,
@@ -40,13 +40,35 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute/value(\?.*$|$)' => [
+    '^.*/item/attribute/type/create(\?.*$|$)' => [
         [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValues',
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeTypeCreate',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/value/view(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValue',
             'verb'       => RouteVerb::GET,
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
+                'state'  => PermissionCategory::ATTRIBUTE,
+            ],
+        ],
+    ],
+    '^.*/item/attribute/value/create(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementAttributeValueCreate',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],

@@ -48,17 +48,17 @@ echo $this->data['nav']->render(); ?>
                                 <table class="layout wf-100">
                                     <tbody>
                                     <tr><td><label for="iSource"><?= $this->getHtml('ID'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text" placeholder="" required></span>
+                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text" required></span>
                                     <tr><td><label for="iSegment"><?= $this->getHtml('Segment'); ?></label>
-                                    <tr><td><input id="iSegment" name="segment" type="text" placeholder="" required>
+                                    <tr><td><input id="iSegment" name="segment" type="text" required>
                                     <tr><td><label for="iProductgroup"><?= $this->getHtml('Productgroup'); ?></label>
-                                    <tr><td><input id="iProductgroup" name="productgroup" type="text" placeholder="" required>
+                                    <tr><td><input id="iProductgroup" name="productgroup" type="text" required>
                                     <tr><td><label for="iGroup"><?= $this->getHtml('Group'); ?></label>
-                                    <tr><td><input id="iGroup" name="group" type="text" placeholder="" required>
+                                    <tr><td><input id="iGroup" name="group" type="text" required>
                                     <tr><td><label for="iArticlegroup"><?= $this->getHtml('Articlegroup'); ?></label>
-                                    <tr><td><input id="iArticlegroup" name="articlegroup" type="text" placeholder="" required>
+                                    <tr><td><input id="iArticlegroup" name="articlegroup" type="text" required>
                                     <tr><td><label for="iSSuccessor"><?= $this->getHtml('Successor'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text" placeholder=""></span>
+                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text"></span>
                                     <tr><td><input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-item">
                                 </table>
                             </form>
@@ -78,11 +78,11 @@ echo $this->data['nav']->render(); ?>
                                                 <option>
                                             </select>
                                     <tr><td><label for="iName"><?= $this->getHtml('Name1'); ?></label>
-                                    <tr><td><input id="iName" name="name" type="text" placeholder="">
+                                    <tr><td><input id="iName" name="name" type="text">
                                     <tr><td><label for="iName"><?= $this->getHtml('Name2'); ?></label>
-                                    <tr><td><input id="iName" name="name" type="text" placeholder="">
+                                    <tr><td><input id="iName" name="name" type="text">
                                     <tr><td><label for="iName"><?= $this->getHtml('Name3'); ?></label>
-                                    <tr><td><input id="iName" name="name" type="text" placeholder="">
+                                    <tr><td><input id="iName" name="name" type="text">
                                     <tr><td><label for="iDescription"><?= $this->getHtml('Description'); ?></label>
                                     <tr><td><textarea id="iDescription" name="description"></textarea>
                                     <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
@@ -102,13 +102,13 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Name'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPTradingUnit"><?= $this->getHtml('Unit'); ?></label>
                             <tr><td><select id="iPTracking" name="tracking">
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Value'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -125,9 +125,9 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Property'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Translation'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -144,9 +144,9 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Value'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Translation'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -160,13 +160,13 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Name'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPTradingUnit"><?= $this->getHtml('Unit'); ?></label>
                             <tr><td><select id="iPTracking" name="tracking">
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Value'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -183,9 +183,9 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Attribute'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Translation'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -202,9 +202,9 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Value'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iPCustomsId" name="customsid" type="text"></span>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('Translation'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -224,7 +224,7 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iPrice">GTIN</label>
-                            <tr><td><input id="iPrice" name="price" type="text" placeholder="">
+                            <tr><td><input id="iPrice" name="price" type="text">
                             <tr><td colspan="2"><label for="iPPriceUnit"><?= $this->getHtml('PriceUnit'); ?></label>
                             <tr><td><select id="iPPriceUnit" name="ppriceunit">
                                         <option value="0">
@@ -234,7 +234,7 @@ echo $this->data['nav']->render(); ?>
                                         <option value="0">
                                     </select><td>
                             <tr><td><label for="iPTradingUnit"><?= $this->getHtml('TradingUnit'); ?></label>
-                            <tr><td><input id="iPTradingUnit" name="tradingunit" type="number" min="0" step="any" placeholder="">
+                            <tr><td><input id="iPTradingUnit" name="tradingunit" type="number" min="0" step="any">
                             <tr><td><label for="iPTracking"><?= $this->getHtml('Tracking'); ?></label>
                             <tr><td><select id="iPTracking" name="tracking">
                                         <option><?= $this->getHtml('None'); ?>
@@ -247,7 +247,7 @@ echo $this->data['nav']->render(); ?>
                                         <option value="0">
                                     </select>
                             <tr><td><label for="iPCustomsId"><?= $this->getHtml('CustomsID'); ?></label>
-                            <tr><td><input id="iPCustomsId" name="customsid" type="text" placeholder="">
+                            <tr><td><input id="iPCustomsId" name="customsid" type="text">
                             <tr><td><label for="iSInfo"><?= $this->getHtml('Info'); ?></label>
                             <tr><td><textarea id="iSInfo" name="sinfo"></textarea>
                         </table>
@@ -262,7 +262,7 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td colspan="2"><label for="iPName"><?= $this->getHtml('Name'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder=""><td>
+                            <tr><td><input id="iPName" name="pname" type="text"><td>
                             <tr><td colspan="2"><label for="iPrice"><?= $this->getHtml('Start'); ?></label>
                             <tr><td><input id="iPrice" name="price" type="datetime-local"><td>
                             <tr><td colspan="2"><label for="iPrice"><?= $this->getHtml('End'); ?></label>
@@ -272,17 +272,17 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select><td>
                             <tr><td colspan="2"><label for="iPQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                            <tr><td><input id="iPQuantity" name="quantity" type="text" placeholder=""><td>
+                            <tr><td><input id="iPQuantity" name="quantity" type="text"><td>
                             <tr><td colspan="2"><label for="iPrice"><?= $this->getHtml('Price'); ?></label>
-                            <tr><td><input id="iPrice" name="price" type="number" step="any" min="0" placeholder=""><td>
+                            <tr><td><input id="iPrice" name="price" type="number" step="any" min="0"><td>
                             <tr><td colspan="2"><label for="iDiscount"><?= $this->getHtml('Discount'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder=""><td>
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0"><td>
                             <tr><td colspan="2"><label for="iDiscount"><?= $this->getHtml('DiscountP'); ?></label>
-                            <tr><td><input id="iDiscountP" name="discountp" type="number" step="any" min="0" placeholder=""><td>
+                            <tr><td><input id="iDiscountP" name="discountp" type="number" step="any" min="0"><td>
                             <tr><td colspan="2"><label for="iBonus"><?= $this->getHtml('Bonus'); ?></label>
-                            <tr><td><input id="iBonus" name="bonus" type="number" step="any" min="0" placeholder=""><td>
+                            <tr><td><input id="iBonus" name="bonus" type="number" step="any" min="0"><td>
                             <tr><td colspan="2"><label for="iGroup"><?= $this->getHtml('ClientGroup'); ?></label>
-                            <tr><td><input id="iGroup" name="price" type="text" placeholder=""><td><button><?= $this->getHtml('Add', '0', '0'); ?></button>
+                            <tr><td><input id="iGroup" name="price" type="text"><td><button><?= $this->getHtml('Add', '0', '0'); ?></button>
                             <tr><td colspan="2"><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -298,9 +298,9 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iSupplierId"><?= $this->getHtml('Supplier'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSupplierId" name="supplierid" type="text" placeholder="" required></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSupplierId" name="supplierid" type="text" required></span>
                             <tr><td><label for="iPrice">GTIN</label>
-                            <tr><td><input id="iPrice" name="price" type="text" placeholder="">
+                            <tr><td><input id="iPrice" name="price" type="text">
                             <tr><td><label for="iPPriceUnit"><?= $this->getHtml('PriceUnit'); ?></label>
                             <tr><td><select id="iPPriceUnit" name="ppriceunit">
                                         <option value="0">
@@ -310,7 +310,7 @@ echo $this->data['nav']->render(); ?>
                                         <option value="0">
                                     </select><td>
                             <tr><td><label for="iPTradingUnit"><?= $this->getHtml('TradingUnit'); ?></label>
-                            <tr><td><input id="iPTradingUnit" name="tradingunit" type="number" min="0" step="any" placeholder="">
+                            <tr><td><input id="iPTradingUnit" name="tradingunit" type="number" min="0" step="any">
                             <tr><td><label for="iPTracking"><?= $this->getHtml('Tracking'); ?></label>
                             <tr><td><select id="iPTracking" name="tracking">
                                         <option><?= $this->getHtml('None'); ?>
@@ -331,17 +331,17 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iPName"><?= $this->getHtml('Name'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="text">
                             <tr><td><label for="iPQuantity"><?= $this->getHtml('Quantity'); ?></label>
-                            <tr><td><input id="iPQuantity" name="quantity" type="text" placeholder="">
+                            <tr><td><input id="iPQuantity" name="quantity" type="text">
                             <tr><td><label for="iPrice"><?= $this->getHtml('Price'); ?></label>
-                            <tr><td><input id="iPrice" name="price" type="number" step="any" min="0" placeholder=""><td>
+                            <tr><td><input id="iPrice" name="price" type="number" step="any" min="0"><td>
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Discount'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('DiscountP'); ?></label>
-                            <tr><td><input id="iDiscountP" name="discountp" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscountP" name="discountp" type="number" step="any" min="0">
                             <tr><td><label for="iBonus"><?= $this->getHtml('Bonus'); ?></label>
-                            <tr><td><input id="iBonus" name="bonus" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iBonus" name="bonus" type="number" step="any" min="0">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -359,13 +359,13 @@ echo $this->data['nav']->render(); ?>
                                         <option value="0">
                                     </select>
                             <tr><td><label for="iPName"><?= $this->getHtml('ReorderLevel'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="text">
                             <tr><td><label for="iPName"><?= $this->getHtml('MinimumLevel'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="text">
                             <tr><td><label for="iPName"><?= $this->getHtml('MaximumLevel'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="text">
                             <tr><td><label for="iPName"><?= $this->getHtml('Leadtime'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="number" min="0" step="1" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="number" min="0" step="1">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
                         </table>
                     </form>
@@ -379,7 +379,7 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iPName"><?= $this->getHtml('Name'); ?></label>
-                            <tr><td><input id="iPName" name="pname" type="text" placeholder="">
+                            <tr><td><input id="iPName" name="pname" type="text">
                             <tr><td><label for="iPName"><?= $this->getHtml('Description'); ?></label>
                             <tr><td><textarea></textarea>
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
@@ -397,13 +397,13 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td colspan="2"><label for="iACostIndicator"><?= $this->getHtml('CostIndicator'); ?></label>
-                            <tr><td><input id="iACostIndicator" name="costindicator" type="text" placeholder="">
+                            <tr><td><input id="iACostIndicator" name="costindicator" type="text">
                             <tr><td colspan="2"><label for="iAEarningIndicator"><?= $this->getHtml('EarningIndicator'); ?></label>
-                            <tr><td><input id="iAEarningIndicator" name="earningindicator" type="text" placeholder="">
+                            <tr><td><input id="iAEarningIndicator" name="earningindicator" type="text">
                             <tr><td colspan="2"><label for="iACostIndicator"><?= $this->getHtml('CostCenter'); ?></label>
-                            <tr><td><input id="iACostIndicator" name="costindicator" type="text" placeholder="">
+                            <tr><td><input id="iACostIndicator" name="costindicator" type="text">
                             <tr><td colspan="2"><label for="iAEarningIndicator"><?= $this->getHtml('CostObject'); ?></label>
-                            <tr><td><input id="iAEarningIndicator" name="earningindicator" type="text" placeholder="">
+                            <tr><td><input id="iAEarningIndicator" name="earningindicator" type="text">
                         </table>
                     </form>
                 </div>
@@ -422,7 +422,7 @@ echo $this->data['nav']->render(); ?>
                                         <option>
                                     </select>
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Makespan'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iPType"><?= $this->getHtml('TimeUnit'); ?></label>
                             <tr><td><select id="iPType" name="ptye">
                                         <option value="0">ms
@@ -448,9 +448,9 @@ echo $this->data['nav']->render(); ?>
                         <table class="layout wf-100">
                             <tbody>
                             <tr><td><label for="iSource"><?= $this->getHtml('ID'); ?></label>
-                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text" placeholder=""></span>
+                            <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input id="iSource" name="source" type="text"></span>
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Quantity'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>
@@ -483,19 +483,19 @@ echo $this->data['nav']->render(); ?>
                                         <option value="0">
                                     </select>
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Quantity'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('GrossWeight'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('NetWeight'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Width'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Height'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Length'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><label for="iDiscount"><?= $this->getHtml('Volume'); ?></label>
-                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0" placeholder="">
+                            <tr><td><input id="iDiscount" name="discount" type="number" step="any" min="0">
                             <tr><td><input type="submit" value="<?= $this->getHtml('Add', '0', '0'); ?>">
                         </table>
                     </form>

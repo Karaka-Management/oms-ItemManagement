@@ -124,6 +124,7 @@ return ['ItemManagement' => [
     'Text'                 => 'Text',
     'TimeUnit'             => 'Zeiteinheit',
     'Title'                => 'Titel',
+    'Defaults'                => 'Standard',
     'TopCustomers'         => 'Top Kunden',
     'Tracking'             => 'Verfolgung',
     'TradingUnit'          => 'Handelseinheit',

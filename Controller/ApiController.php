@@ -188,7 +188,7 @@ final class ApiController extends Controller
     private function createItemDir(Item $item) : string
     {
         return '/Modules/ItemManagement/Items/'
-            . (empty($item->number) ? $item->id : $item->number);
+            . $item->id;
     }
 
     /**
@@ -302,7 +302,8 @@ final class ApiController extends Controller
             $billing->apiPriceCreate($internalRequest, $internalResponse);
         }
 
-        $this->createMediaDirForItem($item->number, $request->header->account);
+        // @todo should this collection get added to the parent collection?
+        $this->createMediaDirForItem($item->id, $request->header->account);
         $path = $this->createItemDir($item);
 
         $uploadedFiles = $request->files['item_profile_image'] ?? [];
@@ -396,19 +397,19 @@ final class ApiController extends Controller
     /**
      * Create directory for an account
      *
-     * @param string $number    Item number
-     * @param int    $createdBy Creator of the directory
+     * @param int $id    Item number
+     * @param int $createdBy Creator of the directory
      *
      * @return Collection
      *
      * @since 1.0.0
      */
-    private function createMediaDirForItem(string $number, int $createdBy) : Collection
+    private function createMediaDirForItem(int $id, int $createdBy) : Collection
     {
         $collection       = new Collection();
-        $collection->name = $number;
+        $collection->name = $id;
         $collection->setVirtualPath('/Modules/ItemManagement/Items');
-        $collection->setPath('/Modules/Media/Files/Modules/ItemManagement/Items/' . $number);
+        $collection->setPath('/Modules/Media/Files/Modules/ItemManagement/Items/' . $id);
         $collection->createdBy = new NullAccount($createdBy);
 
         CollectionMapper::create()->execute($collection);
