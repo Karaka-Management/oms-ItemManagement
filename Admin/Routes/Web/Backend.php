@@ -276,4 +276,15 @@ return [
             ],
         ],
     ],
+    '^/item/material/create(\?.*$|$)' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemMaterialCreate',
+            'verb'       => RouteVerb::GET,
+            'permission' => [
+                'module' => BackendController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::MATERIAL,
+            ],
+        ],
+    ],
 ];

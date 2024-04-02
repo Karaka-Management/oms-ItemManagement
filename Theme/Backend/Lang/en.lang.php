@@ -125,7 +125,7 @@ return ['ItemManagement' => [
     'Text'                 => 'Text',
     'TimeUnit'             => 'Unit of time',
     'Title'                => 'Title',
-    'Defaults'                => 'Defaults',
+    'Defaults'             => 'Defaults',
     'TopCustomers'         => 'Top Customers',
     'Tracking'             => 'Tracking',
     'TradingUnit'          => 'Trading Unit',
@@ -159,4 +159,8 @@ return ['ItemManagement' => [
     'Inventory'            => 'Inventory',
     'Identifier'           => 'Identifier',
     'Stocktaking'          => 'Stocktaking',
+    ':status-1'            => 'Active',
+    ':status-2'            => 'Draft',
+    ':status-3'            => 'Inactive',
+    ':status-4'            => 'Discontinued',
 ]];

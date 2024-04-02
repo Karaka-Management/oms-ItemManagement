@@ -16,8 +16,7 @@ use phpOMS\Localization\NullBaseStringL11nType;
 use phpOMS\Uri\UriFactory;
 
 /** @var \phpOMS\Localization\BaseStringL11nType */
-$type = $this->data['type'] ?? new NullBaseStringL11nType();
-
+$type  = $this->data['type'] ?? new NullBaseStringL11nType();
 $isNew = $type->id === 0;
 
 /** @var \phpOMS\Views\View $this */
@@ -47,6 +46,7 @@ echo $this->data['nav']->render(); ?>
     </div>
 </div>
 
+<?php if (!$isNew) : ?>
 <div class="row">
     <?= $this->data['l11nView']->render(
         $this->data['l11nValues'],
@@ -55,3 +55,4 @@ echo $this->data['nav']->render(); ?>
     );
     ?>
 </div>
+<?php endif; ?>

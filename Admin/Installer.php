@@ -134,10 +134,10 @@ final class Installer extends InstallerAbstract
         $module2 = $app->moduleManager->get('ItemManagement', 'ApiAttribute');
 
         /** @var \Modules\Attribute\Models\AttributeType[] $attributeTypes */
-        $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->execute();
+        $attributeTypes = ItemAttributeTypeMapper::getAll()->with('defaults')->executeGetArray();
 
         /** @var \phpOMS\Localization\BaseStringL11nType[] $l11nTypes */
-        $l11nTypes = ItemL11nTypeMapper::getAll()->execute();
+        $l11nTypes = ItemL11nTypeMapper::getAll()->executeGetArray();
 
         // Change indexing for easier search later on.
         foreach ($attributeTypes as $e) {

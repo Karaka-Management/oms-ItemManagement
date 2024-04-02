@@ -12,13 +12,13 @@
  */
 declare(strict_types=1);
 
-use Modules\Billing\Models\BillTransferType;
 use Modules\Billing\Models\Price\PriceType;
 use Modules\Billing\Models\SalesBillMapper;
+use Modules\ItemManagement\Models\ItemStatus;
+use Modules\ItemManagement\Models\NullItem;
 use Modules\Media\Models\NullMedia;
 use Modules\WarehouseManagement\Models\StockLocationMapper;
 use Modules\WarehouseManagement\Models\StockMapper;
-use phpOMS\DataStorage\Database\Query\OrderType;
 use phpOMS\Localization\ISO3166CharEnum;
 use phpOMS\Localization\ISO3166NameEnum;
 use phpOMS\Localization\ISO4217CharEnum;
@@ -31,29 +31,27 @@ use phpOMS\Stdlib\Base\SmartDateTime;
 use phpOMS\Uri\UriFactory;
 
 /** @var \Modules\ItemManagement\Models\Item $item */
-$item = $this->data['item'];
+$item  = $this->data['item'] ?? new NullItem();
+$isNew = $item->id === 0;
 
-$logs = $this->data['logs'] ?? [];
-
-$notes     = $item->notes;
-$files     = $item->files;
+$logs      = $this->data['logs'] ?? [];
 $itemImage = $this->getData('itemImage') ?? new NullMedia();
 
-$allInvoices   = $this->data['allInvoices'] ?? [];
-$topCustomers  = $this->getData('topCustomers') ?? [[], []];
-$attributeView = $this->data['attributeView'];
-$l11nView      = $this->data['l11nView'];
+$allInvoices  = $this->data['allInvoices'] ?? [];
+$topCustomers = $this->getData('topCustomers') ?? [[], []];
 
-$languages = ISO639Enum::getConstants();
-
+$languages  = ISO639Enum::getConstants();
 $regions    = RegionEnum::getConstants();
 $countries  = ISO3166CharEnum::getConstants();
 $currencies = ISO4217CharEnum::getConstants();
+
+$itemStatus = ItemStatus::getConstants();
 
 echo $this->data['nav']->render();
 ?>
 
 <div class="tabview tab-2">
+    <?php if (!$isNew) : ?>
     <div class="box">
         <ul class="tab-links">
             <li><label for="c-tab-1"><?= $this->getHtml('Profile'); ?></label>
@@ -72,10 +70,11 @@ echo $this->data['nav']->render();
             <?php if (!empty($logs)) : ?><li><label for="c-tab-15"><?= $this->getHtml('Logs'); ?></label><?php endif; ?>
         </ul>
     </div>
+    <?php endif; ?>
     <div class="tab-content">
-        <input type="radio" id="c-tab-1" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
+        <input type="radio" id="c-tab-1" name="tabular-2"<?= $isNew || $this->request->uri->fragment === 'c-tab-1' ? ' checked' : ''; ?>>
         <div class="tab">
-            <?php if (!empty($notes) && ($warning = $item->getEditorDocByTypeName('item_backend_warning'))->id !== 0) : ?>
+            <?php if (!empty($item->notes) && ($warning = $item->getEditorDocByTypeName('item_backend_warning'))->id !== 0) : ?>
             <!-- If note warning exists -->
             <div class="row">
                 <div class="col-xs-12">
@@ -89,24 +88,44 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
                     <section class="portlet">
-                        <form>
+                        <form id="itemForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item?csrf={$CSRF}'); ?>">
                             <div class="portlet-body">
-                              <table class="layout wf-100">
-                                    <tr><td><label for="iId"><?= $this->getHtml('ID', '0', '0'); ?></label>
-                                    <tr><td><span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input type="text" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>" disabled></span>
-                                    <tr><td><label for="iName1"><?= $this->getHtml('Name1'); ?></label>
-                                    <tr><td><input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>" spellcheck="false" required>
-                                    <tr><td><label for="iName2"><?= $this->getHtml('Name2'); ?></label>
-                                    <tr><td><input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->content); ?>" spellcheck="false">
-                              </table>
+                                <div class="form-group">
+                                    <?= $this->getHtml('ID', '0', '0'); ?></label>
+                                    <span class="input"><button type="button" formaction=""><i class="g-icon">book</i></button><input type="text" id="iId" min="1" name="id" value="<?= $this->printHtml($item->number); ?>"<?= $isNew ? ' required' : ' disabled'; ?>></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iStatus"><?= $this->getHtml('Status'); ?></label>
+                                    <select id="iStatus" name="status">
+                                        <?php foreach ($itemStatus as $status) : ?>
+                                            <option value="<?= $status; ?>"<?= $item->status === $status ? ' selected': ''; ?>><?= $this->getHtml(':status-' . $status); ?>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iName1"><?= $this->getHtml('Name1'); ?></label>
+                                    <input type="text" id="iName1" name="name1" value="<?= $this->printHtml($item->getL11n('name1')->content); ?>" spellcheck="false" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="iName2"><?= $this->getHtml('Name2'); ?></label>
+                                    <input type="text" id="iName2" name="name2" value="<?= $this->printHtml($item->getL11n('name2')->content); ?>" spellcheck="false">
+                                </div>
                             </div>
                             <div class="portlet-foot">
-                                <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
-                                <input class="right-xs cancel" type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
+                                <?php if ($isNew) : ?>
+                                    <input type="submit" value="<?= $this->getHtml('Create', '0', '0'); ?>" name="create-item">
+                                <?php else : ?>
+                                    <input type="submit" value="<?= $this->getHtml('Save', '0', '0'); ?>" name="save-item">
+                                    <input class="cancel end-xs" type="submit" value="<?= $this->getHtml('Delete', '0', '0'); ?>" name="delete-item">
+                                <?php endif; ?>
                             </div>
                         </form>
                     </section>
 
+                    <?php if (!$isNew) : ?>
                     <section class="portlet">
                         <div class="portlet-body">
                             <img alt="<?= $this->printHtml($itemImage->name); ?>" width="100%" loading="lazy" class="item-image"
@@ -121,9 +140,12 @@ echo $this->data['nav']->render();
                             <textarea class="undecorated"></textarea>
                         </div>
                     </section>
+                    <?php endif; ?>
                 </div>
+
+                <?php if (!$isNew) : ?>
                 <div class="col-xs-12 col-lg-9 plain-grid">
-                    <?php if ($this->data['hasBilling']) : ?>
+                    <?php if ($this->data['hasBilling'] ?? false) : ?>
                     <div class="row">
                         <div class="col-xs-12 col-lg-4">
                             <section class="portlet hl-7">
@@ -192,7 +214,7 @@ echo $this->data['nav']->render();
                                     <tbody>
                                     <?php
                                     $count = 0;
-                                    foreach ($notes as $note) :
+                                    foreach ($item->notes as $note) :
                                         ++$count;
                                         $url = UriFactory::build('{/base}/editor/view?{?}&id=' . $note->id);
                                     ?>
@@ -224,7 +246,7 @@ echo $this->data['nav']->render();
                                     <tbody>
                                     <?php
                                     $count = 0;
-                                    foreach ($files as $file) :
+                                    foreach ($item->files as $file) :
                                         ++$count;
                                         $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
                                     ?>
@@ -242,7 +264,7 @@ echo $this->data['nav']->render();
                         </div>
                     </div>
 
-                    <?php if ($this->data['hasBilling']) : ?>
+                    <?php if ($this->data['hasBilling'] ?? false) : ?>
                     <div class="row">
                         <div class="col-xs-12">
                             <section class="portlet">
@@ -265,12 +287,13 @@ echo $this->data['nav']->render();
                                     /** @var \Modules\Billing\Models\Bill $invoice */
                                     foreach ($newestInvoices as $invoice) :
                                         ++$count;
-                                        $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
+                                        $url       = UriFactory::build('{/base}/sales/bill/view?{?}&id=' . $invoice->id);
+                                        $clientUrl = UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id);
                                         ?>
                                     <tr data-href="<?= $url; ?>">
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->getNumber()); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->type->getL11n()); ?></a>
-                                        <td><a class="content" href="<?= UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id); ?>"><?= $this->printHtml($invoice->billTo); ?></a>
+                                        <td><a class="content" href="<?= $clientUrl; ?>"><?= $this->printHtml($invoice->billTo); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($invoice->performanceDate->format('Y-m-d')); ?></a>
                                     <?php endforeach; ?>
@@ -284,7 +307,7 @@ echo $this->data['nav']->render();
                     </div>
                     <?php endif; ?>
 
-                    <?php if ($this->data['hasBilling']) :
+                    <?php if ($this->data['hasBilling'] ?? false) :
                         $topCustomers = SalesBillMapper::getItemTopClients($item->id, (new SmartDateTime('now'))->createModify(-1), new SmartDateTime('now'), 5);
                     ?>
                     <div class="row">
@@ -467,12 +490,15 @@ echo $this->data['nav']->render();
                     </div>
                     <?php endif; ?>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
+
+        <?php if (!$isNew) : ?>
         <input type="radio" id="c-tab-2" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
-                <?= $l11nView->render(
+                <?= $this->data['l11nView']->render(
                     $this->data['l11nValues'],
                     $this->data['l11nTypes'] ?? [],
                     '{/api}item/l11n?csrf={$CSRF}'
@@ -484,7 +510,7 @@ echo $this->data['nav']->render();
         <input type="radio" id="c-tab-3" name="tabular-2" checked>
         <div class="tab">
             <div class="row">
-                <?= $attributeView->render(
+                <?= $this->data['attributeView']->render(
                     $item->attributes,
                     $this->data['attributeTypes'] ?? [],
                     $this->data['units'] ?? [],
@@ -1266,7 +1292,7 @@ echo $this->data['nav']->render();
                                         $costcenters = \Modules\Accounting\Models\CostCenterMapper::getAll()
                                             ->with('l11n')
                                             ->where('l11n/language', $this->response->header->l11n->language)
-                                            ->execute();
+                                            ->executeGetArray();
                                         foreach ($costcenters as $cc) : ?>
                                             <option value="<?= $cc->id; ?>"><?= $this->printHtml($cc->code . ' ' . $cc->getL11n()); ?>
                                         <?php endforeach; ?>
@@ -1281,7 +1307,7 @@ echo $this->data['nav']->render();
                                         $costobjects = \Modules\Accounting\Models\CostObjectMapper::getAll()
                                             ->with('l11n')
                                             ->where('l11n/language', $this->response->header->l11n->language)
-                                            ->execute();
+                                            ->executeGetArray();
                                         foreach ($costobjects as $co) : ?>
                                             <option value="<?= $co->id; ?>"><?= $this->printHtml($co->code . ' ' . $co->getL11n()); ?>
                                         <?php endforeach; ?>
@@ -1310,7 +1336,7 @@ echo $this->data['nav']->render();
                                     <label for="iItemStockDefault"><?= $this->getHtml('DefaultStock'); ?></label>
                                     <select id="iItemStockDefault" name="stockdefaultstock">
                                     <?php
-                                        $stocks = StockMapper::getAll()->execute();
+                                        $stocks = StockMapper::getAll()->executeGetArray();
                                         foreach ($stocks as $stock) :
                                     ?>
                                         <option value="<?= $stock->id; ?>"><?= $this->printHtml($stock->name); ?>
@@ -1322,7 +1348,7 @@ echo $this->data['nav']->render();
                                     <label for="iItemStockLocation"><?= $this->getHtml('DefaultStockLocation'); ?></label>
                                     <select id="iItemStockLocation" name="stockdefaultlocation">
                                     <?php
-                                        $stocks = StockLocationMapper::getAll()->execute();
+                                        $stocks = StockLocationMapper::getAll()->executeGetArray();
                                         foreach ($stocks as $stock) :
                                     ?>
                                         <option value="<?= $stock->id; ?>"><?= $this->printHtml($stock->name); ?>
@@ -1409,12 +1435,13 @@ echo $this->data['nav']->render();
                             /** @var \Modules\Billing\Models\Bill $invoice */
                             foreach ($allInvoices as $invoice) :
                                 ++$count;
-                                $url = UriFactory::build('{/base}/sales/bill?{?}&id=' . $invoice->id);
+                                $url       = UriFactory::build('{/base}/sales/bill/view?{?}&id=' . $invoice->id);
+                                $clientUrl = UriFactory::build('{/base}/sales/client/view?{?}&id=' . $invoice->client->id);
                                 ?>
                             <tr data-href="<?= $url; ?>">
                                 <td><a href="<?= $url; ?>"><?= $invoice->getNumber(); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->type->getL11n(); ?></a>
-                                <td><a href="<?= $url; ?>"><?= $invoice->billTo; ?></a>
+                                <td><a class="content" href="<?= $clientUrl; ?>"><?= $invoice->billTo; ?></a>
                                 <td><a href="<?= $url; ?>"><?= $this->getCurrency($invoice->netSales, symbol: ''); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->performanceDate->format('Y-m-d'); ?></a>
                                 <td><a href="<?= $url; ?>"><?= $invoice->createdAt->format('Y-m-d'); ?></a>
@@ -1491,6 +1518,7 @@ echo $this->data['nav']->render();
                 </div>
             </div>
         </div>
+        <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>

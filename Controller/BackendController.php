@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\Controller;
 
+use Modules\Attribute\Models\NullAttributeType;
+use Modules\Attribute\Models\NullAttributeValue;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\ClientManagement\Models\Attribute\ClientAttributeTypeMapper;
 use Modules\ClientManagement\Models\Attribute\ClientAttributeValueL11nMapper;
@@ -73,13 +75,13 @@ final class BackendController extends Controller
      */
     public function viewItemManagementAttributeTypeList(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
-        $view = new \Modules\Attribute\Theme\Backend\Components\AttributeTypeListView($this->app->l11nManager, $request, $response);
+        $view              = new \Modules\Attribute\Theme\Backend\Components\AttributeTypeListView($this->app->l11nManager, $request, $response);
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
 
         $view->attributes = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
-            ->execute();
+            ->executeGetArray();
 
         $view->path = 'item';
 
@@ -100,7 +102,7 @@ final class BackendController extends Controller
      */
     public function viewItemManagementAttributeType(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
-        $view = new \Modules\Attribute\Theme\Backend\Components\AttributeTypeView($this->app->l11nManager, $request, $response);
+        $view              = new \Modules\Attribute\Theme\Backend\Components\AttributeTypeView($this->app->l11nManager, $request, $response);
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
 
         $view->attribute = ItemAttributeTypeMapper::get()
@@ -114,7 +116,7 @@ final class BackendController extends Controller
 
         $view->l11ns = ItemAttributeTypeL11nMapper::getAll()
             ->where('ref', $view->attribute->id)
-            ->execute();
+            ->executeGetArray();
 
         $view->path = 'item';
 
@@ -135,8 +137,10 @@ final class BackendController extends Controller
      */
     public function viewItemManagementAttributeValue(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
-        $view = new \Modules\Attribute\Theme\Backend\Components\AttributeValueView($this->app->l11nManager, $request, $response);
+        $view              = new \Modules\Attribute\Theme\Backend\Components\AttributeValueView($this->app->l11nManager, $request, $response);
         $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
+
+        $view->type = ItemAttributeTypeMapper::get()->where('id', (int) $request->getData('type'))->execute();
 
         $view->attribute = ItemAttributeValueMapper::get()
             ->with('l11n')
@@ -146,7 +150,7 @@ final class BackendController extends Controller
 
         $view->l11ns = ItemAttributeValueL11nMapper::getAll()
             ->where('ref', $view->attribute->id)
-            ->execute();
+            ->executeGetArray();
 
         // @todo Also find the ItemAttributeType
 
@@ -183,7 +187,7 @@ final class BackendController extends Controller
             ->where('files/types/name', 'item_profile_image')
             ->where('unit', $this->app->unitId)
             ->limit(50)
-            ->execute();
+            ->executeGetArray();
 
         $view->data['items'] = $items;
 
@@ -275,7 +279,11 @@ final class BackendController extends Controller
      */
     public function viewItemManagementItemCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
     {
-        return $this->viewItemManagementItem($request, $response, $data);
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-view');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004803001, $request, $response);
+
+        return $view;
     }
 
     /**
@@ -460,20 +468,20 @@ final class BackendController extends Controller
         $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
 
         $view->data['l11nTypes'] = ItemL11nTypeMapper::getAll()
-            ->execute();
+            ->executeGetArray();
 
         $view->data['l11nValues'] = ItemL11nMapper::getAll()
             ->with('type')
             ->where('ref', $view->data['item']->id)
-            ->execute();
+            ->executeGetArray();
 
         $view->data['attributeTypes'] = ItemAttributeTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
-            ->execute();
+            ->executeGetArray();
 
         $view->data['units'] = UnitMapper::getAll()
-            ->execute();
+            ->executeGetArray();
 
         $view->data['hasBilling'] = $this->app->moduleManager->isActive('Billing');
 
@@ -483,7 +491,7 @@ final class BackendController extends Controller
                 ->with('supplier/account')
                 ->where('item', $view->data['item']->id)
                 ->where('client', null)
-                ->execute()
+                ->executeGetArray()
             : [];
 
         /** @var \Modules\Attribute\Models\AttributeType[] $tmp */
@@ -498,7 +506,7 @@ final class BackendController extends Controller
             ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
                 ->where(ItemAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
                 ->orWhere(ItemAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
-            ->execute();
+            ->executeGetArray();
 
         $defaultAttributeTypes = [];
         foreach ($tmp as $t) {
@@ -515,7 +523,7 @@ final class BackendController extends Controller
             ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
                 ->where(ClientAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
                 ->orWhere(ClientAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
-            ->execute();
+            ->executeGetArray();
 
         $clientSegmentationTypes = [];
         foreach ($tmp as $t) {
@@ -538,7 +546,7 @@ final class BackendController extends Controller
                 ->where('type', StringUtils::intHash(ItemMapper::class))
                 ->where('module', 'ItemManagement')
                 ->where('ref', (string) $view->data['item']->id)
-                ->execute();
+                ->executeGetArray();
         }
 
         $view->data['logs'] = $logs;
@@ -549,7 +557,7 @@ final class BackendController extends Controller
             ->with('types')
             ->join('id', ItemMapper::class, 'files') // id = media id, files = item relations
                 ->on('id', $view->data['item']->id, relation: 'files') // id = item id
-            ->execute();
+            ->executeGetArray();
 
         $view->data['media-upload'] = new \Modules\Media\Theme\Backend\Components\Upload\BaseView($this->app->l11nManager, $request, $response);
         $view->data['note']         = new \Modules\Editor\Theme\Backend\Components\Note\BaseView($this->app->l11nManager, $request, $response);
@@ -820,7 +828,7 @@ final class BackendController extends Controller
         $view->data['types'] = MaterialTypeMapper::getAll()
             ->with('l11n')
             ->where('l11n/language', $response->header->l11n->language)
-            ->execute();
+            ->executeGetArray();
 
         return $view;
     }
@@ -849,14 +857,83 @@ final class BackendController extends Controller
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 
-        $view->data['l11nView'] = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
-
         /** @var \phpOMS\Localization\BaseStringL11n[] $l11nValues */
         $l11nValues = MaterialTypeL11nMapper::getAll()
             ->where('ref', $view->data['type']->id)
-            ->execute();
+            ->executeGetArray();
 
+        $view->data['l11nView']   = new \Web\Backend\Views\L11nView($this->app->l11nManager, $request, $response);
         $view->data['l11nValues'] = $l11nValues;
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemMaterialCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view = new View($this->app->l11nManager, $request, $response);
+        $view->setTemplate('/Modules/ItemManagement/Theme/Backend/material-view');
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeTypeCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view              = new \Modules\Attribute\Theme\Backend\Components\AttributeTypeView($this->app->l11nManager, $request, $response);
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
+
+        $view->attribute = new NullAttributeType();
+
+        $view->path = 'item';
+
+        return $view;
+    }
+
+    /**
+     * Routing end-point for application behavior.
+     *
+     * @param RequestAbstract  $request  Request
+     * @param ResponseAbstract $response Response
+     * @param array            $data     Generic data
+     *
+     * @return RenderableInterface
+     *
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function viewItemManagementAttributeValueCreate(RequestAbstract $request, ResponseAbstract $response, array $data = []) : RenderableInterface
+    {
+        $view              = new \Modules\Attribute\Theme\Backend\Components\AttributeValueView($this->app->l11nManager, $request, $response);
+        $view->data['nav'] = $this->app->moduleManager->get('Navigation')->createNavigationMid(1004802001, $request, $response);
+
+        $view->type      = ItemAttributeTypeMapper::get()->where('id', (int) $request->getData('type'))->execute();
+        $view->attribute = new NullAttributeValue();
+
+        $view->path = 'item';
 
         return $view;
     }

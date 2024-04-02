@@ -92,7 +92,7 @@ final class ApiController extends Controller
             ->where('language', $response->header->l11n->language)
             ->where('content', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
             ->limit($request->getDataInt('limit') ?? 50)
-            ->execute();
+            ->executeGetArray();
 
         if (empty($l11n)) {
             /** @var BaseStringL11n[] $l11n */
@@ -102,7 +102,7 @@ final class ApiController extends Controller
                 ->where('language', $response->header->l11n->language)
                 ->where('content', '%' . ($request->getDataString('search') ?? '') . '%', 'LIKE')
                 ->limit($request->getDataInt('limit') ?? 50)
-                ->execute();
+                ->executeGetArray();
         }
 
         if (empty($l11n)) {
@@ -115,7 +115,7 @@ final class ApiController extends Controller
                     ->where('language', $response->header->l11n->language)
                     ->where('content', '%' . $search . '%', 'LIKE')
                     ->limit($request->getDataInt('limit') ?? 50)
-                    ->execute();
+                    ->executeGetArray();
 
                 if (!empty($l11n)) {
                     break;
@@ -131,7 +131,7 @@ final class ApiController extends Controller
                         ->where('language', $response->header->l11n->language)
                         ->where('content', '%' . $search . '%', 'LIKE')
                         ->limit($request->getDataInt('limit') ?? 50)
-                        ->execute();
+                        ->executeGetArray();
 
                     if (!empty($l11n)) {
                         break;
@@ -153,7 +153,7 @@ final class ApiController extends Controller
                 ->where('l11n/type/title', ['name1', 'name2'], 'IN')
                 ->where('l11n/language', $request->header->l11n->language)
                 ->where('id', $itemIds, 'IN')
-                ->execute();
+                ->executeGetArray();
         }
 
         $response->header->set('Content-Type', MimeType::M_JSON, true);
@@ -256,7 +256,7 @@ final class ApiController extends Controller
         /** @var \Modules\Attribute\Models\AttributeType[] $types */
         $types = ItemAttributeTypeMapper::getAll()
             ->where('name', ['default_sales_container', 'default_purchase_container'], 'IN')
-            ->execute();
+            ->executeGetArray();
 
         $primaryContainer = \reset($item->container);
         if ($primaryContainer !== false) {
@@ -379,7 +379,7 @@ final class ApiController extends Controller
         /** @var \Modules\Attribute\Models\AttributeType[] $types */
         $types = ItemAttributeTypeMapper::getAll()
             ->where('name', \array_keys($segmentation), 'IN')
-            ->execute();
+            ->executeGetArray();
 
         foreach ($types as $type) {
             $internalResponse = clone $response;
@@ -397,7 +397,7 @@ final class ApiController extends Controller
     /**
      * Create directory for an account
      *
-     * @param int $id    Item number
+     * @param int $id        Item number
      * @param int $createdBy Creator of the directory
      *
      * @return Collection
