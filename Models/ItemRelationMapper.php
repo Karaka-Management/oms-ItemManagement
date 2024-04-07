@@ -17,7 +17,7 @@ namespace Modules\ItemManagement\Models;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
- * Item mapper class.
+ * ItemRelation mapper class.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 2.0

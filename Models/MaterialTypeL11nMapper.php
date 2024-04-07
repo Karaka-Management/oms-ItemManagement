@@ -18,7 +18,7 @@ use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\Localization\BaseStringL11n;
 
 /**
- * Item mapper class.
+ * MaterialTypeL11n mapper class.
  *
  * @package Modules\ItemManagement\Models
  * @license OMS License 2.0

@@ -192,7 +192,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to export items items
+     * Api method to export items
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -395,7 +395,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Create directory for an account
+     * Create directory for a item
      *
      * @param int $id        Item number
      * @param int $createdBy Creator of the directory
@@ -467,7 +467,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to create item attribute
+     * Api method to create Attribute
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -515,7 +515,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Validate item attribute create request
+     * Validate item l11n create request
      *
      * @param RequestAbstract $request Request
      *
@@ -749,7 +749,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to create item files
+     * Api method to create files
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -827,7 +827,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Validate item note create request
+     * Validate note create request
      *
      * @param RequestAbstract $request Request
      *
@@ -847,7 +847,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Api method to create item files
+     * Api method to create Note
      *
      * @param RequestAbstract  $request  Request
      * @param ResponseAbstract $response Response
@@ -885,7 +885,7 @@ final class ApiController extends Controller
     }
 
     /**
-     * Validate item note create request
+     * Validate note create request
      *
      * @param RequestAbstract $request Request
      *

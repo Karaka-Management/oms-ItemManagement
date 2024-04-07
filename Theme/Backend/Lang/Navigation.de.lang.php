@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 return ['Navigation' => [
     'Analyze'        => 'Analysieren',
-    'Article'        => 'Artikel',
     'Attributes'     => 'Attribute',
     'Create'         => 'Erstellen',
     'Item'           => 'Artikel',

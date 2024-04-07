@@ -18,7 +18,7 @@ use Modules\Attribute\Models\AttributeValue;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 
 /**
- * Item mapper class.
+ * AttributEValue mapper class.
  *
  * @package Modules\ItemManagement\Models\Attribute
  * @license OMS License 2.0
