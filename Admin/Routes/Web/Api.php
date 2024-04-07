@@ -23,7 +23,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemListExport',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -36,7 +36,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemFind',
             'verb'       => RouteVerb::GET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -49,7 +49,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -60,7 +60,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -73,7 +73,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -84,7 +84,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -97,7 +97,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeL11nCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -108,7 +108,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeL11nUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -121,7 +121,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -132,7 +132,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -145,7 +145,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueL11nCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -156,7 +156,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueL11nUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -169,7 +169,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -180,7 +180,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -193,7 +193,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nTypeCreate',
             'verb'       => RouteVerb::PUT,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
@@ -204,7 +204,7 @@ return [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nTypeUpdate',
             'verb'       => RouteVerb::SET,
             'csrf'       => true,
-            'active' => true,
+            'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
