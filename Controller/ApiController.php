@@ -32,7 +32,6 @@ use Modules\ItemManagement\Models\SettingsEnum as ItemSettingsEnum;
 use Modules\ItemManagement\Models\StockIdentifierType;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
-use Modules\Media\Models\MediaMapper;
 use Modules\Media\Models\MediaTypeMapper;
 use Modules\Media\Models\PathSettings;
 use phpOMS\Account\PermissionType;
@@ -308,47 +307,28 @@ final class ApiController extends Controller
 
         $uploadedFiles = $request->files['item_profile_image'] ?? [];
         if (!empty($uploadedFiles)) {
+            /** @var \Modules\Media\Models\MediaType $profileImageType */
+            $profileImageType = MediaTypeMapper::get()
+                ->where('name', 'item_profile_image')
+                ->execute();
+
             // upload image
-            $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
+            $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
                 names: [],
                 fileNames: [],
                 files: $uploadedFiles,
                 account: $request->header->account,
                 basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
                 virtualPath: $path,
-                pathSettings: PathSettings::FILE_PATH
-            );
-
-            // create type / media relation
-            /** @var \Modules\Media\Models\MediaType $profileImageType */
-            $profileImageType = MediaTypeMapper::get()
-                ->where('name', 'item_profile_image')
-                ->execute();
-
-            $this->createModelRelation(
-                $request->header->account,
-                $uploaded[0]->id,
-                $profileImageType->id,
-                MediaMapper::class,
-                'types',
-                '',
-                $request->getOrigin()
-            );
-
-            // create item relation
-            $this->createModelRelation(
-                $request->header->account,
-                $item->id,
-                $uploaded[0]->id,
-                ItemMapper::class,
-                'files',
-                '',
-                $request->getOrigin()
+                pathSettings: PathSettings::FILE_PATH,
+                type: $profileImageType->id,
+                rel: $item->id,
+                mapper: ItemMapper::class,
+                field: 'files'
             );
         }
 
         $this->createItemSegmentation($request, $response, $item);
-
         $this->createStandardCreateResponse($request, $response, $item);
     }
 
@@ -407,7 +387,7 @@ final class ApiController extends Controller
     private function createMediaDirForItem(int $id, int $createdBy) : Collection
     {
         $collection       = new Collection();
-        $collection->name = $id;
+        $collection->name = (string) $id;
         $collection->setVirtualPath('/Modules/ItemManagement/Items');
         $collection->setPath('/Modules/Media/Files/Modules/ItemManagement/Items/' . $id);
         $collection->createdBy = new NullAccount($createdBy);
@@ -770,11 +750,9 @@ final class ApiController extends Controller
             return;
         }
 
-        $uploadedFiles = $request->files;
-
-        if (empty($uploadedFiles)) {
+        if (empty($request->files)) {
             $response->header->status = RequestStatusCode::R_400;
-            $this->createInvalidCreateResponse($request, $response, $uploadedFiles);
+            $this->createInvalidCreateResponse($request, $response, $request->files);
 
             return;
         }
@@ -789,39 +767,22 @@ final class ApiController extends Controller
         $uploaded = $this->app->moduleManager->get('Media', 'Api')->uploadFiles(
             names: $request->getDataList('names'),
             fileNames: $request->getDataList('filenames'),
-            files: $uploadedFiles,
+            files: $request->files,
             account: $request->header->account,
             basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
             virtualPath: $path,
-            pathSettings: PathSettings::FILE_PATH
+            pathSettings: PathSettings::FILE_PATH,
+            type: $request->getDataInt('type'),
+            rel: $item->id,
+            mapper: ItemMapper::class,
+            field: 'files'
         );
 
-        if ($request->hasData('type')) {
-            foreach ($uploaded as $file) {
-                $this->createModelRelation(
-                    $request->header->account,
-                    $file->id,
-                    $request->getDataInt('type'),
-                    MediaMapper::class,
-                    'types',
-                    '',
-                    $request->getOrigin()
-                );
-            }
-        }
-
-        if (empty($uploaded)) {
+        if (empty($uploaded->sources)) {
             $this->createInvalidAddResponse($request, $response, []);
 
             return;
         }
-
-        $this->createModelRelation(
-            $request->header->account,
-            (int) $request->getData('item'),
-            \reset($uploaded)->id,
-            ItemMapper::class, 'files', '', $request->getOrigin()
-        );
 
         $this->createStandardUpdateResponse($request, $response, $uploaded);
     }
