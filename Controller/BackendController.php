@@ -185,7 +185,7 @@ final class BackendController extends Controller
             ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2'], 'IN')
             ->where('files/types/name', 'item_profile_image')
-            ->where('unit', $this->app->unitId)
+            ->where('unit', [$this->app->unitId, null])
             ->limit(50)
             ->executeGetArray();
 
@@ -503,9 +503,7 @@ final class BackendController extends Controller
                 'sales_tax_code', 'purchase_tax_code',
                 //'has_inventory', 'inventory_identifier', 'stocktaking_type',
             ], 'IN')
-            ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
-                ->where(ItemAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
-                ->orWhere(ItemAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
+            ->where('defaults/l11n/language', [$response->header->l11n->language, null])
             ->executeGetArray();
 
         $defaultAttributeTypes = [];
@@ -520,9 +518,7 @@ final class BackendController extends Controller
             ->with('defaults')
             ->with('defaults/l11n')
             ->where('name', ['segment', 'section', 'client_group', 'client_type'], 'IN')
-            ->where('defaults/l11n', (new Where($this->app->dbPool->get()))
-                ->where(ClientAttributeValueL11nMapper::getColumnByMember('ref') ?? '', '=', null)
-                ->orWhere(ClientAttributeValueL11nMapper::getColumnByMember('language') ?? '', '=', $response->header->l11n->language))
+            ->where('defaults/l11n/language', [$response->header->l11n->language, null])
             ->executeGetArray();
 
         $clientSegmentationTypes = [];

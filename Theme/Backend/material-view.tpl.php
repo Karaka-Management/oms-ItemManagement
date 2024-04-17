@@ -23,13 +23,13 @@ $isNew = $type->id === 0;
 echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-6">
-        <div class="portlet">
+        <section class="portlet">
             <form id="materialForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item/material?csrf={$CSRF}'); ?>">
                 <div class="portlet-head"><?= $this->getHtml('Material'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">
                         <label for="iName"><?= $this->getHtml('Name'); ?></label>
-                        <input type="text" name="code" id="iName" value="<?= $this->printHtml($type->title); ?>">
+                        <input type="text" name="name" id="iName" value="<?= $this->printHtml($type->title); ?>">
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@ echo $this->data['nav']->render(); ?>
                     <?php endif; ?>
                 </div>
             </form>
-        </div>
+        </section>
     </div>
 </div>
 

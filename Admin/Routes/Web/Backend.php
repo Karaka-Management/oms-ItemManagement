@@ -127,18 +127,6 @@ return [
             ],
         ],
     ],
-    '^/sales/item/create(\?.*$|$)' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesCreate',
-            'verb'       => RouteVerb::GET,
-            'active'     => true,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::CREATE,
-                'state'  => PermissionCategory::SALES_ITEM,
-            ],
-        ],
-    ],
     '^/sales/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementSalesItem',
@@ -164,18 +152,6 @@ return [
             ],
         ],
     ],
-    '^/purchase/item/create(\?.*$|$)' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseCreate',
-            'verb'       => RouteVerb::GET,
-            'active'     => true,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::CREATE,
-                'state'  => PermissionCategory::PURCHASE_ITEM,
-            ],
-        ],
-    ],
     '^/purchase/item/view(\?.*$|$)' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementPurchaseItem',
@@ -197,18 +173,6 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::STOCK_ITEM,
-            ],
-        ],
-    ],
-    '.*/warehouse/item/create(\?.*$|$)' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementWarehousingCreate',
-            'verb'       => RouteVerb::GET,
-            'active'     => true,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::STOCK_ITEM,
             ],
         ],
@@ -246,18 +210,6 @@ return [
             'permission' => [
                 'module' => BackendController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
-            ],
-        ],
-    ],
-    '^/production/item/create(\?.*$|$)' => [
-        [
-            'dest'       => '\Modules\ItemManagement\Controller\BackendController:viewItemManagementProductionCreate',
-            'verb'       => RouteVerb::GET,
-            'active'     => true,
-            'permission' => [
-                'module' => BackendController::NAME,
-                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],

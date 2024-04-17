@@ -213,21 +213,6 @@
                         "children": []
                     }
                 ]
-            },
-            {
-                "id": 1004805201,
-                "pid": "/sales/item",
-                "type": 3,
-                "subtype": 1,
-                "name": "Create",
-                "uri": "{/base}/sales/item/create",
-                "target": "self",
-                "icon": null,
-                "order": 5,
-                "from": "ItemManagement",
-                "permission": { "permission": 4, "category": null, "element": null },
-                "parent": 1004805001,
-                "children": []
             }
         ]
     },
@@ -275,21 +260,6 @@
                         "children": []
                     }
                 ]
-            },
-            {
-                "id": 1004806201,
-                "pid": "/purchase/item",
-                "type": 3,
-                "subtype": 1,
-                "name": "Create",
-                "uri": "{/base}/purchase/item/create",
-                "target": "self",
-                "icon": null,
-                "order": 5,
-                "from": "ItemManagement",
-                "permission": { "permission": 4, "category": null, "element": null },
-                "parent": 1004806001,
-                "children": []
             }
         ]
     },
@@ -337,21 +307,6 @@
                         "children": []
                     }
                 ]
-            },
-            {
-                "id": 1004807201,
-                "pid": "/warehouse/item",
-                "type": 3,
-                "subtype": 1,
-                "name": "Create",
-                "uri": "{/base}/warehouse/item/create",
-                "target": "self",
-                "icon": null,
-                "order": 5,
-                "from": "ItemManagement",
-                "permission": { "permission": 4, "category": null, "element": null },
-                "parent": 1004807001,
-                "children": []
             }
         ]
     },
@@ -399,21 +354,6 @@
                         "children": []
                     }
                 ]
-            },
-            {
-                "id": 1004808201,
-                "pid": "/production/item",
-                "type": 3,
-                "subtype": 1,
-                "name": "Create",
-                "uri": "{/base}/production/item/create",
-                "target": "self",
-                "icon": null,
-                "order": 5,
-                "from": "ItemManagement",
-                "permission": { "permission": 4, "category": null, "element": null },
-                "parent": 1004807001,
-                "children": []
             }
         ]
     },
