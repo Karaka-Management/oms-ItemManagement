@@ -3,6 +3,7 @@ import { Autoloader } from '../../jsOMS/Autoloader.js';
 
 Autoloader.defineNamespace('omsApp.Modules');
 
+/* global omsApp */
 omsApp.Modules.ItemManagement = class {
     /**
      * @constructor
@@ -16,8 +17,11 @@ omsApp.Modules.ItemManagement = class {
 
     bind (id)
     {
-        const e    = typeof id === 'undefined' ? document.getElementsByTagName('canvas') : [document.getElementById(id)],
-            length = e.length;
+        const e = typeof id === 'undefined'
+            ? document.getElementsByTagName('canvas')
+            : [document.getElementById(id)];
+
+        const length = e.length;
 
         for (let i = 0; i < length; ++i) {
             if (e[i].getAttribute('data-chart') === null
@@ -38,10 +42,10 @@ omsApp.Modules.ItemManagement = class {
             return;
         }
 
-        const self = this;
         const data = JSON.parse(chart.getAttribute('data-chart'));
 
-        /** global: Chart */
+        /* global Chart */
+        // eslint-disable-next-line no-unused-vars
         const myChart = new Chart(chart.getContext('2d'), data);
     };
 };
