@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Controller\Api;
 
+use Modules\Media\Models\MediaTypeMapper;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
@@ -69,6 +70,7 @@ trait ApiControllerItemTrait
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testApiItemCreate')]
     #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemProfileImageCreate() : void
     {
@@ -77,10 +79,14 @@ trait ApiControllerItemTrait
 
         \copy(__DIR__ . '/m_icon.png', __DIR__ . '/m_icon_tmp.png');
 
+        $profileImageType = MediaTypeMapper::get()
+            ->where('name', 'item_profile_image')
+            ->execute();
+
         $request->header->account = 1;
         $request->setData('name', '123456 backend');
         $request->setData('item', 1);
-        $request->setData('type', '1');
+        $request->setData('type', $profileImageType->id);
 
         TestUtils::setMember($request, 'files', [
             'file1' => [
@@ -93,8 +99,8 @@ trait ApiControllerItemTrait
         ]);
 
         $this->module->apiFileCreate($request, $response);
-        $file = $response->getDataArray('')['response'];
-        self::assertGreaterThan(0, \reset($file)->id);
+        $collection = $response->getDataArray('')['response'];
+        self::assertGreaterThan(0, \reset($collection->sources)->id);
     }
 
     /**
@@ -123,9 +129,8 @@ trait ApiControllerItemTrait
         ]);
 
         $this->module->apiFileCreate($request, $response);
-        $file = $response->getDataArray('')['response'];
-        var_dump($file);
-        self::assertGreaterThan(0, \reset($file)->id);
+        $collection = $response->getDataArray('')['response'];
+        self::assertGreaterThan(0, \reset($collection->sources)->id);
     }
 
     /**

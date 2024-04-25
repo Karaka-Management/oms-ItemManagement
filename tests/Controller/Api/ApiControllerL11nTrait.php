@@ -49,7 +49,7 @@ trait ApiControllerL11nTrait
         $request  = new HttpRequest();
 
         $request->header->account = 1;
-        $request->setData('number', '123456');
+        $request->setData('number', '123457');
         $request->setData('info', 'Info text');
 
         $this->module->apiItemCreate($request, $response);
