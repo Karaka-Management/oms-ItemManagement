@@ -49,6 +49,16 @@ trait ApiControllerL11nTrait
         $request  = new HttpRequest();
 
         $request->header->account = 1;
+        $request->setData('number', '123456');
+        $request->setData('info', 'Info text');
+
+        $this->module->apiItemCreate($request, $response);
+        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
+
+        $response = new HttpResponse();
+        $request  = new HttpRequest();
+
+        $request->header->account = 1;
         $request->setData('item', '1');
         $request->setData('type', '1');
         $request->setData('content', 'Description');

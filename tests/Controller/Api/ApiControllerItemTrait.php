@@ -124,6 +124,7 @@ trait ApiControllerItemTrait
 
         $this->module->apiFileCreate($request, $response);
         $file = $response->getDataArray('')['response'];
+        var_dump($file);
         self::assertGreaterThan(0, \reset($file)->id);
     }
 
