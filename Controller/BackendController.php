@@ -18,7 +18,6 @@ use Modules\Attribute\Models\NullAttributeType;
 use Modules\Attribute\Models\NullAttributeValue;
 use Modules\Auditor\Models\AuditMapper;
 use Modules\ClientManagement\Models\Attribute\ClientAttributeTypeMapper;
-use Modules\ClientManagement\Models\Attribute\ClientAttributeValueL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeL11nMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeTypeMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeValueL11nMapper;
