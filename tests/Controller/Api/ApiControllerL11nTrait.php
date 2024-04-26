@@ -42,6 +42,7 @@ trait ApiControllerL11nTrait
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testApiItemL11nTypeCreate')]
     #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemL11nCreate() : void
     {

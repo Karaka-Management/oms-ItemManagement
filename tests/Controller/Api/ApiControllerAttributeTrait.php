@@ -22,6 +22,8 @@ use phpOMS\Message\Http\RequestStatusCode;
 
 trait ApiControllerAttributeTrait
 {
+    public int $attrType = 0;
+
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
      */
@@ -34,10 +36,11 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('name', 'test_attribute');
         $request->setData('title', 'EN:1');
+        $request->setData('repeatable', true);
         $request->setData('language', ISO639x1Enum::_EN);
 
         $this->attrModule->apiItemAttributeTypeCreate($request, $response);
-        self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
+        self::assertGreaterThan(0, $this->attrType = $response->getDataArray('')['response']->id);
     }
 
     /**
@@ -138,6 +141,7 @@ trait ApiControllerAttributeTrait
     /**
      * @covers \Modules\ItemManagement\Controller\ApiController
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testApiItemAttributeTypeCreate')]
     #[\PHPUnit\Framework\Attributes\Group('module')]
     public function testApiItemAttributeCreate() : void
     {
@@ -157,7 +161,7 @@ trait ApiControllerAttributeTrait
         $request->header->account = 1;
         $request->setData('ref', '1');
         $request->setData('value', '1');
-        $request->setData('type', '1');
+        $request->setData('type', $this->attrType);
 
         $this->attrModule->apiItemAttributeCreate($request, $response);
         self::assertGreaterThan(0, $response->getDataArray('')['response']->id);
