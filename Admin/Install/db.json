@@ -13,7 +13,7 @@
                 "name": "itemmgmt_item_no",
                 "type": "VARCHAR(30)",
                 "null": false,
-                "unique": true
+                "unique": false
             },
             "itemmgmt_item_status": {
                 "name": "itemmgmt_item_status",
