@@ -24,7 +24,10 @@ echo $this->data['nav']->render(); ?>
 <div class="row">
     <div class="col-xs-12 col-md-6">
         <section class="portlet">
-            <form id="materialForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item/material?csrf={$CSRF}'); ?>">
+            <form id="materialForm"
+                method="<?= $isNew ? 'PUT' : 'POST'; ?>"
+                action="<?= UriFactory::build('{/api}item/material?csrf={$CSRF}'); ?>"
+                <?= $isNew ? 'data-redirect="' . UriFactory::build('{/base}/item/material/view') . '?id={/0/response/id}"' : ''; ?>>
                 <div class="portlet-head"><?= $this->getHtml('Material'); ?></div>
                 <div class="portlet-body">
                     <div class="form-group">

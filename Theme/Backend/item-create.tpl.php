@@ -586,12 +586,6 @@ echo $this->data['nav']->render(); ?>
         </div>
         <input type="radio" id="c-tab-15" name="tabular-2"<?= $this->request->uri->fragment === 'c-tab-15' ? ' checked' : ''; ?>>
         <div class="tab">
-            <?php
-            $footerView = new \phpOMS\Views\PaginationView($this->l11nManager, $this->request, $this->response);
-            $footerView->setTemplate('/Web/Templates/Lists/Footer/PaginationBig');
-            $footerView->setPages(20);
-            $footerView->setPage(1);
-            ?>
             <div class="box w-100">
                 <table class="default sticky">
                     <caption><?= $this->getHtml('Logs'); ?><i class="g-icon end-xs download btn">download</i></caption>

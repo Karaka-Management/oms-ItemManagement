@@ -57,11 +57,16 @@ use phpOMS\System\MimeType;
  * @link    https://jingga.app
  * @since   1.0.0
  *
- * @todo Import item prices from csv/excel sheet
+ * @feature Import item prices from csv/excel sheet
+ *      Maybe create an exchange script?
  *      https://github.com/Karaka-Management/oms-ItemManagement/issues/15
  *
- * @todo Perform inflation increase on all items
+ * @feature Perform inflation increase on all items
  *      https://github.com/Karaka-Management/oms-ItemManagement/issues/16
+ *
+ * @feature Implement item export with prices.
+ *      Maybe this should be handled in the DatabaseEditor / Report generator module?
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/14
  */
 final class ApiController extends Controller
 {
@@ -329,6 +334,11 @@ final class ApiController extends Controller
         }
 
         $this->createItemSegmentation($request, $response, $item);
+
+        // @todo Try to automatically set sales_tax_code and purchase_tax_code
+        //      This could be achieved based on other items in the same segment->section->sales_group->product_group.
+        //      https://github.com/Karaka-Management/oms-ItemManagement/issues/20
+
         $this->createStandardCreateResponse($request, $response, $item);
     }
 
@@ -342,6 +352,8 @@ final class ApiController extends Controller
      * @param Item             $item     Item
      *
      * @return void
+     *
+     * @todo Accept segmentation attributes from request and if available use these instead of default values
      *
      * @since 1.0.0
      */

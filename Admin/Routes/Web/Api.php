@@ -44,7 +44,44 @@ return [
             ],
         ],
     ],
-    '^.*/item/attribute$' => [
+    '^.*/item(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemCreate',
+            'verb'       => RouteVerb::PUT,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemUpdate',
+            'verb'       => RouteVerb::SET,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/item/material(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemMaterialTypeCreate',
+            'verb'       => RouteVerb::PUT,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::MATERIAL,
+            ],
+        ],
+    ],
+    '^.*/item/attribute(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeCreate',
             'verb'       => RouteVerb::PUT,
@@ -52,7 +89,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
@@ -63,12 +100,12 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::MODIFY,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
-    '^.*/item/attribute/type$' => [
+    '^.*/item/attribute/type(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeCreate',
             'verb'       => RouteVerb::PUT,
@@ -77,7 +114,7 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
         [
@@ -88,11 +125,11 @@ return [
             'permission' => [
                 'module' => ApiController::NAME,
                 'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
     ],
-    '^.*/item/attribute/type/l11n$' => [
+    '^.*/item/attribute/type/l11n(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeTypeL11nCreate',
             'verb'       => RouteVerb::PUT,
@@ -100,8 +137,8 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
         [
@@ -111,12 +148,12 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
-                'state'  => PermissionCategory::SALES_ITEM,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::ATTRIBUTE,
             ],
         ],
     ],
-    '^.*/item/attribute/value$' => [
+    '^.*/item/attribute/value(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueCreate',
             'verb'       => RouteVerb::PUT,
@@ -124,7 +161,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
@@ -135,12 +172,12 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::MODIFY,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
-    '^.*/item/attribute/value/l11n$' => [
+    '^.*/item/attribute/value/l11n(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiAttributeController:apiItemAttributeValueL11nCreate',
             'verb'       => RouteVerb::PUT,
@@ -148,7 +185,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
@@ -159,12 +196,12 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::MODIFY,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
-    '^.*/item/l11n$' => [
+    '^.*/item/l11n(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nCreate',
             'verb'       => RouteVerb::PUT,
@@ -172,7 +209,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
@@ -183,12 +220,12 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::MODIFY,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
     ],
-    '^.*/item/l11n/type$' => [
+    '^.*/item/l11n/type(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemL11nTypeCreate',
             'verb'       => RouteVerb::PUT,
@@ -196,7 +233,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::CREATE,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],
@@ -207,7 +244,7 @@ return [
             'active'     => true,
             'permission' => [
                 'module' => ApiController::NAME,
-                'type'   => PermissionType::READ,
+                'type'   => PermissionType::MODIFY,
                 'state'  => PermissionCategory::SALES_ITEM,
             ],
         ],

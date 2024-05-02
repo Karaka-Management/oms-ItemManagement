@@ -21,6 +21,16 @@ namespace Modules\ItemManagement\Models;
  * @license OMS License 2.0
  * @link    https://jingga.app
  * @since   1.0.0
+ *
+ * @todo Fully implement different containers for items (Gebinde)
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/17
+ *
+ * @todo Item Containers can be Supplier and Client specific.
+ *      Currently they are only handled on item level not in conjunction with clients/suppliers.
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/18
+ *
+ * @todo Item Containers have an effect on the package materials
+ *      https://github.com/Karaka-Management/oms-ItemManagement/issues/19
  */
 class Container implements \JsonSerializable
 {

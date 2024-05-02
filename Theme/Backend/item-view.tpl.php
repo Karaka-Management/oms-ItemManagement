@@ -28,6 +28,8 @@ use phpOMS\Localization\RegionEnum;
 use phpOMS\Message\Http\HttpHeader;
 use phpOMS\Stdlib\Base\FloatInt;
 use phpOMS\Stdlib\Base\SmartDateTime;
+use phpOMS\System\File\ExtensionType;
+use phpOMS\System\File\FileUtils;
 use phpOMS\Uri\UriFactory;
 
 /** @var \Modules\ItemManagement\Models\Item $item */
@@ -46,6 +48,10 @@ $countries  = ISO3166CharEnum::getConstants();
 $currencies = ISO4217CharEnum::getConstants();
 
 $itemStatus = ItemStatus::getConstants();
+
+// @performance The client, supplier and item views should not use actual tabs but individual pages for better performance
+//      Tabs require too many models to be loaded. Implement and then use a tab navigation if it doesn't already exist.
+//      https://github.com/Karaka-Management/oms-ItemManagement/issues/13
 
 echo $this->data['nav']->render();
 ?>
@@ -88,7 +94,10 @@ echo $this->data['nav']->render();
             <div class="row">
                 <div class="col-xs-12 col-lg-3 last-lg">
                     <section class="portlet">
-                        <form id="itemForm" method="<?= $isNew ? 'PUT' : 'POST'; ?>" action="<?= UriFactory::build('{/api}item?csrf={$CSRF}'); ?>">
+                        <form id="itemForm"
+                        method="<?= $isNew ? 'PUT' : 'POST'; ?>"
+                        action="<?= UriFactory::build('{/api}item?csrf={$CSRF}'); ?>"
+                        <?= $isNew ? 'data-redirect="' . UriFactory::build('{/base}/item/view') . '?id={/0/response/id}"' : ''; ?>>
                             <div class="portlet-body">
                                 <div class="form-group">
                                     <?= $this->getHtml('ID', '0', '0'); ?></label>
@@ -249,8 +258,10 @@ echo $this->data['nav']->render();
                                     foreach ($item->files as $file) :
                                         ++$count;
                                         $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
+                                        $extensionType = FileUtils::getExtensionType($value->extension);
                                     ?>
-                                    <tr data-href="<?= $url; ?>">
+                                    <tr data-href="<?= $url; ?>"
+                                        <?= \in_array($extensionType, [ExtensionType::IMAGE, ExtensionType::PDF]) ? 'data-preview="' . UriFactory::build('{/api}media/export?id=' . $file->id . '&type=html&csrf={$CSRF}') . '"' : ''; ?>>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->name); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->extension); ?></a>
                                         <td><a href="<?= $url; ?>"><?= $this->printHtml($file->createdAt->format('Y-m-d')); ?></a>

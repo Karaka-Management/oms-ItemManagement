@@ -395,6 +395,23 @@ final class BackendController extends Controller
      *
      * @return View
      *
+     * @todo Add an area for markers (e.g. not sold for a x month, not purchased for x month, bad margin... etc.)
+     *      Similar to an alarm system (maybe green, yellow, red markers?)
+     *      https://github.com/Karaka-Management/oms-ItemManagement/issues/12
+     *
+     * @todo Show different prices on item profile frontpage (e.g. domestic, export, quantity discount)
+     *      https://github.com/Karaka-Management/oms-ItemManagement/issues/6
+     *
+     * @feature Item view should be customizable since different groups have different interests and read permissions
+     *      (e.g. sales reps, finance, etc.)
+     *      https://github.com/Karaka-Management/oms-ItemManagement/issues/5
+     *
+     * @feature Create a second optional list view
+     *      The item is shown at the bottom of the list which allows the user to see the item list at the top
+     *      and the item itself below. Either create a custom view
+     *      or somehow append an iframe below the list which is loaded based on the selected item
+     *      https://github.com/Karaka-Management/oms-ItemManagement/issues/9
+     *
      * @since 1.0.0
      * @codeCoverageIgnore
      */
