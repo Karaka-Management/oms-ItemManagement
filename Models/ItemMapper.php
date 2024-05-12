@@ -18,7 +18,6 @@ use Modules\Editor\Models\EditorDocMapper;
 use Modules\ItemManagement\Models\Attribute\ItemAttributeMapper;
 use Modules\Media\Models\Media;
 use Modules\Media\Models\MediaMapper;
-use Modules\Media\Models\MediaType;
 use phpOMS\DataStorage\Database\Mapper\DataMapperFactory;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
@@ -130,13 +129,13 @@ final class ItemMapper extends DataMapperFactory
             itemmgmt_item.itemmgmt_item_salesprice,
             media.media_id,
             media.media_file,
-            media_type.media_type_id,
-            media_type.media_type_name
+            tag.tag_id,
+            tag.tag_name
         from itemmgmt_item
         left join itemmgmt_item_media on itemmgmt_item.itemmgmt_item_id = itemmgmt_item_media.itemmgmt_item_media_item
         left join media on itemmgmt_item_media.itemmgmt_item_media_media = media.media_id
-        left join media_type_rel on media.media_id = media_type_rel.media_type_rel_src
-        left join media_type on media_type_rel.media_type_rel_dst = media_type.media_type_id and media_type.media_type_name = 'item_profile_image'
+        left join media_tag on media.media_id = media_tag.media_tag_src
+        left join tag on media_tag.media_tag_dst = tag.tag_id and tag.tag_name = 'profile_image'
         SQL;
 
         $q = self::$db->con->query($query);
@@ -150,10 +149,6 @@ final class ItemMapper extends DataMapperFactory
         foreach ($itemsResult as $res) {
             $media = null;
             if ($res['media_id'] !== null) {
-                $mediaType       = new MediaType();
-                $mediaType->id   = $res['media_type_id'];
-                $mediaType->name = $res['media_type_name'];
-
                 $media     = new Media();
                 $media->id = $res['media_id'];
                 $media->setPath($res['media_file']);

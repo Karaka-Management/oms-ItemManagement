@@ -119,7 +119,7 @@ echo $this->data['nav']->render(); ?>
                 <tbody>
                 <?php $count = 0; foreach ($items as $key => $value) : ++$count;
                 $url         = UriFactory::build('{/base}/item/view?{?}&id=' . $value->id);
-                $image       = $value->getFileByTypeName('item_profile_image');
+                $image       = $value->getFileByTagName('profile_image');
                 ?>
                 <tr data-href="<?= $url; ?>">
                     <td><a href="<?= $url; ?>"><img alt="<?= $this->getHtml('IMG_alt_item'); ?>" width="30" loading="lazy" class="item-image"

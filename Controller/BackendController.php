@@ -30,15 +30,14 @@ use Modules\ItemManagement\Models\MaterialTypeL11nMapper;
 use Modules\ItemManagement\Models\MaterialTypeMapper;
 use Modules\ItemManagement\Models\PermissionCategory;
 use Modules\Media\Models\MediaMapper;
-use Modules\Media\Models\MediaTypeMapper;
 use Modules\Organization\Models\Attribute\UnitAttributeMapper;
 use Modules\Organization\Models\UnitMapper;
+use Modules\Tag\Models\TagMapper;
 use phpOMS\Account\PermissionType;
 use phpOMS\Asset\AssetType;
 use phpOMS\Contract\RenderableInterface;
 use phpOMS\DataStorage\Database\Query\Builder;
 use phpOMS\DataStorage\Database\Query\OrderType;
-use phpOMS\DataStorage\Database\Query\Where;
 use phpOMS\Localization\ISO3166CharEnum;
 use phpOMS\Localization\ISO3166NameEnum;
 use phpOMS\Message\RequestAbstract;
@@ -180,10 +179,10 @@ final class BackendController extends Controller
             ->with('l11n')
             ->with('l11n/type')
             ->with('files')
-            ->with('files/types')
+            ->with('files/tags')
             ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2'], 'IN')
-            ->where('files/types/name', 'item_profile_image')
+            ->where('files/tags/name', 'profile_image')
             ->where('unit', [$this->app->unitId, null])
             ->limit(50)
             ->executeGetArray();
@@ -433,7 +432,7 @@ final class BackendController extends Controller
             ->with('l11n/type')
             ->with('files')->limit(5, 'files')->sort('files/id', OrderType::DESC)
             ->with('notes')->limit(5, 'notes')->sort('notes/id', OrderType::DESC)
-            ->with('files/types')
+            ->with('files/tags')
             ->with('attributes')
             ->with('attributes/type')
             ->with('attributes/type/l11n')
@@ -456,15 +455,14 @@ final class BackendController extends Controller
                 ->on(ItemMapper::HAS_MANY['files']['table'] . '.' . ItemMapper::HAS_MANY['files']['self'], '=', ItemMapper::TABLE . '.' . ItemMapper::PRIMARYFIELD)
             ->leftJoin(MediaMapper::TABLE)
                 ->on(ItemMapper::HAS_MANY['files']['table'] . '.' . ItemMapper::HAS_MANY['files']['external'], '=', MediaMapper::TABLE . '.' . MediaMapper::PRIMARYFIELD)
-             ->leftJoin(MediaMapper::HAS_MANY['types']['table'])
-                ->on(MediaMapper::TABLE . '.' . MediaMapper::PRIMARYFIELD, '=', MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['self'])
-            ->leftJoin(MediaTypeMapper::TABLE)
-                ->on(MediaMapper::HAS_MANY['types']['table'] . '.' . MediaMapper::HAS_MANY['types']['external'], '=', MediaTypeMapper::TABLE . '.' . MediaTypeMapper::PRIMARYFIELD)
+             ->leftJoin(MediaMapper::HAS_MANY['tags']['table'])
+                ->on(MediaMapper::TABLE . '.' . MediaMapper::PRIMARYFIELD, '=', MediaMapper::HAS_MANY['tags']['table'] . '.' . MediaMapper::HAS_MANY['tags']['self'])
+            ->leftJoin(TagMapper::TABLE)
+                ->on(MediaMapper::HAS_MANY['tags']['table'] . '.' . MediaMapper::HAS_MANY['tags']['external'], '=', TagMapper::TABLE . '.' . TagMapper::PRIMARYFIELD)
             ->where(ItemMapper::HAS_MANY['files']['self'], '=', $view->data['item']->id)
-            ->where(MediaTypeMapper::TABLE . '.' . MediaTypeMapper::getColumnByMember('name'), '=', 'item_profile_image');
+            ->where(TagMapper::TABLE . '.' . TagMapper::getColumnByMember('name'), '=', 'profile_image');
 
         $view->data['itemImage'] = MediaMapper::get()
-            ->with('types')
             ->where('id', $results)
             ->limit(1)
             ->execute();
@@ -664,7 +662,7 @@ final class BackendController extends Controller
 
         $head->addAsset(AssetType::CSS, 'Resources/chartjs/chart.css?v=' . $this->app->version);
         $head->addAsset(AssetType::JSLATE, 'Resources/chartjs/chart.js?v=' . $this->app->version, ['nonce' => $nonce]);
-        $head->addAsset(AssetType::JSLATE, 'Modules/Sales/Controller/Controller.js?v=' . self::VERSION, ['nonce' => $nonce, 'type' => 'module']);
+        $head->addAsset(AssetType::JSLATE, 'Modules/ItemManagement/Controller.js?v=' . self::VERSION, ['nonce' => $nonce, 'type' => 'module']);
 
         $view = new View($this->app->l11nManager, $request, $response);
         $view->setTemplate('/Modules/ItemManagement/Theme/Backend/item-analysis');

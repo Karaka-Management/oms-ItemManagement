@@ -32,8 +32,8 @@ use Modules\ItemManagement\Models\SettingsEnum as ItemSettingsEnum;
 use Modules\ItemManagement\Models\StockIdentifierType;
 use Modules\Media\Models\Collection;
 use Modules\Media\Models\CollectionMapper;
-use Modules\Media\Models\MediaTypeMapper;
 use Modules\Media\Models\PathSettings;
+use Modules\Tag\Models\TagMapper;
 use phpOMS\Account\PermissionType;
 use phpOMS\Localization\BaseStringL11n;
 use phpOMS\Localization\BaseStringL11nType;
@@ -256,15 +256,57 @@ final class ApiController extends Controller
         $this->createModel($request->header->account, $item, ItemMapper::class, 'item', $request->getOrigin());
         $this->app->dbPool->get()->con->commit();
 
+        // Define names
+        $names = [];
+        if ($request->hasData('name1')) {
+            $names = ItemL11nTypeMapper::getAll()
+                ->where('title', ['name1', 'name2'])
+                ->executeGetArray();
+
+            foreach ($names as $type) {
+                $names[$type->title] = $type;
+            }
+
+            $internalResponse = new HttpResponse();
+            $internalRequest  = new HttpRequest();
+
+            $internalRequest->header->account = $request->header->account;
+
+            $internalRequest->setData('item', $item->id);
+            $internalRequest->setData('type', $names['name1']->id);
+            $internalRequest->setData('content', $request->getDataString('name1'));
+            $internalRequest->setData('language', $request->getDataString('language') ?? $request->header->l11n->language);
+
+            $this->apiItemL11nCreate($internalRequest, $internalResponse);
+
+            if ($request->hasData('name2')) {
+                $internalResponse = new HttpResponse();
+                $internalRequest  = new HttpRequest();
+
+                $internalRequest->header->account = $request->header->account;
+
+                $internalRequest->setData('item', $item->id);
+                $internalRequest->setData('type', $names['name2']->id);
+                $internalRequest->setData('content', $request->getDataString('name2'));
+                $internalRequest->setData('language', $request->getDataString('language') ?? $request->header->l11n->language);
+
+                $this->apiItemL11nCreate($internalRequest, $internalResponse);
+            }
+        }
+
         // Define default item containers
         /** @var \Modules\Attribute\Models\AttributeType[] $types */
         $types = ItemAttributeTypeMapper::getAll()
-            ->where('name', ['default_sales_container', 'default_purchase_container'], 'IN')
+            ->where('name', ['default_sales_container', 'default_purchase_container', 'hs_code'], 'IN')
             ->executeGetArray();
 
         $primaryContainer = \reset($item->container);
         if ($primaryContainer !== false) {
             foreach ($types as $type) {
+                if (\stripos($type->name, '_container') === false) {
+                    continue;
+                }
+
                 $internalResponse = clone $response;
                 $internalRequest  = new HttpRequest();
 
@@ -277,6 +319,63 @@ final class ApiController extends Controller
             }
         }
 
+        // Guess hs_code
+        /* Alternatively find via segmentation
+        if ($item->stockIdentifier !== StockIdentifierType::NONE && $request->hasData('name1')) {
+            $hsCode = null;
+            foreach ($types as $type) {
+                if ($type->name === 'has_code') {
+                    $hsCode = $type;
+
+                    break;
+                }
+            }
+
+            $nameString = $request->getDataString('name1') . ' ' . ($request->getDataString('name2') ?? '');
+            $names = \explode(' ', $nameString);
+
+            $con = new \phpOMS\DataStorage\Database\Connection\SQLiteConnection(['db' => 'sqlite', 'database' => __DIR__ . '/../../../phpOMS/Api/TARIC/taric.sqlite']);
+            $con->connect();
+
+            \usort($names, function (string $a, string $b) {
+                return \strlen($b) - \strlen($a);
+            });
+
+            $results = [];
+            foreach ($names as $name) {
+                $query = new Builder($con);
+                $query->bind('name', '%' . $name . '%');
+
+                $sql = <<<SQL
+                SELECT taric_good.Goods_code
+                FROM taric_good
+                WHERE taric_good.Description LIKE :name
+                ORDER BY taric_good.Goods_code DESC;
+                SQL;
+
+                $results = $query->raw($sql)->execute();
+                if (!empty($results)) {
+                    break;
+                }
+            }
+
+            if ($hsCode !== null && !empty($results)) {
+                $internalResponse = clone $response;
+                $internalRequest  = new HttpRequest();
+
+                $internalRequest->header->account = $request->header->account;
+                $internalRequest->setData('ref', $item->id);
+                $internalRequest->setData('type', $hsCode->id);
+                $internalRequest->setData('value', $results[0]['Goods_code']);
+
+                $this->app->moduleManager->get('ItemManagement', 'ApiAttribute')->apiItemAttributeCreate($internalRequest, $internalResponse);
+            }
+
+            $con->close();
+        }
+        */
+
+        // Define prices
         if ($this->app->moduleManager->isActive('Billing')) {
             $billing = $this->app->moduleManager->get('Billing', 'ApiPrice');
 
@@ -310,11 +409,11 @@ final class ApiController extends Controller
         $this->createMediaDirForItem($item->id, $request->header->account);
         $path = $this->createItemDir($item);
 
-        $uploadedFiles = $request->files['item_profile_image'] ?? [];
+        $uploadedFiles = $request->files['profile_image'] ?? [];
         if (!empty($uploadedFiles)) {
-            /** @var \Modules\Media\Models\MediaType $profileImageType */
-            $profileImageType = MediaTypeMapper::get()
-                ->where('name', 'item_profile_image')
+            /** @var \Modules\Tag\Models\Tag $profileImageType */
+            $profileImageType = TagMapper::get()
+                ->where('name', 'profile_image')
                 ->execute();
 
             // upload image
@@ -326,7 +425,7 @@ final class ApiController extends Controller
                 basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
                 virtualPath: $path,
                 pathSettings: PathSettings::FILE_PATH,
-                type: $profileImageType->id,
+                tag: $profileImageType->id,
                 rel: $item->id,
                 mapper: ItemMapper::class,
                 field: 'files'
@@ -693,6 +792,23 @@ final class ApiController extends Controller
             return;
         }
 
+        // @question This kind of thing should happen in a separate function?!
+        $exists = ItemL11nMapper::get()
+            ->where('ref', $request->getDataInt('item') ?? 0)
+            ->where('type', $request->getDataInt('type') ?? 0)
+            ->where('language', $request->getDataString('language') ?? $request->header->l11n->language)
+            ->execute();
+
+        if ($exists->id > 0) {
+            $response->header->status = RequestStatusCode::R_400;
+            $this->createInvalidCreateResponse($request, $response, $val);
+
+            return;
+        }
+
+        // @todo This is always the same for every l11n.
+        //      Create a L11n module or something similar to the Attribute module,
+        //      where this can be done for every other module
         $itemL11n = $this->createItemL11nFromRequest($request);
         $this->createModel($request->header->account, $itemL11n, ItemL11nMapper::class, 'item_l11n', $request->getOrigin());
         $this->createStandardCreateResponse($request, $response, $itemL11n);
@@ -784,7 +900,7 @@ final class ApiController extends Controller
             basePath: __DIR__ . '/../../../Modules/Media/Files' . $path,
             virtualPath: $path,
             pathSettings: PathSettings::FILE_PATH,
-            type: $request->getDataInt('type'),
+            tag: $request->getDataInt('tag'),
             rel: $item->id,
             mapper: ItemMapper::class,
             field: 'files'

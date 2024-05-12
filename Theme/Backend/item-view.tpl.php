@@ -258,7 +258,7 @@ echo $this->data['nav']->render();
                                     foreach ($item->files as $file) :
                                         ++$count;
                                         $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
-                                        $extensionType = FileUtils::getExtensionType($value->extension);
+                                        $extensionType = FileUtils::getExtensionType($file->extension);
                                     ?>
                                     <tr data-href="<?= $url; ?>"
                                         <?= \in_array($extensionType, [ExtensionType::IMAGE, ExtensionType::PDF]) ? 'data-preview="' . UriFactory::build('{/api}media/export?id=' . $file->id . '&type=html&csrf={$CSRF}') . '"' : ''; ?>>
@@ -1472,7 +1472,7 @@ echo $this->data['nav']->render();
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="portlet">
+                    <section class="portlet">
                         <div class="portlet-head"><?= $this->getHtml('Logs', 'Auditor'); ?><i class="g-icon download btn end-xs">download</i></div>
                         <div class="slider">
                         <table class="default sticky">
@@ -1525,7 +1525,7 @@ echo $this->data['nav']->render();
                             <a tabindex="0" class="button" href="<?= UriFactory::build($next); ?>"><?= $this->getHtml('Next', '0', '0'); ?></a>
                         </div>
                         -->
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>

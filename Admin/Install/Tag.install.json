@@ -1,0 +1,23 @@
+[
+    {
+        "name": "item_demo_download",
+        "l11n": {
+            "en": "Item Download",
+            "de": "Artikel Download"
+        }
+    },
+    {
+        "name": "item_private_download",
+        "l11n": {
+            "en": "Private Item Download",
+            "de": "Privater Artikel Download"
+        }
+    },
+    {
+        "name": "item_purchase_download",
+        "l11n": {
+            "en": "Purchased Download",
+            "de": "Gekaufter Download"
+        }
+    }
+]

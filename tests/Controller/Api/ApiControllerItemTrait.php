@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace Modules\ItemManagement\tests\Controller\Api;
 
-use Modules\Media\Models\MediaTypeMapper;
+use Modules\Tag\Models\TagMapper;
 use phpOMS\Message\Http\HttpRequest;
 use phpOMS\Message\Http\HttpResponse;
 use phpOMS\Message\Http\RequestStatusCode;
@@ -79,14 +79,14 @@ trait ApiControllerItemTrait
 
         \copy(__DIR__ . '/m_icon.png', __DIR__ . '/m_icon_tmp.png');
 
-        $profileImageType = MediaTypeMapper::get()
-            ->where('name', 'item_profile_image')
+        $profileImageType = TagMapper::get()
+            ->where('name', 'profile_image')
             ->execute();
 
         $request->header->account = 1;
         $request->setData('name', '123456 backend');
         $request->setData('item', 1);
-        $request->setData('type', $profileImageType->id);
+        $request->setData('tag', $profileImageType->id);
 
         TestUtils::setMember($request, 'files', [
             'file1' => [
