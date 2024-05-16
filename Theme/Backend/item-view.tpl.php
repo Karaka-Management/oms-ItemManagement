@@ -257,7 +257,7 @@ echo $this->data['nav']->render();
                                     $count = 0;
                                     foreach ($item->files as $file) :
                                         ++$count;
-                                        $url = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
+                                        $url           = UriFactory::build('{/base}/media/view?{?}&id=' . $file->id);
                                         $extensionType = FileUtils::getExtensionType($file->extension);
                                     ?>
                                     <tr data-href="<?= $url; ?>"

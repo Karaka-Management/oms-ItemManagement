@@ -4,7 +4,7 @@ The **Item Management** module is an essential module for any ERP application. T
 
 ## Target Group
 
-The target group for this module is anyone who wants to manage their tangible and non-tangible products.
+The target group for this module is anyone who wants to manage their tangible and non-tangible products. This usually applies to the sales and purchase department.
 
 # Setup
 
@@ -30,7 +30,7 @@ Attributes allow you to define various item characteristics such as color, medic
 
 ## Pricing
 
-By installing the **Billing** module you are can define multiple purchase and sales prices. Prices and discounts can be defined for individual items, customers and suppliers and for customer groups. You may also define quantity based prices.
+By installing the **Billing** module you can define multiple purchase and sales prices. Prices and discounts can be defined for individual items, customers and suppliers and for customer groups. You may also define quantity based prices.
 
 ## Procurement
 
@@ -48,7 +48,6 @@ Together with the **Warehouse Management** module you can also track your stocks
 
 Other modules that work great with this one together are:
 
-* [Warehouse Management](WarehouseManagement)
-* [Supplier Management](SupplierManagement)
-* [Purchase](Purchase)
-* [Accounting](Accounting)
+* [Warehouse Management]({/}?id=WarehouseManagement)
+* [Supplier Management]({/}?id=SupplierManagement)
+* [Purchase]({/}?id=Purchase)

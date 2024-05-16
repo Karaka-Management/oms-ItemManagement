@@ -67,7 +67,7 @@
         }
     },
     "itemmgmt_item_relation_type": {
-        "description": "Items can be related in many ways e.g. expansions, services, successor, tools, spare parts, materials",
+        "comment": "Items can be related in many ways e.g. expansions, services, successor, tools, spare parts, materials",
         "name": "itemmgmt_item_relation_type",
         "fields": {
             "itemmgmt_item_relation_type_id": {
@@ -243,13 +243,13 @@
                 "autoincrement": true
             },
             "itemmgmt_material_category": {
-                "description": "product, packaging",
+                "comment": "product, packaging",
                 "name": "itemmgmt_material_category",
                 "type": "TINYINT(1)",
                 "null": false
             },
             "itemmgmt_material_subcategory": {
-                "description": "primary, secondary, tertiary, retail",
+                "comment": "primary, secondary, tertiary, retail",
                 "name": "itemmgmt_material_subcategory",
                 "type": "INT",
                 "null": false
@@ -296,7 +296,7 @@
                 "null": false
             },
             "itemmgmt_item_l11n_type_required": {
-                "description": "Every item must have this attribute type if set to true.",
+                "comment": "Every item must have this attribute type if set to true.",
                 "name": "itemmgmt_item_l11n_type_required",
                 "type": "TINYINT(1)",
                 "null": false
@@ -383,13 +383,13 @@
                 "null": false
             },
             "itemmgmt_attr_type_required": {
-                "description": "Every item must have this attribute type if set to true.",
+                "comment": "Every item must have this attribute type if set to true.",
                 "name": "itemmgmt_attr_type_required",
                 "type": "TINYINT(1)",
                 "null": false
             },
             "itemmgmt_attr_type_pattern": {
-                "description": "This is a regex validation pattern.",
+                "comment": "This is a regex validation pattern.",
                 "name": "itemmgmt_attr_type_pattern",
                 "type": "VARCHAR(255)",
                 "null": false

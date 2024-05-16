@@ -523,6 +523,7 @@
         "default_value": "",
         "values": [
             { "value": "GENERAL" },
+            { "value": "REDUCED" },
             { "value": "SOFTWARE" },
             { "value": "SERVICE" }
         ]
