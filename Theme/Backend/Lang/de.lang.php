@@ -16,6 +16,7 @@ return ['ItemManagement' => [
     'Accounting'           => 'Buchhaltung',
     'Articlegroup'         => 'ArtikelGroup.',
     'Attribute'            => 'Attribut',
+    'Decimals'            => 'Dezimalstellen',
     'Attributes'           => 'Attribute',
     'Available'            => 'Erhältlich',
     'Bills'                => 'Rechnungen',
