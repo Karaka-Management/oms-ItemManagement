@@ -6,7 +6,7 @@
  *
  * @package   Modules\ItemManagement\Models\Attribute
  * @copyright Dennis Eichhorn
- * @license   OMS License 2.0
+ * @license   OMS License 2.2
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -21,7 +21,7 @@ use phpOMS\Localization\BaseStringL11n;
  * AttributeValueL11n mapper class.
  *
  * @package Modules\ItemManagement\Models\Attribute
- * @license OMS License 2.0
+ * @license OMS License 2.2
  * @link    https://jingga.app
  * @since   1.0.0
  *

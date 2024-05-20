@@ -6,7 +6,7 @@
  *
  * @package   tests
  * @copyright Dennis Eichhorn
- * @license   OMS License 2.0
+ * @license   OMS License 2.2
  * @version   1.0.0
  * @link      https://jingga.app
  */
@@ -61,7 +61,7 @@ trait ApiControllerL11nTrait
 
         $request->header->account = 1;
         $request->setData('item', '1');
-        $request->setData('type', '1');
+        $request->setData('type', '5');
         $request->setData('content', 'Description');
 
         $this->module->apiItemL11nCreate($request, $response);

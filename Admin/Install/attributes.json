@@ -490,6 +490,19 @@
         ]
     },
     {
+        "name": "bill_match_pattern",
+        "l11n": {
+            "en": "Bill match pattern",
+            "de": "Beleg-Zuordnung"
+        },
+        "value_type": 2,
+        "is_custom_allowed": true,
+        "validation_pattern": "",
+        "is_required": false,
+        "default_value": "",
+        "values": []
+    },
+    {
         "name": "bill_fees",
         "description": "Used for defining special fees such as freight, insurance etc. which can be made accessible in a separate area in the bill",
         "l11n": {
