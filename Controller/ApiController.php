@@ -272,7 +272,7 @@ final class ApiController extends Controller
 
             $internalRequest->header->account = $request->header->account;
 
-            $internalRequest->setData('item', $item->id);
+            $internalRequest->setData('ref', $item->id);
             $internalRequest->setData('type', $names['name1']->id);
             $internalRequest->setData('content', $request->getDataString('name1'));
             $internalRequest->setData('language', $request->getDataString('language') ?? $request->header->l11n->language);
@@ -285,7 +285,7 @@ final class ApiController extends Controller
 
                 $internalRequest->header->account = $request->header->account;
 
-                $internalRequest->setData('item', $item->id);
+                $internalRequest->setData('ref', $item->id);
                 $internalRequest->setData('type', $names['name2']->id);
                 $internalRequest->setData('content', $request->getDataString('name2'));
                 $internalRequest->setData('language', $request->getDataString('language') ?? $request->header->l11n->language);
@@ -794,7 +794,7 @@ final class ApiController extends Controller
 
         // @question This kind of thing should happen in a separate function?!
         $exists = ItemL11nMapper::get()
-            ->where('ref', $request->getDataInt('item') ?? 0)
+            ->where('ref', $request->getDataInt('ref') ?? 0)
             ->where('type', $request->getDataInt('type') ?? 0)
             ->where('language', $request->getDataString('language') ?? $request->header->l11n->language)
             ->execute();
@@ -826,7 +826,7 @@ final class ApiController extends Controller
     private function createItemL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $itemL11n           = new BaseStringL11n();
-        $itemL11n->ref      = $request->getDataInt('item') ?? 0;
+        $itemL11n->ref      = $request->getDataInt('ref') ?? 0;
         $itemL11n->type     = new NullBaseStringL11nType($request->getDataInt('type') ?? 0);
         $itemL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
         $itemL11n->content  = $request->getDataString('content') ?? '';
@@ -846,7 +846,7 @@ final class ApiController extends Controller
     private function validateItemL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['item'] = !$request->hasData('item'))
+        if (($val['ref'] = !$request->hasData('ref'))
             || ($val['type'] = !$request->hasData('type'))
             || ($val['content'] = !$request->hasData('content'))
         ) {
@@ -887,7 +887,7 @@ final class ApiController extends Controller
 
         /** @var \Modules\ItemManagement\Models\Item $item */
         $item = ItemMapper::get()
-            ->where('id', (int) $request->getData('item'))
+            ->where('id', (int) $request->getData('ref'))
             ->execute();
 
         $path = $this->createItemDir($item);
@@ -927,7 +927,7 @@ final class ApiController extends Controller
     private function validateFileCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['item'] = !$request->hasData('item'))
+        if (($val['ref'] = !$request->hasData('ref'))
         ) {
             return $val;
         }
@@ -957,7 +957,7 @@ final class ApiController extends Controller
             return;
         }
 
-        $request->setData('virtualpath', '/Modules/ItemManagement/Items/' . $request->getData('id'), true);
+        $request->setData('virtualpath', '/Modules/ItemManagement/Items/' . $request->getData('ref'), true);
         $this->app->moduleManager->get('Editor', 'Api')->apiEditorCreate($request, $response, $data);
 
         if ($response->header->status !== RequestStatusCode::R_200) {
@@ -970,7 +970,7 @@ final class ApiController extends Controller
         }
 
         $model = $responseData['response'];
-        $this->createModelRelation($request->header->account, (int) $request->getData('id'), $model->id, ItemMapper::class, 'notes', '', $request->getOrigin());
+        $this->createModelRelation($request->header->account, (int) $request->getData('ref'), $model->id, ItemMapper::class, 'notes', '', $request->getOrigin());
     }
 
     /**
@@ -985,7 +985,7 @@ final class ApiController extends Controller
     private function validateNoteCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['id'] = !$request->hasData('id'))
+        if (($val['ref'] = !$request->hasData('ref'))
         ) {
             return $val;
         }
@@ -1088,7 +1088,7 @@ final class ApiController extends Controller
     private function validateMaterialTypeCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = !$request->hasData('title'))
+        if (($val['content'] = !$request->hasData('content'))
             || ($val['name'] = !$request->hasData('name'))
         ) {
             return $val;
@@ -1110,7 +1110,7 @@ final class ApiController extends Controller
     {
         $materialType = new BaseStringL11nType($request->getDataString('name') ?? '');
         $materialType->setL11n(
-            $request->getDataString('title') ?? '',
+            $request->getDataString('content') ?? '',
             ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? ISO639x1Enum::_EN
         );
 
@@ -1156,8 +1156,8 @@ final class ApiController extends Controller
     private function validateMaterialTypeL11nCreate(RequestAbstract $request) : array
     {
         $val = [];
-        if (($val['title'] = !$request->hasData('title'))
-            || ($val['type'] = !$request->hasData('type'))
+        if (($val['content'] = !$request->hasData('content'))
+            || ($val['ref'] = !$request->hasData('ref'))
         ) {
             return $val;
         }
@@ -1177,9 +1177,9 @@ final class ApiController extends Controller
     private function createMaterialTypeL11nFromRequest(RequestAbstract $request) : BaseStringL11n
     {
         $materialL11n           = new BaseStringL11n();
-        $materialL11n->ref      = $request->getDataInt('type') ?? 0;
+        $materialL11n->ref      = $request->getDataInt('ref') ?? 0;
         $materialL11n->language = ISO639x1Enum::tryFromValue($request->getDataString('language')) ?? $request->header->l11n->language;
-        $materialL11n->content  = $request->getDataString('title') ?? '';
+        $materialL11n->content  = $request->getDataString('content') ?? '';
 
         return $materialL11n;
     }

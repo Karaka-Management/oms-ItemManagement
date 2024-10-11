@@ -68,6 +68,54 @@ return [
             ],
         ],
     ],
+    '^.*/item/file(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiFileCreate',
+            'verb'       => RouteVerb::PUT,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
+    '^.*/item/note(\?.*|$)$' => [
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiNoteCreate',
+            'verb'       => RouteVerb::PUT,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::CREATE,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiNoteUpdate',
+            'verb'       => RouteVerb::SET,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::MODIFY,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+        [
+            'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiNoteDelete',
+            'verb'       => RouteVerb::DELETE,
+            'csrf'       => true,
+            'active'     => true,
+            'permission' => [
+                'module' => ApiController::NAME,
+                'type'   => PermissionType::DELETE,
+                'state'  => PermissionCategory::SALES_ITEM,
+            ],
+        ],
+    ],
     '^.*/item/material(\?.*|$)$' => [
         [
             'dest'       => '\Modules\ItemManagement\Controller\ApiController:apiItemMaterialTypeCreate',

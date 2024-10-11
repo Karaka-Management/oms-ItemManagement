@@ -512,7 +512,8 @@ echo $this->data['nav']->render();
                 <?= $this->data['l11nView']->render(
                     $this->data['l11nValues'],
                     $this->data['l11nTypes'] ?? [],
-                    '{/api}item/l11n?csrf={$CSRF}'
+                    '{/api}item/l11n?csrf={$CSRF}',
+                    (string) $item->id
                 );
                 ?>
             </div>
@@ -1413,12 +1414,12 @@ echo $this->data['nav']->render();
 
         <input type="radio" id="c-tab-12" name="tabular-2" checked>
         <div class="tab col-simple">
-            <?= $this->data['note']->render('item-note', 'notes', $item->notes); ?>
+            <?= $this->data['note']->render('item-note', 'notes', $item->notes, '{/api}item/note?csrf={$CSRF}', (string) $item->id); ?>
         </div>
 
         <input type="radio" id="c-tab-13" name="tabular-2" checked>
         <div class="tab col-simple">
-            <?= $this->data['media-upload']->render('item-file', 'files', '', $this->data['files']); ?>
+            <?= $this->data['media-upload']->render('item-file', 'files', '', $this->data['files'], '{/api}item/file?csrf={$CSRF}', (string) $item->id); ?>
         </div>
 
         <input type="radio" id="c-tab-14" name="tabular-2" checked>
