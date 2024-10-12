@@ -506,7 +506,7 @@ echo $this->data['nav']->render();
         </div>
 
         <?php if (!$isNew) : ?>
-        <input type="radio" id="c-tab-2" name="tabular-2" checked>
+        <input type="radio" id="c-tab-2" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <?= $this->data['l11nView']->render(
@@ -519,7 +519,7 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-3" name="tabular-2" checked>
+        <input type="radio" id="c-tab-3" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <?= $this->data['attributeView']->render(
@@ -533,7 +533,7 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-16" name="tabular-2" checked>
+        <input type="radio" id="c-tab-16" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -672,7 +672,7 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-4" name="tabular-2" checked>
+        <input type="radio" id="c-tab-4" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -1023,7 +1023,7 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-5" name="tabular-2" checked>
+        <input type="radio" id="c-tab-5" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -1260,11 +1260,11 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-8" name="tabular-2" checked>
+        <input type="radio" id="c-tab-8" name="tabular-2">
         <div class="tab">
         </div>
 
-        <input type="radio" id="c-tab-9" name="tabular-2" checked>
+        <input type="radio" id="c-tab-9" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -1335,7 +1335,7 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-10" name="tabular-2" checked>
+        <input type="radio" id="c-tab-10" name="tabular-2">
         <div class="tab">
         <div class="row">
                 <div class="col-xs-12 col-md-6">
@@ -1412,17 +1412,17 @@ echo $this->data['nav']->render();
             </div>
         </div>
 
-        <input type="radio" id="c-tab-12" name="tabular-2" checked>
+        <input type="radio" id="c-tab-12" name="tabular-2">
         <div class="tab col-simple">
             <?= $this->data['note']->render('item-note', 'notes', $item->notes, '{/api}item/note?csrf={$CSRF}', (string) $item->id); ?>
         </div>
 
-        <input type="radio" id="c-tab-13" name="tabular-2" checked>
+        <input type="radio" id="c-tab-13" name="tabular-2">
         <div class="tab col-simple">
             <?= $this->data['media-upload']->render('item-file', 'files', '', $this->data['files'], '{/api}item/file?csrf={$CSRF}', (string) $item->id); ?>
         </div>
 
-        <input type="radio" id="c-tab-14" name="tabular-2" checked>
+        <input type="radio" id="c-tab-14" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
@@ -1469,7 +1469,7 @@ echo $this->data['nav']->render();
         </div>
 
         <?php if (!empty($logs)) : ?>
-        <input type="radio" id="c-tab-15" name="tabular-2" checked>
+        <input type="radio" id="c-tab-15" name="tabular-2">
         <div class="tab">
             <div class="row">
                 <div class="col-xs-12">
