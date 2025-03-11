@@ -55,7 +55,6 @@ $itemStatus = ItemStatus::getConstants();
 
 echo $this->data['nav']->render();
 ?>
-
 <div class="tabview tab-2">
     <?php if (!$isNew) : ?>
     <div class="box">
