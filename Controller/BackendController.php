@@ -107,7 +107,7 @@ final class BackendController extends Controller
             ->with('l11n')
             ->with('defaults')
             ->with('defaults/l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('l11n/language', $response->header->l11n->language)
             ->where('defaults/l11n/language', [$response->header->l11n->language, null])
             ->execute();
@@ -142,7 +142,7 @@ final class BackendController extends Controller
 
         $view->attribute = ItemAttributeValueMapper::get()
             ->with('l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('l11n/language', [$response->header->l11n->language, null])
             ->execute();
 
@@ -438,7 +438,7 @@ final class BackendController extends Controller
             ->with('attributes/type/l11n')
             ->with('attributes/value')
             ->with('attributes/value/l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('l11n/language', $response->header->l11n->language)
             ->where('l11n/type/title', ['name1', 'name2'], 'IN')
             ->where('attributes/type/l11n/language', $response->header->l11n->language)
@@ -863,7 +863,7 @@ final class BackendController extends Controller
 
         $view->data['type'] = MaterialTypeMapper::get()
             ->with('l11n')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->where('l11n/language', $response->header->l11n->language)
             ->execute();
 

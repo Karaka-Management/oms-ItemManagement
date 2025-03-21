@@ -580,7 +580,7 @@ final class ApiController extends Controller
         }
 
         $old = ItemL11nMapper::get()
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $new = $this->updateItemL11nFromRequest($request, clone $old);

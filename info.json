@@ -25,6 +25,7 @@
         "Editor": "*",
         "Media": "*",
         "Tag": "*",
+        "Workflow": "*",
         "Admin": "*"
     },
     "load": [

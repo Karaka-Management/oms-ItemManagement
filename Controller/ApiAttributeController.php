@@ -243,7 +243,7 @@ final class ApiAttributeController extends Controller
             ->with('type')
             ->with('type/defaults')
             ->with('value')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         $new = $this->updateAttributeFromRequest($request, clone $old);
@@ -291,7 +291,7 @@ final class ApiAttributeController extends Controller
 
         $itemAttribute = ItemAttributeMapper::get()
             ->with('type')
-            ->where('id', (int) $request->getData('id'))
+            ->where('id', $request->getDataInt('id') ?? 0)
             ->execute();
 
         if ($itemAttribute->type->isRequired) {
@@ -327,7 +327,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var BaseStringL11n $old */
-        $old = ItemAttributeTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ItemAttributeTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateAttributeTypeL11nFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ItemAttributeTypeL11nMapper::class, 'item_attribute_type_l11n', $request->getOrigin());
@@ -357,7 +357,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var BaseStringL11n $itemAttributeTypeL11n */
-        $itemAttributeTypeL11n = ItemAttributeTypeL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $itemAttributeTypeL11n = ItemAttributeTypeL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $itemAttributeTypeL11n, ItemAttributeTypeL11nMapper::class, 'item_attribute_type_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeTypeL11n);
     }
@@ -385,7 +385,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var AttributeType $old */
-        $old = ItemAttributeTypeMapper::get()->with('defaults')->where('id', (int) $request->getData('id'))->execute();
+        $old = ItemAttributeTypeMapper::get()->with('defaults')->where('id', $request->getDataInt('id') ?? 0)->execute();
         $new = $this->updateAttributeTypeFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ItemAttributeTypeMapper::class, 'item_attribute_type', $request->getOrigin());
@@ -417,7 +417,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var AttributeType $itemAttributeType */
-        $itemAttributeType = ItemAttributeTypeMapper::get()->with('defaults')->where('id', (int) $request->getData('id'))->execute();
+        $itemAttributeType = ItemAttributeTypeMapper::get()->with('defaults')->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $itemAttributeType, ItemAttributeTypeMapper::class, 'item_attribute_type', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeType);
     }
@@ -445,7 +445,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var AttributeValue $old */
-        $old = ItemAttributeValueMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $old = ItemAttributeValueMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
 
         /** @var \Modules\Attribute\Models\Attribute $attr */
         $attr = ItemAttributeMapper::get()
@@ -485,7 +485,7 @@ final class ApiAttributeController extends Controller
         // }
 
         // /** @var \Modules\ItemManagement\Models\ItemAttributeValue $itemAttributeValue */
-        // $itemAttributeValue = ItemAttributeValueMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        // $itemAttributeValue = ItemAttributeValueMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         // $this->deleteModel($request->header->account, $itemAttributeValue, ItemAttributeValueMapper::class, 'item_attribute_value', $request->getOrigin());
         // $this->createStandardDeleteResponse($request, $response, $itemAttributeValue);
     }
@@ -513,7 +513,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var BaseStringL11n $old */
-        $old = ItemAttributeValueL11nMapper::get()->where('id', (int) $request->getData('id'));
+        $old = ItemAttributeValueL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0);
         $new = $this->updateAttributeValueL11nFromRequest($request, clone $old);
 
         $this->updateModel($request->header->account, $old, $new, ItemAttributeValueL11nMapper::class, 'item_attribute_value_l11n', $request->getOrigin());
@@ -543,7 +543,7 @@ final class ApiAttributeController extends Controller
         }
 
         /** @var BaseStringL11n $itemAttributeValueL11n */
-        $itemAttributeValueL11n = ItemAttributeValueL11nMapper::get()->where('id', (int) $request->getData('id'))->execute();
+        $itemAttributeValueL11n = ItemAttributeValueL11nMapper::get()->where('id', $request->getDataInt('id') ?? 0)->execute();
         $this->deleteModel($request->header->account, $itemAttributeValueL11n, ItemAttributeValueL11nMapper::class, 'item_attribute_value_l11n', $request->getOrigin());
         $this->createStandardDeleteResponse($request, $response, $itemAttributeValueL11n);
     }

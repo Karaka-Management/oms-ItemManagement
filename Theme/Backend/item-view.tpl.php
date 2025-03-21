@@ -37,10 +37,10 @@ $item  = $this->data['item'] ?? new NullItem();
 $isNew = $item->id === 0;
 
 $logs      = $this->data['logs'] ?? [];
-$itemImage = $this->getData('itemImage') ?? new NullMedia();
+$itemImage = $this->data['itemImage'] ?? new NullMedia();
 
 $allInvoices  = $this->data['allInvoices'] ?? [];
-$topCustomers = $this->getData('topCustomers') ?? [[], []];
+$topCustomers = $this->data['topCustomers'] ?? [[], []];
 
 $languages  = ISO639Enum::getConstants();
 $regions    = RegionEnum::getConstants();
@@ -145,7 +145,7 @@ echo $this->data['nav']->render();
 
                     <section class="portlet hl-4">
                         <div class="portlet-body">
-                            <textarea class="undecorated"></textarea>
+                            <textarea class="undecorated" aria-label="Info"></textarea>
                         </div>
                     </section>
                     <?php endif; ?>
@@ -684,7 +684,7 @@ echo $this->data['nav']->render();
                             <div class="portlet-body">
                                 <input id="iPriceId" class="vh" name="id" type="number" data-tpl-text="/id" data-tpl-value="/id">
                                 <input id="iPriceItemId" class="vh" name="item" type="text" value="<?= $item->id; ?>">
-                                <input id="iPriceItemType" class="vh" name="type" type="text" value="<?= PriceType::SALES; ?>">
+                                <input id="iPriceType" class="vh" name="type" type="text" value="<?= PriceType::SALES; ?>">
 
                                 <div class="form-group">
                                     <label for="iPriceName"><?= $this->getHtml('Name'); ?></label>
